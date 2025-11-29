@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loaders Collection</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    color: white;
+  }
+
+  /* -------- Loader 1: Rotating Ring -------- */
+  .loader-ring {
+    width: 65px;
+    height: 65px;
+    border: 6px solid rgba(255,255,255,0.1);
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* -------- Loader 2: Dots Bounce -------- */
+  .loader-dots {
+    display: flex;
+    gap: 8px;
+  }
+  .loader-dots span {
+    width: 14px;
+    height: 14px;
+    background: #3b82f6;
+    border-radius: 50%;
+    animation: bounce 0.6s infinite alternate;
+  }
+  .loader-dots span:nth-child(2) { animation-delay: .2s; }
+  .loader-dots span:nth-child(3) { animation-delay: .4s; }
+
+  @keyframes bounce {
+    from { transform: translateY(0); opacity: .5; }
+    to { transform: translateY(-12px); opacity: 1; }
+  }
+
+  /* -------- Loader 3: Pulse Ring -------- */
+  .pulse-ring {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #3b82f6;
+    animation: pulse 1.2s ease-out infinite;
+  }
+
+  @keyframes pulse {
+    0%   { transform: scale(0.6); opacity: 0.6; }
+    100% { transform: scale(1.7); opacity: 0; }
+  }
+
+  /* -------- Loader 4: Line Bars -------- */
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 50px;
+  }
+
+  .bars span {
+    width: 8px;
+    height: 10px;
+    background: #3b82f6;
+    animation: barsAnim .8s infinite alternate;
+  }
+
+  .bars span:nth-child(even)  { animation-delay: 0.2s; }
+  .bars span:nth-child(3)     { animation-delay: 0.4s; }
+  .bars span:nth-child(5)     { animation-delay: 0.6s; }
+
+  @keyframes barsAnim {
+    from { height: 12px; opacity: .4; }
+    to   { height: 45px; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="loader-ring"></div>
+
+<div class="loader-dots">
+  <span></span><span></span><span></span>
+</div>
+
+<div class="pulse-ring"></div>
+
+<div class="bars">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+</body>
+</html>
