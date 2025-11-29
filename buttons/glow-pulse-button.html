@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Glow Pulse Button</title>
+<style>
+body {
+    background: #111;
+    padding: 40px;
+    font-family: Poppins, sans-serif;
+}
+.pulse-btn {
+    padding: 14px 40px;
+    background: #007bff;
+    color: white;
+    border-radius: 40px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0px rgba(0,123,255,0.6); }
+    50% { box-shadow: 0 0 20px rgba(0,123,255,0.9); }
+    100% { box-shadow: 0 0 0px rgba(0,123,255,0.6); }
+}
+</style>
+</head>
+<body>
+
+<button class="pulse-btn">Pulse Button</button>
+
+</body>
+</html>

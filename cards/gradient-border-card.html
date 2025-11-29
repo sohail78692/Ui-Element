@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gradient Border Card</title>
+<style>
+body {
+    background: #0f0f0f;
+    padding: 40px;
+    color: white;
+    font-family: Poppins, sans-serif;
+}
+
+.gradient-border {
+    padding: 2px;
+    border-radius: 20px;
+    width: fit-content;
+    background: linear-gradient(45deg,#ff0080,#00b3ff,#00ff6c,#ffcc00);
+    background-size: 300% 300%;
+    animation: borderMove 4s linear infinite;
+}
+.inner-box {
+    background:#111;
+    padding:25px;
+    width:240px;
+    border-radius:18px;
+}
+@keyframes borderMove {
+    0% {background-position:0 0;}
+    100% {background-position:300% 300%;}
+}
+</style>
+</head>
+<body>
+
+<div class="gradient-border">
+    <div class="inner-box">
+        <h3>Animated Border</h3>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Skeleton Loader</title>
+<style>
+body {
+    background: #0f0f0f;
+    padding: 40px;
+    color: white;
+    font-family: Poppins, sans-serif;
+}
+.skeleton {
+    width: 200px;
+    height: 20px;
+    border-radius: 6px;
+    background: linear-gradient(90deg,#333 0%,#444 50%,#333 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+    0% {background-position:200% 0;}
+    100% {background-position:-200% 0;}
+}
+</style>
+</head>
+<body>
+
+<div class="skeleton"></div>
+
+</body>
+</html>
