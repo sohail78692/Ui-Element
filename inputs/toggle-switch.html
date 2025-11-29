@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toggle Switch</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .switch {
+    position: relative;
+    width: 70px;
+    height: 36px;
+  }
+
+  .switch input {
+    display: none;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50px;
+    transition: 0.3s ease;
+  }
+
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    left: 4px;
+    bottom: 4px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  }
+
+  input:checked + .slider {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+  }
+
+  input:checked + .slider::before {
+    transform: translateX(34px);
+  }
+</style>
+</head>
+<body>
+
+<label class="switch">
+  <input type="checkbox">
+  <span class="slider"></span>
+</label>
+
+</body>
+</html>

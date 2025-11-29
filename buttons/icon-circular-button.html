@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Icon Circular Button</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<button class="icon-btn">
+  <i class="fa-solid fa-arrow-right"></i>
+</button>
+
+<style>
+body {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0f172a;
+  font-family: sans-serif;
+}
+
+.icon-btn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00b4d8, #0077b6);
+  border: none;
+  color: #fff;
+  font-size: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  transition: 0.3s ease;
+}
+
+.icon-btn:hover {
+  transform: scale(1.1) rotate(8deg);
+}
+
+.icon-btn:active {
+  transform: scale(0.95);
+}
+</style>
+
+</body>
+</html>

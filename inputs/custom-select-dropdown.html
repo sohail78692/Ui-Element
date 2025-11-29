@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Select Dropdown</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .select-box {
+    position: relative;
+    width: 300px;
+  }
+
+  .select {
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.25);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s ease;
+  }
+
+  .select:hover {
+    border-color: #60a5fa;
+  }
+
+  .select i {
+    transition: 0.3s ease;
+  }
+
+  .options {
+    position: absolute;
+    width: 100%;
+    top: 68px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(18px);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.25);
+    overflow: hidden;
+    display: none;
+    animation: drop 0.25s ease;
+  }
+
+  .option {
+    padding: 14px 18px;
+    font-size: 17px;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .option:hover {
+    background: rgba(255,255,255,0.28);
+  }
+
+  @keyframes drop {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="select-box">
+  <div class="select" onclick="toggleSelect()">
+    <span id="selected">Select Option</span>
+    <i id="arrow" class="fa-solid fa-chevron-down"></i>
+  </div>
+
+  <div class="options" id="options">
+    <div class="option" onclick="choose(this)">Option 1</div>
+    <div class="option" onclick="choose(this)">Option 2</div>
+    <div class="option" onclick="choose(this)">Option 3</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+<script>
+  const options = document.getElementById("options");
+  const selected = document.getElementById("selected");
+  const arrow = document.getElementById("arrow");
+
+  function toggleSelect() {
+    const open = options.style.display === "block";
+    options.style.display = open ? "none" : "block";
+    arrow.style.transform = open ? "rotate(0)" : "rotate(180deg)";
+  }
+
+  function choose(option) {
+    selected.innerText = option.innerText;
+    options.style.display = "none";
+    arrow.style.transform = "rotate(0)";
+  }
+
+  window.onclick = (e) => {
+    if (!e.target.closest(".select-box")) {
+      options.style.display = "none";
+      arrow.style.transform = "rotate(0)";
+    }
+  };
+</script>
+
+</body>
+</html>

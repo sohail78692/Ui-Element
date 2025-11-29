@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toast Notification</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .show-toast-btn {
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .toast {
+    position: fixed;
+    right: 30px;
+    bottom: -120px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 16px 22px;
+    border-radius: 14px;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.25);
+    min-width: 250px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: 0.5s ease;
+  }
+
+  .toast i {
+    font-size: 22px;
+    color: #10b981;
+  }
+
+  .toast.show {
+    bottom: 30px;
+  }
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+</head>
+<body>
+
+<button class="show-toast-btn" onclick="showToast()">Show Notification</button>
+
+<div class="toast" id="toast">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Action completed successfully!</span>
+</div>
+
+<script>
+  const toast = document.getElementById("toast");
+
+  function showToast() {
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3000); // Auto close after 3 seconds
+  }
+</script>
+
+</body>
+</html>
