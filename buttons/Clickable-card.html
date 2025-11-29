@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Element Card</title>
+
+<style>
+    body {
+        font-family: Poppins, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+        margin: 0;
+    }
+
+    .ui-card {
+        width: 320px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        border-radius: 18px;
+        padding: 22px;
+        color: #fff;
+        text-align: left;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .ui-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+    }
+
+    .category-badge {
+        display: inline-block;
+        background: #00eaff;
+        color: #000;
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 50px;
+        margin-bottom: 8px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .title {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 6px 0;
+    }
+
+    .description {
+        font-size: 14px;
+        opacity: 0.85;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="ui-card" onclick="cardClicked()">
+    <span class="category-badge">Buttons</span>
+    <h2 class="title">Glass Morphism Button</h2>
+    <p class="description">A modern button style using blur, transparency, and smooth animation.</p>
+</div>
+
+<script>
+    function cardClicked() {
+        alert("Card clicked! You can link this to a demo or page.");
+    }
+</script>
+
+</body>
+</html>
