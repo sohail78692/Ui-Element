@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sidebar Navigation</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    display: flex;
+    background: #0f172a;
+    color: white;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    height: 100%;
+    background: #1e293b;
+    padding: 20px 18px;
+    transition: 0.3s ease;
+    position: relative;
+  }
+
+  .sidebar.collapsed {
+    width: 80px;
+  }
+
+  .toggle-btn {
+    position: absolute;
+    right: -15px;
+    top: 20px;
+    background: #3b82f6;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .logo {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+
+  .sidebar.collapsed .logo-text {
+    display: none;
+  }
+
+  ul {
+    list-style: none;
+    margin-top: 10px;
+  }
+
+  li {
+    padding: 14px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: 0.3s ease;
+    opacity: 0.85;
+  }
+
+  li i {
+    font-size: 20px;
+  }
+
+  li:hover {
+    background: #3b82f6;
+    opacity: 1;
+  }
+
+  .label {
+    font-size: 18px;
+  }
+
+  .sidebar.collapsed .label {
+    display: none;
+  }
+
+  /* Content */
+  .content {
+    flex: 1;
+    padding: 40px;
+    font-size: 26px;
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+  <div class="toggle-btn" onclick="toggleSidebar()">
+    <i class="fa-solid fa-bars"></i>
+  </div>
+
+  <div class="logo">
+    <span class="logo-text">UI Panel</span>
+  </div>
+
+  <ul>
+    <li><i class="fa-solid fa-house"></i><span class="label">Dashboard</span></li>
+    <li><i class="fa-solid fa-user"></i><span class="label">Profile</span></li>
+    <li><i class="fa-solid fa-gear"></i><span class="label">Settings</span></li>
+    <li><i class="fa-solid fa-right-to-bracket"></i><span class="label">Login</span></li>
+  </ul>
+</div>
+
+<div class="content">
+  Collapsible Sidebar Navigation Component
+</div>
+
+<script>
+  const sidebar = document.getElementById("sidebar");
+
+  function toggleSidebar() {
+    sidebar.classList.toggle("collapsed");
+  }
+</script>
+
+</body>
+</html>

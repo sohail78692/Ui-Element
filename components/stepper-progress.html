@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stepper Progress Bar</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+  }
+
+  .circle {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    transition: .3s ease;
+  }
+
+  .circle.active {
+    border-color: #3b82f6;
+    background: #3b82f6;
+    box-shadow: 0 0 12px rgba(59,130,246,0.6);
+  }
+
+  .line {
+    height: 4px;
+    width: 80px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 4px;
+    transition: .3s ease;
+  }
+
+  .line.active {
+    background: #3b82f6;
+    box-shadow: 0 0 12px rgba(59,130,246,0.6);
+  }
+
+  .btns {
+    position: absolute;
+    bottom: 45px;
+    display: flex;
+    gap: 20px;
+  }
+
+  button {
+    padding: 12px 26px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    color: white;
+    transition: .3s ease;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+  }
+</style>
+</head>
+<body>
+
+<div class="stepper" id="stepper">
+  <div class="circle active">1</div>
+  <div class="line active"></div>
+  <div class="circle">2</div>
+  <div class="line"></div>
+  <div class="circle">3</div>
+  <div class="line"></div>
+  <div class="circle">4</div>
+</div>
+
+<div class="btns">
+  <button onclick="prevStep()">Prev</button>
+  <button onclick="nextStep()">Next</button>
+</div>
+
+<script>
+  const circles = document.querySelectorAll(".circle");
+  const lines   = document.querySelectorAll(".line");
+  let step = 1;
+
+  function updateSteps() {
+    circles.forEach((c, i) => {
+      c.classList.toggle("active", i < step);
+    });
+
+    lines.forEach((l, i) => {
+      l.classList.toggle("active", i < step - 1);
+    });
+  }
+
+  function nextStep() {
+    if (step < circles.length) step++;
+    updateSteps();
+  }
+
+  function prevStep() {
+    if (step > 1) step--;
+    updateSteps();
+  }
+</script>
+
+</body>
+</html>
