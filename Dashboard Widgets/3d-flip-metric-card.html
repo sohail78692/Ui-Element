@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Flip Metric Card</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .flip-card {
+      perspective: 1200px;
+      width: 320px;
+      height: 200px;
+    }
+
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform .7s ease;
+    }
+
+    .flip-card:hover .flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 22px;
+    }
+
+    .back {
+      transform: rotateY(180deg);
+    }
+
+    /* glow animation */
+    @keyframes glowPulse {
+      0%,100% { box-shadow: 0 0 18px #00eaff88; }
+      50% { box-shadow: 0 0 35px #00eaffcc; }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
+
+  <div class="flip-card">
+    <div class="flip-inner">
+
+      <!-- FRONT -->
+      <div class="flip-face bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col items-center justify-center p-6 text-center">
+        <h2 class="text-white text-xl font-bold tracking-wide flex items-center gap-2">
+          📈 Growth Rate
+        </h2>
+        <h3 class="text-5xl font-extrabold text-cyan-400 mt-3">+23%</h3>
+        <p class="text-gray-300 text-sm mt-2">Quarterly Increase</p>
+      </div>
+
+      <!-- BACK -->
+      <div class="flip-face back bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-6 flex flex-col justify-center rounded-2xl animate-[glowPulse_2s_infinite]">
+        <h2 class="text-2xl font-bold">Insight</h2>
+        <p class="text-sm mt-3 opacity-90">
+          Traffic increased due to successful ad campaigns and weekend high activity.  
+          Continue investing in performing channels to maintain upward trend.
+        </p>
+        <button class="mt-5 px-5 py-2 rounded-xl bg-white/20 hover:bg-white/30 font-semibold">
+          View Full Report →
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performance Heatmap Widget</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes fadeScale {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .tile {
+      animation: fadeScale .4s ease forwards;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl max-w-xl w-full">
+    <h2 class="text-white text-2xl font-bold text-center">Performance Heatmap</h2>
+    <p class="text-gray-300 text-sm text-center mt-1">Daily Productivity Activity</p>
+
+    <div id="heatmap" class="grid grid-cols-7 gap-2 mt-8"></div>
+  </div>
+
+<script>
+  // Generate Random Heatmap Tiles
+  const container = document.getElementById("heatmap");
+
+  function intensityColor(value) {
+    if (value < 20) return "bg-gray-700";
+    if (value < 40) return "bg-blue-600";
+    if (value < 60) return "bg-cyan-500";
+    if (value < 80) return "bg-yellow-400";
+    return "bg-green-400";
+  }
+
+  const total = 35; // 5 weeks × 7 days
+  for (let i = 0; i < total; i++) {
+    const value = Math.floor(Math.random() * 100);
+    const tile = document.createElement("div");
+
+    tile.className = `tile w-9 h-9 rounded-lg ${intensityColor(value)} hover:scale-125 transition-all duration-300 cursor-pointer`;
+    tile.style.animationDelay = `${i * 0.06}s`;
+    tile.title = `Score: ${value}%`;
+    container.appendChild(tile);
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics Comparison Card</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-7 animate-[fadeUp_0.8s_ease-out]">
+
+    <div class="flex items-center justify-between">
+      <h2 class="text-white text-2xl font-bold">Sales Comparison</h2>
+      <span class="text-green-400 text-lg font-semibold flex items-center gap-1">
+        <svg class="w-5" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+          d="M5 10l4-4 4 4m-4-4v14" />
+        </svg>
+        +14.2%
+      </span>
+    </div>
+
+    <p class="text-gray-300 mt-1 text-sm">This month vs last month</p>
+
+    <div class="mt-6">
+      <!-- Comparison Bars -->
+      <div class="flex justify-between text-sm text-gray-300 mb-1">
+        <span>This Month</span>
+        <span id="nowVal">0%</span>
+      </div>
+      <div class="w-full bg-white/20 rounded-full h-4 overflow-hidden">
+        <div id="nowBar" class="h-4 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+      </div>
+
+      <div class="flex justify-between text-sm text-gray-300 mt-4 mb-1">
+        <span>Last Month</span>
+        <span id="lastVal">0%</span>
+      </div>
+      <div class="w-full bg-white/20 rounded-full h-4 overflow-hidden">
+        <div id="lastBar" class="h-4 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"></div>
+      </div>
+    </div>
+
+    <div class="mt-8 flex justify-between text-white font-semibold">
+      <div class="flex flex-col">
+        <span class="text-xl count" data-target="74200">0</span>
+        <span class="text-gray-400 text-sm">This Month</span>
+      </div>
+      <div class="flex flex-col text-right">
+        <span class="text-xl count" data-target="65000">0</span>
+        <span class="text-gray-400 text-sm">Last Month</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Count Animation
+    const counters = document.querySelectorAll(".count");
+    counters.forEach((count) => {
+      function update() {
+        const target = +count.getAttribute("data-target");
+        const current = +count.innerText;
+        const increment = target / 120;
+        if (current < target) {
+          count.innerText = Math.ceil(current + increment);
+          setTimeout(update, 9);
+        } else {
+          count.innerText = "$" + target.toLocaleString();
+        }
+      }
+      update();
+    });
+
+    // Bar Animations
+    let now = 0, last = 0;
+    const nowBar = document.getElementById("nowBar");
+    const lastBar = document.getElementById("lastBar");
+    const nowVal = document.getElementById("nowVal");
+    const lastVal = document.getElementById("lastVal");
+
+    const nowGoal = 87;   // % width for this month
+    const lastGoal = 72;  // % width for last month
+
+    const animateBars = setInterval(() => {
+      if (now < nowGoal) {
+        now++;
+        nowBar.style.width = now + "%";
+        nowVal.innerText = now + "%";
+      }
+      if (last < lastGoal) {
+        last++;
+        lastBar.style.width = last + "%";
+        lastVal.innerText = last + "%";
+      }
+      if (now >= nowGoal && last >= lastGoal) clearInterval(animateBars);
+    }, 15);
+  </script>
+
+</body>
+</html>

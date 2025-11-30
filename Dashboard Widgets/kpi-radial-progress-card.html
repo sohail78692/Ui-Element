@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KPI Radial Progress Card</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes fadeScale {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .circle {
+      transform: rotate(-90deg);
+      transform-origin: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+
+  <div class="bg-white/10 backdrop-blur-xl border border-white/20 max-w-sm w-full rounded-3xl p-8 shadow-2xl animate-[fadeScale_0.8s_ease-out]">
+
+    <div class="flex items-center justify-between">
+      <h2 class="text-white text-2xl font-bold">Conversion Rate</h2>
+      <span class="text-green-400 font-semibold text-lg">+6.5%</span>
+    </div>
+
+    <!-- Radial Progress -->
+    <div class="flex items-center justify-center mt-8 relative">
+      <svg width="170" height="170">
+        <circle cx="85" cy="85" r="70" stroke="#ffffff33" stroke-width="15" fill="none" />
+        <circle id="progressCircle" cx="85" cy="85" r="70" stroke="#10b981"
+          stroke-width="15" fill="none" stroke-linecap="round"
+          class="circle" stroke-dasharray="440" stroke-dashoffset="440" />
+      </svg>
+
+      <h3 id="percentValue"
+        class="absolute text-white text-4xl font-bold">
+        0%
+      </h3>
+    </div>
+
+    <!-- Info -->
+    <div class="text-center mt-5">
+      <p class="text-gray-300 text-sm">Goal Achievement Rate</p>
+      <p class="text-green-400 font-semibold mt-1">Excellent Performance</p>
+    </div>
+  </div>
+
+  <script>
+    // Circle Progress Animation
+    const circle = document.getElementById("progressCircle");
+    const percentValue = document.getElementById("percentValue");
+
+    let percent = 0;
+    const goal = 78; // percentage
+    const radius = 70;
+    const circumference = 2 * Math.PI * radius;
+
+    function updateProgress() {
+      percent++;
+      const offset = circumference - (percent / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+      percentValue.innerText = percent + "%";
+
+      if (percent < goal) {
+        requestAnimationFrame(updateProgress);
+      }
+    }
+
+    updateProgress();
+  </script>
+
+</body>
+</html>

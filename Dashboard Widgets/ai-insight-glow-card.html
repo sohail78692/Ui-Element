@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Insight Glow Card</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes glow {
+      0% { box-shadow: 0 0 10px #00f7ff55, 0 0 20px #00f7ff33; }
+      100% { box-shadow: 0 0 30px #00f7ffcc, 0 0 60px #00f7ff99; }
+    }
+
+    .glow-border {
+      border: 1px solid #00f7ff88;
+      animation: glow 1.8s infinite alternate ease-in-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity:0; transform: translateY(10px);}
+      to { opacity:1; transform: translateY(0);}
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
+
+  <div class="glow-border bg-gray-800/40 backdrop-blur-xl rounded-3xl max-w-lg w-full p-8 animate-[fadeInUp_0.8s_ease-out]">
+
+    <div class="flex justify-between items-center">
+      <h2 class="text-white text-2xl font-bold flex items-center gap-2">
+        <svg class="w-7 h-7 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6" />
+        </svg>
+        AI Insights Center
+      </h2>
+
+      <span class="px-4 py-1 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300">Smart Mode</span>
+    </div>
+
+    <div class="mt-6">
+      <h3 class="text-cyan-300 font-semibold text-sm">Latest Recommendation</h3>
+      <p id="aiText" class="text-gray-200 text-lg leading-relaxed mt-3"></p>
+    </div>
+
+    <div class="mt-7">
+      <button id="refreshBtn"
+        class="w-full py-3 rounded-xl text-cyan-300 font-semibold border border-cyan-300 hover:bg-cyan-300 hover:text-gray-900 transition-all">
+        Generate Another Insight
+      </button>
+    </div>
+  </div>
+
+<script>
+  const aiText = document.getElementById("aiText");
+  const insights = [
+    "Boost engagement by sending personalized email campaigns to your most active users.",
+    "Consider launching a limited-time discount — data indicates potential 23% sales uplift.",
+    "Users churn is rising slightly. Add exit survey triggers to capture reasons and fix quickly.",
+    "Your ad budget is performing well: shifting 15% more to retargeting may increase ROI.",
+    "Peak traffic detected around 8–10 PM. Schedule product posts during these hours."
+  ];
+
+  let index = 0;
+
+  function typeInsight(text) {
+    aiText.innerHTML = "";
+    let i = 0;
+    const interval = setInterval(() => {
+      aiText.innerHTML += text[i];
+      i++;
+      if (i === text.length) clearInterval(interval);
+    }, 40);
+  }
+
+  function showNewInsight() {
+    const random = insights[Math.floor(Math.random() * insights.length)];
+    typeInsight(random);
+  }
+
+  document.getElementById("refreshBtn").addEventListener("click", showNewInsight);
+
+  showNewInsight();
+</script>
+
+</body>
+</html>

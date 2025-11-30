@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scrolling Stats Marquee Widget</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes scrollFlow {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-track {
+      animation: scrollFlow 18s linear infinite;
+    }
+
+    .stat-card {
+      transition: .25s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-6px) scale(1.05);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-6 overflow-hidden">
+
+<div class="w-full max-w-6xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl p-4 overflow-hidden">
+  <div class="flex items-center mb-3">
+    <span class="w-3 h-3 rounded-full bg-green-400 mr-2 animate-pulse"></span>
+    <h2 class="text-white text-lg font-semibold">Realtime KPIs Stream</h2>
+  </div>
+
+  <!-- MARQUEE WRAPPER -->
+  <div class="relative overflow-hidden whitespace-nowrap py-2">
+    <div class="inline-flex marquee-track gap-6">
+
+      <!-- Stats Cards Repeated for infinite scroll -->
+      <div class="stat-card px-6 py-3 rounded-2xl bg-white/15 text-white text-center min-w-[160px]">
+        <p class="text-xs text-gray-300">Total Sales</p>
+        <h3 class="text-2xl font-bold">$84,210</h3>
+        <p class="text-green-400 text-xs font-semibold">+12.4%</p>
+      </div>
+
+      <div class="stat-card px-6 py-3 rounded-2xl bg-white/15 text-white text-center min-w-[160px]">
+        <p class="text-xs text-gray-300">New Users</p>
+        <h3 class="text-2xl font-bold">1,284</h3>
+        <p class="text-green-400 text-xs font-semibold">+8.2%</p>
+      </div>
+
+      <div class="stat-card px-6 py-3 rounded-2xl bg-white/15 text-white text-center min-w-[160px]">
+        <p class="text-xs text-gray-300">Refunds</p>
+        <h3 class="text-2xl font-bold">42</h3>
+        <p class="text-red-400 text-xs font-semibold">-2.1%</p>
+      </div>
+
+      <div class="stat-card px-6 py-3 rounded-2xl bg-white/15 text-white text-center min-w-[160px]">
+        <p class="text-xs text-gray-300">Active Sessions</p>
+        <h3 class="text-2xl font-bold">768</h3>
+        <p class="text-green-400 text-xs font-semibold">+9.5%</p>
+      </div>
+
+      <div class="stat-card px-6 py-3 rounded-2xl bg-white/15 text-white text-center min-w-[160px]">
+        <p class="text-xs text-gray-300">Avg Order</p>
+        <h3 class="text-2xl font-bold">$66.30</h3>
+        <p class="text-yellow-400 text-xs font-semibold">Stable</p>
+      </div>
+
+      <!-- Repeat to allow infinite scrolling smooth effect -->
+      <div class="stat-card px-6 py-3 rounded-2xl bg-white/15 text-white text-center min-w-[160px]">
+        <p class="text-xs text-gray-300">Server Uptime</p>
+        <h3 class="text-2xl font-bold">99.91%</h3>
+        <p class="text-green-400 text-xs font-semibold">+0.3%</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

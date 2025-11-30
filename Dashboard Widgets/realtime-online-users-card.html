@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Realtime Online Users Card</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(10px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    @keyframes pulseDot {
+      0%,100% { transform: scale(1); opacity:1; }
+      50% { transform: scale(1.4); opacity:0.6; }
+    }
+
+    .pulse {
+      animation: pulseDot 1.2s infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
+
+<div class="w-full max-w-sm bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl animate-[fadeUp_0.7s_ease-out]">
+
+  <div class="flex justify-between items-center">
+    <h2 class="text-white text-xl font-bold">Online Users</h2>
+
+    <div class="flex items-center gap-2">
+      <span class="w-3 h-3 rounded-full bg-green-400 pulse"></span>
+      <p class="text-green-400 text-xs font-semibold">Live</p>
+    </div>
+  </div>
+
+  <h3 class="text-white text-5xl font-bold mt-3 count" data-target="327">0</h3>
+  <p class="text-gray-400 text-sm">Currently Active</p>
+
+  <!-- Avatar Group -->
+  <div class="flex -space-x-3 mt-6">
+    <img src="https://i.pravatar.cc/100?img=1"
+      class="w-12 h-12 rounded-full border-2 border-white object-cover hover:scale-110 transition" />
+    <img src="https://i.pravatar.cc/100?img=5"
+      class="w-12 h-12 rounded-full border-2 border-white object-cover hover:scale-110 transition" />
+    <img src="https://i.pravatar.cc/100?img=9"
+      class="w-12 h-12 rounded-full border-2 border-white object-cover hover:scale-110 transition" />
+    <img src="https://i.pravatar.cc/100?img=13"
+      class="w-12 h-12 rounded-full border-2 border-white object-cover hover:scale-110 transition" />
+
+    <div class="w-12 h-12 rounded-full bg-white/20 border-2 border-white flex items-center justify-center text-white font-semibold hover:scale-110 transition cursor-pointer">
+      +23
+    </div>
+  </div>
+
+  <!-- Live Growth Line -->
+  <div class="mt-8">
+    <div class="h-1 w-full bg-white/20 rounded-full overflow-hidden">
+      <div id="liveLine" class="h-1 bg-green-400 rounded-full"></div>
+    </div>
+    <p id="growthLabel" class="text-green-400 mt-2 text-sm font-semibold"></p>
+  </div>
+
+</div>
+
+<script>
+  // Count Up Animation
+  const counters = document.querySelectorAll(".count");
+  counters.forEach((count) => {
+    function update() {
+      const target = +count.getAttribute("data-target");
+      const current = +count.innerText;
+      const increment = target / 100;
+      if (current < target) {
+        count.innerText = Math.ceil(current + increment);
+        setTimeout(update, 17);
+      } else {
+        count.innerText = target.toLocaleString();
+      }
+    }
+    update();
+  });
+
+  // Live Line Growth Animation
+  const liveLine = document.getElementById("liveLine");
+  const growthLabel = document.getElementById("growthLabel");
+
+  let width = 0;
+  const goal = 94; // % live growth
+  const growthInterval = setInterval(() => {
+    if (width >= goal) clearInterval(growthInterval);
+    else {
+      width++;
+      liveLine.style.width = width + "%";
+      growthLabel.innerText = "+" + width + "% activity spike";
+    }
+  }, 20);
+</script>
+
+</body>
+</html>

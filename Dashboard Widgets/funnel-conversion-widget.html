@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Funnel Conversion Widget</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .funnel-step {
+      animation: fadeSlide 0.8s ease forwards;
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-6">
+
+<div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl max-w-md w-full">
+
+  <h2 class="text-white text-2xl font-bold text-center">Sales Funnel</h2>
+  <p class="text-gray-300 text-sm text-center mt-1">Conversion Journey Overview</p>
+
+  <div class="mt-6 space-y-5">
+
+    <!-- Step 1 -->
+    <div class="funnel-step" style="animation-delay: .1s;">
+      <div class="flex justify-between items-center">
+        <h3 class="text-white font-semibold">Visitors</h3>
+        <span class="text-blue-400 font-bold count" data-target="15000">0</span>
+      </div>
+      <div class="w-full bg-white/20 h-3 rounded-full overflow-hidden mt-1">
+        <div class="h-3 rounded-full bg-gradient-to-r from-blue-400 to-blue-600" style="width: 95%;"></div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="funnel-step" style="animation-delay: .25s;">
+      <div class="flex justify-between items-center">
+        <h3 class="text-white font-semibold">Leads Captured</h3>
+        <span class="text-cyan-400 font-bold count" data-target="4200">0</span>
+      </div>
+      <div class="w-full bg-white/20 h-3 rounded-full overflow-hidden mt-1">
+        <div class="h-3 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-600" style="width: 62%;"></div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="funnel-step" style="animation-delay: .4s;">
+      <div class="flex justify-between items-center">
+        <h3 class="text-white font-semibold">Qualified Leads</h3>
+        <span class="text-yellow-400 font-bold count" data-target="1100">0</span>
+      </div>
+      <div class="w-full bg-white/20 h-3 rounded-full overflow-hidden mt-1">
+        <div class="h-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600" style="width: 28%;"></div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="funnel-step" style="animation-delay: .55s;">
+      <div class="flex justify-between items-center">
+        <h3 class="text-white font-semibold">Purchases</h3>
+        <span class="text-green-400 font-bold count" data-target="350">0</span>
+      </div>
+      <div class="w-full bg-white/20 h-3 rounded-full overflow-hidden mt-1">
+        <div class="h-3 rounded-full bg-gradient-to-r from-green-400 to-green-600" style="width: 15%;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Conversion Rate -->
+  <div class="text-center mt-8">
+    <p class="text-gray-400 text-sm">Total Conversion Rate</p>
+    <h3 class="text-green-400 font-bold text-4xl count" data-target="2.3">0%</h3>
+  </div>
+</div>
+
+<script>
+  // Count Animation
+  const counters = document.querySelectorAll(".count");
+  counters.forEach((count) => {
+    function update() {
+      const target = +count.getAttribute("data-target");
+      const current = +count.innerText;
+      const increment = target / 120;
+
+      if (current < target) {
+        count.innerText = Math.ceil(current + increment);
+        setTimeout(update, 10);
+      } else {
+        count.innerText = target.toLocaleString();
+      }
+    }
+    update();
+  });
+</script>
+
+</body>
+</html>
