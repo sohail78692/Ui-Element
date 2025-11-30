@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Signature Pad</title>
+
+<style>
+:root{
+  --bg:#0b0d12;
+  --glass:rgba(255,255,255,.06);
+  --primary:#8a63ff;
+  --text:#f1f1f1;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif;}
+body{
+  background:linear-gradient(135deg,#0b0d12,#161d2b);
+  min-height:100vh;display:flex;justify-content:center;align-items:center;
+  padding:24px;color:var(--text);
+}
+
+.container{
+  width:100%;max-width:540px;
+  background:var(--glass);backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius);
+  padding:32px 26px;
+  box-shadow:0 0 40px rgba(0,0,0,.6);
+  text-align:center;
+}
+
+h2{font-size:26px;margin-bottom:10px;}
+p{opacity:.7;margin-bottom:20px;font-size:14px;}
+
+.canvas-box{
+  margin-top:10px;
+  background:#111622;border-radius:16px;
+  border:2px dashed #313846;
+  position:relative;
+  overflow:hidden;
+}
+canvas{width:100%;height:260px;cursor:crosshair;}
+
+.buttons{
+  display:flex;gap:10px;margin-top:20px;
+}
+button{
+  flex:1;padding:13px;border:none;border-radius:14px;
+  background:#2a2f3a;color:white;font-size:16px;font-weight:600;
+  cursor:pointer;transition:.25s;
+}
+button:hover{transform:translateY(-2px);}
+button.save{background:var(--primary);}
+button.clear{background:#33383f;}
+
+.preview{
+  margin-top:22px;display:none;
+}
+.preview img{
+  max-width:100%;border-radius:14px;
+  box-shadow:0 0 20px rgba(0,0,0,.45);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Signature</h2>
+  <p>Please sign below using your mouse or touchscreen</p>
+
+  <div class="canvas-box">
+    <canvas id="signatureCanvas"></canvas>
+  </div>
+
+  <div class="buttons">
+    <button class="clear" id="clearBtn">Clear</button>
+    <button class="save" id="saveBtn">Save</button>
+  </div>
+
+  <div class="preview" id="previewBox">
+    <h3 style="margin:16px 0 10px;font-size:18px;">Saved Signature</h3>
+    <img id="previewImage">
+  </div>
+</div>
+
+<script>
+const canvas=document.getElementById("signatureCanvas");
+const ctx=canvas.getContext("2d");
+let drawing=false;
+
+// auto scale canvas resolution
+function resizeCanvas(){
+  canvas.width=canvas.offsetWidth;
+  canvas.height=canvas.offsetHeight;
+}
+window.addEventListener("resize",resizeCanvas);
+resizeCanvas();
+
+// start drawing
+canvas.addEventListener("mousedown",()=>drawing=true);
+canvas.addEventListener("mouseup",()=>drawing=false);
+canvas.addEventListener("mouseleave",()=>drawing=false);
+canvas.addEventListener("mousemove",draw);
+
+// touch support
+canvas.addEventListener("touchstart",e=>{drawing=true;draw(e);});
+canvas.addEventListener("touchend",()=>drawing=false);
+canvas.addEventListener("touchcancel",()=>drawing=false);
+canvas.addEventListener("touchmove",draw);
+
+function getPos(e){
+  if(e.touches){
+    return {x:e.touches[0].clientX-canvas.getBoundingClientRect().left,
+            y:e.touches[0].clientY-canvas.getBoundingClientRect().top};
+  }
+  return {x:e.clientX-canvas.getBoundingClientRect().left,
+          y:e.clientY-canvas.getBoundingClientRect().top};
+}
+
+function draw(e){
+  if(!drawing) return;
+  const pos=getPos(e);
+  ctx.lineWidth=2.5;
+  ctx.lineCap="round";
+  ctx.strokeStyle="white";
+  ctx.lineTo(pos.x,pos.y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(pos.x,pos.y);
+}
+
+document.getElementById("clearBtn").addEventListener("click",()=>{
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.beginPath();
+  document.getElementById("previewBox").style.display="none";
+});
+
+document.getElementById("saveBtn").addEventListener("click",()=>{
+  const img=canvas.toDataURL("image/png");
+  document.getElementById("previewImage").src=img;
+  document.getElementById("previewBox").style.display="block";
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Tag Input Field</title>
+
+<style>
+:root{
+  --bg:#0b0d12;
+  --glass:rgba(255,255,255,.06);
+  --primary:#8a63ff;
+  --text:#f3f3f3;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif;}
+body{
+  background:linear-gradient(135deg,#0a0c11,#161d2b);
+  min-height:100vh;display:flex;justify-content:center;align-items:center;
+  padding:24px;color:var(--text);
+}
+
+.container{
+  width:100%;max-width:520px;
+  background:var(--glass);backdrop-filter:blur(20px);
+  padding:32px 26px;border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 0 40px rgba(0,0,0,.55);
+}
+
+h2{text-align:center;margin-bottom:10px;font-size:26px;}
+p{text-align:center;opacity:.7;margin-bottom:25px;font-size:14px;}
+
+/* Tag Input Box */
+.tag-box{
+  display:flex;flex-wrap:wrap;gap:10px;
+  padding:14px;background:#131722;
+  border:1.4px solid #2c3240;border-radius:14px;
+  cursor:text;transition:.3s;
+}
+.tag-box:hover{border-color:var(--primary);}
+.tag{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 12px;background:var(--primary);
+  border-radius:30px;font-size:14px;font-weight:500;color:#000;
+  animation:fadeIn .3s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+.tag .remove{
+  font-size:16px;cursor:pointer;line-height:1;margin-left:4px;
+}
+.tag-input{
+  flex:1;min-width:120px;
+  background:none;border:none;outline:none;
+  font-size:15px;color:var(--text);
+  padding:6px;
+}
+
+/* helper */
+.helper{opacity:.6;font-size:13px;margin-top:10px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Tag Input / Chip Field</h2>
+  <p>Add multiple items separated by comma or press enter</p>
+
+  <div class="tag-box" id="tagBox">
+    <input type="text" class="tag-input" id="tagInput" placeholder="Type something...">
+  </div>
+
+  <div class="helper">Press Enter to create tag • Press Backspace to remove last</div>
+</div>
+
+<script>
+const tagBox=document.getElementById("tagBox");
+const tagInput=document.getElementById("tagInput");
+let tags=[];
+
+function renderTags(){
+  tagBox.querySelectorAll(".tag").forEach(t=>t.remove());
+  tags.forEach((tag,index)=>{
+    let tagEl=document.createElement("div");
+    tagEl.className="tag";
+    tagEl.innerHTML=`${tag}<span class="remove" data-index="${index}">×</span>`;
+    tagBox.insertBefore(tagEl,tagInput);
+  });
+
+  document.querySelectorAll(".remove").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      tags.splice(btn.dataset.index,1);
+      renderTags();
+    });
+  });
+}
+
+function addTag(value){
+  value=value.trim();
+  if(value!=="" && !tags.includes(value)){
+    tags.push(value);
+    renderTags();
+  }
+  tagInput.value="";
+}
+
+tagInput.addEventListener("keydown",e=>{
+  if(e.key==="Enter" || e.key===","){
+    e.preventDefault();
+    addTag(tagInput.value);
+  }
+  if(e.key==="Backspace" && tagInput.value==="" && tags.length>0){
+    tags.pop();
+    renderTags();
+  }
+});
+
+tagInput.addEventListener("blur",()=>addTag(tagInput.value));
+
+tagBox.addEventListener("click",()=>tagInput.focus());
+</script>
+
+</body>
+</html>

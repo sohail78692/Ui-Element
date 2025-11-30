@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Pro Footer | UI Element</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins, sans-serif;}
+body{background:#0b0b0b;color:#fff;}
+
+footer{
+    width:100%;
+    padding:80px 8%;
+    background:#0f0f0f;
+    display:flex;
+    flex-direction:column;
+    gap:50px;
+    border-top:1px solid #222;
+}
+
+/* Top content / newsletter */
+.top{
+    display:flex;
+    justify-content:space-between;
+    gap:40px;
+    flex-wrap:wrap;
+}
+
+.top .left h2{
+    font-size:38px;
+    font-weight:700;
+}
+
+.top .left p{
+    margin-top:10px;
+    max-width:460px;
+    opacity:.85;
+}
+
+.news{
+    display:flex;
+    gap:15px;
+    width:100%;
+    max-width:460px;
+}
+
+.news input{
+    flex:1;
+    padding:15px 22px;
+    border-radius:14px;
+    border:none;
+    outline:none;
+    font-size:16px;
+    background:#1a1a1a;
+    color:#fff;
+}
+
+.news button{
+    padding:15px 25px;
+    border:none;
+    border-radius:14px;
+    background:#fff;
+    font-size:16px;
+    font-weight:600;
+    color:#111;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.news button:hover{
+    transform:scale(1.05);
+}
+
+/* Grid section */
+.footer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:40px;
+}
+
+h3{
+    font-size:20px;
+    margin-bottom:18px;
+    font-weight:600;
+}
+
+ul{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+}
+
+ul li a{
+    text-decoration:none;
+    color:#aaa;
+    font-size:15px;
+    padding:2px 0;
+    position:relative;
+    transition:.3s;
+}
+
+ul li a::after{
+    content:"";
+    position:absolute;
+    left:0;bottom:-2px;
+    width:0%;height:2px;
+    background:#fff;
+    transition:.4s ease;
+}
+
+ul li a:hover{
+    color:#fff;
+    transform:translateX(6px);
+}
+
+ul li a:hover::after{
+    width:100%;
+}
+
+/* Social icons */
+.social{
+    display:flex;
+    gap:14px;
+    margin-top:20px;
+}
+
+.social a{
+    width:46px;
+    height:46px;
+    border-radius:14px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#1d1d1d;
+    font-weight:600;
+    font-size:18px;
+    transition:.3s;
+}
+
+.social a:hover{
+    background:#fff;
+    color:#111;
+    transform:translateY(-6px);
+}
+
+/* Bottom */
+.bottom{
+    border-top:1px solid #222;
+    padding-top:25px;
+    text-align:center;
+    color:#888;
+    font-size:14px;
+}
+
+/* Responsive */
+@media(max-width:700px){
+    .top{flex-direction:column;}
+    .news{flex-direction:column;}
+    .news button{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<footer>
+
+    <!-- Top / Newsletter -->
+    <div class="top">
+        <div class="left">
+            <h2>Subscribe to our Updates</h2>
+            <p>Get premium UI components, animations, templates and exclusive frontend tips every week to improve your design workflow.</p>
+        </div>
+
+        <div class="news">
+            <input type="email" placeholder="Enter your email" />
+            <button>Subscribe</button>
+        </div>
+    </div>
+
+    <!-- Grid Section -->
+    <div class="footer-grid">
+
+        <div>
+            <h3>Company</h3>
+            <ul>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Career</a></li>
+                <li><a href="#">Partners</a></li>
+                <li><a href="#">Press</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h3>Products</h3>
+            <ul>
+                <li><a href="#">UI Components</a></li>
+                <li><a href="#">Templates</a></li>
+                <li><a href="#">Icons & Assets</a></li>
+                <li><a href="#">Design System</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <ul>
+                <li><a href="#">Documentation</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="#">License</a></li>
+                <li><a href="#">Roadmap</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h3>Support</h3>
+            <ul>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Status</a></li>
+                <li><a href="#">Report Bug</a></li>
+                <li><a href="#">Request Feature</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Social -->
+    <div class="social">
+        <a>F</a>
+        <a>I</a>
+        <a>X</a>
+    </div>
+
+    <!-- Bottom -->
+    <p class="bottom">© 2025 UI Elements — Advanced Pro Footer. All rights reserved.</p>
+
+</footer>
+
+</body>
+</html>

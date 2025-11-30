@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Accordion Footer | UI Element</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins, sans-serif;}
+body{background:#0d0d0d;color:#fff;}
+
+footer{
+    width:100%;
+    background:#111;
+    padding:70px 8% 40px;
+    display:flex;
+    flex-direction:column;
+    gap:40px;
+    border-top:1px solid #222;
+}
+
+.top{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.top h2{font-size:34px;font-weight:700;}
+.top p{margin-top:10px;opacity:.8;max-width:600px;margin:auto;font-size:16px;}
+
+/* Accordion container */
+.accordion{display:flex;flex-direction:column;gap:15px;}
+
+.item{
+    background:#181818;
+    border-radius:14px;
+    padding:18px 20px;
+    transition:.3s;
+}
+
+.item:hover{background:#202020;}
+
+.head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+}
+
+.head h3{
+    font-size:18px;
+    font-weight:600;
+}
+
+.toggle{
+    font-size:22px;
+    transition:.3s;
+}
+
+.content{
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:all .45s ease;
+    padding-left:4px;
+}
+
+.content ul{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:15px;
+}
+
+.content ul li a{
+    text-decoration:none;
+    color:#aaa;
+    font-size:15px;
+    transition:.3s;
+}
+
+.content ul li a:hover{
+    color:#fff;
+    transform:translateX(6px);
+}
+
+/* Social icons */
+.social{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-top:30px;
+}
+
+.social a{
+    width:46px;
+    height:46px;
+    border-radius:14px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#1c1c1c;
+    font-weight:600;
+    transition:.35s;
+}
+
+.social a:hover{
+    background:#fff;
+    color:#111;
+    transform:translateY(-6px);
+}
+
+/* Bottom */
+.bottom{
+    text-align:center;
+    margin-top:20px;
+    font-size:14px;
+    color:#888;
+}
+</style>
+</head>
+<body>
+
+<footer>
+
+    <div class="top">
+        <h2>Explore More Sections</h2>
+        <p>Premium accordion footer for high-end web applications with smooth animated expand / collapse sections.</p>
+    </div>
+
+    <!-- Accordion Section -->
+    <div class="accordion">
+
+        <div class="item">
+            <div class="head">
+                <h3>Company</h3>
+                <span class="toggle">+</span>
+            </div>
+            <div class="content">
+                <ul>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Career</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Partners</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="head">
+                <h3>Products</h3>
+                <span class="toggle">+</span>
+            </div>
+            <div class="content">
+                <ul>
+                    <li><a href="#">UI Components</a></li>
+                    <li><a href="#">Templates</a></li>
+                    <li><a href="#">Icons</a></li>
+                    <li><a href="#">Design System</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="head">
+                <h3>Support</h3>
+                <span class="toggle">+</span>
+            </div>
+            <div class="content">
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Status</a></li>
+                    <li><a href="#">Report Bug</a></li>
+                    <li><a href="#">Request Feature</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="social">
+        <a>F</a>
+        <a>I</a>
+        <a>X</a>
+    </div>
+
+    <p class="bottom">© 2025 UI Elements — Accordion Footer. All rights reserved.</p>
+</footer>
+
+<script>
+// Accordion JS
+const items = document.querySelectorAll(".item");
+
+items.forEach(item=>{
+    const head = item.querySelector(".head");
+    head.addEventListener("click", ()=>{
+        const open = item.classList.contains("open");
+
+        items.forEach(i=>{
+            i.classList.remove("open");
+            i.querySelector(".content").style.maxHeight = 0;
+            i.querySelector(".content").style.opacity = 0;
+            i.querySelector(".toggle").textContent = "+";
+        });
+
+        if(!open){
+            item.classList.add("open");
+            const content = item.querySelector(".content");
+            content.style.maxHeight = content.scrollHeight + "px";
+            content.style.opacity = 1;
+            item.querySelector(".toggle").textContent = "-";
+        }
+    });
+});
+</script>
+
+</body>
+</html>

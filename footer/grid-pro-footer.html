@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grid Pro Footer | UI Element</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins, sans-serif;}
+body{background:#111;color:#fff;}
+
+footer{
+    width:100%;
+    padding:70px 10%;
+    background:#121212;
+    border-top:1px solid #222;
+}
+
+footer h3{
+    font-size:22px;
+    font-weight:600;
+    margin-bottom:15px;
+}
+
+footer p{
+    max-width:420px;
+    line-height:1.6;
+    opacity:.8;
+    margin-top:10px;
+}
+
+/* grid layout */
+.footer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:40px;
+    margin-bottom:40px;
+}
+
+/* links section */
+footer ul{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+footer ul li a{
+    color:#aaa;
+    text-decoration:none;
+    transition:.3s;
+    font-size:15px;
+}
+
+footer ul li a:hover{
+    color:#fff;
+    transform:translateX(6px);
+}
+
+/* social icons */
+.social{
+    display:flex;
+    gap:12px;
+    margin-top:15px;
+}
+
+.social a{
+    width:42px;
+    height:42px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:600;
+    border-radius:10px;
+    background:rgba(255,255,255,0.1);
+    transition:.3s;
+}
+
+.social a:hover{
+    background:#fff;
+    color:#111;
+    transform:translateY(-6px);
+}
+
+/* copyright */
+.copy{
+    text-align:center;
+    border-top:1px solid #222;
+    padding-top:25px;
+    color:#777;
+    font-size:14px;
+}
+
+/* Responsive */
+@media(max-width:600px){
+    footer{padding:50px 8%;}
+}
+</style>
+</head>
+<body>
+
+<footer>
+
+    <div class="footer-grid">
+
+        <div>
+            <h3>UI Elements</h3>
+            <p>Premium open-source UI components designed for modern web developers to build stunning interfaces quickly and responsively.</p>
+            <div class="social">
+                <a>F</a>
+                <a>I</a>
+                <a>X</a>
+            </div>
+        </div>
+
+        <div>
+            <h3>Products</h3>
+            <ul>
+                <li><a href="#">UI Components</a></li>
+                <li><a href="#">Templates</a></li>
+                <li><a href="#">Theme Kits</a></li>
+                <li><a href="#">Admin Dashboard</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <ul>
+                <li><a href="#">Documentation</a></li>
+                <li><a href="#">API Reference</a></li>
+                <li><a href="#">License</a></li>
+                <li><a href="#">Contribute</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h3>Support</h3>
+            <ul>
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Status</a></li>
+                <li><a href="#">Report Bug</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <p class="copy">© 2025 UI Elements — All rights reserved.</p>
+</footer>
+
+</body>
+</html>

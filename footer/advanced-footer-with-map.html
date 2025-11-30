@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Footer With Map | UI Element</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins, sans-serif;}
+body{background:#0c0c0c;color:#fff;}
+
+footer{
+    width:100%;
+    padding:80px 8%;
+    background:#101010;
+    border-top:1px solid #222;
+    display:flex;
+    flex-direction:column;
+    gap:50px;
+}
+
+/* Top layout */
+.top{
+    display:flex;
+    gap:50px;
+    flex-wrap:wrap;
+}
+
+/* Map */
+.map-container{
+    flex:1;
+    min-height:300px;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid #333;
+}
+
+/* Contact info + form */
+.contact{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.contact h2{
+    font-size:32px;
+    margin-bottom:5px;
+}
+
+.contact p{
+    opacity:.8;
+    line-height:1.6;
+}
+
+.info{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+}
+
+.info span{
+    opacity:.85;
+}
+
+/* Form */
+form{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:15px;
+}
+
+input, textarea{
+    background:#1b1b1b;
+    border:none;
+    outline:none;
+    padding:14px 18px;
+    border-radius:12px;
+    color:#fff;
+    font-size:15px;
+}
+
+textarea{min-height:120px;resize:none;}
+
+button{
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#fff;
+    color:#111;
+    font-weight:600;
+    font-size:16px;
+    cursor:pointer;
+    transition:.35s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+/* Bottom section */
+.bottom{
+    border-top:1px solid #222;
+    padding-top:25px;
+    text-align:center;
+    color:#888;
+    font-size:14px;
+    margin-top:20px;
+}
+
+.social{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-top:18px;
+}
+
+.social a{
+    width:46px;height:46px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:14px;
+    background:#1c1c1c;
+    font-weight:600;
+    transition:.3s;
+}
+.social a:hover{
+    background:#fff;color:#111;
+    transform:translateY(-6px);
+}
+
+/* Responsive */
+@media(max-width:800px){
+    .top{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<footer>
+
+    <div class="top">
+
+        <!-- Map -->
+        <div class="map-container">
+            <!-- Replace src with your real map later -->
+            <iframe 
+                width="100%" height="100%" style="border:0"
+                loading="lazy" allowfullscreen
+                src="https://maps.google.com/maps?q=new%20york&t=&z=13&ie=UTF8&iwloc=&output=embed">
+            </iframe>
+        </div>
+
+        <!-- Contact -->
+        <div class="contact">
+            <h2>Contact Us</h2>
+            <p>Reach out for support, feedback, or partnership opportunities. We’re here to help you build amazing UI experiences.</p>
+
+            <div class="info">
+                <span>📍 Location: New York, USA</span>
+                <span>📧 Email: support@uielements.dev</span>
+                <span>📞 Phone: +1 234 567 890</span>
+            </div>
+
+            <form>
+                <input type="text" placeholder="Your name" />
+                <input type="email" placeholder="Email" />
+                <textarea placeholder="Message"></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="social">
+        <a>F</a>
+        <a>I</a>
+        <a>X</a>
+    </div>
+
+    <p class="bottom">© 2025 UI Elements — Footer With Map. All rights reserved.</p>
+
+</footer>
+
+</body>
+</html>
