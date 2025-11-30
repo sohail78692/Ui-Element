@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polaroid Aesthetic Profile Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes float {
+      0% { transform: rotate(-2deg) translateY(0); }
+      50% { transform: rotate(2deg) translateY(-10px);}
+      100% { transform: rotate(-2deg) translateY(0);}
+    }
+  </style>
+</head>
+
+<body class="bg-[#f8f2ec] min-h-screen flex justify-center items-center p-4">
+
+  <div class="relative w-80 bg-white rounded-xl shadow-2xl p-4 border border-[#e0d6cc]
+              animate-[float_5s_ease-in-out_infinite]">
+
+    <!-- Masking Tape -->
+    <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-[#e8e0d6] opacity-90 rotate-[3deg] border border-[#d5cabd]"></div>
+
+    <!-- Polaroid Styled Photo -->
+    <div class="bg-white border-[6px] border-white shadow-md rounded-sm">
+      <img src="https://i.pinimg.com/736x/7e/99/0e/7e990eef6a1b9859d9417d2db8cb20d2.jpg"
+           class="rounded-sm w-full h-64 object-cover" />
+    </div>
+
+    <h2 class="text-gray-800 font-bold tracking-wide text-2xl mt-4 text-center">
+      Sohail Akhtar
+    </h2>
+
+    <p class="text-gray-600 text-sm text-center">Aesthetic UI Designer · Creative Developer</p>
+
+    <!-- Handwritten note -->
+    <p class="text-center italic text-gray-700 mt-3 text-[15px]">
+      “Capturing ideas & turning them into beauty 🌸”
+    </p>
+
+    <!-- Buttons -->
+    <div class="flex justify-center gap-4 mt-6">
+      <button class="px-5 py-2 bg-black text-white font-semibold rounded-lg shadow hover:opacity-80">
+        Follow
+      </button>
+      <button class="px-5 py-2 bg-[#f3e1d8] text-gray-800 font-semibold rounded-lg shadow hover:bg-[#e9d5ca]">
+        Message
+      </button>
+    </div>
+
+    <!-- Social Icons -->
+    <div class="flex justify-center gap-6 mt-5 text-xl text-gray-700">
+      <a href="#" class="hover:text-black"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#" class="hover:text-black"><ion-icon name="logo-github"></ion-icon></a>
+      <a href="#" class="hover:text-black"><ion-icon name="logo-linkedin"></ion-icon></a>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hologram Scan Profile Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Floating holo motion */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-14px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* Scan line animation */
+    @keyframes scan {
+      0% { top: 10%; opacity: .2; }
+      50% { top: 80%; opacity: .5; }
+      100% { top: 10%; opacity: .2; }
+    }
+
+    .scan-line {
+      animation: scan 4s linear infinite;
+    }
+
+    /* Neon circle glow */
+    .ring-animate {
+      animation: spin 6s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body class="bg-black flex justify-center items-center min-h-screen p-4">
+
+  <div class="relative max-w-xs w-full text-center bg-white/5 rounded-3xl border border-white/10 
+              backdrop-blur-xl p-6 shadow-[0_0_50px_#00eaff55]">
+
+    <!-- Animated scan line -->
+    <div class="absolute left-0 right-0 h-1 bg-cyan-400/40 blur-md scan-line"></div>
+
+    <!-- Neon rotating ring -->
+    <div class="absolute inset-0 rounded-3xl pointer-events-none ring-animate"
+         style="border:1px solid #00eaff55; filter: blur(10px);"></div>
+
+    <!-- Floating avatar -->
+    <div class="relative mx-auto w-32 h-32 mb-3 animate-[float_4s_ease-in-out_infinite]">
+      <img src="https://i.pinimg.com/736x/37/c7/82/37c782d039d9d56e7379c4df79cc97f4.jpg" 
+           class="w-32 h-32 rounded-full border-4 border-cyan-400 shadow-[0_0_25px_#00eaff] object-cover">
+    </div>
+
+    <h2 class="text-white text-3xl font-bold">Sohail Akhtar</h2>
+    <p class="text-cyan-200 text-sm tracking-wide mt-1">Futuristic UI Engineer • Creative Developer</p>
+
+    <!-- Stats -->
+    <div class="flex justify-center gap-8 mt-6 text-cyan-100">
+      <div><p class="text-lg font-bold">72k</p><p class="text-[10px]">Followers</p></div>
+      <div><p class="text-lg font-bold">1.1k</p><p class="text-[10px]">Posts</p></div>
+      <div><p class="text-lg font-bold">203</p><p class="text-[10px]">Projects</p></div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-center gap-4 mt-7">
+      <button class="px-5 py-2 rounded-xl bg-white/10 text-white border border-cyan-400/50 hover:bg-cyan-400/20 transition-all">
+        Follow
+      </button>
+      <button class="px-5 py-2 rounded-xl bg-cyan-400 text-black font-semibold hover:opacity-80">
+        Connect
+      </button>
+    </div>
+
+    <!-- Social icons -->
+    <div class="flex justify-center gap-6 mt-7 text-cyan-200 text-xl">
+      <a href="#" class="hover:text-white"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#" class="hover:text-white"><ion-icon name="logo-github"></ion-icon></a>
+      <a href="#" class="hover:text-white"><ion-icon name="logo-linkedin"></ion-icon></a>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

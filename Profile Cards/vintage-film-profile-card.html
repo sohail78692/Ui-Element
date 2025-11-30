@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vintage Film Profile Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Film grain texture */
+    .grain {
+      background-image: url('https://i.pinimg.com/1200x/cf/0e/86/cf0e864645bbef6bdd047209c62ea876.jpg');
+      opacity: 0.25;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    /* Light leak animation */
+    @keyframes leak {
+      0% { opacity: 0.1; transform: translateX(-40%); }
+      50% { opacity: 0.4; transform: translateX(40%); }
+      100% { opacity: 0.1; transform: translateX(-40%); }
+    }
+
+    .light-leak {
+      animation: leak 6s linear infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-[#f1e9dc] flex justify-center items-center min-h-screen p-4">
+
+  <div class="relative w-80 p-4 bg-black text-white rounded-xl shadow-2xl overflow-hidden border-[6px] border-[#e1d5c4]">
+
+    <!-- Film frame border numbers -->
+    <div class="absolute text-xs font-bold tracking-widest left-2 top-2 rotate-180 opacity-40">
+      35mm
+    </div>
+    <div class="absolute text-xs font-bold right-3 bottom-3 opacity-40">
+      SOHAIL ⬤ 786
+    </div>
+
+    <!-- Light leak animation -->
+    <div class="absolute inset-0 bg-gradient-to-r from-red-300 via-orange-200 to-transparent opacity-40 light-leak"></div>
+
+    <!-- Film Grain overlay -->
+    <div class="grain absolute inset-0"></div>
+
+    <!-- Photo -->
+    <img src="https://i.pinimg.com/736x/85/fc/d9/85fcd91a66516be96b1fb2a6e1c77546.jpg"
+         class="w-full h-64 object-cover rounded-md" />
+
+    <!-- Content -->
+    <h2 class="text-2xl font-bold mt-4 tracking-wide">Sohail Akhtar</h2>
+    <p class="text-sm text-gray-300 mt-1">Creative Frontend Developer & Designer</p>
+
+    <!-- Stats -->
+    <div class="flex justify-center gap-8 mt-5 text-gray-300 font-semibold">
+      <div class="text-center">
+        <p class="text-lg">310k</p>
+        <p class="text-[10px] opacity-70">Followers</p>
+      </div>
+      <div class="text-center">
+        <p class="text-lg">1.8k</p>
+        <p class="text-[10px] opacity-70">Posts</p>
+      </div>
+      <div class="text-center">
+        <p class="text-lg">142</p>
+        <p class="text-[10px] opacity-70">Projects</p>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-center gap-4 mt-6">
+      <button class="px-5 py-2 rounded-md bg-white text-black font-semibold hover:opacity-90 shadow">
+        Follow
+      </button>
+      <button class="px-5 py-2 rounded-md bg-[#e1d5c4] text-black font-semibold hover:bg-[#d3c6b5] shadow">
+        Contact
+      </button>
+    </div>
+
+    <!-- Social Icons -->
+    <div class="flex justify-center gap-6 mt-6 text-xl opacity-80">
+      <a href="#" class="hover:opacity-100"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#" class="hover:opacity-100"><ion-icon name="logo-github"></ion-icon></a>
+      <a href="#" class="hover:opacity-100"><ion-icon name="logo-youtube"></ion-icon></a>
+    </div>
+
+  </div>
+
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

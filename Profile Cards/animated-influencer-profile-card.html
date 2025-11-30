@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Influencer Profile Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .card-wrap {
+      perspective: 1000px;
+    }
+
+    .card {
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease, box-shadow 0.6s ease;
+    }
+
+    .card-wrap:hover .card {
+      transform: rotateX(8deg) rotateY(-12deg) scale(1.03);
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+    }
+
+    .glow {
+      position: absolute;
+      inset: -2px;
+      border-radius: 1.5rem;
+      background: linear-gradient(45deg, #ff008c, #6200ff, #00eaff, #00ff9d, #ffe600);
+      filter: blur(25px);
+      opacity: 0;
+      transition: .4s ease;
+      animation: pulse 4s infinite linear;
+    }
+
+    .card-wrap:hover .glow {
+      opacity: 0.6;
+    }
+
+    @keyframes pulse {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 min-h-screen flex justify-center items-center p-6">
+
+  <div class="card-wrap relative w-full max-w-md">
+    
+    <div class="glow"></div>
+
+    <div class="card bg-gray-800 rounded-3xl p-6 text-center overflow-hidden relative">
+      
+      <!-- Cover Banner -->
+      <div class="h-32 -mt-6 -mx-6 rounded-t-3xl bg-gradient-to-r from-purple-600 to-pink-600"></div>
+
+      <!-- Profile Image -->
+      <div class="-mt-16">
+        <img src="https://i.pravatar.cc/300"
+          class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-gray-900 shadow-xl" />
+      </div>
+
+      <h2 class="text-white text-3xl font-bold mt-3">Sohail Akhtar</h2>
+      <p class="text-gray-300 text-sm">UI/UX Designer • Full Stack Developer</p>
+
+      <!-- Stats -->
+      <div class="flex justify-center gap-10 mt-5 text-gray-200">
+        <div><p class="font-bold text-xl">47k</p><p class="text-xs">Followers</p></div>
+        <div><p class="font-bold text-xl">920</p><p class="text-xs">Posts</p></div>
+        <div><p class="font-bold text-xl">120</p><p class="text-xs">Projects</p></div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-center gap-4 mt-7">
+        <button class="px-5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-medium backdrop-blur-lg">Follow</button>
+        <button class="px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:opacity-90">
+          Contact
+        </button>
+      </div>
+
+      <!-- Social Icons -->
+      <div class="flex justify-center gap-6 mt-8 text-2xl text-gray-300">
+        <a href="#" class="hover:text-white"><ion-icon name="logo-instagram"></ion-icon></a>
+        <a href="#" class="hover:text-white"><ion-icon name="logo-github"></ion-icon></a>
+        <a href="#" class="hover:text-white"><ion-icon name="logo-youtube"></ion-icon></a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
