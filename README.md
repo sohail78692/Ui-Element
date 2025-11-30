@@ -111,6 +111,8 @@ GitHub Profile: [https://github.com/sohail78692](https://github.com/sohail78692)
 
 Released under the **MIT License**.
 
+![License](https://img.shields.io/badge/License-MIT-green)
+
 ---
 
 Thank you for visiting — Happy Coding 💙
