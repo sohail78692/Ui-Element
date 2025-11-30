@@ -87,7 +87,8 @@ git push origin feature-new-component
 
 ## 📸 Screenshots & Live Demos
 
-[![Demo Image]()](https://playgroundcode.netlify.app/)
+[![Demo Image](Webview.png)](https://playgroundcode.netlify.app/)
+Click the image to visit our website, explore the live demos, and test all the code in real time
 
 
 ---
