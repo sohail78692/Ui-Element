@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Country Select Dropdown</title>
+
+<style>
+:root{
+  --bg:#090c12;
+  --glass:rgba(255,255,255,.05);
+  --primary:#845aff;
+  --text:#f3f3f3;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif;}
+body{
+  background:linear-gradient(135deg,#090c12,#151b26);
+  min-height:100vh;
+  display:flex;justify-content:center;align-items:center;
+  padding:20px;color:var(--text);
+}
+
+/* container */
+.container{
+  width:100%;max-width:420px;
+  background:var(--glass);
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.09);
+  padding:32px 24px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 0 40px rgba(0,0,0,.6);
+}
+h2{
+  font-size:26px;margin-bottom:8px;
+}
+p{
+  opacity:.7;margin-bottom:22px;font-size:14px;
+}
+
+/* custom select */
+.select-wrapper{
+  position:relative;
+}
+.select-display{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;
+  background:#121621;
+  border-radius:14px;
+  border:1.4px solid #2c3240;
+  cursor:pointer;
+  transition:.3s;
+}
+.select-display:hover{
+  border-color:var(--primary);
+}
+.select-left{
+  display:flex;align-items:center;gap:10px;
+}
+.flag{
+  font-size:20px;
+}
+.country-name{
+  font-size:15px;
+}
+.chevron{
+  font-size:18px;
+  transform:rotate(0deg);
+  transition:.25s;
+}
+.select-wrapper.open .chevron{
+  transform:rotate(180deg);
+}
+
+/* dropdown panel */
+.dropdown{
+  position:absolute;
+  top:100%;left:0;right:0;
+  margin-top:8px;
+  background:#10141f;
+  border-radius:16px;
+  border:1px solid #262b38;
+  box-shadow:0 14px 34px rgba(0,0,0,.75);
+  overflow:hidden;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(10px);
+  transition:.25s;
+  z-index:20;
+}
+.select-wrapper.open .dropdown{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+
+/* search box */
+.search-box{
+  padding:10px 12px;
+  border-bottom:1px solid #202534;
+}
+.search-box input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #2a3140;
+  background:#151a27;
+  color:var(--text);
+  font-size:14px;
+}
+.search-box input:focus{
+  outline:none;
+  border-color:var(--primary);
+}
+
+/* list */
+.list{
+  max-height:210px;
+  overflow-y:auto;
+}
+.option{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;
+  cursor:pointer;
+  transition:.2s;
+}
+.option-left{
+  display:flex;align-items:center;gap:9px;
+  font-size:14px;
+}
+.option:hover{
+  background:#191f2f;
+}
+.option.active{
+  background:#151a27;
+}
+.country-code{
+  opacity:.75;font-size:13px;
+}
+.empty{
+  padding:16px 14px;font-size:13px;opacity:.75;
+}
+
+/* scrollbars */
+.list::-webkit-scrollbar{width:6px;}
+.list::-webkit-scrollbar-track{background:transparent;}
+.list::-webkit-scrollbar-thumb{
+  background:#2c3140;border-radius:10px;
+}
+
+/* helper text */
+.helper{
+  margin-top:12px;font-size:13px;opacity:.6;
+}
+
+@media(max-width:480px){
+  .container{padding:26px 18px;}
+  h2{font-size:22px;}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Select your country</h2>
+  <p>Custom dropdown with search & flags, ready to reuse in your forms.</p>
+
+  <div class="select-wrapper" id="countrySelect">
+    <div class="select-display" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false">
+      <div class="select-left">
+        <div class="flag" id="selectedFlag">🇮🇳</div>
+        <div class="country-name" id="selectedName">India</div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+
+    <div class="dropdown" role="listbox">
+      <div class="search-box">
+        <input type="text" placeholder="Search country..." id="searchInput">
+      </div>
+      <div class="list" id="countryList">
+        <!-- Options injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="helper" id="helperText">
+    Selected: India (+91)
+  </div>
+</div>
+
+<script>
+const countries=[
+  {name:"India", code:"+91", flag:"🇮🇳"},
+  {name:"United States", code:"+1", flag:"🇺🇸"},
+  {name:"United Kingdom", code:"+44", flag:"🇬🇧"},
+  {name:"Germany", code:"+49", flag:"🇩🇪"},
+  {name:"Canada", code:"+1", flag:"🇨🇦"},
+  {name:"Australia", code:"+61", flag:"🇦🇺"},
+  {name:"United Arab Emirates", code:"+971", flag:"🇦🇪"},
+  {name:"Singapore", code:"+65", flag:"🇸🇬"},
+  {name:"France", code:"+33", flag:"🇫🇷"},
+  {name:"Japan", code:"+81", flag:"🇯🇵"},
+];
+
+const wrapper=document.getElementById("countrySelect");
+const display=wrapper.querySelector(".select-display");
+const dropdown=wrapper.querySelector(".dropdown");
+const listEl=document.getElementById("countryList");
+const searchInput=document.getElementById("searchInput");
+const selectedFlag=document.getElementById("selectedFlag");
+const selectedName=document.getElementById("selectedName");
+const helper=document.getElementById("helperText");
+
+let selectedIndex=0;
+let filtered=countries.slice();
+
+function renderList(){
+  listEl.innerHTML="";
+  if(filtered.length===0){
+    const empty=document.createElement("div");
+    empty.className="empty";
+    empty.textContent="No matches found.";
+    listEl.appendChild(empty);
+    return;
+  }
+  filtered.forEach((c,i)=>{
+    const opt=document.createElement("div");
+    opt.className="option"+(countries.indexOf(c)===selectedIndex?" active":"");
+    opt.dataset.index=countries.indexOf(c);
+
+    const left=document.createElement("div");
+    left.className="option-left";
+    const flag=document.createElement("span");
+    flag.className="flag";
+    flag.textContent=c.flag;
+    const name=document.createElement("span");
+    name.textContent=c.name;
+    left.appendChild(flag);
+    left.appendChild(name);
+
+    const code=document.createElement("span");
+    code.className="country-code";
+    code.textContent=c.code;
+
+    opt.appendChild(left);
+    opt.appendChild(code);
+
+    opt.addEventListener("click",()=>{
+      selectCountry(parseInt(opt.dataset.index,10));
+      closeDropdown();
+    });
+
+    listEl.appendChild(opt);
+  });
+}
+
+function selectCountry(idx){
+  selectedIndex=idx;
+  const c=countries[idx];
+  selectedFlag.textContent=c.flag;
+  selectedName.textContent=c.name;
+  helper.textContent=`Selected: ${c.name} (${c.code})`;
+  renderList();
+}
+
+function openDropdown(){
+  wrapper.classList.add("open");
+  display.setAttribute("aria-expanded","true");
+  searchInput.focus();
+}
+
+function closeDropdown(){
+  wrapper.classList.remove("open");
+  display.setAttribute("aria-expanded","false");
+  searchInput.value="";
+  filtered=countries.slice();
+  renderList();
+}
+
+display.addEventListener("click",()=>{
+  if(wrapper.classList.contains("open")) closeDropdown();
+  else openDropdown();
+});
+
+display.addEventListener("keydown",e=>{
+  if(e.key==="Enter" || e.key===" "){
+    e.preventDefault();
+    if(wrapper.classList.contains("open")) closeDropdown();
+    else openDropdown();
+  }
+});
+
+/* outside click */
+document.addEventListener("click",e=>{
+  if(!wrapper.contains(e.target)) closeDropdown();
+});
+
+/* search */
+searchInput.addEventListener("input",()=>{
+  const term=searchInput.value.toLowerCase();
+  filtered=countries.filter(c=>
+    c.name.toLowerCase().includes(term) ||
+    c.code.toLowerCase().includes(term)
+  );
+  renderList();
+});
+
+/* init */
+selectCountry(0);
+renderList();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium File Upload UI</title>
+
+<style>
+:root{
+  --bg:#0b0d12;
+  --glass:rgba(255,255,255,.06);
+  --primary:#8a63ff;
+  --text:#f1f1f1;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif;}
+body{
+  background:linear-gradient(135deg,#090c12,#151b26);
+  min-height:100vh;display:flex;justify-content:center;align-items:center;
+  padding:20px;color:var(--text);
+}
+
+.container{
+  width:100%;max-width:480px;
+  background:var(--glass);backdrop-filter:blur(20px);
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.07);
+  padding:32px 24px;text-align:center;
+  box-shadow:0 0 40px rgba(0,0,0,.6);
+}
+
+/* Upload Box */
+.drop-zone{
+  border:2px dashed #3a3f4d;
+  padding:40px 18px;border-radius:18px;
+  transition:.35s;cursor:pointer;
+}
+.drop-zone:hover{border-color:var(--primary);}
+.drop-zone.drag{border-color:var(--primary);background:rgba(138,99,255,.1);}
+.icon{font-size:48px;color:var(--primary);margin-bottom:10px;}
+.drop-zone p{font-size:15px;opacity:.75;margin-bottom:4px;}
+.browse{color:var(--primary);font-weight:600;}
+
+.preview{
+  margin-top:18px;
+  display:none;flex-direction:column;align-items:center;gap:12px;
+}
+.preview img{
+  max-width:100%;max-height:210px;border-radius:14px;
+  object-fit:cover;box-shadow:0 0 18px rgba(0,0,0,.4);
+}
+
+/* progress bar */
+.progress{
+  width:100%;background:#1a1f2c;border-radius:10px;height:10px;overflow:hidden;
+}
+.progress-bar{
+  height:10px;width:0;background:var(--primary);
+  border-radius:10px;transition:width .4s ease;
+}
+
+button{
+  width:100%;padding:14px;border:none;border-radius:14px;margin-top:18px;
+  background:var(--primary);color:white;font-size:17px;font-weight:600;cursor:pointer;
+  transition:.3s;
+}
+button:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(138,99,255,.45);}
+
+@media(max-width:480px){
+  .container{padding:26px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2 style="margin-bottom:14px;font-size:26px;">Upload File</h2>
+  <p style="opacity:.7;margin-bottom:24px;">Supports images, videos, documents • Drag & Drop or click</p>
+
+  <input type="file" id="fileInput" hidden>
+
+  <div class="drop-zone" id="dropZone">
+    <div class="icon">⬆</div>
+    <p>Drop your file here</p>
+    <p><span class="browse">Browse</span> from your computer</p>
+  </div>
+
+  <div class="preview" id="preview">
+    <img id="previewImg">
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+
+  <button id="uploadBtn" disabled>Upload</button>
+</div>
+
+<script>
+const dropZone=document.getElementById("dropZone");
+const fileInput=document.getElementById("fileInput");
+const preview=document.getElementById("preview");
+const previewImg=document.getElementById("previewImg");
+const progressBar=document.getElementById("progressBar");
+const uploadBtn=document.getElementById("uploadBtn");
+
+dropZone.addEventListener("click",()=>fileInput.click());
+
+dropZone.addEventListener("dragover",e=>{
+  e.preventDefault();
+  dropZone.classList.add("drag");
+});
+dropZone.addEventListener("dragleave",()=>dropZone.classList.remove("drag"));
+dropZone.addEventListener("drop",e=>{
+  e.preventDefault();
+  dropZone.classList.remove("drag");
+  const file=e.dataTransfer.files[0];
+  handleFile(file);
+});
+
+fileInput.addEventListener("change",e=>{
+  const file=e.target.files[0];
+  handleFile(file);
+});
+
+function handleFile(file){
+  if(!file) return;
+  uploadBtn.disabled=false;
+  preview.style.display="flex";
+
+  const reader=new FileReader();
+  reader.onload=function(e){
+    previewImg.src=e.target.result;
+  }
+  if(file.type.startsWith("image/")) reader.readAsDataURL(file);
+  else previewImg.src=""; // placeholder
+
+  progressBar.style.width="0";
+}
+
+uploadBtn.addEventListener("click",()=>{
+  progressBar.style.width="0";
+  let progress=0;
+  const interval=setInterval(()=>{
+    progress+=5;
+    progressBar.style.width=progress+"%";
+    if(progress>=100){
+      clearInterval(interval);
+    }
+  },120);
+});
+</script>
+
+</body>
+</html>
