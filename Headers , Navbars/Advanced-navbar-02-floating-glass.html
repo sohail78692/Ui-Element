@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Navbar 02 - Floating Glass Animated</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      height: 200vh;
+      color: #fff;
+    }
+
+    /* Floating Glass Navbar */
+    nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 85%;
+      max-width: 1200px;
+      height: 70px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.13);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 35px;
+      z-index: 300;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    ul {
+      display: flex;
+      list-style: none;
+      align-items: center;
+      gap: 35px;
+    }
+
+    ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      position: relative;
+      transition: 0.3s ease;
+    }
+
+    ul li a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -6px;
+      width: 0%; height: 2px;
+      background: #00eaff;
+      transition: 0.35s ease;
+      border-radius: 50px;
+    }
+    ul li a:hover::after { width: 100%; }
+
+    .cta-btn {
+      padding: 10px 24px;
+      border-radius: 50px;
+      border: 2px solid #00eaff;
+      color: #00eaff;
+      font-weight: 600;
+      transition: 0.35s;
+    }
+    .cta-btn:hover {
+      background: #00eaff;
+      color: #000;
+      box-shadow: 0 0 18px #00eaff;
+    }
+
+    /* Mobile */
+    .menu-btn { display: none; font-size: 32px; cursor: pointer; }
+
+    @media(max-width:950px) {
+      nav { padding: 0 25px; }
+      ul {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 260px; height: 100vh;
+        background: rgba(0,0,0,0.75);
+        flex-direction: column;
+        padding-top: 120px;
+        gap: 25px;
+        transition: 0.45s ease;
+        backdrop-filter: blur(10px);
+      }
+      ul.show { right: 0; }
+      .cta-btn { border-radius: 12px; }
+      .menu-btn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">NextUI</div>
+    <ul id="menuLinks">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Components</a></li>
+      <li><a href="#">Examples</a></li>
+      <li><a href="#">Docs</a></li>
+    </ul>
+    <a href="#" class="cta-btn">Download</a>
+    <div class="menu-btn" id="menuBtn">&#9776;</div>
+  </nav>
+
+  <script>
+    const menu = document.getElementById('menuLinks');
+    const menuBtn = document.getElementById('menuBtn');
+    menuBtn.onclick = () => menu.classList.toggle('show');
+  </script>
+
+</body>
+</html>

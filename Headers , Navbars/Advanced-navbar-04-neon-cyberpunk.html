@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Advanced Navbar 04 - Neon Cyberpunk Glow</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        neon: '#00f0ff',
+        neonpink: '#ff00e6'
+      }
+    }
+  }
+};
+</script>
+</head>
+<body class="min-h-screen bg-black text-white overflow-x-hidden">
+
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 w-full py-5 px-8 flex items-center justify-between z-50 transition-all duration-300 bg-black/40 backdrop-blur-xl border-b border-neon/40 shadow-[0_0_25px_#00f0ff]">
+  <h1 class="text-3xl font-extrabold tracking-wider drop-shadow-[0_0_6px_#00f0ff]">CYBERUI</h1>
+
+  <ul id="menuLinks" class="hidden md:flex gap-12 text-lg font-semibold">
+    <li><a href="#" class="relative hover:text-neon transition-all">Home</a></li>
+    <li><a href="#" class="relative hover:text-neon transition-all">Projects</a></li>
+    <li><a href="#" class="relative hover:text-neon transition-all">Services</a></li>
+    <li><a href="#" class="relative hover:text-neon transition-all">Contact</a></li>
+  </ul>
+
+  <button class="hidden md:block px-6 py-2 text-neon font-bold rounded-full border-2 border-neon shadow-[0_0_15px_#00f0ff] hover:bg-neon hover:text-black transition-all">Join Now</button>
+
+  <button id="menuBtn" class="md:hidden text-4xl text-neon">&#9776;</button>
+</nav>
+
+<!-- MOBILE PANEL -->
+<div id="mobilePanel" class="fixed top-0 right-0 h-full w-72 bg-black/90 backdrop-blur-xl translate-x-full transition-all duration-500 flex flex-col pt-32 gap-8 pl-10 text-2xl font-semibold z-40 shadow-[0_0_35px_#ff00e6] border-l border-neonpink/40">
+  <a class="hover:text-neon transition" href="#">Home</a>
+  <a class="hover:text-neon transition" href="#">Projects</a>
+  <a class="hover:text-neon transition" href="#">Services</a>
+  <a class="hover:text-neon transition" href="#">Contact</a>
+  <button class="mt-5 w-40 px-6 py-2 rounded-full border-2 border-neon text-neon font-bold hover:bg-neon hover:text-black transition">Join Now</button>
+</div>
+
+<!-- HERO SECTION DEMO -->
+<section class="pt-40 px-10 text-center">
+  <h2 class="text-5xl font-extrabold drop-shadow-[0_0_12px_#ff00e6]">CYBERPUNK INTERFACE</h2>
+  <p class="mt-6 text-xl max-w-2xl mx-auto text-gray-300">Experience futuristic neon UI elements built for modern web experiences with pixel-perfect responsive design.</p>
+</section>
+
+<!-- SCRIPT -->
+<script>
+const menuBtn = document.getElementById("menuBtn");
+const mobilePanel = document.getElementById("mobilePanel");
+const navbar = document.getElementById("navbar");
+let lastScroll = 0;
+
+// Toggle Mobile Panel
+menuBtn.onclick = () => mobilePanel.classList.toggle("translate-x-full");
+
+// Scroll Hide Show
+window.addEventListener("scroll", () => {
+  const currentScroll = window.pageYOffset;
+  if (currentScroll > lastScroll && currentScroll > 80) {
+    navbar.style.transform = "translateY(-120%)";
+  } else {
+    navbar.style.transform = "translateY(0)";
+  }
+  lastScroll = currentScroll;
+});
+</script>
+</body>
+</html>

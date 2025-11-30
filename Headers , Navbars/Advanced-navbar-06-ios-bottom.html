@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Advanced Navbar 06 - iOS Bottom Nav</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        accent: '#4f9cff',
+        soft: '#1a1a1a'
+      }
+    }
+  }
+};
+</script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen pb-24">
+
+<!-- CONTENT DEMO -->
+<section class="text-center pt-20 px-6">
+  <h1 class="text-4xl font-extrabold mb-4">iOS Style Bottom Navigation</h1>
+  <p class="text-gray-300 max-w-xl mx-auto text-lg">Fully responsive bottom tab navigation designed for mobile interfaces & modern apps. Works great for progressive web apps and dashboards.</p>
+</section>
+
+<!-- iOS Bottom Nav -->
+<nav id="bottomNav" class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-md rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_0_30px_rgba(79,156,255,0.35)] px-4 py-2 flex items-center justify-between z-50 transition-all duration-300">
+
+  <button class="tab flex flex-col items-center gap-1 px-3 py-2 active group">
+    <span class="material-icons text-2xl group-hover:text-accent transition">home</span>
+    <span class="text-xs text-gray-300 group-hover:text-accent transition">Home</span>
+  </button>
+
+  <button class="tab flex flex-col items-center gap-1 px-3 py-2 group">
+    <span class="material-icons text-2xl group-hover:text-accent transition">explore</span>
+    <span class="text-xs text-gray-300 group-hover:text-accent transition">Explore</span>
+  </button>
+
+  <button class="tab flex flex-col items-center gap-1 px-3 py-2 group">
+    <span class="material-icons text-2xl group-hover:text-accent transition">favorite</span>
+    <span class="text-xs text-gray-300 group-hover:text-accent transition">Favorite</span>
+  </button>
+
+  <button class="tab flex flex-col items-center gap-1 px-3 py-2 group">
+    <span class="material-icons text-2xl group-hover:text-accent transition">person</span>
+    <span class="text-xs text-gray-300 group-hover:text-accent transition">Profile</span>
+  </button>
+
+</nav>
+
+<!-- Google Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+<script>
+// Active tab switcher
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(btn => btn.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// Scroll Hide/Show on mobile
+const bottomNav = document.getElementById('bottomNav');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+  if(currentScroll > lastScroll && currentScroll > 50) bottomNav.style.transform = 'translate(-50%, 200%)';
+  else bottomNav.style.transform = 'translate(-50%, 0%)';
+  lastScroll = currentScroll;
+});
+</script>
+
+</body>
+</html>

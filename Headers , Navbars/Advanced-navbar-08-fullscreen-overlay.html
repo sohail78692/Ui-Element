@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Advanced Navbar 08 - Fullscreen Overlay Menu</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        accent: "#38bdf8",
+      },
+    },
+  },
+};
+</script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen overflow-x-hidden">
+
+<!-- NAVBAR -->
+<nav class="fixed top-0 left-0 w-full h-20 z-50 flex items-center justify-between px-8 bg-transparent backdrop-blur-xl">
+  <h1 class="text-3xl font-extrabold tracking-wider text-accent">OverlayX</h1>
+  <button id="menuBtn" class="text-4xl text-accent font-bold">☰</button>
+</nav>
+
+<!-- FULLSCREEN OVERLAY MENU -->
+<div id="overlay" class="fixed top-0 left-0 w-full h-full bg-black/95 backdrop-blur-2xl translate-y-full transition-all duration-700 flex flex-col items-center justify-center gap-10 text-5xl font-bold z-40">
+  <a class="hover:text-accent transition" href="#">Home</a>
+  <a class="hover:text-accent transition" href="#">Portfolio</a>
+  <a class="hover:text-accent transition" href="#">Services</a>
+  <a class="hover:text-accent transition" href="#">Blog</a>
+  <a class="hover:text-accent transition" href="#">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="pt-40 text-center px-6 max-w-3xl mx-auto">
+  <h1 class="text-6xl font-extrabold drop-shadow-[0_0_10px_#38bdf8]">Fullscreen Animated Overlay Navbar</h1>
+  <p class="mt-6 text-gray-300 text-xl">Perfect for creative portfolios, agencies, and minimal landing pages.</p>
+</section>
+
+<script>
+const overlay = document.getElementById("overlay");
+const menuBtn = document.getElementById("menuBtn");
+let open = false;
+
+menuBtn.onclick = () => {
+  open = !open;
+  overlay.style.transform = open ? "translateY(0%)" : "translateY(100%)";
+  menuBtn.innerHTML = open ? "✕" : "☰";
+};
+</script>
+
+</body>
+</html>

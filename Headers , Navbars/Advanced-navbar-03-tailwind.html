@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Navbar 03 - Tailwind</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: "#00eaff",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black min-h-screen text-white">
+
+  <!-- Navbar -->
+  <nav id="navbar" class="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl px-6 h-16 rounded-2xl backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl flex items-center justify-between z-50 transition-all duration-300">
+    <h1 class="text-2xl font-bold tracking-wide">TailNav</h1>
+
+    <ul id="menuLinks" class="hidden md:flex gap-10 text-lg font-medium">
+      <li><a class="hover:text-neon transition" href="#">Home</a></li>
+      <li><a class="hover:text-neon transition" href="#">Products</a></li>
+      <li><a class="hover:text-neon transition" href="#">Pricing</a></li>
+      <li><a class="hover:text-neon transition" href="#">Contact</a></li>
+    </ul>
+
+    <!-- CTA Button -->
+    <button class="hidden md:block px-6 py-2 rounded-full border-2 border-neon text-neon font-semibold hover:bg-neon hover:text-black transition shadow-[0_0_15px_#00eaff]">
+      Get Started
+    </button>
+
+    <!-- Mobile Menu Button -->
+    <button id="menuBtn" class="md:hidden text-3xl">&#9776;</button>
+  </nav>
+
+  <!-- Mobile Panel -->
+  <div id="mobilePanel" class="fixed right-0 top-0 w-64 h-full bg-black/80 backdrop-blur-xl translate-x-full transition-all duration-500 flex flex-col pt-28 gap-8 pl-10 text-xl z-40">
+    <a class="hover:text-neon transition" href="#">Home</a>
+    <a class="hover:text-neon transition" href="#">Products</a>
+    <a class="hover:text-neon transition" href="#">Pricing</a>
+    <a class="hover:text-neon transition" href="#">Contact</a>
+    <button class="mt-5 w-40 px-6 py-2 rounded-full border-2 border-neon text-neon font-semibold hover:bg-neon hover:text-black transition">
+      Get Started
+    </button>
+  </div>
+
+  <!-- Script -->
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const mobilePanel = document.getElementById("mobilePanel");
+    const navbar = document.getElementById("navbar");
+    let lastScroll = 0;
+
+    // Mobile Toggle
+    menuBtn.onclick = () => {
+      mobilePanel.classList.toggle("translate-x-full");
+    };
+
+    // Scroll Hide / Show
+    window.addEventListener("scroll", () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > lastScroll && currentScroll > 50) {
+        navbar.style.transform = "translateY(-120%)";
+      } else {
+        navbar.style.transform = "translateY(0)";
+      }
+      lastScroll = currentScroll;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Advanced Navbar 05 - 3D Magnetic Hover</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        accent: '#4f9cff',
+      },
+    },
+  },
+};
+</script>
+<style>
+  .magnetic {
+    transition: transform 0.15s ease;
+  }
+</style>
+</head>
+<body class="bg-gray-950 text-white min-h-screen overflow-x-hidden">
+
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl h-16 px-6 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_0_25px_rgba(79,156,255,0.45)] flex items-center justify-between z-50 transition-all duration-300">
+  <h1 class="text-2xl font-extrabold tracking-wider text-accent drop-shadow-[0_0_6px_#4f9cff] magnetic">MAGNETIC</h1>
+
+  <ul id="menuLinks" class="hidden md:flex gap-10 text-lg font-medium">
+    <li><a class="magnetic hover:text-accent transition" href="#">Home</a></li>
+    <li><a class="magnetic hover:text-accent transition" href="#">Features</a></li>
+    <li><a class="magnetic hover:text-accent transition" href="#">Showcase</a></li>
+    <li><a class="magnetic hover:text-accent transition" href="#">Support</a></li>
+  </ul>
+
+  <button class="hidden md:block magnetic px-6 py-2 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-black font-bold transition-all shadow-[0_0_15px_#4f9cff]">Launch</button>
+
+  <button id="menuBtn" class="md:hidden text-4xl text-accent magnetic">&#9776;</button>
+</nav>
+
+<!-- MOBILE PANEL -->
+<div id="mobilePanel" class="fixed right-0 top-0 w-64 h-full bg-black/90 backdrop-blur-xl translate-x-full transition-all duration-500 flex flex-col pt-28 gap-8 pl-10 text-xl font-semibold z-40">
+  <a class="hover:text-accent transition" href="#">Home</a>
+  <a class="hover:text-accent transition" href="#">Features</a>
+  <a class="hover:text-accent transition" href="#">Showcase</a>
+  <a class="hover:text-accent transition" href="#">Support</a>
+  <button class="mt-5 w-40 px-6 py-2 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-black transition font-bold">Launch</button>
+</div>
+
+<section class="pt-40 text-center px-6">
+  <h2 class="text-5xl font-extrabold drop-shadow-[0_0_10px_#4f9cff]">3D Magnetic Navbar</h2>
+  <p class="mt-6 max-w-2xl mx-auto text-gray-300 text-lg">Items move slightly towards your mouse pointer to create a magnetic 3D hover interaction.</p>
+</section>
+
+<script>
+// Magnetic Effect
+const magnets = document.querySelectorAll('.magnetic');
+
+magnets.forEach((magnet) => {
+  magnet.addEventListener('mousemove', function(e) {
+    const item = this.getBoundingClientRect();
+    const x = e.clientX - item.left - item.width / 2;
+    const y = e.clientY - item.top - item.height / 2;
+    this.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+  });
+
+  magnet.addEventListener('mouseleave', function() {
+    this.style.transform = `translate(0px, 0px)`;
+  });
+});
+
+// Mobile Slide Panel
+const menuBtn = document.getElementById('menuBtn');
+const mobilePanel = document.getElementById('mobilePanel');
+menuBtn.onclick = () => mobilePanel.classList.toggle('translate-x-full');
+
+// Scroll Hide / Show
+const navbar = document.getElementById('navbar');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+  if (currentScroll > lastScroll && currentScroll > 60) {
+    navbar.style.transform = 'translateY(-150%)';
+  } else {
+    navbar.style.transform = 'translateY(0)';
+  }
+  lastScroll = currentScroll;
+});
+</script>
+
+</body>
+</html>
