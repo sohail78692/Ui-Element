@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Hologram Profile Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Card tilt */
+    .tilt {
+      transition: transform .4s ease, box-shadow .4s ease;
+    }
+    .tilt:hover {
+      transform: rotateX(10deg) rotateY(-10deg) scale(1.03);
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Liquid morph wave */
+    @keyframes morph {
+      0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      50% { border-radius: 30% 60% 70% 40% / 50% 60% 40% 60%; }
+    }
+    .blob {
+      animation: morph 6s ease-in-out infinite;
+    }
+
+    /* Hologram sheen line */
+    @keyframes shine {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(120%); }
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-[#0d0e12] to-[#1b1f29] min-h-screen flex justify-center items-center p-4">
+
+  <div class="tilt relative max-w-sm w-full rounded-3xl p-8 text-center 
+              bg-white/10 border border-white/20 backdrop-blur-2xl 
+              shadow-[0_0_40px_#00eaff55] overflow-hidden">
+
+    <!-- Hologram liquid morph shape -->
+    <div class="blob absolute -top-10 left-1/2 -translate-x-1/2 w-72 h-72 
+                bg-gradient-to-r from-cyan-400 to-purple-500 blur-[70px] opacity-60"></div>
+
+    <!-- Shimmer light sweep -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="absolute w-1/3 h-full bg-white/20 blur-xl 
+                  -skew-x-12 opacity-0 hover:opacity-80 transition 
+                  animate-[shine_4s_linear_infinite]"></div>
+    </div>
+
+    <!-- Avatar -->
+    <img src="https://i.pinimg.com/originals/ac/90/96/ac90969d164204a31f768c88b1d37cc9.gif"
+         class="relative z-10 w-32 h-32 rounded-full mx-auto border-4 border-white/40
+                shadow-[0_0_20px_#ffffff] mb-4">
+
+    <h2 class="relative z-10 text-white text-3xl font-bold tracking-wide">
+      Sohail Akhtar
+    </h2>
+    <p class="text-cyan-200 text-sm mt-1">Futuristic UI Engineer • Creative Developer</p>
+
+    <!-- Stats -->
+    <div class="relative z-10 flex justify-center gap-10 mt-6 text-cyan-200">
+      <div><p class="text-xl font-bold">510k</p><p class="text-xs">Followers</p></div>
+      <div><p class="text-xl font-bold">2.1k</p><p class="text-xs">Posts</p></div>
+      <div><p class="text-xl font-bold">260</p><p class="text-xs">Projects</p></div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="relative z-10 flex justify-center gap-4 mt-7">
+      <button class="px-6 py-2 rounded-xl bg-white/20 text-white border border-white/40 hover:bg-white/30 backdrop-blur-md">
+        Follow
+      </button>
+      <button class="px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold hover:opacity-90">
+        Connect
+      </button>
+    </div>
+
+    <!-- Social -->
+    <div class="flex justify-center gap-6 mt-8 text-2xl text-cyan-200 relative z-10">
+      <a href="#" class="hover:text-white"><ion-icon name="logo-github"></ion-icon></a>
+      <a href="#" class="hover:text-white"><ion-icon name="logo-linkedin"></ion-icon></a>
+      <a href="#" class="hover:text-white"><ion-icon name="logo-instagram"></ion-icon></a>
+    </div>
+
+  </div>
+
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+</html>

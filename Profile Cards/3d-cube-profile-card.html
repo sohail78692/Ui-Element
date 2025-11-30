@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Cube Profile Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .cube {
+      width: 160px;
+      height: 160px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotateCube 7s infinite linear;
+      margin: auto;
+    }
+
+    @keyframes rotateCube {
+      0% { transform: rotateX(0) rotateY(0); }
+      50% { transform: rotateX(360deg) rotateY(180deg); }
+      100% { transform: rotateX(720deg) rotateY(360deg); }
+    }
+
+    .cube-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.4);
+      border: 3px solid rgba(255,255,255,0.4);
+      background: #000;
+    }
+
+    .cube-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* AUTO BEST CROP */
+    }
+
+    .cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(80px); }
+    .cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(80px); }
+    .cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(80px); }
+    .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(80px); }
+    .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(80px); }
+    .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(80px); }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 to-black min-h-screen flex justify-center items-center p-6">
+
+  <div class="text-center bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-[0_0_40px_#00eaff65] max-w-sm w-full">
+
+    <!-- 3D CUBE IMAGE -->
+    <div class="cube">
+      <div class="cube-face"><img src="https://i.pinimg.com/originals/20/19/77/20197737373645d98652517e7761dcb4.gif"></div>
+      <div class="cube-face"><img src="https://i.pinimg.com/originals/e6/5d/50/e65d50f699ab952ca89c8525058c4a0d.gif"></div>
+      <div class="cube-face"><img src="https://i.pinimg.com/originals/ce/79/ad/ce79ad34d01ad5600a3d47b3c0024aa3.gif"></div>
+      <div class="cube-face"><img src="https://i.pinimg.com/originals/2a/6f/b6/2a6fb6ac14a958d1a2633ac3b2d4076b.gif"></div>
+      <div class="cube-face"><img src="https://i.pinimg.com/originals/39/25/db/3925db061ec24c9907dca58f9e2ba2e8.gif"></div>
+      <div class="cube-face"><img src="https://i.pinimg.com/originals/e3/51/63/e3516307092df0c65a25515178e38656.gif"></div>
+    </div>
+
+    <h2 class="text-white text-3xl font-bold mt-6">Sohail Akhtar</h2>
+    <p class="text-gray-300 text-sm">Futuristic UI Engineer • 3D Motion Designer</p>
+
+    <div class="flex justify-center gap-8 mt-5 text-cyan-200 font-semibold">
+      <div><p class="text-xl">612k</p><p class="text-xs opacity-60">Followers</p></div>
+      <div><p class="text-xl">1.9k</p><p class="text-xs opacity-60">Posts</p></div>
+      <div><p class="text-xl">340</p><p class="text-xs opacity-60">Projects</p></div>
+    </div>
+
+    <div class="flex justify-center gap-4 mt-7">
+      <button class="px-6 py-2 border border-cyan-400 text-cyan-300 rounded-xl hover:bg-cyan-400 hover:text-black transition">
+        Follow
+      </button>
+      <button class="px-6 py-2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl font-semibold hover:opacity-90">
+        Connect
+      </button>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sakura Aesthetic Profile Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Floating avatar */
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Falling sakura petals */
+    @keyframes fall {
+      0% { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0.9; }
+      50% { transform: translateY(120px) translateX(-20px) rotate(120deg); opacity: .6; }
+      100% { transform: translateY(220px) translateX(20px) rotate(260deg); opacity: 0; }
+    }
+
+    .petal {
+      position: absolute;
+      background: pink;
+      border-radius: 80% 60% 80% 60%;
+      width: 12px;
+      height: 18px;
+      opacity: 0.8;
+      filter: blur(0.4px);
+      animation: fall 7s linear infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-b from-pink-200 to-white min-h-screen flex justify-center items-center p-4">
+
+  <div class="relative max-w-sm w-full text-center p-8 bg-white/60 backdrop-blur-2xl border border-white/40
+              rounded-3xl shadow-[0_0_40px_#ffffff90] overflow-hidden">
+
+    <!-- Sakura petals floating -->
+    <div class="petal" style="left:10%; animation-delay:0s;"></div>
+    <div class="petal" style="left:25%; animation-delay:1.5s;"></div>
+    <div class="petal" style="left:50%; animation-delay:3s;"></div>
+    <div class="petal" style="left:70%; animation-delay:2s;"></div>
+    <div class="petal" style="left:85%; animation-delay:4s;"></div>
+
+    <div class="animate-[float_4s_ease-in-out_infinite] mt-4">
+      <img src="https://i.pinimg.com/736x/20/99/5d/20995d18765c03435cd108a61ff44df2.jpg"
+           class="w-36 h-36 rounded-full mx-auto border-4 border-white shadow-[0_0_25px_#ffc7d6]">
+    </div>
+
+    <h2 class="text-pink-700 text-3xl font-bold mt-4">Sohail Akhtar</h2>
+    <p class="text-pink-600 text-sm">Aesthetic UI Designer • Creative Artist</p>
+
+    <p class="text-pink-700 italic mt-3 text-sm">
+      “Bloom with grace, like sakura petals in spring.”
+    </p>
+
+    <!-- Stats -->
+    <div class="flex justify-center gap-10 mt-6 text-pink-700 font-semibold">
+      <div><p class="text-xl">180k</p><p class="text-xs opacity-70">Followers</p></div>
+      <div><p class="text-xl">530</p><p class="text-xs opacity-70">Posts</p></div>
+      <div><p class="text-xl">106</p><p class="text-xs opacity-70">Projects</p></div>
+    </div>
+
+    <div class="flex justify-center gap-4 mt-7">
+      <button class="px-6 py-2 rounded-xl bg-white/70 font-semibold text-pink-700 hover:bg-white/90 shadow">
+        Follow
+      </button>
+      <button class="px-6 py-2 rounded-xl bg-pink-500 text-white font-semibold hover:bg-pink-600 shadow">
+        Contact
+      </button>
+    </div>
+
+    <div class="flex justify-center gap-6 mt-8 text-2xl text-pink-700">
+      <a href="#" class="hover:text-pink-900"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#" class="hover:text-pink-900"><ion-icon name="logo-github"></ion-icon></a>
+      <a href="#" class="hover:text-pink-900"><ion-icon name="logo-linkedin"></ion-icon></a>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
