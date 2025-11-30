@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics Progress Chart Card</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .growth-line {
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      animation: drawLine 2s ease forwards;
+    }
+
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+
+<div class="w-full max-w-md p-6 bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl shadow-2xl animate-[fadeUp_0.8s_ease-out]">
+
+  <div class="flex items-center justify-between">
+    <h2 class="text-white text-2xl font-semibold">Monthly Earnings</h2>
+    <span class="text-green-400 text-lg font-bold">↑ 18.2%</span>
+  </div>
+
+  <h3 class="text-5xl font-bold text-white mt-4 count" data-target="85000">0</h3>
+  <p class="text-gray-300 text-sm mt-1">Compared to last month</p>
+
+  <!-- Progress Bar -->
+  <div class="mt-6">
+    <div class="flex justify-between text-sm text-gray-300 mb-1">
+      <span>Progress</span>
+      <span id="progressValue">0%</span>
+    </div>
+    <div class="w-full bg-white/20 rounded-full h-3 overflow-hidden">
+      <div id="progressBar" class="h-3 bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-1000"></div>
+    </div>
+  </div>
+
+  <!-- Trend Chart Style -->
+  <div class="mt-10">
+    <svg viewBox="0 0 200 60" class="w-full">
+      <polyline
+        fill="none"
+        stroke="#4ade80"
+        stroke-width="4"
+        points="5,50 40,42 75,30 110,35 145,20 185,10"
+        class="growth-line"
+      />
+    </svg>
+  </div>
+</div>
+
+<script>
+  // Count Animation
+  const counters = document.querySelectorAll(".count");
+  counters.forEach((count) => {
+    function update() {
+      const target = +count.getAttribute("data-target");
+      const current = +count.innerText;
+      const increment = target / 120;
+      if (current < target) {
+        count.innerText = Math.ceil(current + increment);
+        setTimeout(update, 10);
+      } else {
+        count.innerText = "$" + target.toLocaleString();
+      }
+    }
+    update();
+  });
+
+  // Progress Bar Animation
+  const progressBar = document.getElementById("progressBar");
+  const progressValue = document.getElementById("progressValue");
+  let width = 0;
+  const interval = setInterval(() => {
+    if (width >= 82) {
+      clearInterval(interval);
+    } else {
+      width++;
+      progressBar.style.width = width + "%";
+      progressValue.innerText = width + "%";
+    }
+  }, 15);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics Card Advanced</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes floatUp {
+      0% { transform: translateY(10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl">
+
+    <!-- Card -->
+    <div class="glass-card p-6 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer animate-[floatUp_0.8s_ease-out]">
+      <div class="flex justify-between items-center">
+        <h2 class="text-white text-xl font-semibold">Total Sales</h2>
+        <div class="p-3 rounded-xl bg-white/20">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 3v18h18M7 14l3-3 2 2 5-5" />
+          </svg>
+        </div>
+      </div>
+
+      <h3 class="text-4xl font-bold text-white mt-4 count" data-target="58240">0</h3>
+      <p class="text-gray-300 mt-2 text-sm">+12% from last month</p>
+    </div>
+
+    <!-- Card -->
+    <div class="glass-card p-6 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer animate-[floatUp_1s_ease-out]">
+      <div class="flex justify-between items-center">
+        <h2 class="text-white text-xl font-semibold">New Users</h2>
+        <div class="p-3 rounded-xl bg-white/20">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M17 21v-2a4 4 0 00-3-3.87 4 4 0 10-4 0A4 4 0 007 19v2" />
+          </svg>
+        </div>
+      </div>
+
+      <h3 class="text-4xl font-bold text-white mt-4 count" data-target="1250">0</h3>
+      <p class="text-gray-300 mt-2 text-sm">+5.4% this week</p>
+    </div>
+
+    <!-- Card -->
+    <div class="glass-card p-6 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer animate-[floatUp_1.2s_ease-out]">
+      <div class="flex justify-between items-center">
+        <h2 class="text-white text-xl font-semibold">Revenue</h2>
+        <div class="p-3 rounded-xl bg-white/20">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 8c-1.667 0-3 .833-3 2.5S10.333 13 12 13s3 .833 3 2.5S13.667 18 12 18m0-12v2m0 8v2" />
+          </svg>
+        </div>
+      </div>
+
+      <h3 class="text-4xl font-bold text-white mt-4 count" data-target="987000">0</h3>
+      <p class="text-gray-300 mt-2 text-sm">Monthly Revenue</p>
+    </div>
+
+    <!-- Card -->
+    <div class="glass-card p-6 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer animate-[floatUp_1.4s_ease-out]">
+      <div class="flex justify-between items-center">
+        <h2 class="text-white text-xl font-semibold">Active Sessions</h2>
+        <div class="p-3 rounded-xl bg-white/20">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 6v6l4 2" />
+          </svg>
+        </div>
+      </div>
+
+      <h3 class="text-4xl font-bold text-white mt-4 count" data-target="764">0</h3>
+      <p class="text-gray-300 mt-2 text-sm">Live Right Now</p>
+    </div>
+
+  </div>
+
+  <!-- Count-Up Script -->
+  <script>
+    const counters = document.querySelectorAll(".count");
+    counters.forEach((count) => {
+      function update() {
+        const target = +count.getAttribute("data-target");
+        const current = +count.innerText;
+        const increment = target / 150;
+        if (current < target) {
+          count.innerText = Math.ceil(current + increment);
+          setTimeout(update, 10);
+        } else {
+          count.innerText = target.toLocaleString();
+        }
+      }
+      update();
+    });
+  </script>
+
+</body>
+</html>
