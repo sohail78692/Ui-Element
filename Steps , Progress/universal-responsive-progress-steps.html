@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Universal Progress Steps</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .step-active {
+      background: #4f46e5;
+      color: white !important;
+      border-color: #4f46e5;
+      transform: scale(1.15);
+      transition: .3s ease;
+      box-shadow: 0 0 14px #4f46e588;
+    }
+
+    .progress-bar {
+      transition: width .4s ease;
+    }
+  </style>
+</head>
+
+<body class="p-6 bg-gray-100 min-h-screen flex justify-center items-center">
+
+  <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8">
+
+    <h2 class="text-3xl font-bold text-center text-gray-900 mb-10">Progress Tracker</h2>
+
+    <!-- Responsive Steps -->
+    <div class="relative flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+
+      <!-- Background bar -->
+      <div class="absolute md:top-1/2 left-1/2 md:-translate-y-1/2 -translate-x-1/2 
+                  w-1 h-full md:w-full md:h-1 bg-gray-300 rounded-full -z-10"></div>
+
+      <!-- Animated bar -->
+      <div id="bar" class="progress-bar absolute md:top-1/2 left-1/2 md:-translate-y-1/2 -translate-x-1/2
+                           h-full md:h-1 w-0 bg-indigo-600 rounded-full -z-10"></div>
+
+      <div class="step flex flex-col items-center gap-2 text-center">
+        <div class="w-12 h-12 border-2 border-gray-400 rounded-full flex items-center justify-center text-xl font-bold text-gray-600">
+          📝
+        </div>
+        <p class="text-sm font-medium text-gray-700">Details</p>
+      </div>
+
+      <div class="step flex flex-col items-center gap-2 text-center">
+        <div class="w-12 h-12 border-2 border-gray-400 rounded-full flex items-center justify-center text-xl font-bold text-gray-600">
+          📦
+        </div>
+        <p class="text-sm font-medium text-gray-700">Shipping</p>
+      </div>
+
+      <div class="step flex flex-col items-center gap-2 text-center">
+        <div class="w-12 h-12 border-2 border-gray-400 rounded-full flex items-center justify-center text-xl font-bold text-gray-600">
+          💳
+        </div>
+        <p class="text-sm font-medium text-gray-700">Payment</p>
+      </div>
+
+      <div class="step flex flex-col items-center gap-2 text-center">
+        <div class="w-12 h-12 border-2 border-gray-400 rounded-full flex items-center justify-center text-xl font-bold text-gray-600">
+          🎉
+        </div>
+        <p class="text-sm font-medium text-gray-700">Complete</p>
+      </div>
+
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-center gap-4 mt-10">
+      <button id="prev" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg font-medium disabled:opacity-50">
+        Prev
+      </button>
+      <button id="next" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
+        Next
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    const steps = document.querySelectorAll(".step div:first-child");
+    const bar = document.getElementById("bar");
+    const nextBtn = document.getElementById("next");
+    const prevBtn = document.getElementById("prev");
+
+    let current = 1;
+
+    function update() {
+      steps.forEach((step, i) => {
+        if (i < current) step.classList.add("step-active");
+        else step.classList.remove("step-active");
+      });
+
+      bar.style.width = `${((current - 1) / (steps.length - 1)) * 100}%`;
+
+      nextBtn.disabled = current === steps.length;
+      prevBtn.disabled = current === 1;
+    }
+
+    nextBtn.addEventListener("click", () => {
+      current++;
+      if (current > steps.length) current = steps.length;
+      update();
+    });
+
+    prevBtn.addEventListener("click", () => {
+      current--;
+      if (current < 1) current = 1;
+      update();
+    });
+
+    update();
+  </script>
+
+</body>
+</html>

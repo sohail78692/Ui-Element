@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Animated Progress Steps</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .circle {
+      transition: .4s ease;
+    }
+    .line {
+      transition: width .4s ease;
+    }
+    .active {
+      background: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-6">
+
+  <div class="w-full max-w-xl text-center">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Multi-Step Progress</h2>
+
+    <!-- Progress bar container -->
+    <div class="relative flex justify-between mb-10">
+      <div id="progress" class="absolute top-1/2 left-0 h-1 bg-indigo-600 line -z-10"
+           style="width: 0%; transform: translateY(-50%);"></div>
+
+      <div class="step circle w-10 h-10 rounded-full border-2 border-gray-400 flex items-center justify-center font-semibold text-gray-600">1</div>
+      <div class="step circle w-10 h-10 rounded-full border-2 border-gray-400 flex items-center justify-center font-semibold text-gray-600">2</div>
+      <div class="step circle w-10 h-10 rounded-full border-2 border-gray-400 flex items-center justify-center font-semibold text-gray-600">3</div>
+      <div class="step circle w-10 h-10 rounded-full border-2 border-gray-400 flex items-center justify-center font-semibold text-gray-600">4</div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-center gap-4">
+      <button id="prev" class="px-5 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium disabled:opacity-50">
+        Prev
+      </button>
+      <button id="next" class="px-5 py-2 bg-indigo-600 text-white rounded-lg font-medium">
+        Next
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const progress = document.getElementById("progress");
+    const prev = document.getElementById("prev");
+    const next = document.getElementById("next");
+    const steps = document.querySelectorAll(".step");
+
+    let currentStep = 1;
+
+    next.addEventListener("click", () => {
+      currentStep++;
+      if (currentStep > steps.length) {
+        currentStep = steps.length;
+      }
+      update();
+    });
+
+    prev.addEventListener("click", () => {
+      currentStep--;
+      if (currentStep < 1) {
+        currentStep = 1;
+      }
+      update();
+    });
+
+    function update() {
+      steps.forEach((step, index) => {
+        if (index < currentStep) {
+          step.classList.add("active");
+        } else {
+          step.classList.remove("active");
+        }
+      });
+
+      const actives = document.querySelectorAll(".active");
+      progress.style.width = `${((actives.length - 1) / (steps.length - 1)) * 100}%`;
+
+      prev.disabled = currentStep === 1;
+      next.disabled = currentStep === steps.length;
+    }
+
+    update();
+  </script>
+
+</body>
+</html>
