@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Login Buttons</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .social-btn {
+      transition: 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    }
+
+    .glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.6), transparent 60%);
+      opacity: 0;
+      transition: .4s ease;
+    }
+
+    .social-btn:hover .glow {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 flex items-center justify-center p-8">
+
+  <div class="bg-gray-800 text-white p-10 rounded-3xl w-[420px] shadow-2xl text-center">
+    <h1 class="text-3xl font-bold mb-6">Continue with</h1>
+
+    <div class="grid gap-4">
+      <!-- Google -->
+      <button class="social-btn bg-white text-black font-semibold rounded-xl py-3 flex items-center justify-center gap-3">
+        <div class="glow"></div>
+        <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png" class="w-6" />
+        Continue with Google
+      </button>
+
+      <!-- Github -->
+      <button class="social-btn bg-[#111] text-white font-semibold rounded-xl py-3 flex items-center justify-center gap-3">
+        <div class="glow"></div>
+        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="w-6 invert" />
+        Continue with GitHub
+      </button>
+
+      <!-- Facebook -->
+      <button class="social-btn bg-[#1877f2] text-white font-semibold rounded-xl py-3 flex items-center justify-center gap-3">
+        <div class="glow"></div>
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" class="w-6" />
+        Continue with Facebook
+      </button>
+
+      <!-- Apple -->
+      <button class="social-btn bg-[#ffffff]/10 border border-white/30 text-white font-semibold rounded-xl py-3 flex items-center justify-center gap-3">
+        <div class="glow"></div>
+        <img src="https://cdn-icons-png.flaticon.com/512/179/179309.png" class="w-6 invert" />
+        Continue with Apple
+      </button>
+    </div>
+
+    <p class="text-gray-400 text-sm mt-6">We will never share your personal data.</p>
+  </div>
+
+</body>
+</html>
