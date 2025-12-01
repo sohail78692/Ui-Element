@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Glow Button</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .neon-btn {
+      position: relative;
+      transition: 0.3s ease;
+      box-shadow: 0 0 10px #00f2ff, 0 0 25px #00f2ff, inset 0 0 10px #00f2ff;
+    }
+
+    .neon-btn:hover {
+      box-shadow: 0 0 15px #00f2ff, 0 0 40px #00f2ff, inset 0 0 15px #00f2ff;
+      transform: translateY(-3px);
+    }
+
+    .neon-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #00f2ff, #ff00e1);
+      opacity: 0.5;
+      filter: blur(15px);
+      z-index: -1;
+      animation: glow 2.5s linear infinite;
+    }
+
+    @keyframes glow {
+      0% {
+        filter: blur(10px);
+      }
+      50% {
+        filter: blur(18px);
+      }
+      100% {
+        filter: blur(10px);
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gray-900 p-6">
+
+  <button class="neon-btn text-white px-10 py-4 text-xl font-semibold rounded-lg uppercase tracking-wide bg-black/40 backdrop-blur-md">
+    Neon Glow
+  </button>
+
+</body>
+
+</html>

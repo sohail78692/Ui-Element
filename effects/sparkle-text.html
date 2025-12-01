@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sparkle Shine Text</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .gold {
+      background: linear-gradient(90deg, #d4af37, #ffd700, #fff4c2, #ffd700, #d4af37);
+      background-size: 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 4s linear infinite;
+      position: relative;
+    }
+
+    @keyframes shine {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .glow::before {
+      content: "";
+      position: absolute;
+      left: -80px;
+      top: 0;
+      width: 80px;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+      transform: skewX(-20deg);
+      animation: sweep 2.8s infinite ease-in-out;
+    }
+
+    @keyframes sweep {
+      from { transform: translateX(0) skewX(-20deg); opacity: 0; }
+      50% { opacity: 1; }
+      to { transform: translateX(450px) skewX(-20deg); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-black">
+
+  <h1 class="gold glow relative text-center text-6xl md:text-8xl font-extrabold tracking-wider select-none">
+    PREMIUM UI
+  </h1>
+
+</body>
+
+</html>

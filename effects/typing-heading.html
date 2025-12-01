@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Text Animation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .typing {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 3px solid #fff;
+      animation: typing 4s steps(30) infinite, blink .7s infinite step-end alternate;
+    }
+
+    @keyframes typing {
+      0% {
+        width: 0;
+      }
+
+      50% {
+        width: 100%;
+      }
+
+      100% {
+        width: 0;
+      }
+    }
+
+    @keyframes blink {
+      50% {
+        border-color: transparent;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gray-900 p-6">
+
+  <div class="text-center">
+    <h1 class="text-4xl md:text-6xl font-bold text-white typing mx-auto w-fit">
+      Build Stunning UI Elements ✨
+    </h1>
+    <p class="text-gray-300 mt-6 text-lg">
+      Beautiful animated heading using pure CSS typing animation.
+    </p>
+  </div>
+
+</body>
+
+</html>

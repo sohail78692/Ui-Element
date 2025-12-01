@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glass Floating Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .float {
+      animation: floating 3s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-900 p-6">
+
+  <div
+    class="float backdrop-blur-lg bg-white/10 border border-white/15 rounded-3xl p-8 shadow-xl max-w-sm text-center text-white">
+    <h2 class="text-3xl font-bold mb-3">Glassmorphism Card</h2>
+    <p class="text-gray-300">
+      Smooth floating animation with frosted transparent UI. Perfect for hero sections & dashboards.
+    </p>
+
+    <button
+      class="mt-5 px-6 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition font-semibold tracking-wide">
+      Explore
+    </button>
+  </div>
+
+</body>
+
+</html>
