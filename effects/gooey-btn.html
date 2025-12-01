@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gooey Button</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .gooey-container {
+      filter: url(#gooey);
+    }
+
+    .blob {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: #00eaff;
+      border-radius: 50%;
+      animation: moveBlobs 4s infinite ease-in-out;
+    }
+
+    @keyframes moveBlobs {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(50px, -20px); }
+      50% { transform: translate(-40px, 30px); }
+      75% { transform: translate(20px, -10px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    button:hover .blob {
+      animation-duration: 1.8s;
+      filter: brightness(1.5);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-[#0d0d0d]">
+
+  <!-- Gooey Filter -->
+  <svg width="0" height="0">
+    <defs>
+      <filter id="gooey">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feColorMatrix in="blur"
+          mode="matrix"
+          values="
+            1 0 0 0 0
+            0 1 0 0 0
+            0 0 1 0 0
+            0 0 0 18 -7"
+          result="gooey" />
+        <feBlend in="SourceGraphic" in2="gooey" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Button Container -->
+  <div class="gooey-container relative flex">
+    <button
+      class="relative z-10 px-12 py-4 text-2xl font-semibold text-black rounded-full bg-[#00eaff] shadow-xl uppercase tracking-wide backdrop-blur-sm">
+      Gooey
+    </button>
+
+    <!-- blobs -->
+    <span class="blob"></span>
+    <span class="blob" style="animation-delay: .6s"></span>
+    <span class="blob" style="animation-delay: 1.2s"></span>
+    <span class="blob" style="animation-delay: 1.8s"></span>
+  </div>
+
+</body>
+
+</html>

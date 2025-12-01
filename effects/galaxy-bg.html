@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galaxy Background Interaction</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: 1;
+    }
+  </style>
+</head>
+
+<body class="overflow-hidden bg-black">
+
+  <canvas id="stars"></canvas>
+
+  <div class="relative z-10 flex items-center justify-center min-h-screen text-center text-white px-8">
+    <div>
+      <h1 class="text-5xl md:text-7xl font-extrabold tracking-wide">Galaxy Background</h1>
+      <p class="text-gray-300 text-lg mt-4 max-w-2xl mx-auto">
+        Interactive starfield that moves based on mouse direction and speed.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+
+    let stars = [];
+    let mouseX = 0, mouseY = 0;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = [];
+
+      for (let i = 0; i < 250; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 1.8,
+          speed: Math.random() * 0.8 + 0.2
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "white";
+
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        let dx = (mouseX - canvas.width / 2) * 0.0004;
+        let dy = (mouseY - canvas.height / 2) * 0.0004;
+
+        star.x += star.speed * dx * 200;
+        star.y += star.speed * dy * 200;
+
+        if (star.x < 0 || star.x > canvas.width || star.y < 0 || star.y > canvas.height) {
+          star.x = Math.random() * canvas.width;
+          star.y = Math.random() * canvas.height;
+        }
+      });
+
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    window.addEventListener("resize", resize);
+
+    resize();
+    drawStars();
+  </script>
+
+</body>
+
+</html>
