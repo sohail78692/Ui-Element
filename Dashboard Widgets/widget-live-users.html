@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Users Pulse Widget</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .pulse {
+      animation: pulseGlow 1.3s infinite ease-in-out;
+      box-shadow: 0 0 15px #00ffa6;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.18); opacity: 0.65; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .wave {
+      animation: waveMove 1.2s infinite ease-in-out alternate;
+    }
+
+    @keyframes waveMove {
+      from { height: 10%; }
+      to { height: 60%; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 flex items-center justify-center p-6">
+
+  <div class="bg-gray-800 p-7 rounded-3xl shadow-2xl text-white w-80">
+    <h3 class="text-lg font-semibold mb-4">Live Online Users</h3>
+
+    <!-- Main Count + Pulse Icon -->
+    <div class="flex items-center gap-4 mb-5">
+      <div class="w-5 h-5 bg-[#00FFA6] rounded-full pulse"></div>
+      <h1 id="userCount" class="text-4xl font-bold tracking-wide">0</h1>
+    </div>
+
+    <!-- Waveform Pulse -->
+    <div class="flex items-end gap-1 h-16 mt-4">
+      <div class="wave bg-[#00ffa6] w-2 rounded-lg" style="animation-delay: .1s"></div>
+      <div class="wave bg-[#00ffa6] w-2 rounded-lg" style="animation-delay: .2s"></div>
+      <div class="wave bg-[#00ffa6] w-2 rounded-lg" style="animation-delay: .3s"></div>
+      <div class="wave bg-[#00ffa6] w-2 rounded-lg" style="animation-delay: .4s"></div>
+      <div class="wave bg-[#00ffa6] w-2 rounded-lg" style="animation-delay: .5s"></div>
+      <div class="wave bg-[#00ffa6] w-2 rounded-lg" style="animation-delay: .6s"></div>
+    </div>
+
+    <p class="text-gray-400 text-sm mt-4">Tracking active sessions worldwide 🌍</p>
+  </div>
+
+  <script>
+    let count = 2890;  // starting users
+    const display = document.getElementById("userCount");
+
+    function update() {
+      const change = Math.floor(Math.random() * 15) - 5; // random +/- change
+      count += change;
+      if (count < 0) count = 0;
+      display.textContent = count.toLocaleString();
+    }
+
+    setInterval(update, 1200);
+    update();
+  </script>
+
+</body>
+
+</html>
