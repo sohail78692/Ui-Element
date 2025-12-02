@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Transaction Table</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex justify-center items-center p-6">
+
+  <div class="w-full max-w-6xl bg-white p-6 rounded-2xl shadow-2xl border border-gray-200">
+
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Recent Transactions</h2>
+
+    <!-- DESKTOP TABLE -->
+    <div class="overflow-x-auto hidden md:block">
+      <table class="w-full text-left text-gray-700">
+        <thead class="bg-gray-50 border-b">
+          <tr>
+            <th class="py-3 px-4">Date</th>
+            <th class="py-3 px-4">Description</th>
+            <th class="py-3 px-4">Category</th>
+            <th class="py-3 px-4">Payment</th>
+            <th class="py-3 px-4 text-right">Amount</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr class="border-b hover:bg-gray-100 transition">
+            <td class="py-3 px-4">Feb 12, 2025</td>
+            <td class="py-3 px-4">McDonald's</td>
+            <td class="py-3 px-4">
+              <span class="px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-700">Food</span>
+            </td>
+            <td class="py-3 px-4">💳 Card</td>
+            <td class="py-3 px-4 text-right text-red-500 font-semibold">- ₹450</td>
+          </tr>
+
+          <tr class="border-b hover:bg-gray-100 transition">
+            <td class="py-3 px-4">Feb 10, 2025</td>
+            <td class="py-3 px-4">Salary Credited</td>
+            <td class="py-3 px-4">
+              <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-700">Income</span>
+            </td>
+            <td class="py-3 px-4">🏦 Bank</td>
+            <td class="py-3 px-4 text-right text-green-600 font-semibold">+ ₹25,000</td>
+          </tr>
+
+          <tr class="border-b hover:bg-gray-100 transition">
+            <td class="py-3 px-4">Feb 09, 2025</td>
+            <td class="py-3 px-4">Amazon Purchase</td>
+            <td class="py-3 px-4">
+              <span class="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">Shopping</span>
+            </td>
+            <td class="py-3 px-4">💳 Card</td>
+            <td class="py-3 px-4 text-right text-red-500 font-semibold">- ₹1,299</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MOBILE VIEW CARDS -->
+    <div class="md:hidden space-y-4">
+      
+      <div class="bg-gray-50 p-4 rounded-xl border shadow-sm">
+        <div class="flex justify-between">
+          <p class="font-semibold text-gray-900">McDonald's</p>
+          <p class="text-red-500 font-semibold">- ₹450</p>
+        </div>
+        <p class="text-gray-600 text-sm">Feb 12, 2025 | 💳 Card</p>
+        <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-700">Food</span>
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded-xl border shadow-sm">
+        <div class="flex justify-between">
+          <p class="font-semibold text-gray-900">Salary Credited</p>
+          <p class="text-green-600 font-semibold">+ ₹25,000</p>
+        </div>
+        <p class="text-gray-600 text-sm">Feb 10, 2025 | 🏦 Bank</p>
+        <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm bg-green-100 text-green-700">Income</span>
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded-xl border shadow-sm">
+        <div class="flex justify-between">
+          <p class="font-semibold text-gray-900">Amazon Purchase</p>
+          <p class="text-red-500 font-semibold">- ₹1,299</p>
+        </div>
+        <p class="text-gray-600 text-sm">Feb 09, 2025 | 💳 Card</p>
+        <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">Shopping</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
