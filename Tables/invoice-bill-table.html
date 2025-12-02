@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice Bill Table</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex justify-center items-center p-6">
+
+  <div class="w-full max-w-5xl bg-white p-6 rounded-2xl shadow-2xl border border-gray-200">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-3 mb-6">
+      <h1 class="text-3xl font-bold text-gray-800">Invoice #INV-2025-001</h1>
+      <button onclick="window.print()" class="px-5 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
+        Print Invoice
+      </button>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="mb-6">
+      <p class="text-gray-600"><b>Customer:</b> Sohail Akhtar</p>
+      <p class="text-gray-600"><b>Email:</b> sohail@example.com</p>
+      <p class="text-gray-600"><b>Date:</b> Feb 10, 2025</p>
+    </div>
+
+    <!-- Desktop Table -->
+    <div class="overflow-x-auto hidden md:block">
+      <table class="w-full text-left text-gray-700">
+        <thead class="bg-gray-50 border-b">
+          <tr>
+            <th class="py-3 px-4">Item</th>
+            <th class="py-3 px-4">Qty</th>
+            <th class="py-3 px-4">Price</th>
+            <th class="py-3 px-4">Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="border-b">
+            <td class="py-3 px-4">UI Design Service</td>
+            <td class="py-3 px-4">2</td>
+            <td class="py-3 px-4">$120</td>
+            <td class="py-3 px-4 font-semibold">$240</td>
+          </tr>
+
+          <tr class="border-b">
+            <td class="py-3 px-4">Hosting Fee</td>
+            <td class="py-3 px-4">1</td>
+            <td class="py-3 px-4">$70</td>
+            <td class="py-3 px-4 font-semibold">$70</td>
+          </tr>
+
+          <tr>
+            <td class="py-3 px-4">Domain Purchase</td>
+            <td class="py-3 px-4">1</td>
+            <td class="py-3 px-4">$10</td>
+            <td class="py-3 px-4 font-semibold">$10</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Card Table -->
+    <div class="space-y-4 md:hidden">
+      <div class="bg-gray-50 p-4 rounded-xl border shadow-sm">
+        <p class="font-semibold text-gray-900 text-lg">UI Design Service</p>
+        <p class="text-gray-600 text-sm">Qty: 2</p>
+        <p class="text-gray-600 text-sm">Price: $120</p>
+        <p class="font-semibold text-gray-900 mt-2">Total: $240</p>
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded-xl border shadow-sm">
+        <p class="font-semibold text-gray-900 text-lg">Hosting Fee</p>
+        <p class="text-gray-600 text-sm">Qty: 1</p>
+        <p class="text-gray-600 text-sm">Price: $70</p>
+        <p class="font-semibold text-gray-900 mt-2">Total: $70</p>
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded-xl border shadow-sm">
+        <p class="font-semibold text-gray-900 text-lg">Domain Purchase</p>
+        <p class="text-gray-600 text-sm">Qty: 1</p>
+        <p class="text-gray-600 text-sm">Price: $10</p>
+        <p class="font-semibold text-gray-900 mt-2">Total: $10</p>
+      </div>
+    </div>
+
+    <!-- Footer Summary -->
+    <div class="border-t mt-6 pt-4 flex flex-col md:flex-row justify-between items-center">
+      <div>
+        <p class="text-gray-600 text-sm"><b>Payment Status:</b>
+          <span class="px-3 py-1 rounded-full bg-green-100 text-green-600">Paid</span>
+        </p>
+      </div>
+
+      <div class="text-right mt-4 md:mt-0">
+        <p class="text-gray-600 font-medium">Subtotal: $320</p>
+        <p class="text-gray-600 font-medium">Tax (10%): $32</p>
+        <p class="text-2xl font-bold text-gray-900 mt-1">Grand Total: $352</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
