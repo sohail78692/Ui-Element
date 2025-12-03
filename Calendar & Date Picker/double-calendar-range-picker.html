@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Double Calendar Date Range Picker - Ui Element</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card-bg: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.25);
+      --border: rgba(148, 163, 184, 0.35);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 60%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: 26px;
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, #111827 0, #020617 50%);
+      box-shadow:
+        0 18px 45px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 1);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -140px;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.06), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.08), transparent 60%);
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .title {
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Range display */
+    .range-display {
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+    }
+
+    .range-pill {
+      border-radius: 999px;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .range-pill span {
+      white-space: nowrap;
+    }
+
+    .dot-green {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .hint {
+      opacity: 0.75;
+    }
+
+    .clear-btn {
+      border-radius: 999px;
+      padding: 6px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.78rem;
+      outline: none;
+      white-space: nowrap;
+    }
+
+    .clear-btn:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* Layout for double calendar */
+    .calendars {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        border-radius: 22px;
+        padding: 16px 12px 12px;
+      }
+
+      .calendars {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .calendar {
+      border-radius: 18px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      overflow: hidden;
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.8);
+    }
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 9px 7px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      background: linear-gradient(to right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.86));
+    }
+
+    .month-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .nav-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.95);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .nav-btn:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .calendar-grid {
+      padding: 7px 8px 8px;
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 5px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .day {
+      height: 30px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .day.outside {
+      color: rgba(148, 163, 184, 0.45);
+    }
+
+    .day:hover {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.75);
+    }
+
+    .day.today {
+      border-color: rgba(56, 189, 248, 0.7);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+    }
+
+    .day.selected {
+      background: radial-gradient(circle at top, #38bdf8, #0369a1);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.7);
+    }
+
+    .day.in-range:not(.selected) {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.32);
+    }
+
+    .day.range-start::before,
+    .day.range-end::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(56, 189, 248, 0.5), transparent);
+      z-index: -1;
+    }
+
+    .day.range-end::before {
+      background: linear-gradient(to left, rgba(56, 189, 248, 0.5), transparent);
+    }
+
+    .calendar-footer {
+      padding: 6px 8px 7px;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      font-size: 0.74rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-pill {
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot-blue {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #38bdf8;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+    }
+
+    .today-link {
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      background: rgba(8, 47, 73, 0.9);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.74rem;
+      white-space: nowrap;
+    }
+
+    .today-link:active {
+      transform: translateY(1px) scale(0.98);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="card-inner">
+        <div class="header">
+          <div class="title-wrap">
+            <div class="title">Date Range Picker</div>
+            <div class="subtitle">Double calendar for bookings, analytics & filters</div>
+          </div>
+          <div class="badge">Double Calendar</div>
+        </div>
+
+        <div class="range-display">
+          <div class="range-pill">
+            <span class="dot-green"></span>
+            <span id="rangeLabel">No dates selected</span>
+          </div>
+          <button class="clear-btn" id="clearRangeBtn" type="button">Clear range</button>
+        </div>
+
+        <div class="range-display">
+          <span class="hint">
+            Click once to set <strong>start</strong>, again to set <strong>end</strong>. Select backwards also works.
+          </span>
+        </div>
+
+        <div class="calendars">
+          <!-- Left calendar -->
+          <div class="calendar" data-side="left">
+            <div class="calendar-header">
+              <button class="nav-btn" id="prevMonthBtn" type="button">‹</button>
+              <div class="month-label" id="leftMonthLabel">March 2025</div>
+              <div style="width:26px"></div>
+            </div>
+            <div class="calendar-grid">
+              <div class="weekdays">
+                <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+              </div>
+              <div class="days" id="leftDays"></div>
+            </div>
+            <div class="calendar-footer">
+              <div class="footer-pill">
+                <span class="dot-blue"></span>
+                <span>Left month</span>
+              </div>
+              <button class="today-link" id="jumpTodayLeft" type="button">Today here</button>
+            </div>
+          </div>
+
+          <!-- Right calendar -->
+          <div class="calendar" data-side="right">
+            <div class="calendar-header">
+              <div style="width:26px"></div>
+              <div class="month-label" id="rightMonthLabel">April 2025</div>
+              <button class="nav-btn" id="nextMonthBtn" type="button">›</button>
+            </div>
+            <div class="calendar-grid">
+              <div class="weekdays">
+                <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+              </div>
+              <div class="days" id="rightDays"></div>
+            </div>
+            <div class="calendar-footer">
+              <div class="footer-pill">
+                <span class="dot-blue"></span>
+                <span>Right month</span>
+              </div>
+              <button class="today-link" id="jumpTodayRight" type="button">Today here</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const leftMonthLabel = document.getElementById("leftMonthLabel");
+    const rightMonthLabel = document.getElementById("rightMonthLabel");
+    const leftDaysContainer = document.getElementById("leftDays");
+    const rightDaysContainer = document.getElementById("rightDays");
+    const prevMonthBtn = document.getElementById("prevMonthBtn");
+    const nextMonthBtn = document.getElementById("nextMonthBtn");
+    const jumpTodayLeft = document.getElementById("jumpTodayLeft");
+    const jumpTodayRight = document.getElementById("jumpTodayRight");
+    const clearRangeBtn = document.getElementById("clearRangeBtn");
+    const rangeLabel = document.getElementById("rangeLabel");
+
+    let baseDate = new Date(); // left calendar month
+    baseDate.setDate(1);
+    let selectedStart = null;
+    let selectedEnd = null;
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    function formatDate(date) {
+      if (!date) return "";
+      const d = String(date.getDate()).padStart(2, "0");
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const y = date.getFullYear();
+      return `${d}/${m}/${y}`;
+    }
+
+    function updateRangeLabel() {
+      if (!selectedStart && !selectedEnd) {
+        rangeLabel.textContent = "No dates selected";
+        return;
+      }
+      if (selectedStart && !selectedEnd) {
+        rangeLabel.textContent = `Start: ${formatDate(selectedStart)} (select end date)`;
+        return;
+      }
+      if (selectedStart && selectedEnd) {
+        rangeLabel.textContent = `${formatDate(selectedStart)} → ${formatDate(selectedEnd)}`;
+      }
+    }
+
+    function sameDay(a, b) {
+      return a && b &&
+        a.getFullYear() === b.getFullYear() &&
+        a.getMonth() === b.getMonth() &&
+        a.getDate() === b.getDate();
+    }
+
+    function isBetween(date, start, end) {
+      if (!start || !end) return false;
+      const t = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+      const s = new Date(start.getFullYear(), start.getMonth(), start.getDate()).getTime();
+      const e = new Date(end.getFullYear(), end.getMonth(), end.getDate()).getTime();
+      return t > s && t < e;
+    }
+
+    function buildCalendar(container, monthOffset) {
+      container.innerHTML = "";
+      const current = new Date(baseDate.getFullYear(), baseDate.getMonth() + monthOffset, 1);
+      const year = current.getFullYear();
+      const month = current.getMonth();
+
+      const firstDayOfMonth = new Date(year, month, 1);
+      const lastDayOfMonth = new Date(year, month + 1, 0);
+      const prevMonthLastDay = new Date(year, month, 0);
+
+      const startingDayIndex = firstDayOfMonth.getDay();
+      const totalDaysInMonth = lastDayOfMonth.getDate();
+      const totalDaysInPrevMonth = prevMonthLastDay.getDate();
+
+      const totalCells = 42; // 6 weeks grid
+
+      const cells = [];
+      // prev month tail
+      for (let i = startingDayIndex - 1; i >= 0; i--) {
+        const dayNum = totalDaysInPrevMonth - i;
+        const date = new Date(year, month - 1, dayNum);
+        cells.push({ dayNum, date, outside: true });
+      }
+      // current month
+      for (let d = 1; d <= totalDaysInMonth; d++) {
+        const date = new Date(year, month, d);
+        cells.push({ dayNum: d, date, outside: false });
+      }
+      // next month head
+      let extra = totalCells - cells.length;
+      for (let d = 1; d <= extra; d++) {
+        const date = new Date(year, month + 1, d);
+        cells.push({ dayNum: d, date, outside: true });
+      }
+
+      cells.forEach((cell) => {
+        const dayEl = document.createElement("button");
+        dayEl.type = "button";
+        dayEl.classList.add("day");
+        if (cell.outside) dayEl.classList.add("outside");
+
+        const today = new Date();
+        if (sameDay(cell.date, today)) {
+          dayEl.classList.add("today");
+        }
+
+        if (selectedStart && sameDay(cell.date, selectedStart)) {
+          dayEl.classList.add("selected", "range-start");
+        }
+
+        if (selectedEnd && sameDay(cell.date, selectedEnd)) {
+          dayEl.classList.add("selected", "range-end");
+        }
+
+        if (selectedStart && selectedEnd && isBetween(cell.date, selectedStart, selectedEnd)) {
+          dayEl.classList.add("in-range");
+        }
+
+        dayEl.textContent = cell.dayNum;
+        dayEl.addEventListener("click", () => handleDayClick(cell.date));
+        container.appendChild(dayEl);
+      });
+
+      // update labels
+      if (monthOffset === 0) {
+        leftMonthLabel.textContent = `${monthNames[month]} ${year}`;
+      } else {
+        rightMonthLabel.textContent = `${monthNames[month]} ${year}`;
+      }
+    }
+
+    function handleDayClick(date) {
+      // If no range or both start & end set -> start new range
+      if (!selectedStart || (selectedStart && selectedEnd)) {
+        selectedStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        selectedEnd = null;
+      } else if (selectedStart && !selectedEnd) {
+        const clicked = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        if (clicked < selectedStart) {
+          selectedEnd = selectedStart;
+          selectedStart = clicked;
+        } else if (sameDay(clicked, selectedStart)) {
+          selectedEnd = null; // single-day
+        } else {
+          selectedEnd = clicked;
+        }
+      }
+      updateRangeLabel();
+      renderAll();
+    }
+
+    function renderAll() {
+      buildCalendar(leftDaysContainer, 0);
+      buildCalendar(rightDaysContainer, 1);
+    }
+
+    // Buttons
+    prevMonthBtn.addEventListener("click", () => {
+      baseDate.setMonth(baseDate.getMonth() - 1);
+      renderAll();
+    });
+
+    nextMonthBtn.addEventListener("click", () => {
+      baseDate.setMonth(baseDate.getMonth() + 1);
+      renderAll();
+    });
+
+    jumpTodayLeft.addEventListener("click", () => {
+      const today = new Date();
+      baseDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      selectedStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      selectedEnd = null;
+      updateRangeLabel();
+      renderAll();
+    });
+
+    jumpTodayRight.addEventListener("click", () => {
+      const today = new Date();
+      baseDate = new Date(today.getFullYear(), today.getMonth() - 1, 1); // so today month becomes right
+      selectedStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      selectedEnd = null;
+      updateRangeLabel();
+      renderAll();
+    });
+
+    clearRangeBtn.addEventListener("click", () => {
+      selectedStart = null;
+      selectedEnd = null;
+      updateRangeLabel();
+      renderAll();
+    });
+
+    // Init
+    (function init() {
+      updateRangeLabel();
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
