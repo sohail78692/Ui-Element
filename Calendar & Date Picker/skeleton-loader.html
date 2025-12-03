@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Skeleton Loader - Ui Element</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050816;
+      --card-bg: #0f172a;
+      --skeleton-base: #1e293b;
+      --skeleton-highlight: #334155;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: #e5e7eb;
+    }
+
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 24px;
+      padding: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow:
+        0 18px 45px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(148, 163, 184, 0.15);
+      backdrop-filter: blur(16px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.75;
+    }
+
+    /* Skeleton Animation */
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: var(--skeleton-base);
+    }
+
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(148, 163, 184, 0.4) 40%,
+        rgba(148, 163, 184, 0.8) 50%,
+        rgba(148, 163, 184, 0.4) 60%,
+        transparent 100%
+      );
+      animation: shimmer 1.4s infinite;
+    }
+
+    @keyframes shimmer {
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .skeleton-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+    }
+
+    .skeleton-line {
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .skeleton-line.sm {
+      width: 35%;
+    }
+
+    .skeleton-line.md {
+      width: 60%;
+    }
+
+    .skeleton-line.lg {
+      width: 90%;
+    }
+
+    .skeleton-tag {
+      width: 65px;
+      height: 20px;
+      border-radius: 999px;
+    }
+
+    /* Card skeleton layout */
+    .profile-skeleton {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .profile-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+      gap: 16px;
+    }
+
+    .row .skeleton-line {
+      flex: 1;
+    }
+
+    .row .skeleton-tag {
+      flex-shrink: 0;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(148, 163, 184, 0.5),
+        transparent
+      );
+      margin: 12px 0;
+    }
+
+    .footer-lines {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    /* Right side: list skeletons */
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(96, 165, 250, 0.9);
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.9);
+      flex-shrink: 0;
+    }
+
+    .list-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .chip-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .chip {
+      height: 18px;
+      border-radius: 999px;
+      padding: 0 12px;
+      font-size: 0.7rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: flex;
+      align-items: center;
+      opacity: 0.8;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 0.78rem;
+      opacity: 0.75;
+    }
+
+    .btn-row {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 8px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.78rem;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 80%);
+      cursor: pointer;
+      outline: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn span.dot-pill {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .btn.secondary {
+      opacity: 0.8;
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .btn[data-speed="slow"].active {
+      border-color: #f97316;
+      box-shadow: 0 0 14px rgba(249, 115, 22, 0.6);
+    }
+
+    .btn[data-speed="normal"].active {
+      border-color: #22c55e;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.6);
+    }
+
+    .btn[data-speed="fast"].active {
+      border-color: #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left: Card Skeleton -->
+    <div class="card">
+      <div class="card-header">
+        <div class="title">Profile Card Skeleton</div>
+        <div class="pill">Skeleton • Loading</div>
+      </div>
+
+      <div class="profile-skeleton">
+        <div class="skeleton skeleton-circle"></div>
+        <div class="profile-content">
+          <div class="skeleton skeleton-line md"></div>
+          <div class="skeleton skeleton-line sm"></div>
+          <div class="row">
+            <div class="skeleton skeleton-line lg"></div>
+            <div class="skeleton skeleton-tag"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row">
+        <div class="skeleton skeleton-line sm"></div>
+        <div class="skeleton skeleton-line md"></div>
+      </div>
+
+      <div class="row">
+        <div class="skeleton skeleton-line md"></div>
+        <div class="skeleton skeleton-line sm"></div>
+      </div>
+
+      <div class="footer-lines">
+        <div class="skeleton skeleton-line lg"></div>
+        <div class="skeleton skeleton-line md"></div>
+      </div>
+
+      <p class="hint">
+        Use this pattern for profile cards, product placeholders, or analytics panels while data loads.
+      </p>
+
+      <div class="btn-row">
+        <button class="btn secondary" type="button">
+          <span class="dot-pill"></span>
+          Skeleton active
+        </button>
+        <button class="btn" data-speed="slow" type="button">Slow shimmer</button>
+        <button class="btn active" data-speed="normal" type="button">Normal shimmer</button>
+        <button class="btn" data-speed="fast" type="button">Fast shimmer</button>
+      </div>
+    </div>
+
+    <!-- Right: List Skeleton -->
+    <div class="card">
+      <div class="card-header">
+        <div class="title">Activity List Skeleton</div>
+        <div class="pill">Mobile friendly</div>
+      </div>
+
+      <div class="list">
+        <div class="list-item">
+          <div class="dot"></div>
+          <div class="list-text">
+            <div class="skeleton skeleton-line lg"></div>
+            <div class="skeleton skeleton-line md"></div>
+            <div class="chip-row">
+              <div class="skeleton skeleton-tag"></div>
+              <div class="skeleton skeleton-tag"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="dot"></div>
+          <div class="list-text">
+            <div class="skeleton skeleton-line lg"></div>
+            <div class="skeleton skeleton-line sm"></div>
+            <div class="chip-row">
+              <div class="skeleton skeleton-tag"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="dot"></div>
+          <div class="list-text">
+            <div class="skeleton skeleton-line lg"></div>
+            <div class="skeleton skeleton-line md"></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="hint">
+        Perfect as a placeholder for notifications, recent transactions, or any list-based content.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Control animation speed with buttons
+    const root = document.documentElement;
+    const buttons = document.querySelectorAll(".btn[data-speed]");
+
+    // Default
+    root.style.setProperty("--shimmer-duration", "1.4s");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        buttons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const speed = btn.getAttribute("data-speed");
+        let duration = "1.4s";
+
+        if (speed === "slow") duration = "2.2s";
+        if (speed === "normal") duration = "1.4s";
+        if (speed === "fast") duration = "0.8s";
+
+        document.querySelectorAll(".skeleton::after"); // for clarity, CSS handles animation
+
+        // Update animation duration by overriding the rule
+        const styleTagId = "skeleton-speed-style";
+        let styleTag = document.getElementById(styleTagId);
+
+        if (!styleTag) {
+          styleTag = document.createElement("style");
+          styleTag.id = styleTagId;
+          document.head.appendChild(styleTag);
+        }
+
+        styleTag.textContent = `
+        .skeleton::after {
+          animation-duration: ${duration} !important;
+        }`;
+      });
+    });
+  </script>
+</body>
+</html>
