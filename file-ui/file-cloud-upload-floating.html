@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-indigo-800 to-black min-h-screen flex items-center justify-center text-white">
+
+  <div class="text-center space-y-6">
+    <h2 class="text-3xl font-bold">Cloud Upload</h2>
+
+    <div id="cloud"
+      class="w-64 h-40 bg-white/10 rounded-3xl border border-white/20 backdrop-blur-xl shadow-[0_0_25px_#4fd1c5]
+      flex flex-col items-center justify-center gap-3 cursor-pointer transition hover:scale-105">
+      
+      <div class="text-5xl">☁</div>
+      <p class="text-gray-300">Drop files here</p>
+    </div>
+
+    <div id="status" class="text-cyan-400 font-semibold hidden">Uploading...</div>
+  </div>
+
+  <script>
+    const cloud = document.getElementById("cloud");
+    const status = document.getElementById("status");
+
+    cloud.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      cloud.classList.add("shadow-[0_0_30px_#00fff2]");
+    });
+
+    cloud.addEventListener("dragleave", () => {
+      cloud.classList.remove("shadow-[0_0_30px_#00fff2]");
+    });
+
+    cloud.addEventListener("drop", (e) => {
+      e.preventDefault();
+      status.classList.remove("hidden");
+      status.innerText = "Uploading...";
+
+      setTimeout(() => (status.innerText = "Upload Complete ✔"), 2000);
+    });
+  </script>
+
+</body>
+</html>
