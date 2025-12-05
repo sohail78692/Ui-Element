@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-6 text-white">
+
+  <div class="w-full max-w-lg">
+    <h2 class="text-2xl font-bold mb-4 text-center">Drag & Drop File Upload</h2>
+
+    <!-- Dropzone -->
+    <div id="dropZone"
+      class="border-2 border-dashed border-cyan-400 rounded-2xl p-10 text-center cursor-pointer bg-white/10 backdrop-blur-lg
+      hover:border-cyan-300 transition duration-300">
+
+      <p class="text-gray-300 mb-2">Drag & Drop files here</p>
+      <p class="text-sm text-gray-400">or click to browse</p>
+    </div>
+
+    <!-- Preview Container -->
+    <div id="previewContainer" class="mt-6 space-y-4"></div>
+  </div>
+
+  <script>
+    const dropZone = document.getElementById("dropZone");
+    const previewContainer = document.getElementById("previewContainer");
+
+    dropZone.addEventListener("click", () => {
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.multiple = true;
+      fileInput.onchange = () => handleFiles(fileInput.files);
+      fileInput.click();
+    });
+
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.classList.add("border-cyan-300", "bg-white/20");
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.classList.remove("border-cyan-300", "bg-white/20");
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("border-cyan-300", "bg-white/20");
+      handleFiles(e.dataTransfer.files);
+    });
+
+    function handleFiles(files) {
+      [...files].forEach((file) => {
+        const reader = new FileReader();
+        const previewItem = document.createElement("div");
+        previewItem.className = "bg-white/10 border border-white/20 rounded-xl p-4 flex items-center gap-4";
+
+        const img = document.createElement("img");
+        img.className = "w-16 h-16 object-cover rounded-lg";
+
+        const info = document.createElement("div");
+        info.className = "flex-1";
+
+        const fileName = document.createElement("p");
+        fileName.className = "font-semibold";
+        fileName.innerText = file.name;
+
+        const progressBar = document.createElement("div");
+        progressBar.className = "w-full h-2 bg-gray-600 rounded-full mt-2 overflow-hidden";
+        
+        const progress = document.createElement("div");
+        progress.className = "h-full bg-cyan-400 rounded-full";
+        progress.style.width = "0%";
+
+        const delBtn = document.createElement("button");
+        delBtn.innerHTML = "🗑";
+        delBtn.className = "text-red-400 hover:text-red-500";
+        delBtn.onclick = () => previewItem.remove();
+
+        progressBar.appendChild(progress);
+        info.appendChild(fileName);
+        info.appendChild(progressBar);
+        previewItem.appendChild(img);
+        previewItem.appendChild(info);
+        previewItem.appendChild(delBtn);
+        previewContainer.appendChild(previewItem);
+
+        // Animate progress
+        let width = 0;
+        const interval = setInterval(() => {
+          width += 3;
+          progress.style.width = width + "%";
+          if (width >= 100) clearInterval(interval);
+        }, 50);
+
+        // Show preview if image
+        if (file.type.startsWith("image/")) {
+          reader.onload = () => img.src = reader.result;
+          reader.readAsDataURL(file);
+        } else {
+          img.src = "https://dummyimage.com/100x100/333/fff&text=FILE";
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
