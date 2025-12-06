@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ripple Grid Loader</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@keyframes rippleGrid {
+  0% { transform: scale(.2); opacity:.9; }
+  100% { transform: scale(1.8); opacity:0; }
+}
+</style>
+</head>
+<body class="bg-black flex items-center justify-center h-screen">
+
+<div class="grid grid-cols-3 gap-2">
+  <div class="w-4 h-4 bg-blue-500 rounded animate-[rippleGrid_1.2s_infinite]"></div>
+  <div class="w-4 h-4 bg-blue-500 rounded animate-[rippleGrid_1.2s_infinite_.2s]"></div>
+  <div class="w-4 h-4 bg-blue-500 rounded animate-[rippleGrid_1.2s_infinite_.4s]"></div>
+  <div class="w-4 h-4 bg-blue-500 rounded animate-[rippleGrid_1.2s_infinite_.6s]"></div>
+  <div class="w-4 h-4 bg-blue-500 rounded animate-[rippleGrid_1.2s_infinite_.8s]"></div>
+  <div class="w-4 h-4 bg-blue-500 rounded animate-[rippleGrid_1.2s_infinite_1s]"></div>
+</div>
+
+</body>
+</html>
