@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Glass Pulse Bars Loader</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@keyframes grow { 0%,100%{height:6px;} 50%{height:36px;} }
+</style>
+</head>
+<body class="bg-[#0e111a] h-screen flex items-center justify-center">
+
+<div class="flex gap-3 p-4 bg-white/10 backdrop-blur-xl rounded-xl border border-white/20">
+  <div class="w-2 bg-cyan-400 rounded animate-[grow_.7s_infinite_.1s]"></div>
+  <div class="w-2 bg-blue-400 rounded animate-[grow_.7s_infinite_.2s]"></div>
+  <div class="w-2 bg-indigo-400 rounded animate-[grow_.7s_infinite_.3s]"></div>
+  <div class="w-2 bg-purple-400 rounded animate-[grow_.7s_infinite_.4s]"></div>
+</div>
+
+</body>
+</html>
