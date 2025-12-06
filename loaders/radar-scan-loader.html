@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Radar Loader</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@keyframes radarSweep { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="bg-[#03111A] flex items-center justify-center h-screen">
+
+<div class="relative w-40 h-40 rounded-full border-2 border-green-500/40">
+  <div class="absolute inset-0 rounded-full border-4 border-green-500/60 animate-ping"></div>
+  <div class="absolute inset-0 origin-center">
+    <div class="w-1/2 h-[2px] bg-green-400 absolute top-1/2 left-1/2 origin-left animate-[radarSweep_1.5s_linear_infinite]"></div>
+  </div>
+</div>
+
+</body>
+</html>
