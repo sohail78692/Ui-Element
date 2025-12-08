@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+ background:#121212;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ height:100vh;
+}
+.card{
+ width:260px;
+ height:160px;
+ background:#1d1d1d;
+ border-radius:12px;
+ position:relative;
+ overflow:hidden;
+}
+.card:before{
+ content:"";
+ position:absolute;
+ top:-100%;
+ left:-100%;
+ width:200%;
+ height:200%;
+ background:linear-gradient(115deg,transparent,white,transparent);
+ transform:rotate(25deg);
+ transition:.6s;
+}
+.card:hover:before{
+ top:100%;
+ left:100%;
+}
+</style>
+</head>
+<body>
+<div class="card"></div>
+</body>
+</html>
