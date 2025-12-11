@@ -115,4 +115,4 @@ Released under the **MIT License**.
 
 ---
 
-Thank you for visiting — Happy Coding 💙
+Thank you for visiting — Happy Coding. 💙
