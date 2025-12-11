@@ -22,7 +22,7 @@ Ui-Element/
 ├── loaders/
 ├── forms/
 ├── animations/
-└── ... (more components coming soon)
+└── ... (more components )
 ```
 
 ---
