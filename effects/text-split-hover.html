@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Text Split Hover</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="h-screen flex items-center justify-center bg-black">
+
+  <div class="group relative cursor-pointer select-none">
+    <!-- Top Text -->
+    <span
+      class="block text-6xl font-extrabold text-white
+             transition-transform duration-300 group-hover:-translate-y-2">
+      HOVER
+    </span>
+
+    <!-- Bottom Text -->
+    <span
+      class="absolute top-0 left-0 text-6xl font-extrabold text-blue-500
+             transition-transform duration-300 group-hover:translate-y-2">
+      HOVER
+    </span>
+  </div>
+
+</body>
+</html>
