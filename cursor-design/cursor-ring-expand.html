@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cursor Ring Expand</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      cursor: none;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #60a5fa;
+      border-radius: 9999px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease, width 0.15s, height 0.15s;
+      z-index: 1000;
+    }
+
+    .cursor-ring.active {
+      width: 60px;
+      height: 60px;
+    }
+  </style>
+</head>
+
+<body class="h-screen flex items-center justify-center bg-gray-950 text-white">
+
+  <div class="cursor-ring" id="cursor"></div>
+
+  <p class="text-xl">Move & Click</p>
+
+  <script>
+    const cursor = document.getElementById("cursor");
+
+    window.addEventListener("mousemove", (e) => {
+      cursor.style.left = e.clientX + "px";
+      cursor.style.top = e.clientY + "px";
+    });
+
+    window.addEventListener("mousedown", () => {
+      cursor.classList.add("active");
+    });
+
+    window.addEventListener("mouseup", () => {
+      cursor.classList.remove("active");
+    });
+  </script>
+
+</body>
+</html>
