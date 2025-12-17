@@ -1,4 +1,4 @@
-# UI Elements Collection
+# 🎨 UI Elements Collection
 
 A modern and reusable collection of stunning UI components built with **HTML**, **CSS**, and **JavaScript**. Designed for developers to effortlessly integrate beautiful interface elements into any project.
 
@@ -22,7 +22,7 @@ Ui-Element/
 ├── loaders/
 ├── forms/
 ├── animations/
-└── ... (more components coming soon)
+└── ... (more components )
 ```
 
 ---
@@ -115,4 +115,4 @@ Released under the **MIT License**.
 
 ---
 
-Thank you for visiting — Happy Coding 💙
+Thank you for visiting — Happy Coding. 💙
