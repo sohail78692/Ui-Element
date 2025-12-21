@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cursor Magnetic Ripple</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      cursor: none;
+      background: #000;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .cursor-core {
+      position: fixed;
+      width: 16px;
+      height: 16px;
+      background: radial-gradient(circle, #fff, #60a5fa);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
+      box-shadow: 0 0 20px rgba(96, 165, 250, 0.8),
+                  0 0 40px rgba(96, 165, 250, 0.4);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+    }
+
+    .ripple {
+      position: fixed;
+      border: 2px solid rgba(96, 165, 250, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: ripple-expand 1s ease-out forwards;
+    }
+
+    @keyframes ripple-expand {
+      0% {
+        width: 20px;
+        height: 20px;
+        opacity: 1;
+      }
+      100% {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+      }
+    }
+
+    .content {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 100;
+      color: white;
+    }
+
+    .card {
+      background: rgba(30, 27, 75, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      border-radius: 20px;
+      padding: 40px 60px;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      background: rgba(30, 27, 75, 0.5);
+      border-color: rgba(96, 165, 250, 0.6);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="canvas"></canvas>
+  <div id="cursor" class="cursor-core"></div>
+
+  <div class="content">
+    <div class="card">
+      <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+        Magnetic Ripple Cursor
+      </h1>
+      <p class="text-lg text-gray-300">Move around and click to create ripples</p>
+      <p class="text-sm text-gray-400 mt-2">Hover over this card</p>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const cursor = document.getElementById("cursor");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let mouseX = canvas.width / 2;
+    let mouseY = canvas.height / 2;
+    let particles = [];
+
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.baseX = x;
+        this.baseY = y;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.color = `hsl(${Math.random() * 60 + 200}, 70%, 60%)`;
+      }
+
+      update() {
+        // Magnetic effect - particles attracted to cursor
+        let dx = mouseX - this.x;
+        let dy = mouseY - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        let maxDistance = 150;
+
+        if (distance < maxDistance) {
+          let force = (maxDistance - distance) / maxDistance;
+          let angle = Math.atan2(dy, dx);
+          this.x += Math.cos(angle) * force * 2;
+          this.y += Math.sin(angle) * force * 2;
+        } else {
+          // Return to base position
+          this.x += (this.baseX - this.x) * 0.05;
+          this.y += (this.baseY - this.y) * 0.05;
+        }
+
+        // Float animation
+        this.baseX += this.speedX;
+        this.baseY += this.speedY;
+
+        // Bounce off edges
+        if (this.baseX < 0 || this.baseX > canvas.width) this.speedX *= -1;
+        if (this.baseY < 0 || this.baseY > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    // Create particles
+    function initParticles() {
+      particles = [];
+      let particleCount = 100;
+      for (let i = 0; i < particleCount; i++) {
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height;
+        particles.push(new Particle(x, y));
+      }
+    }
+
+    initParticles();
+
+    // Mouse move
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = mouseX + "px";
+      cursor.style.top = mouseY + "px";
+    });
+
+    // Click ripple effect
+    window.addEventListener("click", (e) => {
+      createRipple(e.clientX, e.clientY);
+      createClickParticles(e.clientX, e.clientY);
+    });
+
+    function createRipple(x, y) {
+      const ripple = document.createElement("div");
+      ripple.className = "ripple";
+      ripple.style.left = x + "px";
+      ripple.style.top = y + "px";
+      document.body.appendChild(ripple);
+
+      setTimeout(() => ripple.remove(), 1000);
+    }
+
+    function createClickParticles(x, y) {
+      for (let i = 0; i < 8; i++) {
+        let angle = (Math.PI * 2 * i) / 8;
+        let speed = Math.random() * 3 + 2;
+        particles.push({
+          x: x,
+          y: y,
+          baseX: x + Math.cos(angle) * 100,
+          baseY: y + Math.sin(angle) * 100,
+          size: Math.random() * 4 + 2,
+          speedX: Math.cos(angle) * speed,
+          speedY: Math.sin(angle) * speed,
+          color: `hsl(${Math.random() * 60 + 280}, 70%, 60%)`,
+          life: 60,
+          update: function() {
+            if (this.life) {
+              this.life--;
+              this.x += this.speedX;
+              this.y += this.speedY;
+              this.speedX *= 0.95;
+              this.speedY *= 0.95;
+            }
+          },
+          draw: function() {
+            if (this.life) {
+              ctx.fillStyle = this.color;
+              ctx.globalAlpha = this.life / 60;
+              ctx.shadowBlur = 20;
+              ctx.shadowColor = this.color;
+              ctx.beginPath();
+              ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.globalAlpha = 1;
+              ctx.shadowBlur = 0;
+            }
+          }
+        });
+      }
+    }
+
+    // Animation loop
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw connections between nearby particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          let dx = particles[i].x - particles[j].x;
+          let dy = particles[i].y - particles[j].y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 100) {
+            ctx.strokeStyle = `rgba(96, 165, 250, ${0.2 * (1 - distance / 100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Update and draw particles
+      particles = particles.filter(p => !p.life || p.life > 0);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Resize handler
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    });
+  </script>
+
+</body>
+</html>
