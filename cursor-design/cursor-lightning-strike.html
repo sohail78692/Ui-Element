@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cursor Lightning Strike</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      cursor: none;
+      background: linear-gradient(to bottom, #0a0a0a 0%, #1a1a2e 100%);
+      overflow: hidden;
+      margin: 0;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    .cursor-bolt {
+      position: fixed;
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle, #fff, #4ade80);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
+      box-shadow: 0 0 30px #4ade80;
+      animation: flicker 0.1s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .content {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 100;
+      color: white;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #4ade80;
+      text-shadow: 0 0 30px rgba(74, 222, 128, 0.8);
+      margin-bottom: 1rem;
+      animation: electric 2s ease-in-out infinite;
+    }
+
+    @keyframes electric {
+      0%, 100% { text-shadow: 0 0 30px rgba(74, 222, 128, 0.8); }
+      50% { text-shadow: 0 0 50px rgba(74, 222, 128, 1), 0 0 80px rgba(74, 222, 128, 0.6); }
+    }
+
+    p {
+      color: #888;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="canvas"></canvas>
+  <div id="cursor" class="cursor-bolt"></div>
+
+  <div class="content">
+    <h1>Lightning Strike</h1>
+    <p>Click to unleash the storm</p>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const cursor = document.getElementById("cursor");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let mouseX = canvas.width / 2;
+    let mouseY = canvas.height / 2;
+    let lightnings = [];
+
+    class Lightning {
+      constructor(startX, startY, endX, endY) {
+        this.startX = startX;
+        this.startY = startY;
+        this.endX = endX;
+        this.endY = endY;
+        this.points = this.generateLightning();
+        this.life = 1;
+        this.thickness = Math.random() * 3 + 2;
+      }
+
+      generateLightning() {
+        let points = [{x: this.startX, y: this.startY}];
+        let x = this.startX;
+        let y = this.startY;
+        let segments = Math.floor(Math.random() * 10) + 15;
+
+        for (let i = 1; i < segments; i++) {
+          let progress = i / segments;
+          x = this.startX + (this.endX - this.startX) * progress;
+          y = this.startY + (this.endY - this.startY) * progress;
+
+          // Add randomness
+          x += (Math.random() - 0.5) * 40;
+          y += (Math.random() - 0.5) * 40;
+
+          points.push({x, y});
+        }
+
+        points.push({x: this.endX, y: this.endY});
+        return points;
+      }
+
+      update() {
+        this.life -= 0.05;
+        return this.life > 0;
+      }
+
+      draw() {
+        if (this.life > 0) {
+          ctx.save();
+          ctx.globalAlpha = this.life;
+          ctx.shadowBlur = 20;
+          ctx.shadowColor = '#4ade80';
+          ctx.strokeStyle = '#4ade80';
+          ctx.lineWidth = this.thickness;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+
+          // Main bolt
+          ctx.beginPath();
+          ctx.moveTo(this.points[0].x, this.points[0].y);
+          for (let i = 1; i < this.points.length; i++) {
+            ctx.lineTo(this.points[i].x, this.points[i].y);
+          }
+          ctx.stroke();
+
+          // Glow effect
+          ctx.shadowBlur = 40;
+          ctx.strokeStyle = 'rgba(74, 222, 128, 0.3)';
+          ctx.lineWidth = this.thickness * 3;
+          ctx.beginPath();
+          ctx.moveTo(this.points[0].x, this.points[0].y);
+          for (let i = 1; i < this.points.length; i++) {
+            ctx.lineTo(this.points[i].x, this.points[i].y);
+          }
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+    }
+
+    let lastX = mouseX;
+    let lastY = mouseY;
+
+    window.addEventListener("mousemove", (e) => {
+      let newX = e.clientX;
+      let newY = e.clientY;
+
+      cursor.style.left = newX + "px";
+      cursor.style.top = newY + "px";
+
+      // Create lightning trail when moving fast
+      let dx = newX - lastX;
+      let dy = newY - lastY;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance > 30) {
+        lightnings.push(new Lightning(lastX, lastY, newX, newY));
+      }
+
+      mouseX = newX;
+      mouseY = newY;
+      lastX = newX;
+      lastY = newY;
+    });
+
+    window.addEventListener("click", (e) => {
+      // Create multiple lightning bolts radiating from click
+      for (let i = 0; i < 8; i++) {
+        let angle = (Math.PI * 2 * i) / 8;
+        let distance = Math.random() * 200 + 150;
+        let endX = e.clientX + Math.cos(angle) * distance;
+        let endY = e.clientY + Math.sin(angle) * distance;
+
+        lightnings.push(new Lightning(e.clientX, e.clientY, endX, endY));
+
+        // Add branches
+        for (let j = 0; j < 2; j++) {
+          let branchAngle = angle + (Math.random() - 0.5);
+          let branchDist = distance * 0.6;
+          let branchX = e.clientX + Math.cos(branchAngle) * branchDist;
+          let branchY = e.clientY + Math.sin(branchAngle) * branchDist;
+          lightnings.push(new Lightning(e.clientX, e.clientY, branchX, branchY));
+        }
+      }
+    });
+
+    function animate() {
+      ctx.fillStyle = "rgba(10, 10, 10, 0.3)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      lightnings = lightnings.filter(lightning => {
+        let alive = lightning.update();
+        lightning.draw();
+        return alive;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+
+</body>
+</html>
