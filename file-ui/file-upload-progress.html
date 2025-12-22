@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .upload-card {
+      background: linear-gradient(145deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.95) 100%);
+      backdrop-filter: blur(20px);
+    }
+    .progress-ring {
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+    .progress-ring-circle {
+      transition: stroke-dashoffset 0.5s ease;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+    }
+    .uploading {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .float-icon {
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes check-draw {
+      to { stroke-dashoffset: 0; }
+    }
+    .check-mark {
+      stroke-dasharray: 50;
+      stroke-dashoffset: 50;
+      animation: check-draw 0.5s ease forwards;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 min-h-screen flex items-center justify-center p-8">
+
+  <div class="w-full max-w-2xl space-y-6">
+    <h2 class="text-3xl font-bold text-white mb-8 text-center">Upload Progress</h2>
+
+    <!-- Uploading File -->
+    <div class="upload-card rounded-2xl border border-white/10 p-6 uploading">
+      <div class="flex items-center gap-5">
+        <!-- Circular Progress -->
+        <div class="relative w-20 h-20 flex-shrink-0">
+          <svg class="progress-ring w-20 h-20" viewBox="0 0 80 80">
+            <circle class="text-gray-700" stroke="currentColor" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+            <circle id="progress1" class="progress-ring-circle text-blue-500" stroke="currentColor" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"
+              stroke-dasharray="213.628" stroke-dashoffset="85" stroke-linecap="round"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="percent1" class="text-white font-bold text-lg">60%</span>
+          </div>
+        </div>
+
+        <!-- File Info -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center float-icon">
+              <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-white font-semibold truncate">project_assets.zip</h3>
+              <p class="text-gray-400 text-sm">45.2 MB of 75.3 MB</p>
+            </div>
+          </div>
+          <!-- Linear Progress Bar -->
+          <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div id="bar1" class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full transition-all duration-300" style="width: 60%"></div>
+          </div>
+          <div class="flex justify-between mt-2 text-xs text-gray-500">
+            <span>2.4 MB/s</span>
+            <span>~12 sec remaining</span>
+          </div>
+        </div>
+
+        <!-- Cancel Button -->
+        <button class="w-10 h-10 rounded-full bg-red-500/10 hover:bg-red-500/20 flex items-center justify-center transition-all group">
+          <svg class="w-5 h-5 text-red-400 group-hover:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Completed File -->
+    <div class="upload-card rounded-2xl border border-emerald-500/30 p-6">
+      <div class="flex items-center gap-5">
+        <!-- Success Circle -->
+        <div class="relative w-20 h-20 flex-shrink-0">
+          <svg class="w-20 h-20" viewBox="0 0 80 80">
+            <circle class="text-emerald-500/20" stroke="currentColor" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+            <circle class="text-emerald-500" stroke="currentColor" stroke-width="6" fill="transparent" r="34" cx="40" cy="40" stroke-dasharray="213.628" stroke-dashoffset="0"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path class="check-mark" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- File Info -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-white font-semibold truncate">banner_design.png</h3>
+              <p class="text-emerald-400 text-sm">Upload complete</p>
+            </div>
+          </div>
+          <div class="w-full h-2 bg-emerald-500/20 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full w-full"></div>
+          </div>
+          <div class="flex justify-between mt-2 text-xs text-gray-500">
+            <span>8.4 MB</span>
+            <span class="text-emerald-400">Completed</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2">
+          <button class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+          </button>
+          <button class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Queued/Pending File -->
+    <div class="upload-card rounded-2xl border border-white/10 p-6 opacity-60">
+      <div class="flex items-center gap-5">
+        <!-- Waiting Circle -->
+        <div class="relative w-20 h-20 flex-shrink-0">
+          <svg class="w-20 h-20" viewBox="0 0 80 80">
+            <circle class="text-gray-700" stroke="currentColor" stroke-width="6" fill="transparent" r="34" cx="40" cy="40" stroke-dasharray="8 8"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- File Info -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-lg bg-gray-500/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-white font-semibold truncate">presentation_final.mp4</h3>
+              <p class="text-gray-500 text-sm">Queued - 234.5 MB</p>
+            </div>
+          </div>
+          <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full bg-gray-600 rounded-full w-0"></div>
+          </div>
+          <div class="flex justify-between mt-2 text-xs text-gray-600">
+            <span>Waiting...</span>
+            <span>In queue</span>
+          </div>
+        </div>
+
+        <!-- Remove from queue -->
+        <button class="w-10 h-10 rounded-full bg-white/5 hover:bg-red-500/20 flex items-center justify-center transition-all group">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Error File -->
+    <div class="upload-card rounded-2xl border border-red-500/30 p-6">
+      <div class="flex items-center gap-5">
+        <!-- Error Circle -->
+        <div class="relative w-20 h-20 flex-shrink-0">
+          <svg class="w-20 h-20" viewBox="0 0 80 80">
+            <circle class="text-red-500/20" stroke="currentColor" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+            <circle class="text-red-500" stroke="currentColor" stroke-width="6" fill="transparent" r="34" cx="40" cy="40" stroke-dasharray="213.628" stroke-dashoffset="128"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- File Info -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-white font-semibold truncate">database_backup.sql</h3>
+              <p class="text-red-400 text-sm">Upload failed - Network error</p>
+            </div>
+          </div>
+          <div class="w-full h-2 bg-red-500/20 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 40%"></div>
+          </div>
+          <div class="flex justify-between mt-2 text-xs text-gray-500">
+            <span>18.2 MB of 45.6 MB</span>
+            <span class="text-red-400">Failed at 40%</span>
+          </div>
+        </div>
+
+        <!-- Retry Button -->
+        <button class="w-10 h-10 rounded-full bg-blue-500/20 hover:bg-blue-500/30 flex items-center justify-center transition-all group">
+          <svg class="w-5 h-5 text-blue-400 group-hover:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Animate the uploading progress
+    let progress = 60;
+    const progressCircle = document.getElementById('progress1');
+    const progressBar = document.getElementById('bar1');
+    const percentText = document.getElementById('percent1');
+    const circumference = 2 * Math.PI * 34;
+
+    setInterval(() => {
+      if (progress < 100) {
+        progress += 1;
+        const offset = circumference - (progress / 100) * circumference;
+        progressCircle.style.strokeDashoffset = offset;
+        progressBar.style.width = progress + '%';
+        percentText.textContent = progress + '%';
+      }
+    }, 200);
+  </script>
+
+</body>
+</html>
