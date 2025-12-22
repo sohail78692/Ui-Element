@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .dropzone {
+      background: radial-gradient(ellipse at center, rgba(59,130,246,0.05) 0%, transparent 70%);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dropzone.active {
+      background: radial-gradient(ellipse at center, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 70%);
+      border-color: rgba(59, 130, 246, 0.6);
+      transform: scale(1.02);
+    }
+    .dropzone.active .upload-icon {
+      transform: translateY(-10px) scale(1.1);
+    }
+    .dropzone.active .ring-animation {
+      animation: ring-pulse 1s ease-out infinite;
+    }
+    @keyframes ring-pulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes dash {
+      to { stroke-dashoffset: -20; }
+    }
+    .dashed-border {
+      stroke-dasharray: 8 8;
+      animation: dash 1s linear infinite;
+    }
+    .dropzone.active .dashed-border {
+      stroke: rgba(59, 130, 246, 0.8);
+    }
+    @keyframes bounce-in {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .preview-item {
+      animation: bounce-in 0.4s ease forwards;
+    }
+    .upload-progress {
+      background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #3b82f6 100%);
+      background-size: 200% 100%;
+      animation: gradient-move 2s linear infinite;
+    }
+    @keyframes gradient-move {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    @keyframes particle-float {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100px) scale(0); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen flex items-center justify-center p-8">
+
+  <div class="w-full max-w-2xl">
+    <h2 class="text-3xl font-bold text-white mb-2 text-center">Animated Dropzone</h2>
+    <p class="text-gray-400 text-center mb-8">Interactive file upload with animations</p>
+
+    <!-- Main Dropzone -->
+    <div id="dropzone" class="dropzone relative rounded-3xl border-2 border-dashed border-white/20 p-12 cursor-pointer overflow-hidden">
+      <!-- Animated Border SVG -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+        <rect class="dashed-border" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="24" ry="24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+      </svg>
+
+      <!-- Ring Animation Container -->
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div class="ring-animation w-32 h-32 rounded-full border-2 border-blue-500/30 opacity-0"></div>
+      </div>
+
+      <!-- Content -->
+      <div class="relative z-10 text-center">
+        <!-- Upload Icon -->
+        <div class="upload-icon inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 mb-6 transition-all duration-300 float">
+          <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+          </svg>
+        </div>
+
+        <h3 class="text-xl font-semibold text-white mb-2">Drop files here</h3>
+        <p class="text-gray-400 mb-4">or click to browse from your computer</p>
+
+        <!-- File Type Icons -->
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center" title="PDF">
+            <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+            </svg>
+          </div>
+          <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center" title="Images">
+            <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+            </svg>
+          </div>
+          <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center" title="Videos">
+            <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+            </svg>
+          </div>
+          <div class="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center" title="Archives">
+            <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/>
+            </svg>
+          </div>
+        </div>
+
+        <p class="text-xs text-gray-500">Maximum file size: 50MB</p>
+      </div>
+
+      <!-- Hidden File Input -->
+      <input type="file" id="fileInput" class="hidden" multiple>
+    </div>
+
+    <!-- Preview Area -->
+    <div id="previewArea" class="mt-6 space-y-3"></div>
+
+    <!-- Upload Button -->
+    <button id="uploadBtn" class="hidden w-full mt-6 py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-semibold transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+      <span class="flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+        </svg>
+        Upload All Files
+      </span>
+    </button>
+
+    <!-- Alternative Styles -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Compact Style -->
+      <div class="dropzone-mini bg-white/5 border border-dashed border-white/20 rounded-2xl p-6 cursor-pointer hover:border-blue-500/50 hover:bg-blue-500/5 transition-all group">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-medium text-white">Add files</p>
+            <p class="text-sm text-gray-500">Drop or click</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Icon Only Style -->
+      <div class="dropzone-icon w-full aspect-video bg-white/5 border border-dashed border-white/20 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all group">
+        <div class="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all">
+          <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <p class="text-sm text-gray-400 group-hover:text-emerald-400 transition-colors">Upload Image</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const previewArea = document.getElementById('previewArea');
+    const uploadBtn = document.getElementById('uploadBtn');
+
+    // Click to open file dialog
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    // Drag events
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('active');
+        createParticles();
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('active');
+      });
+    });
+
+    // Handle drop
+    dropzone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    // Handle file input change
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+      [...files].forEach((file, index) => {
+        setTimeout(() => {
+          addPreviewItem(file);
+        }, index * 100);
+      });
+      uploadBtn.classList.remove('hidden');
+    }
+
+    function addPreviewItem(file) {
+      const item = document.createElement('div');
+      item.className = 'preview-item bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-4';
+
+      const iconColors = {
+        'application/pdf': { bg: 'bg-red-500/20', text: 'text-red-400' },
+        'image': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+        'video': { bg: 'bg-purple-500/20', text: 'text-purple-400' },
+        'default': { bg: 'bg-blue-500/20', text: 'text-blue-400' }
+      };
+
+      let colorKey = 'default';
+      if (file.type === 'application/pdf') colorKey = 'application/pdf';
+      else if (file.type.startsWith('image')) colorKey = 'image';
+      else if (file.type.startsWith('video')) colorKey = 'video';
+
+      const colors = iconColors[colorKey];
+
+      item.innerHTML = `
+        <div class="w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 ${colors.text}" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-white font-medium truncate">${file.name}</p>
+          <p class="text-sm text-gray-500">${formatFileSize(file.size)}</p>
+          <div class="mt-2 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+            <div class="upload-progress h-full rounded-full" style="width: 0%"></div>
+          </div>
+        </div>
+        <button class="w-10 h-10 rounded-xl bg-white/5 hover:bg-red-500/20 flex items-center justify-center text-gray-400 hover:text-red-400 transition-all flex-shrink-0" onclick="removePreview(this)">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      `;
+
+      previewArea.appendChild(item);
+
+      // Animate progress
+      const progressBar = item.querySelector('.upload-progress');
+      let width = 0;
+      const interval = setInterval(() => {
+        width += Math.random() * 15;
+        if (width >= 100) {
+          width = 100;
+          clearInterval(interval);
+          progressBar.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+          progressBar.style.animation = 'none';
+        }
+        progressBar.style.width = width + '%';
+      }, 200);
+    }
+
+    function removePreview(btn) {
+      const item = btn.closest('.preview-item');
+      item.style.transform = 'translateX(20px)';
+      item.style.opacity = '0';
+      setTimeout(() => {
+        item.remove();
+        if (previewArea.children.length === 0) {
+          uploadBtn.classList.add('hidden');
+        }
+      }, 300);
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function createParticles() {
+      const colors = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981'];
+      for (let i = 0; i < 5; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.bottom = '20%';
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.animation = `particle-float ${1 + Math.random()}s ease-out forwards`;
+        dropzone.appendChild(particle);
+        setTimeout(() => particle.remove(), 2000);
+      }
+    }
+  </script>
+
+</body>
+</html>
