@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .sidebar {
+      background: linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(30,41,59,0.95) 100%);
+      backdrop-filter: blur(20px);
+    }
+    .tree-item:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    .tree-item.selected {
+      background: rgba(59, 130, 246, 0.15);
+      border-left: 3px solid #3b82f6;
+    }
+    .folder-icon {
+      transition: transform 0.2s ease;
+    }
+    .folder-open .folder-icon {
+      transform: rotate(90deg);
+    }
+    @keyframes slide-in {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .tree-children > div {
+      animation: slide-in 0.2s ease forwards;
+    }
+    .breadcrumb-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    .file-item:hover {
+      background: rgba(255,255,255,0.05);
+      transform: translateX(4px);
+    }
+    .context-menu {
+      background: rgba(30,41,59,0.98);
+      backdrop-filter: blur(20px);
+    }
+  </style>
+</head>
+<body class="bg-slate-900 min-h-screen flex text-white">
+
+  <!-- Sidebar - File Tree -->
+  <aside class="sidebar w-72 border-r border-white/10 flex flex-col">
+    <!-- Header -->
+    <div class="p-4 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="font-bold">File Browser</h2>
+          <p class="text-xs text-gray-400">23.4 GB used</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="p-4 border-b border-white/10">
+      <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Quick Access</p>
+      <div class="space-y-1">
+        <div class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-white/5 transition">
+          <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+          </svg>
+          <span class="text-sm">Starred</span>
+          <span class="ml-auto text-xs text-gray-500">12</span>
+        </div>
+        <div class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-white/5 transition">
+          <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          <span class="text-sm">Recent</span>
+          <span class="ml-auto text-xs text-gray-500">24</span>
+        </div>
+        <div class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-white/5 transition">
+          <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+          </svg>
+          <span class="text-sm">Trash</span>
+          <span class="ml-auto text-xs text-gray-500">3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- File Tree -->
+    <div class="flex-1 overflow-y-auto p-2">
+      <p class="text-xs text-gray-500 uppercase tracking-wider mb-3 px-2">Folders</p>
+
+      <!-- Root Folder -->
+      <div class="tree-folder">
+        <div class="tree-item selected flex items-center gap-2 p-2 rounded-lg cursor-pointer transition" onclick="toggleFolder(this)">
+          <svg class="folder-icon w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+          <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+          </svg>
+          <span class="text-sm flex-1">Projects</span>
+          <span class="text-xs text-gray-500">8</span>
+        </div>
+        <div class="tree-children ml-4 pl-2 border-l border-white/10">
+          <!-- Subfolder -->
+          <div class="tree-folder folder-open">
+            <div class="tree-item flex items-center gap-2 p-2 rounded-lg cursor-pointer transition" onclick="toggleFolder(this)">
+              <svg class="folder-icon w-4 h-4 text-gray-400 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+              </svg>
+              <span class="text-sm flex-1">Web App</span>
+              <span class="text-xs text-gray-500">5</span>
+            </div>
+            <div class="tree-children ml-4 pl-2 border-l border-white/10">
+              <div class="tree-item flex items-center gap-2 p-2 rounded-lg cursor-pointer transition">
+                <span class="w-4"></span>
+                <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                </svg>
+                <span class="text-sm text-gray-300">index.html</span>
+              </div>
+              <div class="tree-item flex items-center gap-2 p-2 rounded-lg cursor-pointer transition">
+                <span class="w-4"></span>
+                <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                </svg>
+                <span class="text-sm text-gray-300">styles.css</span>
+              </div>
+              <div class="tree-item flex items-center gap-2 p-2 rounded-lg cursor-pointer transition">
+                <span class="w-4"></span>
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                </svg>
+                <span class="text-sm text-gray-300">app.js</span>
+              </div>
+            </div>
+          </div>
+          <!-- Another subfolder -->
+          <div class="tree-folder">
+            <div class="tree-item flex items-center gap-2 p-2 rounded-lg cursor-pointer transition" onclick="toggleFolder(this)">
+              <svg class="folder-icon w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+              <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+              </svg>
+              <span class="text-sm flex-1">Mobile App</span>
+              <span class="text-xs text-gray-500">12</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents Folder -->
+      <div class="tree-folder mt-1">
+        <div class="tree-item flex items-center gap-2 p-2 rounded-lg cursor-pointer transition" onclick="toggleFolder(this)">
+          <svg class="folder-icon w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+          <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+          </svg>
+          <span class="text-sm flex-1">Documents</span>
+          <span class="text-xs text-gray-500">34</span>
+        </div>
+      </div>
+
+      <!-- Images Folder -->
+      <div class="tree-folder mt-1">
+        <div class="tree-item flex items-center gap-2 p-2 rounded-lg cursor-pointer transition" onclick="toggleFolder(this)">
+          <svg class="folder-icon w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+          <svg class="w-5 h-5 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+          </svg>
+          <span class="text-sm flex-1">Images</span>
+          <span class="text-xs text-gray-500">156</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Storage Info -->
+    <div class="p-4 border-t border-white/10">
+      <div class="flex items-center justify-between mb-2 text-sm">
+        <span class="text-gray-400">Storage</span>
+        <span class="text-gray-300">23.4 / 50 GB</span>
+      </div>
+      <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+        <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" style="width: 47%"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col">
+    <!-- Top Bar -->
+    <header class="h-16 border-b border-white/10 flex items-center justify-between px-6">
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-2">
+        <button class="breadcrumb-item px-3 py-1.5 rounded-lg text-sm text-gray-400 hover:text-white transition">
+          Home
+        </button>
+        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        <button class="breadcrumb-item px-3 py-1.5 rounded-lg text-sm text-gray-400 hover:text-white transition">
+          Projects
+        </button>
+        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        <button class="breadcrumb-item px-3 py-1.5 rounded-lg text-sm text-white bg-white/5">
+          Web App
+        </button>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <input type="text" placeholder="Search files..." class="w-64 px-4 py-2 pl-10 rounded-xl bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-blue-500/50 transition">
+          <svg class="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <button class="p-2 rounded-lg hover:bg-white/5 transition">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+          </svg>
+        </button>
+        <button class="p-2 rounded-lg hover:bg-white/5 transition bg-white/5">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+          </svg>
+        </button>
+        <button class="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-sm font-medium transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Upload
+        </button>
+      </div>
+    </header>
+
+    <!-- File Grid -->
+    <div class="flex-1 p-6 overflow-y-auto">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+
+        <!-- Folder Item -->
+        <div class="file-item p-4 rounded-2xl border border-white/10 bg-white/5 cursor-pointer transition-all hover:border-blue-500/30" oncontextmenu="showContextMenu(event)">
+          <div class="w-full aspect-square rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 flex items-center justify-center mb-3">
+            <svg class="w-16 h-16 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="font-medium truncate text-sm">Assets</h3>
+          <p class="text-xs text-gray-500">24 items</p>
+        </div>
+
+        <!-- Image File -->
+        <div class="file-item p-4 rounded-2xl border border-white/10 bg-white/5 cursor-pointer transition-all hover:border-emerald-500/30">
+          <div class="w-full aspect-square rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 flex items-center justify-center mb-3 overflow-hidden">
+            <svg class="w-12 h-12 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+            </svg>
+          </div>
+          <h3 class="font-medium truncate text-sm">hero-banner.png</h3>
+          <p class="text-xs text-gray-500">2.4 MB</p>
+        </div>
+
+        <!-- HTML File -->
+        <div class="file-item p-4 rounded-2xl border border-white/10 bg-white/5 cursor-pointer transition-all hover:border-orange-500/30">
+          <div class="w-full aspect-square rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 flex items-center justify-center mb-3">
+            <svg class="w-12 h-12 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4z"/>
+            </svg>
+            <span class="absolute text-[10px] font-bold text-orange-400 mt-6">HTML</span>
+          </div>
+          <h3 class="font-medium truncate text-sm">index.html</h3>
+          <p class="text-xs text-gray-500">12 KB</p>
+        </div>
+
+        <!-- CSS File -->
+        <div class="file-item p-4 rounded-2xl border border-white/10 bg-white/5 cursor-pointer transition-all hover:border-blue-500/30">
+          <div class="w-full aspect-square rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 flex items-center justify-center mb-3">
+            <svg class="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4z"/>
+            </svg>
+            <span class="absolute text-[10px] font-bold text-blue-400 mt-6">CSS</span>
+          </div>
+          <h3 class="font-medium truncate text-sm">styles.css</h3>
+          <p class="text-xs text-gray-500">8 KB</p>
+        </div>
+
+        <!-- JS File -->
+        <div class="file-item p-4 rounded-2xl border border-white/10 bg-white/5 cursor-pointer transition-all hover:border-yellow-500/30">
+          <div class="w-full aspect-square rounded-xl bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 flex items-center justify-center mb-3">
+            <svg class="w-12 h-12 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4z"/>
+            </svg>
+            <span class="absolute text-[10px] font-bold text-yellow-400 mt-6">JS</span>
+          </div>
+          <h3 class="font-medium truncate text-sm">app.js</h3>
+          <p class="text-xs text-gray-500">24 KB</p>
+        </div>
+
+        <!-- JSON File -->
+        <div class="file-item p-4 rounded-2xl border border-white/10 bg-white/5 cursor-pointer transition-all hover:border-gray-500/30">
+          <div class="w-full aspect-square rounded-xl bg-gradient-to-br from-gray-500/20 to-gray-600/10 flex items-center justify-center mb-3">
+            <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4z"/>
+            </svg>
+            <span class="absolute text-[10px] font-bold text-gray-400 mt-6">JSON</span>
+          </div>
+          <h3 class="font-medium truncate text-sm">config.json</h3>
+          <p class="text-xs text-gray-500">2 KB</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Context Menu (hidden by default) -->
+  <div id="contextMenu" class="context-menu fixed hidden rounded-xl border border-white/10 shadow-2xl py-2 min-w-48 z-50">
+    <button class="w-full px-4 py-2 text-left text-sm hover:bg-white/5 flex items-center gap-3">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+      </svg>
+      Open
+    </button>
+    <button class="w-full px-4 py-2 text-left text-sm hover:bg-white/5 flex items-center gap-3">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+      </svg>
+      Download
+    </button>
+    <button class="w-full px-4 py-2 text-left text-sm hover:bg-white/5 flex items-center gap-3">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+      </svg>
+      Rename
+    </button>
+    <div class="border-t border-white/10 my-2"></div>
+    <button class="w-full px-4 py-2 text-left text-sm hover:bg-white/5 flex items-center gap-3">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+      </svg>
+      Copy
+    </button>
+    <button class="w-full px-4 py-2 text-left text-sm hover:bg-white/5 flex items-center gap-3">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+      </svg>
+      Move
+    </button>
+    <div class="border-t border-white/10 my-2"></div>
+    <button class="w-full px-4 py-2 text-left text-sm hover:bg-red-500/10 text-red-400 flex items-center gap-3">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>
+      Delete
+    </button>
+  </div>
+
+  <script>
+    // Toggle folder open/close
+    function toggleFolder(element) {
+      const folder = element.closest('.tree-folder');
+      const children = folder.querySelector('.tree-children');
+      const icon = element.querySelector('.folder-icon');
+
+      if (children) {
+        children.classList.toggle('hidden');
+        icon.classList.toggle('rotate-90');
+        folder.classList.toggle('folder-open');
+      }
+
+      // Update selection
+      document.querySelectorAll('.tree-item').forEach(item => item.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    // Context menu
+    const contextMenu = document.getElementById('contextMenu');
+
+    function showContextMenu(e) {
+      e.preventDefault();
+      contextMenu.style.left = e.pageX + 'px';
+      contextMenu.style.top = e.pageY + 'px';
+      contextMenu.classList.remove('hidden');
+    }
+
+    document.addEventListener('click', () => {
+      contextMenu.classList.add('hidden');
+    });
+
+    // File item selection
+    document.querySelectorAll('.file-item').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.file-item').forEach(i => i.classList.remove('ring-2', 'ring-blue-500'));
+        this.classList.add('ring-2', 'ring-blue-500');
+      });
+    });
+  </script>
+
+</body>
+</html>
