@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .timeline-container {
+      background: linear-gradient(135deg, rgba(15,23,42,0.98) 0%, rgba(30,41,59,0.95) 100%);
+      backdrop-filter: blur(20px);
+    }
+    .version-card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    .version-card:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+    }
+    .timeline-line {
+      position: absolute;
+      left: 19px;
+      top: 60px;
+      bottom: -20px;
+      width: 2px;
+      background: linear-gradient(180deg, #3b82f6 0%, rgba(59, 130, 246, 0.2) 100%);
+    }
+    .timeline-dot {
+      position: relative;
+      z-index: 10;
+    }
+    .timeline-dot::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: inherit;
+      opacity: 0.3;
+      animation: pulse-ring 2s ease-out infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+    .diff-added {
+      background: rgba(34, 197, 94, 0.1);
+      border-left: 3px solid #22c55e;
+    }
+    .diff-removed {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid #ef4444;
+    }
+    .diff-modified {
+      background: rgba(251, 191, 36, 0.1);
+      border-left: 3px solid #fbbf24;
+    }
+    .preview-img {
+      transition: transform 0.3s ease;
+    }
+    .preview-img:hover {
+      transform: scale(1.05);
+    }
+    .action-btn {
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+    .version-card:hover .action-btn {
+      opacity: 1;
+    }
+    .badge-current {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+    }
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    .version-card {
+      animation: slideInLeft 0.4s ease forwards;
+    }
+    .version-card:nth-child(1) { animation-delay: 0.1s; }
+    .version-card:nth-child(2) { animation-delay: 0.2s; }
+    .version-card:nth-child(3) { animation-delay: 0.3s; }
+    .version-card:nth-child(4) { animation-delay: 0.4s; }
+    .version-card:nth-child(5) { animation-delay: 0.5s; }
+    .compare-view {
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 min-h-screen p-8">
+
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+        <button class="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <div>
+          <h1 class="text-3xl font-bold text-white mb-1">Version History</h1>
+          <p class="text-gray-400">project_proposal_2024.pdf</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+          </svg>
+          Filter
+        </button>
+        <button class="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium hover:shadow-lg transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+          </svg>
+          Compare Versions
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="timeline-container rounded-xl border border-white/10 p-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-white">15</p>
+            <p class="text-xs text-gray-400">Total Versions</p>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-container rounded-xl border border-white/10 p-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-white">4</p>
+            <p class="text-xs text-gray-400">Contributors</p>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-container rounded-xl border border-white/10 p-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-white">+234</p>
+            <p class="text-xs text-gray-400">Changes Made</p>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-container rounded-xl border border-white/10 p-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+            <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-white">2.4 MB</p>
+            <p class="text-xs text-gray-400">Current Size</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline-container rounded-2xl border border-white/10 p-6">
+      <div class="relative">
+        <div class="timeline-line"></div>
+
+        <!-- Version 1 - Current -->
+        <div class="version-card rounded-xl border border-white/10 p-5 mb-4 relative">
+          <div class="flex items-start gap-4">
+            <div class="timeline-dot w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <h3 class="text-lg font-bold text-white">Version 15 (Current)</h3>
+                  <span class="badge-current px-3 py-1 rounded-full text-xs font-semibold text-white">LIVE</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 hover:text-white transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download
+                  </button>
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 hover:text-white transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    Preview
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                  <span class="text-gray-300">Sarah Johnson</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-gray-400">2 hours ago</span>
+                </div>
+              </div>
+              <p class="text-sm text-gray-400 mb-3">Final review changes - Updated executive summary and financial projections based on Q4 data</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="diff-added px-3 py-1 rounded-lg text-xs font-medium text-emerald-300">+12 pages</span>
+                <span class="diff-modified px-3 py-1 rounded-lg text-xs font-medium text-amber-300">~8 edits</span>
+                <span class="text-xs text-gray-500 px-3 py-1">2.4 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Version 2 -->
+        <div class="version-card rounded-xl border border-white/10 p-5 mb-4 relative">
+          <div class="flex items-start gap-4">
+            <div class="timeline-dot w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+              <span class="text-white font-bold text-sm">14</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold text-white">Version 14</h3>
+                <div class="flex items-center gap-2">
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 hover:text-white transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download
+                  </button>
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-sm text-blue-400 transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Restore
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                  <span class="text-gray-300">Michael Chen</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-gray-400">Yesterday at 3:45 PM</span>
+                </div>
+              </div>
+              <p class="text-sm text-gray-400 mb-3">Added market analysis section with competitor comparison charts</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="diff-added px-3 py-1 rounded-lg text-xs font-medium text-emerald-300">+5 pages</span>
+                <span class="diff-modified px-3 py-1 rounded-lg text-xs font-medium text-amber-300">~3 edits</span>
+                <span class="text-xs text-gray-500 px-3 py-1">2.1 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Version 3 -->
+        <div class="version-card rounded-xl border border-white/10 p-5 mb-4 relative">
+          <div class="flex items-start gap-4">
+            <div class="timeline-dot w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center flex-shrink-0">
+              <span class="text-white font-bold text-sm">13</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold text-white">Version 13</h3>
+                <div class="flex items-center gap-2">
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 hover:text-white transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download
+                  </button>
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-sm text-blue-400 transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Restore
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                  <span class="text-gray-300">Emma Williams</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-gray-400">Dec 20, 2024 at 11:20 AM</span>
+                </div>
+              </div>
+              <p class="text-sm text-gray-400 mb-3">Fixed formatting issues in the budget section and updated contact information</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="diff-modified px-3 py-1 rounded-lg text-xs font-medium text-amber-300">~15 edits</span>
+                <span class="text-xs text-gray-500 px-3 py-1">1.9 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Version 4 -->
+        <div class="version-card rounded-xl border border-white/10 p-5 mb-4 relative">
+          <div class="flex items-start gap-4">
+            <div class="timeline-dot w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
+              <span class="text-white font-bold text-sm">12</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold text-white">Version 12</h3>
+                <div class="flex items-center gap-2">
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 hover:text-white transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download
+                  </button>
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-sm text-blue-400 transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Restore
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                  <span class="text-gray-300">Sarah Johnson</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-gray-400">Dec 18, 2024 at 4:30 PM</span>
+                </div>
+              </div>
+              <p class="text-sm text-gray-400 mb-3">Removed outdated Q3 data and consolidated appendix sections</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="diff-removed px-3 py-1 rounded-lg text-xs font-medium text-red-300">-7 pages</span>
+                <span class="diff-modified px-3 py-1 rounded-lg text-xs font-medium text-amber-300">~6 edits</span>
+                <span class="text-xs text-gray-500 px-3 py-1">1.8 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Version 5 -->
+        <div class="version-card rounded-xl border border-white/10 p-5 relative">
+          <div class="flex items-start gap-4">
+            <div class="timeline-dot w-10 h-10 rounded-full bg-cyan-500 flex items-center justify-center flex-shrink-0">
+              <span class="text-white font-bold text-sm">11</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold text-white">Version 11</h3>
+                <div class="flex items-center gap-2">
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 hover:text-white transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download
+                  </button>
+                  <button class="action-btn px-3 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-sm text-blue-400 transition flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Restore
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                  <span class="text-gray-300">David Martinez</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-gray-400">Dec 15, 2024 at 9:15 AM</span>
+                </div>
+              </div>
+              <p class="text-sm text-gray-400 mb-3">Initial draft with project scope and timeline overview</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="diff-added px-3 py-1 rounded-lg text-xs font-medium text-emerald-300">+20 pages</span>
+                <span class="text-xs text-gray-500 px-3 py-1">1.6 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Load More -->
+      <div class="text-center mt-6">
+        <button class="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition flex items-center gap-2 mx-auto">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+          Load 10 More Versions
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Restore version functionality
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+
+        const action = this.textContent.trim();
+        const versionCard = this.closest('.version-card');
+        const versionTitle = versionCard.querySelector('h3').textContent;
+
+        if(action.includes('Restore')) {
+          if(confirm(`Are you sure you want to restore ${versionTitle}? This will create a new version.`)) {
+            // Simulate restore
+            this.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Restoring...';
+
+            setTimeout(() => {
+              this.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Restored';
+              setTimeout(() => {
+                location.reload();
+              }, 1000);
+            }, 2000);
+          }
+        } else if(action.includes('Download')) {
+          // Simulate download
+          this.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
+
+          setTimeout(() => {
+            this.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Downloaded';
+            setTimeout(() => {
+              this.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Download';
+            }, 2000);
+          }, 1500);
+        }
+      });
+    });
+
+    // Version card selection
+    document.querySelectorAll('.version-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        if(e.target.closest('.action-btn')) return;
+
+        document.querySelectorAll('.version-card').forEach(c => {
+          c.classList.remove('ring-2', 'ring-blue-500');
+        });
+
+        this.classList.add('ring-2', 'ring-blue-500');
+      });
+    });
+  </script>
+
+</body>
+</html>
