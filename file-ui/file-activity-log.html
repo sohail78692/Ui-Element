@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .activity-panel {
+      background: linear-gradient(135deg, rgba(15,23,42,0.98) 0%, rgba(30,41,59,0.95) 100%);
+      backdrop-filter: blur(20px);
+    }
+    .activity-item {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+    .activity-item:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateX(8px);
+      border-left-color: #3b82f6;
+    }
+    .activity-icon {
+      position: relative;
+    }
+    .activity-icon::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: inherit;
+      opacity: 0.2;
+      animation: pulse-icon 2s ease-in-out infinite;
+    }
+    @keyframes pulse-icon {
+      0%, 100% { transform: scale(1); opacity: 0.2; }
+      50% { transform: scale(1.3); opacity: 0; }
+    }
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .activity-item {
+      animation: slideInUp 0.4s ease forwards;
+    }
+    .activity-item:nth-child(1) { animation-delay: 0.05s; }
+    .activity-item:nth-child(2) { animation-delay: 0.1s; }
+    .activity-item:nth-child(3) { animation-delay: 0.15s; }
+    .activity-item:nth-child(4) { animation-delay: 0.2s; }
+    .activity-item:nth-child(5) { animation-delay: 0.25s; }
+    .activity-item:nth-child(6) { animation-delay: 0.3s; }
+    .activity-item:nth-child(7) { animation-delay: 0.35s; }
+    .activity-item:nth-child(8) { animation-delay: 0.4s; }
+
+    .filter-chip {
+      transition: all 0.2s ease;
+    }
+    .filter-chip:hover {
+      transform: translateY(-2px);
+    }
+    .filter-chip.active {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    }
+    .timeline-connector {
+      position: absolute;
+      left: 23px;
+      top: 60px;
+      bottom: -20px;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.3) 0%, transparent 100%);
+    }
+    .stat-card {
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+    }
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .count-animation {
+      animation: countUp 0.6s ease forwards;
+    }
+    .export-btn {
+      transition: all 0.2s ease;
+    }
+    .export-btn:hover {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen p-8">
+
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+        <button class="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <div>
+          <h1 class="text-3xl font-bold text-white mb-1">Activity Log</h1>
+          <p class="text-gray-400">Track all changes to project_proposal_2024.pdf</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="export-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          Export Log
+        </button>
+        <button class="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium hover:shadow-lg transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+          </svg>
+          Filter
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="stat-card activity-panel rounded-xl border border-white/10 p-5">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-emerald-400 bg-emerald-500/20 px-2 py-1 rounded-full">+12%</span>
+        </div>
+        <p class="text-3xl font-bold text-white mb-1 count-animation">1,247</p>
+        <p class="text-sm text-gray-400">Total Views</p>
+      </div>
+
+      <div class="stat-card activity-panel rounded-xl border border-white/10 p-5">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-purple-400 bg-purple-500/20 px-2 py-1 rounded-full">+5</span>
+        </div>
+        <p class="text-3xl font-bold text-white mb-1 count-animation">87</p>
+        <p class="text-sm text-gray-400">Edits Made</p>
+      </div>
+
+      <div class="stat-card activity-panel rounded-xl border border-white/10 p-5">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+          </div>
+          <span class="text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded-full">34</span>
+        </div>
+        <p class="text-3xl font-bold text-white mb-1 count-animation">156</p>
+        <p class="text-sm text-gray-400">Downloads</p>
+      </div>
+
+      <div class="stat-card activity-panel rounded-xl border border-white/10 p-5">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-blue-400 bg-blue-500/20 px-2 py-1 rounded-full">8</span>
+        </div>
+        <p class="text-3xl font-bold text-white mb-1 count-animation">23</p>
+        <p class="text-sm text-gray-400">Shares</p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="activity-panel rounded-2xl border border-white/10 p-5 mb-6">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-sm text-gray-400">Show:</span>
+        <button class="filter-chip active px-4 py-2 rounded-lg border border-white/10 text-sm font-medium text-white">
+          All Activity
+        </button>
+        <button class="filter-chip px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:text-white">
+          <svg class="w-4 h-4 inline mr-1 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Views
+        </button>
+        <button class="filter-chip px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:text-white">
+          <svg class="w-4 h-4 inline mr-1 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+          </svg>
+          Edits
+        </button>
+        <button class="filter-chip px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:text-white">
+          <svg class="w-4 h-4 inline mr-1 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Downloads
+        </button>
+        <button class="filter-chip px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:text-white">
+          <svg class="w-4 h-4 inline mr-1 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+          </svg>
+          Shares
+        </button>
+        <button class="filter-chip px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:text-white">
+          <svg class="w-4 h-4 inline mr-1 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          Security
+        </button>
+        <div class="ml-auto flex items-center gap-2">
+          <input type="date" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500 transition">
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div class="activity-panel rounded-2xl border border-white/10 p-6">
+      <div class="relative">
+        <div class="timeline-connector"></div>
+
+        <div class="space-y-4">
+
+          <!-- Activity 1 - Edit -->
+          <div class="activity-item rounded-xl p-4 border border-white/10">
+            <div class="flex items-start gap-4">
+              <div class="activity-icon w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h3 class="text-white font-semibold">Sarah Johnson edited the file</h3>
+                    <p class="text-sm text-gray-400 mt-1">Updated financial projections section with Q4 data</p>
+                  </div>
+                  <span class="text-xs text-gray-500 whitespace-nowrap ml-4">2 hours ago</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">SJ</span>
+                    </div>
+                    <span class="text-sm text-gray-300">sarah.johnson@company.com</span>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full bg-purple-500/20 text-purple-400">Edit</span>
+                  <span class="text-xs text-gray-500">From: Chrome on Windows</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 2 - Download -->
+          <div class="activity-item rounded-xl p-4 border border-white/10">
+            <div class="flex items-start gap-4">
+              <div class="activity-icon w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h3 class="text-white font-semibold">Michael Chen downloaded the file</h3>
+                    <p class="text-sm text-gray-400 mt-1">Downloaded version 15 (2.4 MB)</p>
+                  </div>
+                  <span class="text-xs text-gray-500 whitespace-nowrap ml-4">3 hours ago</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">MC</span>
+                    </div>
+                    <span class="text-sm text-gray-300">michael.chen@company.com</span>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400">Download</span>
+                  <span class="text-xs text-gray-500">From: Safari on macOS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 3 - View -->
+          <div class="activity-item rounded-xl p-4 border border-white/10">
+            <div class="flex items-start gap-4">
+              <div class="activity-icon w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h3 class="text-white font-semibold">Emma Williams viewed the file</h3>
+                    <p class="text-sm text-gray-400 mt-1">Spent 12 minutes reviewing the document</p>
+                  </div>
+                  <span class="text-xs text-gray-500 whitespace-nowrap ml-4">5 hours ago</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">EW</span>
+                    </div>
+                    <span class="text-sm text-gray-300">emma.williams@company.com</span>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-400">View</span>
+                  <span class="text-xs text-gray-500">From: Firefox on Linux</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 4 - Share -->
+          <div class="activity-item rounded-xl p-4 border border-white/10">
+            <div class="flex items-start gap-4">
+              <div class="activity-icon w-12 h-12 rounded-full bg-pink-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h3 class="text-white font-semibold">David Martinez shared the file</h3>
+                    <p class="text-sm text-gray-400 mt-1">Shared with alex.thompson@company.com (Can edit)</p>
+                  </div>
+                  <span class="text-xs text-gray-500 whitespace-nowrap ml-4">Yesterday</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">DM</span>
+                    </div>
+                    <span class="text-sm text-gray-300">david.martinez@company.com</span>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full bg-pink-500/20 text-pink-400">Share</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 5 - Comment -->
+          <div class="activity-item rounded-xl p-4 border border-white/10">
+            <div class="flex items-start gap-4">
+              <div class="activity-icon w-12 h-12 rounded-full bg-cyan-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h3 class="text-white font-semibold">Sarah Johnson added a comment</h3>
+                    <p class="text-sm text-gray-400 mt-1">"Can we review the budget allocation on page 12?"</p>
+                  </div>
+                  <span class="text-xs text-gray-500 whitespace-nowrap ml-4">2 days ago</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">SJ</span>
+                    </div>
+                    <span class="text-sm text-gray-300">sarah.johnson@company.com</span>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full bg-cyan-500/20 text-cyan-400">Comment</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 6 - Security -->
+          <div class="activity-item rounded-xl p-4 border border-white/10">
+            <div class="flex items-start gap-4">
+              <div class="activity-icon w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h3 class="text-white font-semibold">Security settings updated</h3>
+                    <p class="text-sm text-gray-400 mt-1">Link sharing enabled with password protection</p>
+                  </div>
+                  <span class="text-xs text-gray-500 whitespace-nowrap ml-4">3 days ago</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">SJ</span>
+                    </div>
+                    <span class="text-sm text-gray-300">sarah.johnson@company.com</span>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full bg-orange-500/20 text-orange-400">Security</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 7 - Version -->
+          <div class="activity-item rounded-xl p-4 border border-white/10">
+            <div class="flex items-start gap-4">
+              <div class="activity-icon w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h3 class="text-white font-semibold">New version created</h3>
+                    <p class="text-sm text-gray-400 mt-1">Version 14 uploaded with major revisions</p>
+                  </div>
+                  <span class="text-xs text-gray-500 whitespace-nowrap ml-4">4 days ago</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">MC</span>
+                    </div>
+                    <span class="text-sm text-gray-300">michael.chen@company.com</span>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full bg-indigo-500/20 text-indigo-400">Version</span>
+                  <span class="text-xs text-gray-500">+234 KB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 8 - Created -->
+          <div class="activity-item rounded-xl p-4 border border-white/10">
+            <div class="flex items-start gap-4">
+              <div class="activity-icon w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h3 class="text-white font-semibold">File created</h3>
+                    <p class="text-sm text-gray-400 mt-1">project_proposal_2024.pdf was created</p>
+                  </div>
+                  <span class="text-xs text-gray-500 whitespace-nowrap ml-4">Dec 15, 2024</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">SJ</span>
+                    </div>
+                    <span class="text-sm text-gray-300">sarah.johnson@company.com</span>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400">Created</span>
+                  <span class="text-xs text-gray-500">1.2 MB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Load More -->
+      <div class="text-center mt-6">
+        <button class="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition flex items-center gap-2 mx-auto">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+          Load More Activities
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Filter chip functionality
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.filter-chip').forEach(c => {
+          c.classList.remove('active');
+          c.classList.add('bg-white/5');
+        });
+        this.classList.add('active');
+        this.classList.remove('bg-white/5');
+      });
+    });
+
+    // Activity item click
+    document.querySelectorAll('.activity-item').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.activity-item').forEach(i => {
+          i.classList.remove('ring-2', 'ring-blue-500');
+        });
+        this.classList.add('ring-2', 'ring-blue-500');
+      });
+    });
+
+    // Export log simulation
+    document.querySelector('.export-btn').addEventListener('click', function() {
+      const originalText = this.innerHTML;
+      this.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Exporting...';
+
+      setTimeout(() => {
+        this.innerHTML = '<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Exported!';
+        setTimeout(() => {
+          this.innerHTML = originalText;
+        }, 2000);
+      }, 2000);
+    });
+  </script>
+
+</body>
+</html>
