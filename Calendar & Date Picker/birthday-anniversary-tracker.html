@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Birthday & Anniversary Tracker - Ui Element</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card-bg: #0f172a;
+      --accent: #f472b6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(244, 114, 182, 0.5);
+      --border: rgba(148, 163, 184, 0.3);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 60%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: 28px;
+      padding: 26px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%);
+      box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(148, 163, 184, 0.1);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -150px;
+      background:
+        radial-gradient(circle at top left, rgba(244, 114, 182, 0.08), transparent 50%),
+        radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.08), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #f472b6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Month Navigator */
+    .month-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-radius: 16px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.6);
+      margin-bottom: 24px;
+    }
+
+    .month-display {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .month-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+      color: var(--text);
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent);
+      background: rgba(244, 114, 182, 0.15);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Calendar */
+    .calendar-section {
+      margin-bottom: 24px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .calendar-weekday {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      padding: 8px 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      background: rgba(15, 23, 42, 0.4);
+      position: relative;
+    }
+
+    .calendar-day:hover {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(148, 163, 184, 0.5);
+      transform: scale(1.05);
+    }
+
+    .calendar-day.outside {
+      color: rgba(148, 163, 184, 0.25);
+      background: transparent;
+    }
+
+    .calendar-day.today {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(244, 114, 182, 0.3);
+    }
+
+    .calendar-day.has-event {
+      background: linear-gradient(135deg, rgba(244, 114, 182, 0.3), rgba(168, 85, 247, 0.3));
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .calendar-day.has-event:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .event-indicator {
+      display: flex;
+      gap: 3px;
+      margin-top: 3px;
+      position: absolute;
+      bottom: 4px;
+    }
+
+    .event-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+    }
+
+    .event-dot.birthday {
+      background: #f472b6;
+      box-shadow: 0 0 6px rgba(244, 114, 182, 0.8);
+    }
+
+    .event-dot.anniversary {
+      background: #a855f7;
+      box-shadow: 0 0 6px rgba(168, 85, 247, 0.8);
+    }
+
+    /* Upcoming Events */
+    .upcoming-section {
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .upcoming-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .event-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.6);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .event-card:hover {
+      border-color: var(--accent);
+      background: rgba(30, 41, 59, 0.8);
+      transform: translateX(4px);
+    }
+
+    .event-card.birthday {
+      border-left: 4px solid #f472b6;
+    }
+
+    .event-card.anniversary {
+      border-left: 4px solid #a855f7;
+    }
+
+    .event-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .event-icon.birthday {
+      background: rgba(244, 114, 182, 0.2);
+    }
+
+    .event-icon.anniversary {
+      background: rgba(168, 85, 247, 0.2);
+    }
+
+    .event-content {
+      flex: 1;
+    }
+
+    .event-name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .event-date {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .event-age {
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .event-countdown {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .countdown-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #f472b6, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+
+    .countdown-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .countdown-today {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f472b6, #a855f7);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(71, 85, 105, 0.5);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+    }
+
+    .legend-dot.birthday {
+      background: #f472b6;
+      box-shadow: 0 0 8px rgba(244, 114, 182, 0.8);
+    }
+
+    .legend-dot.anniversary {
+      background: #a855f7;
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 20px;
+      }
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .calendar-grid {
+        gap: 6px;
+      }
+
+      .event-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .event-countdown {
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .month-nav {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .calendar-day {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="card-inner">
+        <div class="header">
+          <div class="title">
+            <span>🎂</span>
+            <span>Special Dates Tracker</span>
+          </div>
+          <div class="subtitle">Never miss a birthday or anniversary again</div>
+        </div>
+
+        <div class="month-nav">
+          <div class="month-display" id="monthDisplay">December 2025</div>
+          <div class="month-controls">
+            <button class="nav-btn" id="prevMonth" type="button">‹</button>
+            <button class="nav-btn" id="todayBtn" type="button">Today</button>
+            <button class="nav-btn" id="nextMonth" type="button">›</button>
+          </div>
+        </div>
+
+        <div class="calendar-section">
+          <div class="calendar-grid">
+            <div class="calendar-weekday">Sun</div>
+            <div class="calendar-weekday">Mon</div>
+            <div class="calendar-weekday">Tue</div>
+            <div class="calendar-weekday">Wed</div>
+            <div class="calendar-weekday">Thu</div>
+            <div class="calendar-weekday">Fri</div>
+            <div class="calendar-weekday">Sat</div>
+          </div>
+          <div class="calendar-grid" id="calendarDays">
+            <!-- Generated by JavaScript -->
+          </div>
+        </div>
+
+        <div class="upcoming-section">
+          <div class="section-title">
+            <span>⏰</span>
+            <span>Upcoming Events</span>
+          </div>
+          <div class="upcoming-list" id="upcomingList">
+            <!-- Generated by JavaScript -->
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-dot birthday"></div>
+            <span>Birthday</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot anniversary"></div>
+            <span>Anniversary</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample events data
+    const events = [
+      { name: "Sarah Johnson", type: "birthday", month: 11, day: 28, year: 1990 },
+      { name: "Mike & Emma Wedding", type: "anniversary", month: 11, day: 30, year: 2018 },
+      { name: "David Chen", type: "birthday", month: 0, day: 5, year: 1985 },
+      { name: "Our Anniversary", type: "anniversary", month: 0, day: 14, year: 2020 },
+      { name: "Mom", type: "birthday", month: 0, day: 22, year: 1965 },
+      { name: "Tom Wilson", type: "birthday", month: 1, day: 14, year: 1992 },
+      { name: "Parents Anniversary", type: "anniversary", month: 2, day: 15, year: 1988 },
+      { name: "Jessica Lee", type: "birthday", month: 3, day: 10, year: 1995 },
+      { name: "Dad", type: "birthday", month: 5, day: 18, year: 1963 },
+      { name: "Best Friend Sarah", type: "birthday", month: 8, day: 5, year: 1991 },
+    ];
+
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const monthDisplay = document.getElementById("monthDisplay");
+    const calendarDays = document.getElementById("calendarDays");
+    const upcomingList = document.getElementById("upcomingList");
+    const prevMonthBtn = document.getElementById("prevMonth");
+    const nextMonthBtn = document.getElementById("nextMonth");
+    const todayBtn = document.getElementById("todayBtn");
+
+    function getDaysInMonth(year, month) {
+      return new Date(year, month + 1, 0).getDate();
+    }
+
+    function isToday(year, month, day) {
+      const today = new Date();
+      return year === today.getFullYear() &&
+             month === today.getMonth() &&
+             day === today.getDate();
+    }
+
+    function getEventsForDate(month, day) {
+      return events.filter(e => e.month === month && e.day === day);
+    }
+
+    function calculateAge(birthYear) {
+      return currentYear - birthYear;
+    }
+
+    function getDaysUntil(month, day) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      let eventDate = new Date(currentYear, month, day);
+      if (eventDate < today) {
+        eventDate = new Date(currentYear + 1, month, day);
+      }
+
+      const diff = eventDate - today;
+      return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    }
+
+    function renderCalendar() {
+      calendarDays.innerHTML = "";
+      monthDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+      const prevMonthDays = currentMonth === 0
+        ? getDaysInMonth(currentYear - 1, 11)
+        : getDaysInMonth(currentYear, currentMonth - 1);
+
+      // Previous month days
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const day = document.createElement("div");
+        day.className = "calendar-day outside";
+        day.textContent = prevMonthDays - i;
+        calendarDays.appendChild(day);
+      }
+
+      // Current month days
+      for (let d = 1; d <= daysInMonth; d++) {
+        const day = document.createElement("div");
+        day.className = "calendar-day";
+
+        if (isToday(currentYear, currentMonth, d)) {
+          day.classList.add("today");
+        }
+
+        const dayEvents = getEventsForDate(currentMonth, d);
+        if (dayEvents.length > 0) {
+          day.classList.add("has-event");
+
+          const indicators = document.createElement("div");
+          indicators.className = "event-indicator";
+
+          dayEvents.forEach(event => {
+            const dot = document.createElement("div");
+            dot.className = `event-dot ${event.type}`;
+            indicators.appendChild(dot);
+          });
+
+          day.appendChild(indicators);
+        }
+
+        const dayNumber = document.createElement("span");
+        dayNumber.textContent = d;
+        day.insertBefore(dayNumber, day.firstChild);
+
+        day.addEventListener("click", () => {
+          if (dayEvents.length > 0) {
+            const names = dayEvents.map(e => `${e.name} (${e.type})`).join("\n");
+            alert(`Events on ${monthNames[currentMonth]} ${d}:\n\n${names}`);
+          }
+        });
+
+        calendarDays.appendChild(day);
+      }
+
+      // Next month days
+      const totalCells = firstDay + daysInMonth;
+      const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+      for (let d = 1; d <= remainingCells; d++) {
+        const day = document.createElement("div");
+        day.className = "calendar-day outside";
+        day.textContent = d;
+        calendarDays.appendChild(day);
+      }
+    }
+
+    function renderUpcomingEvents() {
+      upcomingList.innerHTML = "";
+
+      // Get all events with countdown
+      const eventsWithCountdown = events.map(event => ({
+        ...event,
+        daysUntil: getDaysUntil(event.month, event.day)
+      }));
+
+      // Sort by days until
+      eventsWithCountdown.sort((a, b) => a.daysUntil - b.daysUntil);
+
+      // Show top 5
+      eventsWithCountdown.slice(0, 5).forEach(event => {
+        const card = document.createElement("div");
+        card.className = `event-card ${event.type}`;
+
+        const icon = document.createElement("div");
+        icon.className = `event-icon ${event.type}`;
+        icon.textContent = event.type === "birthday" ? "🎂" : "💑";
+
+        const content = document.createElement("div");
+        content.className = "event-content";
+
+        const name = document.createElement("div");
+        name.className = "event-name";
+        name.textContent = event.name;
+
+        const date = document.createElement("div");
+        date.className = "event-date";
+        date.textContent = `${monthNames[event.month]} ${event.day}`;
+
+        const age = document.createElement("div");
+        age.className = "event-age";
+        if (event.type === "birthday") {
+          age.textContent = `Turning ${calculateAge(event.year)} years old`;
+        } else {
+          const years = calculateAge(event.year);
+          age.textContent = `${years} year${years !== 1 ? 's' : ''} anniversary`;
+        }
+
+        content.appendChild(name);
+        content.appendChild(date);
+        content.appendChild(age);
+
+        const countdown = document.createElement("div");
+        countdown.className = "event-countdown";
+
+        if (event.daysUntil === 0) {
+          const todayLabel = document.createElement("div");
+          todayLabel.className = "countdown-today";
+          todayLabel.textContent = "TODAY!";
+          countdown.appendChild(todayLabel);
+        } else {
+          const number = document.createElement("div");
+          number.className = "countdown-number";
+          number.textContent = event.daysUntil;
+
+          const label = document.createElement("div");
+          label.className = "countdown-label";
+          label.textContent = event.daysUntil === 1 ? "day left" : "days left";
+
+          countdown.appendChild(number);
+          countdown.appendChild(label);
+        }
+
+        card.appendChild(icon);
+        card.appendChild(content);
+        card.appendChild(countdown);
+
+        card.addEventListener("click", () => {
+          alert(`${event.name}\n${event.type === "birthday" ? "Birthday" : "Anniversary"}\n${monthNames[event.month]} ${event.day}, ${event.year}`);
+        });
+
+        upcomingList.appendChild(card);
+      });
+    }
+
+    // Navigation
+    prevMonthBtn.addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    });
+
+    todayBtn.addEventListener("click", () => {
+      const today = new Date();
+      currentMonth = today.getMonth();
+      currentYear = today.getFullYear();
+      renderCalendar();
+    });
+
+    // Initialize
+    renderCalendar();
+    renderUpcomingEvents();
+  </script>
+</body>
+</html>
