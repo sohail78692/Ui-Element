@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Circular Progress Steps</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 50px 40px;
+      border-radius: 25px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: #2d3748;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header p {
+      color: #718096;
+      font-size: 16px;
+    }
+
+    /* Circular Progress */
+    .progress-circle-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring-circle {
+      transition: stroke-dashoffset 0.6s ease;
+      stroke: #e2e8f0;
+      fill: transparent;
+    }
+
+    .progress-ring-fill {
+      transition: stroke-dashoffset 0.6s ease;
+      stroke: url(#gradient);
+      fill: transparent;
+      stroke-linecap: round;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .progress-percentage {
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .progress-label {
+      font-size: 14px;
+      color: #718096;
+      margin-top: 5px;
+    }
+
+    /* Steps List */
+    .steps-list {
+      margin-bottom: 40px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      background: #f7fafc;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .step-item.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transform: translateX(8px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .step-item.completed {
+      background: #f0fff4;
+      border-color: #48bb78;
+    }
+
+    .step-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 20px;
+      margin-right: 20px;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .step-item:not(.active):not(.completed) .step-icon {
+      background: #e2e8f0;
+      color: #a0aec0;
+    }
+
+    .step-item.active .step-icon {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .step-item.completed .step-icon {
+      background: #48bb78;
+      color: white;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .step-item:not(.active) .step-title {
+      color: #2d3748;
+    }
+
+    .step-item.active .step-title {
+      color: white;
+    }
+
+    .step-description {
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .step-item:not(.active) .step-description {
+      color: #718096;
+    }
+
+    .step-item.active .step-description {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .step-check {
+      font-size: 24px;
+      color: #48bb78;
+      margin-left: 10px;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s ease;
+    }
+
+    .step-item.completed .step-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-prev {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-prev:hover:not(:disabled) {
+      background: #cbd5e0;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-next:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-reset {
+      background: #fc8181;
+      color: white;
+    }
+
+    .btn-reset:hover {
+      background: #f56565;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(252, 129, 129, 0.4);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .progress-percentage {
+        font-size: 36px;
+      }
+
+      .step-item {
+        padding: 15px;
+      }
+
+      .step-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        margin-right: 15px;
+      }
+
+      .step-title {
+        font-size: 16px;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>Project Progress Tracker</h1>
+      <p>Complete each step to reach your goal</p>
+    </div>
+
+    <!-- Circular Progress -->
+    <div class="progress-circle-container">
+      <svg class="progress-ring" width="200" height="200">
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <circle class="progress-ring-circle" stroke-width="12" r="90" cx="100" cy="100" />
+        <circle class="progress-ring-fill" stroke-width="12" r="90" cx="100" cy="100" id="progress-circle" />
+      </svg>
+      <div class="progress-text">
+        <div class="progress-percentage" id="percentage">0%</div>
+        <div class="progress-label">Complete</div>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps-list">
+      <div class="step-item" data-step="0">
+        <div class="step-icon">1</div>
+        <div class="step-content">
+          <div class="step-title">Planning</div>
+          <div class="step-description">Define your project scope and objectives</div>
+        </div>
+        <div class="step-check">✓</div>
+      </div>
+
+      <div class="step-item" data-step="1">
+        <div class="step-icon">2</div>
+        <div class="step-content">
+          <div class="step-title">Design</div>
+          <div class="step-description">Create wireframes and visual mockups</div>
+        </div>
+        <div class="step-check">✓</div>
+      </div>
+
+      <div class="step-item" data-step="2">
+        <div class="step-icon">3</div>
+        <div class="step-content">
+          <div class="step-title">Development</div>
+          <div class="step-description">Build and implement your solution</div>
+        </div>
+        <div class="step-check">✓</div>
+      </div>
+
+      <div class="step-item" data-step="3">
+        <div class="step-icon">4</div>
+        <div class="step-content">
+          <div class="step-title">Testing</div>
+          <div class="step-description">Quality assurance and bug fixes</div>
+        </div>
+        <div class="step-check">✓</div>
+      </div>
+
+      <div class="step-item" data-step="4">
+        <div class="step-icon">5</div>
+        <div class="step-content">
+          <div class="step-title">Launch</div>
+          <div class="step-description">Deploy and monitor your project</div>
+        </div>
+        <div class="step-check">✓</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn btn-prev" id="prevBtn">Previous</button>
+      <button class="btn btn-reset" id="resetBtn">Reset</button>
+      <button class="btn btn-next" id="nextBtn">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const steps = document.querySelectorAll('.step-item');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const progressCircle = document.getElementById('progress-circle');
+    const percentage = document.getElementById('percentage');
+
+    let currentStep = 0;
+    const totalSteps = steps.length;
+
+    // Circle calculations
+    const radius = 90;
+    const circumference = 2 * Math.PI * radius;
+    progressCircle.style.strokeDasharray = circumference;
+    progressCircle.style.strokeDashoffset = circumference;
+
+    function updateProgress() {
+      // Update steps
+      steps.forEach((step, index) => {
+        step.classList.remove('active', 'completed');
+
+        if (index < currentStep) {
+          step.classList.add('completed');
+        } else if (index === currentStep) {
+          step.classList.add('active');
+        }
+      });
+
+      // Update circular progress
+      const progress = ((currentStep + 1) / totalSteps) * 100;
+      const offset = circumference - (progress / 100) * circumference;
+      progressCircle.style.strokeDashoffset = offset;
+      percentage.textContent = Math.round(progress) + '%';
+
+      // Update buttons
+      prevBtn.disabled = currentStep === 0;
+      nextBtn.disabled = currentStep === totalSteps - 1;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < totalSteps - 1) {
+        currentStep++;
+        updateProgress();
+      }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentStep > 0) {
+        currentStep--;
+        updateProgress();
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      currentStep = 0;
+      updateProgress();
+    });
+
+    // Initialize
+    updateProgress();
+  </script>
+
+</body>
+</html>
