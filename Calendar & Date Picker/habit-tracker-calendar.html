@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Habit Tracker Calendar - Ui Element</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card-bg: #0f172a;
+      --accent: #22c55e;
+      --accent-secondary: #84cc16;
+      --accent-glow: rgba(34, 197, 94, 0.5);
+      --border: rgba(148, 163, 184, 0.3);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 60%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: 28px;
+      padding: 26px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%);
+      box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(148, 163, 184, 0.1);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -150px;
+      background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.08), transparent 50%),
+        radial-gradient(circle at bottom right, rgba(132, 204, 22, 0.08), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #22c55e, #84cc16);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Stats Section */
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      border-color: var(--accent);
+      background: rgba(30, 41, 59, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .stat-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #22c55e, #84cc16);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Month Navigation */
+    .month-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 0 4px;
+    }
+
+    .month-display {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .month-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+      color: var(--text);
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent);
+      background: rgba(34, 197, 94, 0.15);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Calendar */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .calendar-weekday {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      padding: 8px 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+      background: rgba(15, 23, 42, 0.4);
+      position: relative;
+    }
+
+    .calendar-day:hover {
+      transform: scale(1.08);
+      border-color: rgba(148, 163, 184, 0.5);
+    }
+
+    .calendar-day.outside {
+      color: rgba(148, 163, 184, 0.25);
+      background: transparent;
+      cursor: default;
+    }
+
+    .calendar-day.outside:hover {
+      transform: none;
+      border-color: transparent;
+    }
+
+    .calendar-day.today {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+    }
+
+    .calendar-day.future {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .calendar-day.future:hover {
+      transform: none;
+      border-color: transparent;
+    }
+
+    /* Habit Status */
+    .calendar-day.completed {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+    }
+
+    .calendar-day.partial {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    }
+
+    .calendar-day.missed {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    }
+
+    .day-number {
+      margin-bottom: 4px;
+    }
+
+    .day-status {
+      font-size: 1.2rem;
+      position: absolute;
+      bottom: 4px;
+    }
+
+    /* Habit Progress Bar */
+    .progress-section {
+      margin-bottom: 24px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .progress-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .progress-percentage {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .progress-bar-container {
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.6);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(to right, #22c55e, #84cc16);
+      transition: width 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Streak Info */
+    .streak-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .streak-card {
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .streak-icon {
+      font-size: 2rem;
+    }
+
+    .streak-content {
+      flex: 1;
+    }
+
+    .streak-value {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .streak-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(71, 85, 105, 0.5);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .legend-box {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .legend-box.completed {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+    }
+
+    .legend-box.partial {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+    }
+
+    .legend-box.missed {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+
+    .legend-box.none {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 20px;
+      }
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .stats-section {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .calendar-grid {
+        gap: 6px;
+      }
+
+      .calendar-day {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="card-inner">
+        <div class="header">
+          <div class="title">
+            <span>✅</span>
+            <span>Habit Tracker</span>
+          </div>
+          <div class="subtitle">Build better habits one day at a time</div>
+        </div>
+
+        <div class="stats-section">
+          <div class="stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value" id="currentStreak">7</div>
+            <div class="stat-label">Current Streak</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value" id="longestStreak">15</div>
+            <div class="stat-label">Longest Streak</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-value" id="totalDays">21</div>
+            <div class="stat-label">Total Days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value" id="completionRate">84%</div>
+            <div class="stat-label">Success Rate</div>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-header">
+            <div class="progress-title">Monthly Progress</div>
+            <div class="progress-percentage" id="monthProgress">68%</div>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar" style="width: 68%"></div>
+          </div>
+        </div>
+
+        <div class="month-nav">
+          <div class="month-display" id="monthDisplay">December 2025</div>
+          <div class="month-controls">
+            <button class="nav-btn" id="prevMonth" type="button">‹</button>
+            <button class="nav-btn" id="todayBtn" type="button">Today</button>
+            <button class="nav-btn" id="nextMonth" type="button">›</button>
+          </div>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="calendar-weekday">Sun</div>
+          <div class="calendar-weekday">Mon</div>
+          <div class="calendar-weekday">Tue</div>
+          <div class="calendar-weekday">Wed</div>
+          <div class="calendar-weekday">Thu</div>
+          <div class="calendar-weekday">Fri</div>
+          <div class="calendar-weekday">Sat</div>
+        </div>
+        <div class="calendar-grid" id="calendarDays">
+          <!-- Generated by JavaScript -->
+        </div>
+
+        <div class="streak-section">
+          <div class="streak-card">
+            <div class="streak-icon">🔥</div>
+            <div class="streak-content">
+              <div class="streak-value" id="streakDays">7 days</div>
+              <div class="streak-label">Keep it going!</div>
+            </div>
+          </div>
+          <div class="streak-card">
+            <div class="streak-icon">💪</div>
+            <div class="streak-content">
+              <div class="streak-value" id="thisWeek">5/7</div>
+              <div class="streak-label">This Week</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-box completed">✓</div>
+            <span>Completed</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box partial">~</div>
+            <span>Partial</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box missed">✗</div>
+            <span>Missed</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box none"></div>
+            <span>No Data</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample habit data (in real app, this would come from database)
+    const habitData = {
+      "2025-12-01": "completed",
+      "2025-12-02": "completed",
+      "2025-12-03": "missed",
+      "2025-12-04": "completed",
+      "2025-12-05": "completed",
+      "2025-12-06": "partial",
+      "2025-12-07": "completed",
+      "2025-12-08": "completed",
+      "2025-12-09": "completed",
+      "2025-12-10": "missed",
+      "2025-12-11": "completed",
+      "2025-12-12": "completed",
+      "2025-12-13": "completed",
+      "2025-12-14": "partial",
+      "2025-12-15": "completed",
+      "2025-12-16": "completed",
+      "2025-12-17": "missed",
+      "2025-12-18": "completed",
+      "2025-12-19": "completed",
+      "2025-12-20": "completed",
+      "2025-12-21": "completed",
+      "2025-12-22": "completed",
+      "2025-12-23": "completed",
+      "2025-12-24": "completed",
+    };
+
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const monthDisplay = document.getElementById("monthDisplay");
+    const calendarDays = document.getElementById("calendarDays");
+
+    function formatDateKey(year, month, day) {
+      return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    }
+
+    function isToday(year, month, day) {
+      const today = new Date();
+      return year === today.getFullYear() &&
+             month === today.getMonth() &&
+             day === today.getDate();
+    }
+
+    function isFuture(year, month, day) {
+      const date = new Date(year, month, day);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return date > today;
+    }
+
+    function getDaysInMonth(year, month) {
+      return new Date(year, month + 1, 0).getDate();
+    }
+
+    function getStatusIcon(status) {
+      switch(status) {
+        case "completed": return "✓";
+        case "partial": return "~";
+        case "missed": return "✗";
+        default: return "";
+      }
+    }
+
+    function renderCalendar() {
+      calendarDays.innerHTML = "";
+      monthDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+      const prevMonthDays = currentMonth === 0
+        ? getDaysInMonth(currentYear - 1, 11)
+        : getDaysInMonth(currentYear, currentMonth - 1);
+
+      // Previous month days
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const day = document.createElement("div");
+        day.className = "calendar-day outside";
+        day.textContent = prevMonthDays - i;
+        calendarDays.appendChild(day);
+      }
+
+      // Current month days
+      for (let d = 1; d <= daysInMonth; d++) {
+        const day = document.createElement("div");
+        day.className = "calendar-day";
+
+        const dateKey = formatDateKey(currentYear, currentMonth, d);
+        const status = habitData[dateKey];
+
+        if (isToday(currentYear, currentMonth, d)) {
+          day.classList.add("today");
+        }
+
+        if (isFuture(currentYear, currentMonth, d)) {
+          day.classList.add("future");
+        } else if (status) {
+          day.classList.add(status);
+        }
+
+        const dayNumber = document.createElement("span");
+        dayNumber.className = "day-number";
+        dayNumber.textContent = d;
+
+        day.appendChild(dayNumber);
+
+        if (status && !isFuture(currentYear, currentMonth, d)) {
+          const statusIcon = document.createElement("span");
+          statusIcon.className = "day-status";
+          statusIcon.textContent = getStatusIcon(status);
+          day.appendChild(statusIcon);
+        }
+
+        day.addEventListener("click", () => {
+          if (!isFuture(currentYear, currentMonth, d)) {
+            toggleHabitStatus(dateKey, day);
+          }
+        });
+
+        calendarDays.appendChild(day);
+      }
+
+      // Next month days
+      const totalCells = firstDay + daysInMonth;
+      const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+      for (let d = 1; d <= remainingCells; d++) {
+        const day = document.createElement("div");
+        day.className = "calendar-day outside";
+        day.textContent = d;
+        calendarDays.appendChild(day);
+      }
+
+      updateStats();
+    }
+
+    function toggleHabitStatus(dateKey, element) {
+      const currentStatus = habitData[dateKey];
+      const statuses = [null, "completed", "partial", "missed"];
+      const currentIndex = statuses.indexOf(currentStatus);
+      const nextIndex = (currentIndex + 1) % statuses.length;
+
+      if (nextIndex === 0) {
+        delete habitData[dateKey];
+      } else {
+        habitData[dateKey] = statuses[nextIndex];
+      }
+
+      renderCalendar();
+    }
+
+    function updateStats() {
+      // Calculate stats
+      const completed = Object.values(habitData).filter(s => s === "completed").length;
+      const partial = Object.values(habitData).filter(s => s === "partial").length;
+      const total = Object.keys(habitData).length;
+      const rate = total > 0 ? Math.round(((completed + partial * 0.5) / total) * 100) : 0;
+
+      // Calculate current streak
+      let streak = 0;
+      const today = new Date();
+      let checkDate = new Date(today);
+      while (true) {
+        const key = formatDateKey(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+        if (habitData[key] === "completed") {
+          streak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+
+      document.getElementById("currentStreak").textContent = streak;
+      document.getElementById("longestStreak").textContent = 15; // Would calculate in real app
+      document.getElementById("totalDays").textContent = completed;
+      document.getElementById("completionRate").textContent = `${rate}%`;
+
+      // Update progress for current month
+      const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+      const daysCompleted = Object.keys(habitData).filter(key => {
+        const [y, m] = key.split('-').map(Number);
+        return y === currentYear && m === currentMonth + 1 && habitData[key] === "completed";
+      }).length;
+      const monthProgress = Math.round((daysCompleted / daysInMonth) * 100);
+
+      document.getElementById("monthProgress").textContent = `${monthProgress}%`;
+      document.getElementById("progressBar").style.width = `${monthProgress}%`;
+      document.getElementById("streakDays").textContent = `${streak} days`;
+      document.getElementById("thisWeek").textContent = `${Math.min(streak, 7)}/7`;
+    }
+
+    // Navigation
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById("todayBtn").addEventListener("click", () => {
+      const today = new Date();
+      currentMonth = today.getMonth();
+      currentYear = today.getFullYear();
+      renderCalendar();
+    });
+
+    // Initialize
+    renderCalendar();
+  </script>
+</body>
+</html>
