@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Timezone World Clock Calendar - Ui Element</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card-bg: #0f172a;
+      --accent: #0ea5e9;
+      --accent-secondary: #06b6d4;
+      --accent-glow: rgba(14, 165, 233, 0.5);
+      --border: rgba(148, 163, 184, 0.3);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 60%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: 28px;
+      padding: 26px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%);
+      box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(148, 163, 184, 0.1);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -150px;
+      background:
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 50%),
+        radial-gradient(circle at bottom left, rgba(6, 182, 212, 0.08), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #0ea5e9, #06b6d4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* World Clocks */
+    .clocks-section {
+      margin-bottom: 24px;
+    }
+
+    .clocks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .clock-card {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.6);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .clock-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--accent), var(--accent-secondary));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .clock-card:hover {
+      border-color: var(--accent);
+      background: rgba(30, 41, 59, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .clock-card:hover::before {
+      opacity: 1;
+    }
+
+    .clock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .clock-city {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .clock-flag {
+      font-size: 1.3rem;
+    }
+
+    .clock-time {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #0ea5e9, #06b6d4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .clock-date {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .clock-offset {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(14, 165, 233, 0.4);
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Calendar Section */
+    .calendar-section {
+      margin-bottom: 20px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+
+    .calendar-month {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .calendar-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+      color: var(--text);
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent);
+      background: rgba(14, 165, 233, 0.15);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .calendar-weekday {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      padding: 8px 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .calendar-day:hover {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(148, 163, 184, 0.5);
+      transform: scale(1.05);
+    }
+
+    .calendar-day.outside {
+      color: rgba(148, 163, 184, 0.25);
+      background: transparent;
+    }
+
+    .calendar-day.today {
+      background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .calendar-day.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3);
+    }
+
+    /* Timezone Converter */
+    .converter-section {
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.6);
+      margin-bottom: 20px;
+    }
+
+    .converter-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .converter-input {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .input-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .input-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 0.88rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+    }
+
+    .converter-result {
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(14, 165, 233, 0.1);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      font-size: 0.88rem;
+      color: var(--accent);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Info Panel */
+    .info-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(71, 85, 105, 0.5);
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .info-icon {
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 20px;
+      }
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .clocks-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .converter-input {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="card-inner">
+        <div class="header">
+          <div class="title">
+            <span>🌍</span>
+            <span>World Clock Calendar</span>
+          </div>
+          <div class="subtitle">Track time across multiple timezones with live updates</div>
+        </div>
+
+        <div class="clocks-section">
+          <div class="clocks-grid" id="clocksGrid">
+            <!-- Generated by JavaScript -->
+          </div>
+        </div>
+
+        <div class="converter-section">
+          <div class="converter-title">
+            <span>🔄</span>
+            <span>Time Converter</span>
+          </div>
+          <div class="converter-input">
+            <div class="input-group">
+              <div class="input-label">Select Time</div>
+              <input type="time" class="input-field" id="convertTime" value="14:00">
+            </div>
+            <div class="input-group">
+              <div class="input-label">From Timezone</div>
+              <select class="input-field" id="fromTimezone">
+                <option value="America/New_York">New York (EST)</option>
+                <option value="America/Los_Angeles">Los Angeles (PST)</option>
+                <option value="Europe/London" selected>London (GMT)</option>
+                <option value="Europe/Paris">Paris (CET)</option>
+                <option value="Asia/Tokyo">Tokyo (JST)</option>
+                <option value="Asia/Dubai">Dubai (GST)</option>
+                <option value="Australia/Sydney">Sydney (AEST)</option>
+              </select>
+            </div>
+          </div>
+          <div class="converter-result" id="converterResult">
+            Select a time and timezone to convert
+          </div>
+        </div>
+
+        <div class="calendar-section">
+          <div class="calendar-header">
+            <div class="calendar-month" id="calendarMonth">December 2025</div>
+            <div class="calendar-controls">
+              <button class="nav-btn" id="prevMonth" type="button">‹</button>
+              <button class="nav-btn" id="todayBtn" type="button">Today</button>
+              <button class="nav-btn" id="nextMonth" type="button">›</button>
+            </div>
+          </div>
+          <div class="calendar-grid">
+            <div class="calendar-weekday">Sun</div>
+            <div class="calendar-weekday">Mon</div>
+            <div class="calendar-weekday">Tue</div>
+            <div class="calendar-weekday">Wed</div>
+            <div class="calendar-weekday">Thu</div>
+            <div class="calendar-weekday">Fri</div>
+            <div class="calendar-weekday">Sat</div>
+          </div>
+          <div class="calendar-grid" id="calendarDays">
+            <!-- Generated by JavaScript -->
+          </div>
+        </div>
+
+        <div class="info-panel">
+          <div class="info-item">
+            <span class="info-icon">💡</span>
+            <span>Times update automatically every second</span>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">⏰</span>
+            <span>Perfect for scheduling international meetings</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const timezones = [
+      { city: "New York", timezone: "America/New_York", flag: "🇺🇸" },
+      { city: "Los Angeles", timezone: "America/Los_Angeles", flag: "🇺🇸" },
+      { city: "London", timezone: "Europe/London", flag: "🇬🇧" },
+      { city: "Paris", timezone: "Europe/Paris", flag: "🇫🇷" },
+      { city: "Tokyo", timezone: "Asia/Tokyo", flag: "🇯🇵" },
+      { city: "Dubai", timezone: "Asia/Dubai", flag: "🇦🇪" },
+      { city: "Sydney", timezone: "Australia/Sydney", flag: "🇦🇺" },
+      { city: "Singapore", timezone: "Asia/Singapore", flag: "🇸🇬" },
+    ];
+
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const clocksGrid = document.getElementById("clocksGrid");
+    const calendarMonth = document.getElementById("calendarMonth");
+    const calendarDays = document.getElementById("calendarDays");
+    const convertTime = document.getElementById("convertTime");
+    const fromTimezone = document.getElementById("fromTimezone");
+    const converterResult = document.getElementById("converterResult");
+
+    function getTimeInTimezone(timezone) {
+      return new Date().toLocaleTimeString("en-US", {
+        timeZone: timezone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
+    }
+
+    function getDateInTimezone(timezone) {
+      return new Date().toLocaleDateString("en-US", {
+        timeZone: timezone,
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function getTimezoneOffset(timezone) {
+      const date = new Date();
+      const utcDate = new Date(date.toLocaleString("en-US", { timeZone: "UTC" }));
+      const tzDate = new Date(date.toLocaleString("en-US", { timeZone: timezone }));
+      const offset = (tzDate - utcDate) / (1000 * 60 * 60);
+      const sign = offset >= 0 ? "+" : "";
+      return `UTC${sign}${offset}`;
+    }
+
+    function renderClocks() {
+      clocksGrid.innerHTML = "";
+      timezones.forEach(tz => {
+        const card = document.createElement("div");
+        card.className = "clock-card";
+
+        card.innerHTML = `
+          <div class="clock-header">
+            <div class="clock-city">${tz.city}</div>
+            <div class="clock-flag">${tz.flag}</div>
+          </div>
+          <div class="clock-time" data-timezone="${tz.timezone}">${getTimeInTimezone(tz.timezone)}</div>
+          <div class="clock-date">${getDateInTimezone(tz.timezone)}</div>
+          <div class="clock-offset">${getTimezoneOffset(tz.timezone)}</div>
+        `;
+
+        clocksGrid.appendChild(card);
+      });
+    }
+
+    function updateClocks() {
+      document.querySelectorAll(".clock-time").forEach(el => {
+        const timezone = el.dataset.timezone;
+        el.textContent = getTimeInTimezone(timezone);
+      });
+    }
+
+    function convertTimezone() {
+      const time = convertTime.value;
+      const fromTz = fromTimezone.value;
+
+      if (!time) {
+        converterResult.textContent = "Please select a time";
+        return;
+      }
+
+      const [hours, minutes] = time.split(":");
+      const date = new Date();
+      date.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+      let results = [];
+      timezones.forEach(tz => {
+        const tzTime = date.toLocaleTimeString("en-US", {
+          timeZone: tz.timezone,
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false
+        });
+        results.push(`${tz.city}: ${tzTime}`);
+      });
+
+      converterResult.textContent = results.join(" • ");
+    }
+
+    function getDaysInMonth(year, month) {
+      return new Date(year, month + 1, 0).getDate();
+    }
+
+    function isToday(year, month, day) {
+      const today = new Date();
+      return year === today.getFullYear() &&
+             month === today.getMonth() &&
+             day === today.getDate();
+    }
+
+    function renderCalendar() {
+      calendarDays.innerHTML = "";
+      calendarMonth.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+      const prevMonthDays = currentMonth === 0
+        ? getDaysInMonth(currentYear - 1, 11)
+        : getDaysInMonth(currentYear, currentMonth - 1);
+
+      // Previous month days
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const day = document.createElement("div");
+        day.className = "calendar-day outside";
+        day.textContent = prevMonthDays - i;
+        calendarDays.appendChild(day);
+      }
+
+      // Current month days
+      for (let d = 1; d <= daysInMonth; d++) {
+        const day = document.createElement("div");
+        day.className = "calendar-day";
+
+        if (isToday(currentYear, currentMonth, d)) {
+          day.classList.add("today");
+        }
+
+        day.textContent = d;
+        day.addEventListener("click", () => {
+          document.querySelectorAll(".calendar-day.selected").forEach(el => {
+            el.classList.remove("selected");
+          });
+          day.classList.add("selected");
+        });
+
+        calendarDays.appendChild(day);
+      }
+
+      // Next month days
+      const totalCells = firstDay + daysInMonth;
+      const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+      for (let d = 1; d <= remainingCells; d++) {
+        const day = document.createElement("div");
+        day.className = "calendar-day outside";
+        day.textContent = d;
+        calendarDays.appendChild(day);
+      }
+    }
+
+    // Event listeners
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById("todayBtn").addEventListener("click", () => {
+      const today = new Date();
+      currentMonth = today.getMonth();
+      currentYear = today.getFullYear();
+      renderCalendar();
+    });
+
+    convertTime.addEventListener("change", convertTimezone);
+    fromTimezone.addEventListener("change", convertTimezone);
+
+    // Initialize
+    renderClocks();
+    renderCalendar();
+    convertTimezone();
+
+    // Update clocks every second
+    setInterval(updateClocks, 1000);
+  </script>
+</body>
+</html>
