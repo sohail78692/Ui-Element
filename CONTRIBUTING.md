@@ -15,3 +15,7 @@ Thank you for considering contributing to this UI Elements collection!
 - Include proper HTML structure
 - Add CSS styling inline or in style tags
 - Test your components in different browsers
+
+## Reporting Issues
+
+If you find a bug or have a suggestion, please open an issue in the GitHub repository.
