@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 - Contributing guidelines
 - Changelog file
 
+### Changed
+- Improved documentation in README and .gitignore
+
 ## Previous Updates
 
 ### Components
