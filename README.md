@@ -22,6 +22,9 @@ Ui-Element/
 ├── buttons/
 ├── cards/
 ├── loaders/
+├── footer/
+├── tables/
+├── dashboard/
 ├── forms/
 ├── animations/
 └── ... (more components )
