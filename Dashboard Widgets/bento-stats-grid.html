@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Bento Stats Grid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --accent-purple: #9d50bb;
+            --accent-blue: #6e72fc;
+            --accent-green: #00dfd8;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 180px);
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .bento-item {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+        }
+
+        .bento-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Span classes */
+        .span-2-col {
+            grid-column: span 2;
+        }
+
+        .span-2-row {
+            grid-row: span 2;
+        }
+
+        /* Specific Item Styling */
+        .main-stat {
+            background: linear-gradient(135deg, rgba(157, 80, 187, 0.1), rgba(110, 114, 252, 0.1));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .accent-green {
+            border-bottom: 3px solid var(--accent-green);
+        }
+
+        .accent-purple {
+            border-bottom: 3px solid var(--accent-purple);
+        }
+
+        .title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .trend {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend.up {
+            color: #00ff88;
+        }
+
+        .trend.down {
+            color: #ff4d4d;
+        }
+
+        /* Icon styling */
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        /* Abstract Decoration */
+        .glow {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: var(--accent-purple);
+            filter: blur(80px);
+            opacity: 0.2;
+            top: -50px;
+            right: -50px;
+            pointer-events: none;
+        }
+
+        /* Graphs placeholder */
+        .mini-graph {
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            margin-top: 15px;
+        }
+
+        .graph-bar {
+            flex: 1;
+            background: var(--text-secondary);
+            opacity: 0.3;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .bento-item:hover .graph-bar {
+            opacity: 0.8;
+            background: var(--accent-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .span-2-col {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bento-grid">
+        <!-- Item 1: Main Sales -->
+        <div class="bento-item span-2-col main-stat">
+            <div class="glow"></div>
+            <div>
+                <p class="title">Total Revenue</p>
+                <p class="value">$128,430</p>
+                <p class="trend up">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <path d="M7 17l9.2-9.2M17 17V7H7" />
+                    </svg>
+                    +12.5% vs last month
+                </p>
+            </div>
+            <div class="mini-graph">
+                <div class="graph-bar" style="height: 40%"></div>
+                <div class="graph-bar" style="height: 60%"></div>
+                <div class="graph-bar" style="height: 35%"></div>
+                <div class="graph-bar" style="height: 80%"></div>
+                <div class="graph-bar" style="height: 55%"></div>
+                <div class="graph-bar" style="height: 90%"></div>
+                <div class="graph-bar" style="height: 75%"></div>
+            </div>
+        </div>
+
+        <!-- Item 2: Active Users -->
+        <div class="bento-item accent-green">
+            <div class="icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)"
+                    stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+            </div>
+            <p class="title">Active Now</p>
+            <p class="value">2,841</p>
+            <p class="trend up">Live updates</p>
+        </div>
+
+        <!-- Item 3: Server Status -->
+        <div class="bento-item">
+            <div class="icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                    <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                    <line x1="6" y1="6" x2="6.01" y2="6" />
+                    <line x1="6" y1="18" x2="6.01" y2="18" />
+                </svg>
+            </div>
+            <p class="title">CPU Load</p>
+            <p class="value">42%</p>
+            <p class="trend down">High traffic</p>
+        </div>
+
+        <!-- Item 4: Conversion Rate -->
+        <div class="bento-item accent-purple">
+            <p class="title">Conversion</p>
+            <p class="value">4.2%</p>
+            <p class="trend up">+0.8%</p>
+            <div class="mini-graph" style="margin-top: 10px;">
+                <div class="graph-bar" style="height: 30%"></div>
+                <div class="graph-bar" style="height: 50%"></div>
+                <div class="graph-bar" style="height: 80%"></div>
+                <div class="graph-bar" style="height: 40%"></div>
+            </div>
+        </div>
+
+        <!-- Item 5: AI Insights -->
+        <div class="bento-item span-2-col" style="background: rgba(110, 114, 252, 0.05);">
+            <div class="icon-box" style="background: var(--accent-blue);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10 10 10 0 0 1-10-10 10 10 0 0 1 10-10z" />
+                    <path d="M12 16v-4" />
+                    <path d="M12 8h.01" />
+                </svg>
+            </div>
+            <p class="title" style="color: var(--accent-blue);">AI Suggestion</p>
+            <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-secondary);">Your ad campaign in <span
+                    style="color: white; font-weight: 600;">Europe</span> is performing 25% better than average.
+                Consider increasing budget.</p>
+        </div>
+
+        <!-- Item 6: Notifications -->
+        <div class="bento-item">
+            <div class="icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)"
+                    stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+            </div>
+            <p class="title">Alerts</p>
+            <p class="value">12</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
