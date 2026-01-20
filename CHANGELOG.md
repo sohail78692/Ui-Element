@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Contributing guidelines
 - Changelog file
+- Premium Glassmorphic Music Player widget 🎵
 
 ### Changed
 - Improved documentation in README and .gitignore
