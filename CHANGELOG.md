@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Contributing guidelines
 - Changelog file
 - Premium Glassmorphic Music Player widget 🎵
+- Premium Bento Stats Grid dashboard 📊
 
 ### Changed
 - Improved documentation in README and .gitignore
