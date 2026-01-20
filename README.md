@@ -36,6 +36,7 @@ Ui-Element/
 
 * **Buttons** — 3D, Glassmorphism, Gradient & more
 * **Cards** — Login / Register, Profile, Product
+* **Dashboard Widgets** — Music Player, Analytics, Metrics
 * **Loaders & Spinners**
 * **Forms & Inputs**
 * **Animations & Special Effects**
