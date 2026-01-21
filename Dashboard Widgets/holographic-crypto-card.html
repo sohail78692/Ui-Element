@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!-- Holographic Crypto Wallet Card - Advanced data visualization widget -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Crypto Wallet | Premium UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hologram-cyan: rgba(0, 242, 255, 0.4);
+            --hologram-blue: rgba(0, 102, 255, 0.4);
+            --text-glow: 0 0 10px rgba(0, 242, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background: #02040a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .hologram-card {
+            width: 380px;
+            background: rgba(0, 20, 40, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .hologram-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+            border-color: rgba(0, 242, 255, 0.5);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.15);
+        }
+
+        .hologram-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(0, 242, 255, 0.05),
+                    transparent);
+            transform: skewX(-15deg);
+            animation: scanline 4s infinite linear;
+        }
+
+        @keyframes scanline {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-box {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 242, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            animation: pulse-border 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-border {
+
+            0%,
+            100% {
+                border-color: rgba(0, 242, 255, 0.3);
+            }
+
+            50% {
+                border-color: rgba(0, 242, 255, 1);
+                box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+            }
+        }
+
+        .balance-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: var(--text-glow);
+        }
+
+        .currency-tag {
+            font-size: 1rem;
+            color: var(--hologram-cyan);
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item span {
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .positive {
+            color: #00ff88;
+        }
+
+        .flicker {
+            animation: flicker 4s infinite step-end;
+        }
+
+        @keyframes flicker {
+
+            0%,
+            19.999%,
+            22%,
+            62.999%,
+            64%,
+            64.999%,
+            70%,
+            100% {
+                opacity: 1;
+            }
+
+            20%,
+            21.999%,
+            63%,
+            63.999%,
+            65%,
+            69.999% {
+                opacity: 0.4;
+            }
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hologram-card">
+        <div class="card-header">
+            <div class="logo-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+            </div>
+            <div class="flicker"
+                style="font-size: 12px; color: #00f2ff; background: rgba(0,242,255,0.1); padding: 4px 12px; border-radius: 99px;">
+                CONNECTED
+            </div>
+        </div>
+
+        <div class="balance-section">
+            <p class="balance-label">Main Portfolio</p>
+            <h2 class="balance-value">$42,892.50</h2>
+            <span class="currency-tag">1.428 BTC</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">24h Change</span>
+                <span class="stat-value positive">+5.24%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Market Cap</span>
+                <span class="stat-value flicker">$1.2T</span>
+            </div>
+        </div>
+
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <script>
+        // Simple particle overlay
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.style.position = 'absolute';
+            p.style.width = '2px';
+            p.style.height = '2px';
+            p.style.background = '#00f2ff';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.opacity = Math.random();
+            p.style.boxShadow = '0 0 5px #00f2ff';
+            container.appendChild(p);
+        }
+    </script>
+</body>
+
+</html>
