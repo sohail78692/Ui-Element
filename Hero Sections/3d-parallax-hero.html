@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!-- Premium 3D Parallax Hero Section - High-end visual entry point -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Parallax Hero Section | Premium UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #f43f5e;
+            --bg: #0f172a;
+            --text: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            transition: transform 0.2s ease-out;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            bottom: -50px;
+            right: -50px;
+        }
+
+        .content {
+            z-index: 10;
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transform: translateZ(50px);
+        }
+
+        p {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            transform: translateZ(30px);
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            transform: translateZ(20px);
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 99px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .floating-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 20px;
+            z-index: 5;
+            transition: transform 0.2s ease-out;
+        }
+
+        .card-1 {
+            top: 20%;
+            left: 15%;
+            transform: rotate(-5deg);
+        }
+
+        .card-2 {
+            bottom: 25%;
+            right: 15%;
+            transform: rotate(8deg);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            .floating-card {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="parallax-bg">
+            <div class="blob blob-1" id="blob1"></div>
+            <div class="blob blob-2" id="blob2"></div>
+        </div>
+
+        <div class="floating-card card-1" id="card1">
+            <div style="width: 40px; height: 40px; background: #fbbf24; border-radius: 8px; margin-bottom: 10px;"></div>
+            <div
+                style="width: 100px; height: 10px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 6px;">
+            </div>
+            <div style="width: 60px; height: 10px; background: rgba(255,255,255,0.05); border-radius: 4px;"></div>
+        </div>
+
+        <div class="floating-card card-2" id="card2">
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <div style="width: 32px; height: 32px; background: #22c55e; border-radius: 50%;"></div>
+                <div>
+                    <div
+                        style="width: 80px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 4px;">
+                    </div>
+                    <div style="width: 40px; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="heroContent">
+            <h1>Design the Future<br>With Intelligence</h1>
+            <p>Experience the next generation of web interfaces with our immersive 3D parallax elements and fluid motion
+                design.</p>
+            <div class="cta-group">
+                <a href="#" class="btn btn-primary">Get Started</a>
+                <a href="#" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const hero = document.querySelector('.hero');
+        const content = document.getElementById('heroContent');
+        const blob1 = document.getElementById('blob1');
+        const blob2 = document.getElementById('blob2');
+        const card1 = document.getElementById('card1');
+        const card2 = document.getElementById('card2');
+
+        hero.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            const moveX = (clientX - centerX) / 50;
+            const moveY = (clientY - centerY) / 50;
+
+            // Content Parallax (Tilt)
+            content.style.transform = `rotateY(${moveX}deg) rotateX(${-moveY}deg)`;
+
+            // Blobs Move Opposite
+            blob1.style.transform = `translate(${moveX * 10}px, ${moveY * 10}px)`;
+            blob2.style.transform = `translate(${-moveX * 10}px, ${-moveY * 10}px)`;
+
+            // Cards Parallax
+            card1.style.transform = `translate(${moveX * 2}px, ${moveY * 2}px) rotate(-5deg)`;
+            card2.style.transform = `translate(${-moveX * 3}px, ${-moveY * 3}px) rotate(8deg)`;
+        });
+    </script>
+</body>
+
+</html>
