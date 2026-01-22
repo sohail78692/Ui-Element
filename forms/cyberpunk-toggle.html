@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Toggle Switch | Premium UI</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #121212;
+            overflow: hidden;
+            font-family: monospace;
+        }
+
+        .switch-container {
+            position: relative;
+            display: flex;
+            gap: 40px;
+        }
+
+        /* Toggle Wrapper */
+        .cyber-toggle {
+            position: relative;
+            display: inline-block;
+            width: 100px;
+            height: 40px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .cyber-toggle input {
+            display: none;
+        }
+
+        /* The Switch Track */
+        .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #1a1a1a;
+            border: 2px solid #333;
+            transition: .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 4px;
+            /* Mechanical look */
+            box-shadow: inset 0 0 10px #000;
+        }
+
+        /* The Knob */
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 28px;
+            width: 40px;
+            left: 4px;
+            bottom: 4px;
+            background-color: #444;
+            transition: .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 2px;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        /* Checked State */
+        input:checked+.slider {
+            border-color: #0ff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), inset 0 0 10px #000;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(48px);
+            background-color: #0ff;
+            box-shadow: 0 0 15px #0ff;
+        }
+
+        /* Neon Text inside */
+        .label-on,
+        .label-off {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+
+        .label-off {
+            right: 10px;
+            color: #555;
+            text-shadow: none;
+        }
+
+        .label-on {
+            left: 10px;
+            color: transparent;
+            text-shadow: none;
+        }
+
+        input:checked+.slider .label-off {
+            color: transparent;
+            text-shadow: none;
+        }
+
+        input:checked+.slider .label-on {
+            color: #000;
+            text-shadow: none;
+            z-index: 1;
+            /* Behind knob usually, but here we want it hidden by knod or visible? */
+        }
+
+        /* Let's make text glow when exposed */
+        input:not(:checked)+.slider .label-off {
+            color: #666;
+        }
+
+        /* Decorative Glitch lines */
+        .lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .lines span {
+            position: absolute;
+            background: #0ff;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        /* Top line */
+        .lines span:nth-child(1) {
+            top: -5px;
+            left: 10%;
+            width: 2px;
+            height: 5px;
+        }
+
+        /* Bottom line */
+        .lines span:nth-child(2) {
+            bottom: -5px;
+            right: 10%;
+            width: 2px;
+            height: 5px;
+        }
+
+        input:checked~.lines span {
+            opacity: 1;
+            box-shadow: 0 0 5px #0ff;
+        }
+
+        /* Variant 2: Red/Hazard */
+        .cyber-toggle.hazard input:checked+.slider {
+            border-color: #ff2a2a;
+            box-shadow: 0 0 15px rgba(255, 42, 42, 0.2), inset 0 0 10px #000;
+        }
+
+        .cyber-toggle.hazard input:checked+.slider:before {
+            background-color: #ff2a2a;
+            box-shadow: 0 0 15px #ff2a2a;
+        }
+
+        .cyber-toggle.hazard .lines span {
+            background: #ff2a2a;
+            box-shadow: 0 0 5px #ff2a2a;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="switch-container">
+
+        <!-- Cyan Switch -->
+        <label class="cyber-toggle">
+            <input type="checkbox">
+            <span class="slider">
+                <span class="label-off">OFF</span>
+                <span class="label-on">ON</span>
+            </span>
+            <div class="lines">
+                <span></span><span></span>
+            </div>
+        </label>
+
+        <!-- Red Hazard Switch -->
+        <label class="cyber-toggle hazard">
+            <input type="checkbox" checked>
+            <span class="slider">
+                <span class="label-off">SAFE</span>
+                <span class="label-on">ARM</span>
+            </span>
+            <div class="lines">
+                <span></span><span></span>
+            </div>
+        </label>
+
+    </div>
+
+</body>
+
+</html>
