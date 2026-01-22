@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Morph Button | Premium UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            position: relative;
+            filter: url('#goo');
+        }
+
+        .button {
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: 70px;
+            text-decoration: none;
+            color: #fff;
+            background: #ff0055;
+            border-radius: 35px;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 2;
+            overflow: hidden;
+            transition: transform 0.1s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .blobs {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .blob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150px;
+            height: 40px;
+            background: #ff0055;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .button:hover+.blobs .blob:nth-child(1) {
+            transform: translate(-140%, -80%) scale(1.4);
+            transition-delay: 0.05s;
+        }
+
+        .button:hover+.blobs .blob:nth-child(2) {
+            transform: translate(40%, -80%) scale(1.1);
+            transition-delay: 0.1s;
+        }
+
+        .button:hover+.blobs .blob:nth-child(3) {
+            transform: translate(-100%, 80%) scale(0.8);
+            transition-delay: 0.15s;
+        }
+
+        .button:hover+.blobs .blob:nth-child(4) {
+            transform: translate(60%, 60%) scale(1.2);
+            transition-delay: 0.2s;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Particles container to handle pointer events differently if needed */
+        .particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        @keyframes fly-out {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <svg style="display: none;">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="
+                    1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 18 -7" result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs>
+    </svg>
+
+    <div class="container">
+        <button class="button">HOVER ME</button>
+        <div class="blobs">
+            <div class="blob"></div>
+            <div class="blob"></div>
+            <div class="blob"></div>
+            <div class="blob"></div>
+        </div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <script>
+        const btn = document.querySelector('.button');
+        const particlesContainer = document.getElementById('particles');
+
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            // Create small sparkles occasionally
+            if (Math.random() > 0.8) {
+                createSparkle(e.clientX - rect.left, e.clientY - rect.top);
+            }
+        });
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+
+            const tx = (Math.random() - 0.5) * 50 + 'px';
+            const ty = (Math.random() - 0.5) * 50 + 'px';
+
+            sparkle.style.setProperty('--tx', tx);
+            sparkle.style.setProperty('--ty', ty);
+
+            sparkle.style.animation = 'fly-out 0.8s ease-out forwards';
+
+            particlesContainer.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 800);
+        }
+    </script>
+</body>
+
+</html>
