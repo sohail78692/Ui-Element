@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glitch Text Reveal | Premium UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            text-align: center;
+        }
+
+        .glitch-text {
+            font-size: 4rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            color: #fff;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+        }
+
+        /* Glitch layers */
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(21px, 9999px, 86px, 0);
+                transform: skew(0.55deg);
+            }
+
+            5% {
+                clip: rect(69px, 9999px, 6px, 0);
+                transform: skew(0.35deg);
+            }
+
+            10% {
+                clip: rect(9px, 9999px, 14px, 0);
+                transform: skew(0.53deg);
+            }
+
+            15% {
+                clip: rect(74px, 9999px, 4px, 0);
+                transform: skew(0.48deg);
+            }
+
+            20% {
+                clip: rect(23px, 9999px, 83px, 0);
+                transform: skew(0.39deg);
+            }
+
+            25% {
+                clip: rect(8px, 9999px, 2px, 0);
+                transform: skew(0.79deg);
+            }
+
+            30% {
+                clip: rect(48px, 9999px, 66px, 0);
+                transform: skew(0.34deg);
+            }
+
+            35% {
+                clip: rect(68px, 9999px, 20px, 0);
+                transform: skew(0.95deg);
+            }
+
+            40% {
+                clip: rect(32px, 9999px, 2px, 0);
+                transform: skew(0.24deg);
+            }
+
+            45% {
+                clip: rect(59px, 9999px, 95px, 0);
+                transform: skew(0.85deg);
+            }
+
+            50% {
+                clip: rect(27px, 9999px, 35px, 0);
+                transform: skew(0.08deg);
+            }
+
+            55% {
+                clip: rect(3px, 9999px, 46px, 0);
+                transform: skew(0.25deg);
+            }
+
+            60% {
+                clip: rect(83px, 9999px, 23px, 0);
+                transform: skew(0.43deg);
+            }
+
+            65% {
+                clip: rect(51px, 9999px, 58px, 0);
+                transform: skew(0.66deg);
+            }
+
+            70% {
+                clip: rect(18px, 9999px, 73px, 0);
+                transform: skew(0.88deg);
+            }
+
+            75% {
+                clip: rect(46px, 9999px, 6px, 0);
+                transform: skew(0.12deg);
+            }
+
+            80% {
+                clip: rect(93px, 9999px, 11px, 0);
+                transform: skew(0.03deg);
+            }
+
+            85% {
+                clip: rect(7px, 9999px, 95px, 0);
+                transform: skew(0.33deg);
+            }
+
+            90% {
+                clip: rect(52px, 9999px, 88px, 0);
+                transform: skew(0.73deg);
+            }
+
+            95% {
+                clip: rect(26px, 9999px, 47px, 0);
+                transform: skew(0.49deg);
+            }
+
+            100% {
+                clip: rect(63px, 9999px, 2px, 0);
+                transform: skew(0.21deg);
+            }
+        }
+
+        @keyframes glitch-anim2 {
+            0% {
+                clip: rect(29px, 9999px, 86px, 0);
+                transform: skew(0.89deg);
+            }
+
+            5% {
+                clip: rect(6px, 9999px, 50px, 0);
+                transform: skew(0.06deg);
+            }
+
+            10% {
+                clip: rect(47px, 9999px, 60px, 0);
+                transform: skew(0.81deg);
+            }
+
+            15% {
+                clip: rect(60px, 9999px, 21px, 0);
+                transform: skew(0.35deg);
+            }
+
+            20% {
+                clip: rect(94px, 9999px, 32px, 0);
+                transform: skew(0.61deg);
+            }
+
+            25% {
+                clip: rect(22px, 9999px, 25px, 0);
+                transform: skew(0.7deg);
+            }
+
+            30% {
+                clip: rect(71px, 9999px, 85px, 0);
+                transform: skew(0.15deg);
+            }
+
+            35% {
+                clip: rect(37px, 9999px, 96px, 0);
+                transform: skew(0.98deg);
+            }
+
+            40% {
+                clip: rect(85px, 9999px, 19px, 0);
+                transform: skew(0.23deg);
+            }
+
+            45% {
+                clip: rect(44px, 9999px, 21px, 0);
+                transform: skew(0.44deg);
+            }
+
+            50% {
+                clip: rect(97px, 9999px, 65px, 0);
+                transform: skew(0.32deg);
+            }
+
+            55% {
+                clip: rect(40px, 9999px, 49px, 0);
+                transform: skew(0.19deg);
+            }
+
+            60% {
+                clip: rect(81px, 9999px, 73px, 0);
+                transform: skew(0.13deg);
+            }
+
+            65% {
+                clip: rect(56px, 9999px, 16px, 0);
+                transform: skew(0.82deg);
+            }
+
+            70% {
+                clip: rect(24px, 9999px, 30px, 0);
+                transform: skew(0.49deg);
+            }
+
+            75% {
+                clip: rect(7px, 9999px, 22px, 0);
+                transform: skew(0.34deg);
+            }
+
+            80% {
+                clip: rect(57px, 9999px, 5px, 0);
+                transform: skew(0.44deg);
+            }
+
+            85% {
+                clip: rect(20px, 9999px, 78px, 0);
+                transform: skew(0.17deg);
+            }
+
+            90% {
+                clip: rect(66px, 9999px, 81px, 0);
+                transform: skew(0.36deg);
+            }
+
+            95% {
+                clip: rect(6px, 9999px, 47px, 0);
+                transform: skew(0.63deg);
+            }
+
+            100% {
+                clip: rect(27px, 9999px, 66px, 0);
+                transform: skew(0.38deg);
+            }
+        }
+
+        .subtitle {
+            margin-top: 20px;
+            color: #888;
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .container:hover .subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scanline overlay */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.2) 50%,
+                    rgba(0, 0, 0, 0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <h1 class="glitch-text" data-text="CYBERPUNK">CYBERPUNK</h1>
+        <div class="subtitle" id="subtitle">SYSTEM BREACH DETECTED</div>
+    </div>
+
+    <script>
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+        const element = document.querySelector('.glitch-text');
+
+        let interval = null;
+
+        element.onmouseover = event => {
+            let iteration = 0;
+            let originalText = event.target.dataset.text;
+
+            clearInterval(interval);
+
+            interval = setInterval(() => {
+                event.target.innerText = event.target.innerText
+                    .split("")
+                    .map((letter, index) => {
+                        if (index < iteration) {
+                            return originalText[index];
+                        }
+
+                        return letters[Math.floor(Math.random() * 26)]
+                    })
+                    .join("");
+
+                if (iteration >= originalText.length) {
+                    clearInterval(interval);
+                }
+
+                iteration += 1 / 3;
+            }, 30);
+        }
+    </script>
+</body>
+
+</html>
