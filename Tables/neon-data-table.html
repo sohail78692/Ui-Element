@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Data Table | Premium UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Oxanium', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .table-container {
+            width: 100%;
+            max-width: 900px;
+            background: #161b22;
+            border-radius: 16px;
+            border: 1px solid #30363d;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .table-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #58a6ff, #8b949e, #58a6ff);
+            z-index: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #0d1117;
+        }
+
+        th {
+            padding: 16px 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: #8b949e;
+            border-bottom: 2px solid #30363d;
+            cursor: pointer;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        th:hover {
+            color: #58a6ff;
+        }
+
+        th::after {
+            content: '↕';
+            position: absolute;
+            right: 10px;
+            opacity: 0.3;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #21262d;
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background-color: rgba(88, 166, 255, 0.1);
+            transform: scale(1.005);
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.1);
+            z-index: 2;
+            position: relative;
+            border-left: 3px solid #58a6ff;
+        }
+
+        td {
+            padding: 16px 24px;
+            font-size: 0.95rem;
+        }
+
+        /* Status Pills */
+        .status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .status.active {
+            background: rgba(46, 160, 67, 0.15);
+            color: #3fb950;
+            border: 1px solid rgba(46, 160, 67, 0.4);
+            box-shadow: 0 0 5px rgba(46, 160, 67, 0.2);
+        }
+
+        .status.pending {
+            background: rgba(210, 153, 34, 0.15);
+            color: #d29922;
+            border: 1px solid rgba(210, 153, 34, 0.4);
+            box-shadow: 0 0 5px rgba(210, 153, 34, 0.2);
+        }
+
+        .status.offline {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+            border: 1px solid rgba(248, 81, 73, 0.4);
+            box-shadow: 0 0 5px rgba(248, 81, 73, 0.2);
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1f6feb, #58a6ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Pagination placeholder */
+        .pagination {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0d1117;
+            border-top: 1px solid #30363d;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+
+        .page-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover {
+            background: #30363d;
+            border-color: #8b949e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th width="35%">User</th>
+                    <th width="20%">Role</th>
+                    <th width="20%">Last Login</th>
+                    <th width="15%">Status</th>
+                    <th width="10%">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <div class="avatar">JD</div>
+                            <div>
+                                <div>John Doe</div>
+                                <div style="font-size: 0.75rem; color: #8b949e;">john@cyber.net</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>Admin</td>
+                    <td>2 mins ago</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <div class="avatar" style="background: linear-gradient(135deg, #d29922, #f9c513);">AS</div>
+                            <div>
+                                <div>Alice Smith</div>
+                                <div style="font-size: 0.75rem; color: #8b949e;">alice@nexus.io</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>Editor</td>
+                    <td>4 hrs ago</td>
+                    <td><span class="status pending">Pending</span></td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f85149, #ff7b72);">MK</div>
+                            <div>
+                                <div>Mike K.</div>
+                                <div style="font-size: 0.75rem; color: #8b949e;">mike@void.com</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>Viewer</td>
+                    <td>2 days ago</td>
+                    <td><span class="status offline">Offline</span></td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b949e, #d2a8ff);">RX</div>
+                            <div>
+                                <div>Roxanne</div>
+                                <div style="font-size: 0.75rem; color: #8b949e;">rox@grid.sys</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>Developer</td>
+                    <td>Active now</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>...</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="pagination">
+            <span>Showing 1-4 of 24</span>
+            <div style="display: flex; gap: 8px;">
+                <button class="page-btn">Prev</button>
+                <button class="page-btn">Next</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
