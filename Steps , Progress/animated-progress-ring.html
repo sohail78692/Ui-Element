@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<!-- Animated Progress Ring - Circular progress indicators with animations -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Progress Ring | Premium UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            padding: 40px 20px;
+        }
+
+        .progress-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 60px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .progress-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        /* Circular Progress Ring */
+        .progress-ring {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 12;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#gradient1);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 565.48;
+            animation: fillProgress1 2s ease-out forwards;
+            filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.6));
+        }
+
+        @keyframes fillProgress1 {
+            to {
+                stroke-dashoffset: 141.37;
+                /* 75% progress */
+            }
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .progress-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            line-height: 1;
+        }
+
+        .progress-percent {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .progress-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 8px;
+        }
+
+        /* Gradient Progress Ring */
+        .progress-ring-gradient .progress-ring-fill {
+            stroke: url(#gradient2);
+            animation: fillProgress2 2s ease-out forwards;
+            filter: drop-shadow(0 0 10px rgba(240, 147, 251, 0.6));
+        }
+
+        @keyframes fillProgress2 {
+            to {
+                stroke-dashoffset: 197.92;
+                /* 65% progress */
+            }
+        }
+
+        /* Neon Progress Ring */
+        .progress-ring-neon .progress-ring-fill {
+            stroke: url(#gradient3);
+            animation: fillProgress3 2s ease-out forwards;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 200, 0.8));
+        }
+
+        @keyframes fillProgress3 {
+            to {
+                stroke-dashoffset: 56.55;
+                /* 90% progress */
+            }
+        }
+
+        /* Multi-layer Progress Ring */
+        .progress-ring-multi {
+            width: 220px;
+            height: 220px;
+        }
+
+        .progress-ring-multi .ring-layer-1 {
+            stroke: url(#gradient4);
+            stroke-dashoffset: 565.48;
+            animation: fillLayer1 2s ease-out forwards;
+            filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.5));
+        }
+
+        .progress-ring-multi .ring-layer-2 {
+            stroke: url(#gradient5);
+            stroke-dashoffset: 471.24;
+            animation: fillLayer2 2s ease-out 0.3s forwards;
+            filter: drop-shadow(0 0 8px rgba(255, 200, 87, 0.5));
+        }
+
+        .progress-ring-multi .ring-layer-3 {
+            stroke: url(#gradient6);
+            stroke-dashoffset: 376.99;
+            animation: fillLayer3 2s ease-out 0.6s forwards;
+            filter: drop-shadow(0 0 8px rgba(87, 255, 200, 0.5));
+        }
+
+        @keyframes fillLayer1 {
+            to {
+                stroke-dashoffset: 169.64;
+                /* 70% */
+            }
+        }
+
+        @keyframes fillLayer2 {
+            to {
+                stroke-dashoffset: 141.37;
+                /* 70% */
+            }
+        }
+
+        @keyframes fillLayer3 {
+            to {
+                stroke-dashoffset: 113.10;
+                /* 70% */
+            }
+        }
+
+        /* Segmented Progress Ring */
+        .progress-ring-segmented .progress-ring-fill {
+            stroke: url(#gradient7);
+            stroke-dasharray: 20 10;
+            animation: fillProgress4 2s ease-out forwards;
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.6));
+        }
+
+        @keyframes fillProgress4 {
+            to {
+                stroke-dashoffset: 113.10;
+                /* 80% progress */
+            }
+        }
+
+        /* Pulse Animation */
+        .progress-ring-pulse .progress-ring-fill {
+            stroke: url(#gradient8);
+            animation: fillProgress5 2s ease-out forwards, pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes fillProgress5 {
+            to {
+                stroke-dashoffset: 226.19;
+                /* 60% progress */
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.6));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 20px rgba(99, 102, 241, 1));
+            }
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .progress-container {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 40px;
+            }
+
+            .progress-ring {
+                width: 180px;
+                height: 180px;
+            }
+
+            .progress-value {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="progress-container">
+        <!-- Standard Progress Ring -->
+        <div class="progress-wrapper">
+            <div class="progress-ring">
+                <svg>
+                    <defs>
+                        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-bg" cx="100" cy="100" r="90"></circle>
+                    <circle class="progress-ring-fill" cx="100" cy="100" r="90"></circle>
+                </svg>
+                <div class="progress-text">
+                    <div class="progress-value">75<span class="progress-percent">%</span></div>
+                    <div class="progress-subtitle">Complete</div>
+                </div>
+            </div>
+            <div class="progress-label">Standard</div>
+        </div>
+
+        <!-- Gradient Progress Ring -->
+        <div class="progress-wrapper">
+            <div class="progress-ring progress-ring-gradient">
+                <svg>
+                    <defs>
+                        <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-bg" cx="100" cy="100" r="90"></circle>
+                    <circle class="progress-ring-fill" cx="100" cy="100" r="90"></circle>
+                </svg>
+                <div class="progress-text">
+                    <div class="progress-value">65<span class="progress-percent">%</span></div>
+                    <div class="progress-subtitle">Progress</div>
+                </div>
+            </div>
+            <div class="progress-label">Gradient</div>
+        </div>
+
+        <!-- Neon Progress Ring -->
+        <div class="progress-wrapper">
+            <div class="progress-ring progress-ring-neon">
+                <svg>
+                    <defs>
+                        <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00ffc8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-bg" cx="100" cy="100" r="90"></circle>
+                    <circle class="progress-ring-fill" cx="100" cy="100" r="90"></circle>
+                </svg>
+                <div class="progress-text">
+                    <div class="progress-value">90<span class="progress-percent">%</span></div>
+                    <div class="progress-subtitle">Success</div>
+                </div>
+            </div>
+            <div class="progress-label">Neon Glow</div>
+        </div>
+
+        <!-- Multi-layer Progress Ring -->
+        <div class="progress-wrapper">
+            <div class="progress-ring progress-ring-multi">
+                <svg>
+                    <defs>
+                        <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8e53;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffc857;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ffb347;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradient6" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#57ffc8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#47ffb3;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-bg" cx="110" cy="110" r="90"></circle>
+                    <circle class="progress-ring-fill ring-layer-1" cx="110" cy="110" r="90"></circle>
+                    <circle class="progress-ring-bg" cx="110" cy="110" r="75" stroke-width="10"></circle>
+                    <circle class="progress-ring-fill ring-layer-2" cx="110" cy="110" r="75" stroke-width="10"></circle>
+                    <circle class="progress-ring-bg" cx="110" cy="110" r="60" stroke-width="8"></circle>
+                    <circle class="progress-ring-fill ring-layer-3" cx="110" cy="110" r="60" stroke-width="8"></circle>
+                </svg>
+                <div class="progress-text">
+                    <div class="progress-value">70<span class="progress-percent">%</span></div>
+                    <div class="progress-subtitle">Multi</div>
+                </div>
+            </div>
+            <div class="progress-label">Multi-Layer</div>
+        </div>
+
+        <!-- Segmented Progress Ring -->
+        <div class="progress-wrapper">
+            <div class="progress-ring progress-ring-segmented">
+                <svg>
+                    <defs>
+                        <linearGradient id="gradient7" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#d946ef;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-bg" cx="100" cy="100" r="90"></circle>
+                    <circle class="progress-ring-fill" cx="100" cy="100" r="90"></circle>
+                </svg>
+                <div class="progress-text">
+                    <div class="progress-value">80<span class="progress-percent">%</span></div>
+                    <div class="progress-subtitle">Segments</div>
+                </div>
+            </div>
+            <div class="progress-label">Segmented</div>
+        </div>
+
+        <!-- Pulse Progress Ring -->
+        <div class="progress-wrapper">
+            <div class="progress-ring progress-ring-pulse">
+                <svg>
+                    <defs>
+                        <linearGradient id="gradient8" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-bg" cx="100" cy="100" r="90"></circle>
+                    <circle class="progress-ring-fill" cx="100" cy="100" r="90"></circle>
+                </svg>
+                <div class="progress-text">
+                    <div class="progress-value">60<span class="progress-percent">%</span></div>
+                    <div class="progress-subtitle">Active</div>
+                </div>
+            </div>
+            <div class="progress-label">Pulse Effect</div>
+        </div>
+    </div>
+
+</body>
+
+</html>
