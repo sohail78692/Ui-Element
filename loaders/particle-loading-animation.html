@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<!-- Particle Loading Animation - Advanced loading spinner with particle effects -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Loading Animation | Premium UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .loader-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 80px;
+            max-width: 1200px;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .loader-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .loader-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* Particle Orbit Loader */
+        .particle-orbit {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .orbit-ring:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            animation: rotate 3s linear infinite;
+        }
+
+        .orbit-ring:nth-child(2) {
+            width: 90px;
+            height: 90px;
+            animation: rotate 2s linear infinite reverse;
+        }
+
+        .orbit-ring:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            animation: rotate 1.5s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .particle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            box-shadow:
+                0 0 20px rgba(102, 126, 234, 0.8),
+                0 0 40px rgba(118, 75, 162, 0.6);
+        }
+
+        .orbit-ring:nth-child(1) .particle {
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .orbit-ring:nth-child(2) .particle {
+            top: 50%;
+            right: -6px;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow:
+                0 0 20px rgba(240, 147, 251, 0.8),
+                0 0 40px rgba(245, 87, 108, 0.6);
+        }
+
+        .orbit-ring:nth-child(3) .particle {
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #00ffc8 0%, #00d4ff 100%);
+            box-shadow:
+                0 0 20px rgba(0, 255, 200, 0.8),
+                0 0 40px rgba(0, 212, 255, 0.6);
+        }
+
+        /* DNA Helix Loader */
+        .dna-helix {
+            position: relative;
+            width: 100px;
+            height: 120px;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.8);
+        }
+
+        .dna-strand:nth-child(1) {
+            animation: dnaLeft 2s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        .dna-strand:nth-child(2) {
+            animation: dnaRight 2s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        .dna-strand:nth-child(3) {
+            animation: dnaLeft 2s ease-in-out infinite;
+            animation-delay: 0.2s;
+        }
+
+        .dna-strand:nth-child(4) {
+            animation: dnaRight 2s ease-in-out infinite;
+            animation-delay: 0.2s;
+        }
+
+        .dna-strand:nth-child(5) {
+            animation: dnaLeft 2s ease-in-out infinite;
+            animation-delay: 0.4s;
+        }
+
+        .dna-strand:nth-child(6) {
+            animation: dnaRight 2s ease-in-out infinite;
+            animation-delay: 0.4s;
+        }
+
+        .dna-strand:nth-child(7) {
+            animation: dnaLeft 2s ease-in-out infinite;
+            animation-delay: 0.6s;
+        }
+
+        .dna-strand:nth-child(8) {
+            animation: dnaRight 2s ease-in-out infinite;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes dnaLeft {
+
+            0%,
+            100% {
+                left: 0;
+                top: 0;
+            }
+
+            50% {
+                left: 92px;
+                top: 60px;
+            }
+        }
+
+        @keyframes dnaRight {
+
+            0%,
+            100% {
+                right: 0;
+                top: 0;
+            }
+
+            50% {
+                right: 92px;
+                top: 60px;
+            }
+        }
+
+        /* Quantum Dots Loader */
+        .quantum-dots {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .quantum-dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #00ffc8 0%, #00d4ff 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 0;
+            animation: quantumPulse 1.5s ease-in-out infinite;
+        }
+
+        .quantum-dot:nth-child(1) {
+            transform: rotate(0deg) translate(50px) scale(0);
+            animation-delay: 0s;
+        }
+
+        .quantum-dot:nth-child(2) {
+            transform: rotate(45deg) translate(50px) scale(0);
+            animation-delay: 0.1s;
+        }
+
+        .quantum-dot:nth-child(3) {
+            transform: rotate(90deg) translate(50px) scale(0);
+            animation-delay: 0.2s;
+        }
+
+        .quantum-dot:nth-child(4) {
+            transform: rotate(135deg) translate(50px) scale(0);
+            animation-delay: 0.3s;
+        }
+
+        .quantum-dot:nth-child(5) {
+            transform: rotate(180deg) translate(50px) scale(0);
+            animation-delay: 0.4s;
+        }
+
+        .quantum-dot:nth-child(6) {
+            transform: rotate(225deg) translate(50px) scale(0);
+            animation-delay: 0.5s;
+        }
+
+        .quantum-dot:nth-child(7) {
+            transform: rotate(270deg) translate(50px) scale(0);
+            animation-delay: 0.6s;
+        }
+
+        .quantum-dot:nth-child(8) {
+            transform: rotate(315deg) translate(50px) scale(0);
+            animation-delay: 0.7s;
+        }
+
+        @keyframes quantumPulse {
+
+            0%,
+            100% {
+                transform: rotate(var(--rotation, 0deg)) translate(50px) scale(0);
+                box-shadow: 0 0 0 rgba(0, 255, 200, 0);
+            }
+
+            50% {
+                transform: rotate(var(--rotation, 0deg)) translate(50px) scale(1);
+                box-shadow: 0 0 30px rgba(0, 255, 200, 0.8);
+            }
+        }
+
+        /* Wave Loader */
+        .wave-loader {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            height: 80px;
+        }
+
+        .wave-bar {
+            width: 8px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            animation: wave 1.2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .wave-bar:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .wave-bar:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .wave-bar:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .wave-bar:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .wave-bar:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .wave-bar:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+
+        .wave-bar:nth-child(7) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                height: 20px;
+            }
+
+            50% {
+                height: 80px;
+            }
+        }
+
+        /* Loading Text */
+        .loading-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 3px;
+        }
+
+        .loading-text::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: '';
+            }
+
+            40% {
+                content: '.';
+            }
+
+            60% {
+                content: '..';
+            }
+
+            80%,
+            100% {
+                content: '...';
+            }
+        }
+
+        @media (max-width: 768px) {
+            .loader-container {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loader-container">
+        <!-- Particle Orbit Loader -->
+        <div class="loader-wrapper">
+            <div class="particle-orbit">
+                <div class="orbit-ring">
+                    <div class="particle"></div>
+                </div>
+                <div class="orbit-ring">
+                    <div class="particle"></div>
+                </div>
+                <div class="orbit-ring">
+                    <div class="particle"></div>
+                </div>
+            </div>
+            <div class="loader-label">Particle Orbit</div>
+        </div>
+
+        <!-- DNA Helix Loader -->
+        <div class="loader-wrapper">
+            <div class="dna-helix">
+                <div class="dna-strand"></div>
+                <div class="dna-strand"></div>
+                <div class="dna-strand"></div>
+                <div class="dna-strand"></div>
+                <div class="dna-strand"></div>
+                <div class="dna-strand"></div>
+                <div class="dna-strand"></div>
+                <div class="dna-strand"></div>
+            </div>
+            <div class="loader-label">DNA Helix</div>
+        </div>
+
+        <!-- Quantum Dots Loader -->
+        <div class="loader-wrapper">
+            <div class="quantum-dots">
+                <div class="quantum-dot"></div>
+                <div class="quantum-dot"></div>
+                <div class="quantum-dot"></div>
+                <div class="quantum-dot"></div>
+                <div class="quantum-dot"></div>
+                <div class="quantum-dot"></div>
+                <div class="quantum-dot"></div>
+                <div class="quantum-dot"></div>
+            </div>
+            <div class="loader-label">Quantum Dots</div>
+        </div>
+
+        <!-- Wave Loader -->
+        <div class="loader-wrapper">
+            <div class="wave-loader">
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+            </div>
+            <div class="loader-label">Wave Pulse</div>
+        </div>
+    </div>
+
+</body>
+
+</html>
