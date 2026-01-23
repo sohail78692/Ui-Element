@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<!-- Neon Glow Toggle Switch - Futuristic toggle with neon effects -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Glow Toggle Switch | Premium UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Cyberpunk Grid Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(50px);
+            }
+        }
+
+        .toggle-container {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .toggle-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .toggle-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 500;
+        }
+
+        /* Neon Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 120px;
+            height: 60px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            display: none;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(30, 30, 40, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 60px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow:
+                inset 0 0 20px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 46px;
+            width: 46px;
+            left: 5px;
+            bottom: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow:
+                0 0 20px rgba(102, 126, 234, 0.6),
+                0 0 40px rgba(118, 75, 162, 0.4);
+        }
+
+        .toggle-switch input:checked+.toggle-slider {
+            background: rgba(0, 255, 200, 0.1);
+            border-color: rgba(0, 255, 200, 0.5);
+            box-shadow:
+                inset 0 0 30px rgba(0, 255, 200, 0.2),
+                0 0 40px rgba(0, 255, 200, 0.3);
+        }
+
+        .toggle-switch input:checked+.toggle-slider::before {
+            transform: translateX(60px);
+            background: linear-gradient(135deg, #00ffc8 0%, #00d4ff 100%);
+            box-shadow:
+                0 0 30px rgba(0, 255, 200, 0.8),
+                0 0 60px rgba(0, 212, 255, 0.6);
+        }
+
+        /* Pulse Toggle */
+        .toggle-pulse .toggle-slider::before {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow:
+                    0 0 20px rgba(102, 126, 234, 0.6),
+                    0 0 40px rgba(118, 75, 162, 0.4);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 30px rgba(102, 126, 234, 0.8),
+                    0 0 60px rgba(118, 75, 162, 0.6);
+            }
+        }
+
+        .toggle-pulse input:checked+.toggle-slider::before {
+            animation: pulseActive 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseActive {
+
+            0%,
+            100% {
+                box-shadow:
+                    0 0 30px rgba(0, 255, 200, 0.8),
+                    0 0 60px rgba(0, 212, 255, 0.6);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 40px rgba(0, 255, 200, 1),
+                    0 0 80px rgba(0, 212, 255, 0.8);
+            }
+        }
+
+        /* Minimal Toggle */
+        .toggle-minimal .toggle-slider {
+            background: rgba(50, 50, 60, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .toggle-minimal .toggle-slider::before {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            box-shadow:
+                0 0 15px rgba(255, 107, 107, 0.5),
+                0 0 30px rgba(255, 142, 83, 0.3);
+        }
+
+        .toggle-minimal input:checked+.toggle-slider {
+            background: rgba(76, 209, 55, 0.1);
+            border-color: rgba(76, 209, 55, 0.3);
+        }
+
+        .toggle-minimal input:checked+.toggle-slider::before {
+            background: linear-gradient(135deg, #4cd137 0%, #44bd32 100%);
+            box-shadow:
+                0 0 20px rgba(76, 209, 55, 0.7),
+                0 0 40px rgba(68, 189, 50, 0.5);
+        }
+
+        /* Status Text */
+        .status-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch input:checked~.status-text {
+            color: rgba(0, 255, 200, 0.9);
+        }
+
+        .toggle-minimal input:checked~.status-text {
+            color: rgba(76, 209, 55, 0.9);
+        }
+
+        /* Icon Toggle */
+        .toggle-icon {
+            position: relative;
+            width: 140px;
+            height: 70px;
+        }
+
+        .toggle-icon .toggle-slider::after {
+            content: '☾';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .toggle-icon input:checked+.toggle-slider::after {
+            content: '☀';
+            left: 20px;
+            right: auto;
+            color: rgba(255, 200, 0, 0.9);
+        }
+
+        .toggle-icon .toggle-slider::before {
+            width: 54px;
+            height: 54px;
+            left: 6px;
+            bottom: 6px;
+        }
+
+        .toggle-icon input:checked+.toggle-slider::before {
+            transform: translateX(70px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .toggle-container {
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toggle-container">
+        <!-- Neon Toggle -->
+        <div class="toggle-wrapper">
+            <span class="toggle-label">Neon Glow</span>
+            <label class="toggle-switch">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="status-text">OFF</span>
+        </div>
+
+        <!-- Pulse Toggle -->
+        <div class="toggle-wrapper">
+            <span class="toggle-label">Pulse Effect</span>
+            <label class="toggle-switch toggle-pulse">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="status-text">ON</span>
+        </div>
+
+        <!-- Minimal Toggle -->
+        <div class="toggle-wrapper">
+            <span class="toggle-label">Minimal Style</span>
+            <label class="toggle-switch toggle-minimal">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="status-text">OFF</span>
+        </div>
+
+        <!-- Icon Toggle -->
+        <div class="toggle-wrapper">
+            <span class="toggle-label">Dark Mode</span>
+            <label class="toggle-switch toggle-icon">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="status-text">LIGHT</span>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity to update status text
+        document.querySelectorAll('.toggle-switch input').forEach((toggle, index) => {
+            const statusText = toggle.closest('.toggle-wrapper').querySelector('.status-text');
+
+            toggle.addEventListener('change', function () {
+                if (index === 3) { // Dark mode toggle
+                    statusText.textContent = this.checked ? 'DARK' : 'LIGHT';
+                } else {
+                    statusText.textContent = this.checked ? 'ON' : 'OFF';
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
