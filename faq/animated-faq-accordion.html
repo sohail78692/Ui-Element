@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated FAQ Accordion - Interactive Component</title>
+    <meta name="description"
+        content="A beautiful FAQ accordion with smooth expand/collapse animations, gradient accents, icons, and search functionality.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            width: 100%;
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out 0.2s backwards;
+        }
+
+        .faq-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px 60px 20px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            color: #667eea;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            animation: slideInLeft 0.6s ease-out forwards;
+        }
+
+        .faq-item:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+
+        .faq-item:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        .faq-item:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        .faq-item:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .faq-item:nth-child(5) {
+            animation-delay: 0.9s;
+        }
+
+        .faq-item:nth-child(6) {
+            animation-delay: 1s;
+        }
+
+        .faq-item.hidden {
+            display: none;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .faq-item.active {
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .faq-question {
+            padding: 25px 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .faq-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .faq-question-text {
+            flex: 1;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .faq-toggle {
+            width: 35px;
+            height: 35px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            flex-shrink: 0;
+        }
+
+        .faq-toggle::before,
+        .faq-toggle::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 3px;
+            background: #667eea;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .faq-toggle::after {
+            transform: rotate(90deg);
+        }
+
+        .faq-item.active .faq-toggle {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-toggle::before,
+        .faq-item.active .faq-toggle::after {
+            background: white;
+        }
+
+        .faq-item.active .faq-toggle::after {
+            transform: rotate(0deg);
+            opacity: 0;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0 30px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 30px 30px 100px;
+        }
+
+        .faq-answer-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .faq-divider {
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(102, 126, 234, 0.2),
+                    transparent);
+            margin: 0 30px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .faq-item.active .faq-divider {
+            opacity: 1;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: none;
+        }
+
+        .no-results.show {
+            display: block;
+            animation: fadeInScale 0.5s ease-out;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .no-results-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .no-results-subtext {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .expand-all-btn {
+            display: block;
+            margin: 0 auto 30px;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-out 1.1s backwards;
+        }
+
+        .expand-all-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .faq-title {
+                font-size: 2.5rem;
+            }
+
+            .faq-subtitle {
+                font-size: 1rem;
+            }
+
+            .faq-question {
+                padding: 20px;
+            }
+
+            .faq-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .faq-question-text {
+                font-size: 1rem;
+            }
+
+            .faq-item.active .faq-answer {
+                padding: 0 20px 20px 70px;
+            }
+
+            .search-input {
+                padding: 18px 50px 18px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="faq-container">
+        <div class="faq-header">
+            <h1 class="faq-title">FAQ</h1>
+            <p class="faq-subtitle">Find answers to commonly asked questions</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search for questions..."
+                autocomplete="off">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+            </svg>
+        </div>
+
+        <button class="expand-all-btn" id="expandAllBtn">Expand All</button>
+
+        <div class="faq-list" id="faqList">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-icon">🚀</div>
+                    <div class="faq-question-text">How do I get started?</div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-divider"></div>
+                <div class="faq-answer">
+                    <p class="faq-answer-text">
+                        Getting started is easy! Simply sign up for an account, complete your profile, and you'll have
+                        access to all our features. Our onboarding guide will walk you through the essential steps to
+                        make the most of our platform.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-icon">💳</div>
+                    <div class="faq-question-text">What payment methods do you accept?</div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-divider"></div>
+                <div class="faq-answer">
+                    <p class="faq-answer-text">
+                        We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank
+                        transfers. All transactions are secured with industry-standard encryption to protect your
+                        financial information.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-icon">🔒</div>
+                    <div class="faq-question-text">Is my data secure?</div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-divider"></div>
+                <div class="faq-answer">
+                    <p class="faq-answer-text">
+                        Absolutely! We use enterprise-grade encryption, regular security audits, and comply with GDPR
+                        and other international data protection regulations. Your data is stored in secure, redundant
+                        data centers with 24/7 monitoring.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-icon">🔄</div>
+                    <div class="faq-question-text">Can I cancel my subscription anytime?</div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-divider"></div>
+                <div class="faq-answer">
+                    <p class="faq-answer-text">
+                        Yes, you can cancel your subscription at any time with no penalties or hidden fees. Your access
+                        will continue until the end of your current billing period, and you won't be charged again.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-icon">📱</div>
+                    <div class="faq-question-text">Is there a mobile app available?</div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-divider"></div>
+                <div class="faq-answer">
+                    <p class="faq-answer-text">
+                        Yes! We have native mobile apps for both iOS and Android. Download them from the App Store or
+                        Google Play Store. The mobile apps sync seamlessly with your web account for a consistent
+                        experience across all devices.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-icon">💬</div>
+                    <div class="faq-question-text">How can I contact support?</div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-divider"></div>
+                <div class="faq-answer">
+                    <p class="faq-answer-text">
+                        Our support team is available 24/7 via live chat, email at support@example.com, or phone at
+                        1-800-SUPPORT. Premium users also have access to priority support with faster response times.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <div class="no-results-icon">🔍</div>
+            <div class="no-results-text">No results found</div>
+            <div class="no-results-subtext">Try searching with different keywords</div>
+        </div>
+    </div>
+
+    <script>
+        const faqItems = document.querySelectorAll('.faq-item');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+        const expandAllBtn = document.getElementById('expandAllBtn');
+        let allExpanded = false;
+
+        // Toggle FAQ item
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+
+            question.addEventListener('click', () => {
+                const wasActive = item.classList.contains('active');
+
+                // Close all items
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+
+                // Open clicked item if it wasn't active
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            let hasResults = false;
+
+            faqItems.forEach(item => {
+                const questionText = item.querySelector('.faq-question-text').textContent.toLowerCase();
+                const answerText = item.querySelector('.faq-answer-text').textContent.toLowerCase();
+
+                if (questionText.includes(searchTerm) || answerText.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                    hasResults = true;
+                } else {
+                    item.classList.add('hidden');
+                    item.classList.remove('active');
+                }
+            });
+
+            // Show/hide no results message
+            if (searchTerm && !hasResults) {
+                noResults.classList.add('show');
+            } else {
+                noResults.classList.remove('show');
+            }
+        });
+
+        // Expand/Collapse all
+        expandAllBtn.addEventListener('click', () => {
+            allExpanded = !allExpanded;
+
+            faqItems.forEach(item => {
+                if (!item.classList.contains('hidden')) {
+                    if (allExpanded) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                }
+            });
+
+            expandAllBtn.textContent = allExpanded ? 'Collapse All' : 'Expand All';
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + F to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+
+            // Escape to clear search
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+
+        // Add smooth scroll to active item
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+
+            question.addEventListener('click', () => {
+                setTimeout(() => {
+                    if (item.classList.contains('active')) {
+                        item.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
+                        });
+                    }
+                }, 100);
+            });
+        });
+    </script>
+</body>
+
+</html>
