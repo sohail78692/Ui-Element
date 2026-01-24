@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morphing Search Bar - Interactive Input Element</title>
+    <meta name="description"
+        content="A stunning morphing search bar that expands on focus with smooth animations, voice search capability, and real-time suggestions.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            margin: 0 auto;
+        }
+
+        .search-wrapper.expanded {
+            width: 100%;
+        }
+
+        .search-form {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .search-wrapper.expanded .search-input-wrapper {
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .search-input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            padding: 0 70px 0 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+            background: transparent;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.2s;
+        }
+
+        .search-wrapper.expanded .search-input {
+            opacity: 1;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+            font-weight: 400;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            z-index: 10;
+        }
+
+        .search-wrapper:not(.expanded) .search-btn {
+            right: 5px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .search-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .search-icon {
+            width: 20px;
+            height: 20px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+
+        .voice-btn {
+            position: absolute;
+            right: 65px;
+            top: 50%;
+            transform: translateY(-50%) scale(0);
+            width: 45px;
+            height: 45px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0;
+        }
+
+        .search-wrapper.expanded .voice-btn {
+            transform: translateY(-50%) scale(1);
+            opacity: 1;
+            transition-delay: 0.2s;
+        }
+
+        .voice-btn:hover {
+            background: #667eea;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .voice-btn.listening {
+            background: #ef4444;
+            border-color: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        .mic-icon {
+            width: 18px;
+            height: 18px;
+            fill: #667eea;
+            transition: fill 0.3s ease;
+        }
+
+        .voice-btn:hover .mic-icon,
+        .voice-btn.listening .mic-icon {
+            fill: white;
+        }
+
+        .suggestions-dropdown {
+            position: absolute;
+            top: calc(100% + 15px);
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 5;
+        }
+
+        .suggestions-dropdown.show {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        .suggestion-item {
+            padding: 18px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), transparent);
+            padding-left: 30px;
+        }
+
+        .suggestion-icon {
+            width: 20px;
+            height: 20px;
+            color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .suggestion-text {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .suggestion-category {
+            font-size: 0.85rem;
+            color: #999;
+            margin-left: auto;
+        }
+
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .search-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .search-wrapper.expanded~.quick-actions {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.3s;
+        }
+
+        .quick-action-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-size: 0.95rem;
+        }
+
+        .quick-action-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-wrapper {
+                width: 50px;
+                height: 50px;
+            }
+
+            .search-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .voice-btn {
+                right: 55px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .quick-actions {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-overlay" id="searchOverlay"></div>
+
+    <div class="search-container">
+        <div class="search-wrapper" id="searchWrapper">
+            <form class="search-form" id="searchForm">
+                <div class="search-input-wrapper">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search anything..."
+                        autocomplete="off">
+
+                    <button type="button" class="voice-btn" id="voiceBtn" title="Voice Search">
+                        <svg class="mic-icon" viewBox="0 0 24 24">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                            <path
+                                d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                        </svg>
+                    </button>
+
+                    <button type="submit" class="search-btn" id="searchBtn">
+                        <svg class="search-icon" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="suggestions-dropdown" id="suggestionsDropdown">
+                    <div class="suggestion-item" data-value="Web Development">
+                        <span class="suggestion-icon">🌐</span>
+                        <span class="suggestion-text">Web Development</span>
+                        <span class="suggestion-category">Popular</span>
+                    </div>
+                    <div class="suggestion-item" data-value="UI/UX Design">
+                        <span class="suggestion-icon">🎨</span>
+                        <span class="suggestion-text">UI/UX Design</span>
+                        <span class="suggestion-category">Trending</span>
+                    </div>
+                    <div class="suggestion-item" data-value="Machine Learning">
+                        <span class="suggestion-icon">🤖</span>
+                        <span class="suggestion-text">Machine Learning</span>
+                        <span class="suggestion-category">Tech</span>
+                    </div>
+                    <div class="suggestion-item" data-value="Mobile Apps">
+                        <span class="suggestion-icon">📱</span>
+                        <span class="suggestion-text">Mobile Apps</span>
+                        <span class="suggestion-category">Development</span>
+                    </div>
+                    <div class="suggestion-item" data-value="Cloud Computing">
+                        <span class="suggestion-icon">☁️</span>
+                        <span class="suggestion-text">Cloud Computing</span>
+                        <span class="suggestion-category">Infrastructure</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="quick-actions">
+            <button class="quick-action-btn" data-search="Tutorials">📚 Tutorials</button>
+            <button class="quick-action-btn" data-search="Documentation">📖 Docs</button>
+            <button class="quick-action-btn" data-search="Examples">💡 Examples</button>
+        </div>
+    </div>
+
+    <script>
+        const searchWrapper = document.getElementById('searchWrapper');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const searchOverlay = document.getElementById('searchOverlay');
+        const suggestionsDropdown = document.getElementById('suggestionsDropdown');
+        const suggestionItems = document.querySelectorAll('.suggestion-item');
+        const quickActionBtns = document.querySelectorAll('.quick-action-btn');
+        const searchForm = document.getElementById('searchForm');
+
+        let isExpanded = false;
+        let recognition = null;
+
+        // Initialize Speech Recognition if available
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                searchInput.value = transcript;
+                voiceBtn.classList.remove('listening');
+                showSuggestions();
+            };
+
+            recognition.onerror = () => {
+                voiceBtn.classList.remove('listening');
+            };
+
+            recognition.onend = () => {
+                voiceBtn.classList.remove('listening');
+            };
+        }
+
+        // Expand search bar
+        function expandSearch() {
+            if (!isExpanded) {
+                searchWrapper.classList.add('expanded');
+                searchOverlay.classList.add('show');
+                isExpanded = true;
+                setTimeout(() => searchInput.focus(), 300);
+            }
+        }
+
+        // Collapse search bar
+        function collapseSearch() {
+            if (isExpanded && !searchInput.value) {
+                searchWrapper.classList.remove('expanded');
+                searchOverlay.classList.remove('show');
+                suggestionsDropdown.classList.remove('show');
+                isExpanded = false;
+                searchInput.blur();
+            }
+        }
+
+        // Show suggestions
+        function showSuggestions() {
+            if (searchInput.value.length > 0) {
+                suggestionsDropdown.classList.add('show');
+            } else {
+                suggestionsDropdown.classList.remove('show');
+            }
+        }
+
+        // Event listeners
+        searchBtn.addEventListener('click', (e) => {
+            if (!isExpanded) {
+                e.preventDefault();
+                expandSearch();
+            }
+        });
+
+        searchInput.addEventListener('focus', expandSearch);
+
+        searchInput.addEventListener('input', showSuggestions);
+
+        searchOverlay.addEventListener('click', collapseSearch);
+
+        // Voice search
+        voiceBtn.addEventListener('click', () => {
+            if (recognition) {
+                voiceBtn.classList.add('listening');
+                recognition.start();
+            } else {
+                alert('Voice recognition is not supported in your browser.');
+            }
+        });
+
+        // Suggestion items
+        suggestionItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const value = item.getAttribute('data-value');
+                searchInput.value = value;
+                suggestionsDropdown.classList.remove('show');
+                searchInput.focus();
+            });
+        });
+
+        // Quick actions
+        quickActionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const searchTerm = btn.getAttribute('data-search');
+                searchInput.value = searchTerm;
+                expandSearch();
+                showSuggestions();
+            });
+        });
+
+        // Form submission
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (searchInput.value) {
+                console.log('Searching for:', searchInput.value);
+                // Add your search logic here
+                alert(`Searching for: ${searchInput.value}`);
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + K to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                expandSearch();
+            }
+
+            // Escape to close
+            if (e.key === 'Escape') {
+                collapseSearch();
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchWrapper.contains(e.target)) {
+                suggestionsDropdown.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+
+</html>
