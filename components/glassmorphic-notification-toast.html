@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphic Notification Toast - Component</title>
+    <meta name="description"
+        content="Beautiful glassmorphic notification toasts with multiple variants, smooth animations, progress bars, and auto-dismiss functionality.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .demo-container {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .demo-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .demo-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out 0.3s backwards;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 0.5s backwards;
+        }
+
+        .demo-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .demo-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-btn.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .demo-btn.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .demo-btn.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .demo-btn.info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        /* Toast Container */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Toast */
+        .toast {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-origin: right center;
+        }
+
+        .toast.removing {
+            animation: slideOutRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        .toast::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--toast-color);
+            box-shadow: 0 0 20px var(--toast-color);
+        }
+
+        .toast.success {
+            --toast-color: #10b981;
+        }
+
+        .toast.error {
+            --toast-color: #ef4444;
+        }
+
+        .toast.warning {
+            --toast-color: #f59e0b;
+        }
+
+        .toast.info {
+            --toast-color: #3b82f6;
+        }
+
+        .toast-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.5rem;
+            background: var(--toast-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: iconPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s backwards;
+        }
+
+        .toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast-message {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .toast-close {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .toast-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: var(--toast-color);
+            width: 100%;
+            transform-origin: left;
+            animation: progressBar var(--duration) linear forwards;
+            box-shadow: 0 0 10px var(--toast-color);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(400px) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes slideOutRight {
+            to {
+                opacity: 0;
+                transform: translateX(400px) scale(0.8);
+            }
+        }
+
+        @keyframes iconPop {
+            from {
+                transform: scale(0) rotate(-180deg);
+            }
+
+            to {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes progressBar {
+            from {
+                transform: scaleX(1);
+            }
+
+            to {
+                transform: scaleX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .toast-container {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+
+            .demo-title {
+                font-size: 2rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .demo-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="demo-container">
+        <h1 class="demo-title">Notification Toasts</h1>
+        <p class="demo-subtitle">Click buttons to see beautiful toast notifications</p>
+
+        <div class="button-group">
+            <button class="demo-btn success" onclick="showToast('success')">
+                ✓ Success Toast
+            </button>
+            <button class="demo-btn error" onclick="showToast('error')">
+                ✕ Error Toast
+            </button>
+            <button class="demo-btn warning" onclick="showToast('warning')">
+                ⚠ Warning Toast
+            </button>
+            <button class="demo-btn info" onclick="showToast('info')">
+                ℹ Info Toast
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const toastContainer = document.getElementById('toastContainer');
+        let toastId = 0;
+
+        const toastConfig = {
+            success: {
+                icon: '✓',
+                title: 'Success!',
+                message: 'Your action was completed successfully.',
+                duration: 5000
+            },
+            error: {
+                icon: '✕',
+                title: 'Error!',
+                message: 'Something went wrong. Please try again.',
+                duration: 5000
+            },
+            warning: {
+                icon: '⚠',
+                title: 'Warning!',
+                message: 'Please review your information before proceeding.',
+                duration: 5000
+            },
+            info: {
+                icon: 'ℹ',
+                title: 'Information',
+                message: 'Here\'s some useful information for you.',
+                duration: 5000
+            }
+        };
+
+        function createToast(type) {
+            const config = toastConfig[type];
+            const id = `toast-${toastId++}`;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.id = id;
+            toast.style.setProperty('--duration', `${config.duration}ms`);
+
+            toast.innerHTML = `
+                <div class="toast-icon">${config.icon}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${config.title}</div>
+                    <div class="toast-message">${config.message}</div>
+                </div>
+                <button class="toast-close" onclick="removeToast('${id}')" aria-label="Close">×</button>
+                <div class="toast-progress"></div>
+            `;
+
+            return toast;
+        }
+
+        function showToast(type) {
+            const toast = createToast(type);
+            toastContainer.appendChild(toast);
+
+            // Auto remove after duration
+            const duration = toastConfig[type].duration;
+            setTimeout(() => {
+                removeToast(toast.id);
+            }, duration);
+        }
+
+        function removeToast(id) {
+            const toast = document.getElementById(id);
+            if (toast) {
+                toast.classList.add('removing');
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }
+        }
+
+        // Keyboard shortcut demo
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case '1':
+                        e.preventDefault();
+                        showToast('success');
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        showToast('error');
+                        break;
+                    case '3':
+                        e.preventDefault();
+                        showToast('warning');
+                        break;
+                    case '4':
+                        e.preventDefault();
+                        showToast('info');
+                        break;
+                }
+            }
+        });
+
+        // Custom toast function for advanced usage
+        function showCustomToast(options) {
+            const {
+                type = 'info',
+                icon = 'ℹ',
+                title = 'Notification',
+                message = 'This is a notification message.',
+                duration = 5000
+            } = options;
+
+            const id = `toast-${toastId++}`;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.id = id;
+            toast.style.setProperty('--duration', `${duration}ms`);
+
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="removeToast('${id}')" aria-label="Close">×</button>
+                <div class="toast-progress"></div>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                removeToast(id);
+            }, duration);
+        }
+
+        // Example of programmatic usage
+        // showCustomToast({
+        //     type: 'success',
+        //     icon: '🎉',
+        //     title: 'Welcome!',
+        //     message: 'Thanks for checking out this component!',
+        //     duration: 6000
+        // });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.demo-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+                ripple.style.pointerEvents = 'none';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+</body>
+
+</html>
