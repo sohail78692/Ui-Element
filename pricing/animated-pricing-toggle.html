@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Pricing Toggle Card - Premium UI Element</title>
+    <meta name="description"
+        content="A stunning animated pricing card with monthly/yearly toggle, featuring smooth transitions, gradient backgrounds, and interactive hover effects.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .pricing-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .pricing-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            animation: fadeIn 1s ease-out 0.3s backwards;
+        }
+
+        .toggle-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-label.active {
+            transform: scale(1.1);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 70px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .toggle-switch:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 27px;
+            height: 27px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.yearly .toggle-slider {
+            transform: translateX(35px);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            animation: fadeInUp 1s ease-out 0.5s backwards;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .pricing-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-15px) scale(1.08);
+        }
+
+        .pricing-card.featured .plan-name,
+        .pricing-card.featured .feature-item {
+            color: white;
+        }
+
+        .pricing-card.featured .price {
+            color: white;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 40px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .price-wrapper {
+            margin: 25px 0;
+            position: relative;
+            height: 80px;
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #667eea;
+            position: absolute;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .price.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .price span {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #666;
+        }
+
+        .billing-period {
+            font-size: 0.95rem;
+            color: #666;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .pricing-card.featured .billing-period {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .feature-item {
+            padding: 12px 0;
+            color: #555;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            animation: slideInLeft 0.5s ease-out backwards;
+        }
+
+        .feature-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .feature-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .feature-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .feature-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .feature-item:hover {
+            transform: translateX(10px);
+        }
+
+        .feature-item::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:not(.featured) .cta-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .pricing-card.featured .cta-button {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        .discount-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pricing-header h1 {
+                font-size: 2rem;
+            }
+
+            .pricing-header p {
+                font-size: 1rem;
+            }
+
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .price {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pricing-container">
+        <div class="pricing-header">
+            <h1>Choose Your Plan</h1>
+            <p>Flexible pricing for teams of all sizes</p>
+
+            <div class="toggle-container">
+                <span class="toggle-label monthly-label active">Monthly</span>
+                <div class="toggle-switch" id="billingToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+                <span class="toggle-label yearly-label">
+                    Yearly
+                    <span class="discount-badge">Save 20%</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="pricing-cards">
+            <!-- Starter Plan -->
+            <div class="pricing-card">
+                <h3 class="plan-name">Starter</h3>
+                <div class="price-wrapper">
+                    <div class="price monthly-price active">
+                        $19<span>/mo</span>
+                    </div>
+                    <div class="price yearly-price">
+                        $182<span>/yr</span>
+                    </div>
+                </div>
+                <p class="billing-period">Perfect for individuals</p>
+                <ul class="features-list">
+                    <li class="feature-item">5 Projects</li>
+                    <li class="feature-item">10 GB Storage</li>
+                    <li class="feature-item">Basic Analytics</li>
+                    <li class="feature-item">Email Support</li>
+                    <li class="feature-item">Mobile App Access</li>
+                </ul>
+                <button class="cta-button">Get Started</button>
+            </div>
+
+            <!-- Professional Plan (Featured) -->
+            <div class="pricing-card featured">
+                <div class="featured-badge">POPULAR</div>
+                <h3 class="plan-name">Professional</h3>
+                <div class="price-wrapper">
+                    <div class="price monthly-price active">
+                        $49<span>/mo</span>
+                    </div>
+                    <div class="price yearly-price">
+                        $470<span>/yr</span>
+                    </div>
+                </div>
+                <p class="billing-period">Best for growing teams</p>
+                <ul class="features-list">
+                    <li class="feature-item">Unlimited Projects</li>
+                    <li class="feature-item">100 GB Storage</li>
+                    <li class="feature-item">Advanced Analytics</li>
+                    <li class="feature-item">Priority Support</li>
+                    <li class="feature-item">Custom Integrations</li>
+                </ul>
+                <button class="cta-button">Get Started</button>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card">
+                <h3 class="plan-name">Enterprise</h3>
+                <div class="price-wrapper">
+                    <div class="price monthly-price active">
+                        $99<span>/mo</span>
+                    </div>
+                    <div class="price yearly-price">
+                        $950<span>/yr</span>
+                    </div>
+                </div>
+                <p class="billing-period">For large organizations</p>
+                <ul class="features-list">
+                    <li class="feature-item">Unlimited Everything</li>
+                    <li class="feature-item">1 TB Storage</li>
+                    <li class="feature-item">AI-Powered Insights</li>
+                    <li class="feature-item">24/7 Dedicated Support</li>
+                    <li class="feature-item">White-Label Solution</li>
+                </ul>
+                <button class="cta-button">Contact Sales</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('billingToggle');
+        const monthlyLabel = document.querySelector('.monthly-label');
+        const yearlyLabel = document.querySelector('.yearly-label');
+        const monthlyPrices = document.querySelectorAll('.monthly-price');
+        const yearlyPrices = document.querySelectorAll('.yearly-price');
+
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('yearly');
+
+            // Toggle labels
+            monthlyLabel.classList.toggle('active');
+            yearlyLabel.classList.toggle('active');
+
+            // Toggle prices with animation
+            if (toggle.classList.contains('yearly')) {
+                monthlyPrices.forEach(price => price.classList.remove('active'));
+                setTimeout(() => {
+                    yearlyPrices.forEach(price => price.classList.add('active'));
+                }, 250);
+            } else {
+                yearlyPrices.forEach(price => price.classList.remove('active'));
+                setTimeout(() => {
+                    monthlyPrices.forEach(price => price.classList.add('active'));
+                }, 250);
+            }
+        });
+
+        // Add click handlers to buttons
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function (e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+</body>
+
+</html>
