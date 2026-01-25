@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Color Swatch Product Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #eef2f5;
+        }
+
+        .card {
+            position: relative;
+            width: 320px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .imgbox {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s ease;
+            background: #232323;
+        }
+
+        .imgbox img {
+            max-width: 80%;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+        }
+
+        .card:hover .imgbox img {
+            transform: scale(1.1) rotate(-10deg);
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .content p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .colors {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .color-btn {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .color-btn.active {
+            transform: scale(1.2);
+            border-color: #333;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            outline: none;
+            background: #232323;
+            color: #fff;
+            font-weight: 500;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease, letter-spacing 0.3s;
+        }
+
+        .action-btn:hover {
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        /* Color variations for demo using CSS filters for the image simulation */
+        /* In real app, you'd swap the image src */
+        .color-btn:nth-child(1) {
+            background: #232323;
+        }
+
+        /* Black */
+        .color-btn:nth-child(2) {
+            background: #1a5cff;
+        }
+
+        /* Blue */
+        .color-btn:nth-child(3) {
+            background: #ff1f1f;
+        }
+
+        /* Red */
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="imgbox" id="cardBackground">
+            <!-- Using a generic sneaker placeholder SVG representation or external URL -->
+            <img src="https://assets.codepen.io/16327/nike-shoe.png" alt="Nike Shoe" id="productImage">
+        </div>
+        <div class="content">
+            <h2>Nike Air Max</h2>
+            <p>Premium running shoes with breathable mesh and comfortable sole.</p>
+            <span class="price">$129.00</span>
+
+            <div class="colors">
+                <div class="color-btn active" data-color="#232323" style="background:#232323;"></div>
+                <div class="color-btn" data-color="#1a5cff" style="background:#1a5cff;"></div>
+                <div class="color-btn" data-color="#ff1f1f" style="background:#ff1f1f;"></div>
+            </div>
+
+            <button class="action-btn" id="buyBtn">Add to Cart</button>
+        </div>
+    </div>
+
+    <script>
+        const colorBtns = document.querySelectorAll('.color-btn');
+        const imgBox = document.querySelector('.imgbox');
+        const productImage = document.getElementById('productImage');
+        const buyBtn = document.getElementById('buyBtn');
+
+        colorBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all
+                colorBtns.forEach(b => b.classList.remove('active'));
+                // Add active to clicked
+                btn.classList.add('active');
+
+                // Change background color
+                const color = btn.getAttribute('data-color');
+                imgBox.style.background = color;
+                buyBtn.style.background = color;
+
+                // Simulate image color change with hue-rotate for demo purposes
+                // Note: accurate color change usually requires separate images
+                if (color === '#232323') { // Black
+                    productImage.style.filter = 'grayscale(100%) brightness(1.2)';
+                } else if (color === '#1a5cff') { // Blue
+                    productImage.style.filter = 'hue-rotate(210deg) saturate(3)';
+                } else if (color === '#ff1f1f') { // Red
+                    productImage.style.filter = 'hue-rotate(340deg) saturate(2)';
+                }
+            });
+        });
+
+        // Initialize default
+        productImage.style.filter = 'grayscale(100%) brightness(1.2)';
+    </script>
+</body>
+
+</html>
