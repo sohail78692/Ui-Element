@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Activated Search</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #121212;
+            font-family: sans-serif;
+            margin: 0;
+        }
+
+        .search-container {
+            position: relative;
+            width: 300px;
+            height: 60px;
+            background: #222;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            transition: width 0.3s;
+        }
+
+        .search-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .mic-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mic-btn svg {
+            width: 20px;
+            fill: #aaa;
+            transition: 0.2s;
+        }
+
+        .search-container.listening .mic-btn svg {
+            fill: #ff4757;
+        }
+
+        /* Voice Waves */
+        .waves {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 3px;
+            height: 30px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .wave {
+            width: 4px;
+            height: 6px;
+            background: linear-gradient(to top, #ff4757, #ff6b81);
+            border-radius: 4px;
+            animation: none;
+        }
+
+        .search-container.listening .search-input {
+            opacity: 0;
+            /* Hide text when listening */
+        }
+
+        .search-container.listening .waves {
+            opacity: 1;
+        }
+
+        .search-container.listening .wave {
+            animation: sound 0.5s infinite ease-in-out alternate;
+        }
+
+        .search-container.listening .wave:nth-child(1) {
+            animation-delay: 0.1s;
+            height: 10px;
+        }
+
+        .search-container.listening .wave:nth-child(2) {
+            animation-delay: 0.2s;
+            height: 15px;
+        }
+
+        .search-container.listening .wave:nth-child(3) {
+            animation-delay: 0.3s;
+            height: 25px;
+        }
+
+        .search-container.listening .wave:nth-child(4) {
+            animation-delay: 0.1s;
+            height: 18px;
+        }
+
+        .search-container.listening .wave:nth-child(5) {
+            animation-delay: 0.4s;
+            height: 12px;
+        }
+
+        @keyframes sound {
+            0% {
+                height: 6px;
+            }
+
+            100% {
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="search-container" id="searchBox">
+        <div class="mic-btn" id="micBtn">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                <path
+                    d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+            </svg>
+        </div>
+        <input type="text" class="search-input" placeholder="Say something..." id="inputField">
+
+        <div class="waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+    </div>
+
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        const micBtn = document.getElementById('micBtn');
+        const inputField = document.getElementById('inputField');
+
+        let isListening = false;
+
+        micBtn.addEventListener('click', () => {
+            isListening = !isListening;
+
+            if (isListening) {
+                searchBox.classList.add('listening');
+                inputField.placeholder = "Listening...";
+
+                // Simulate voice recognition end
+                setTimeout(() => {
+                    searchBox.classList.remove('listening');
+                    isListening = false;
+                    inputField.placeholder = "Say something...";
+                    inputField.value = "Show me UI designs";
+                    inputField.style.opacity = 1;
+                }, 3000);
+            } else {
+                searchBox.classList.remove('listening');
+                inputField.placeholder = "Say something...";
+            }
+        });
+    </script>
+</body>
+
+</html>
