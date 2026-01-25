@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Hover Button</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+
+        .magnetic-wrap {
+            position: relative;
+            display: inline-block;
+            padding: 50px;
+            /* Hit area */
+        }
+
+        .magnetic-btn {
+            position: relative;
+            width: 180px;
+            height: 60px;
+            background: #000;
+            border-radius: 30px;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 500;
+            transition: transform 0.1s linear;
+            will-change: transform;
+            overflow: hidden;
+        }
+
+        .magnetic-text {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+            transition: transform 0.1s linear;
+        }
+
+        .magnetic-btn::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: #333;
+            border-radius: 50%;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: top 0.5s ease;
+        }
+
+        .magnetic-btn:hover::after {
+            top: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="magnetic-wrap">
+        <div class="magnetic-btn">
+            <span class="magnetic-text">Hover Me</span>
+        </div>
+    </div>
+
+    <script>
+        const wrap = document.querySelector('.magnetic-wrap');
+        const btn = document.querySelector('.magnetic-btn');
+        const text = document.querySelector('.magnetic-text');
+
+        wrap.addEventListener('mousemove', (e) => {
+            const rect = wrap.getBoundingClientRect();
+            // Calculate center of the wrap
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // Distance from cursor to center
+            const x = e.clientX - centerX;
+            const y = e.clientY - centerY;
+
+            // Magnetic attraction strength
+            // Button moves 40% of the distance
+            const btnX = x * 0.4;
+            const btnY = y * 0.4;
+
+            // Text moves 60% for parallax
+            const textX = x * 0.2;
+            const textY = y * 0.2;
+
+            btn.style.transform = `translate(${btnX}px, ${btnY}px)`;
+            text.style.transform = `translate(${textX}px, ${textY}px)`;
+        });
+
+        wrap.addEventListener('mouseleave', () => {
+            btn.style.transform = `translate(0px, 0px)`;
+            text.style.transform = `translate(0px, 0px)`;
+            // Add transition for smooth reset
+            btn.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+            text.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+
+            setTimeout(() => {
+                // Remove transition to allow quick following again
+                btn.style.transition = 'transform 0.1s linear';
+                text.style.transition = 'transform 0.1s linear';
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>
