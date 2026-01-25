@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Orbiting Testimonials</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #111;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .orbit-system {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            transform-style: preserve-3d;
+            animation: rotateSystem 20s linear infinite;
+        }
+
+        .central-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateY(0deg) !important;
+            /* Counter rotation handled by JS or structure */
+            width: 200px;
+            text-align: center;
+            color: #fff;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Actually simpler to not rotate the text container with the orbit, 
+           but rotate the orbit around the text. */
+
+        .orbit-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            top: 0;
+            left: 0;
+        }
+
+        .planet {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            margin-left: -25px;
+            margin-top: -25px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        /* Positioning planets in a circle and counter-rotating them so they face front */
+        .planet:nth-child(1) {
+            transform: rotateY(0deg) translateZ(150px) rotateY(0deg);
+            animation: counterRotate 20s linear infinite reverse;
+        }
+
+        .planet:nth-child(2) {
+            transform: rotateY(72deg) translateZ(150px) rotateY(-72deg);
+            animation: counterRotate 20s linear infinite reverse;
+        }
+
+        .planet:nth-child(3) {
+            transform: rotateY(144deg) translateZ(150px) rotateY(-144deg);
+            animation: counterRotate 20s linear infinite reverse;
+        }
+
+        .planet:nth-child(4) {
+            transform: rotateY(216deg) translateZ(150px) rotateY(-216deg);
+            animation: counterRotate 20s linear infinite reverse;
+        }
+
+        .planet:nth-child(5) {
+            transform: rotateY(288deg) translateZ(150px) rotateY(-288deg);
+            animation: counterRotate 20s linear infinite reverse;
+        }
+
+        /* The animation needs to be applied to a wrapper or handle carefully */
+        /* Let's try a different approach: Rotate the wrapper, counter-rotate the items */
+
+        .wrapper {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: spin 20s linear infinite;
+        }
+
+        .wrapper:hover {
+            animation-play-state: paused;
+        }
+
+        .wrapper .item {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #fff;
+            left: 50%;
+            top: 0;
+            margin-left: -30px;
+            margin-top: -30px;
+            transform-origin: 30px 180px;
+            /* Distance to center (radius 150px + item half height 30px) approx */
+            /* Wait, transform-origin is easier for static placement. */
+            animation: counterSpin 20s linear infinite;
+        }
+
+        .item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Positioning items around the circle (static start points, then the whole wrapper spins) */
+        .item:nth-child(1) {
+            transform: rotate(0deg) translateY(-150px) rotate(0deg);
+        }
+
+        /* This approach is static. Animation spin rotates the whole wrapper. */
+
+        /* Better Approach for continuous upright orientation: 
+           Wrapper rotates. Items are children. Items must counter-rotate locally equal to wrapper rotation?
+           No, if wrapper rotates, items rotate with it. We need `animation: counter-spin` on items matching wrapper `spin`.
+        */
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes counterSpin {
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+
+        /* Use transform origin to place them */
+        .item {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 60px;
+            height: 60px;
+            margin: -30px;
+            --angle: 0deg;
+            /* x = r * cos(a), y = r * sin(a) */
+            /* We'll use JS to place them or CSS manually */
+        }
+
+        .item:nth-child(1) {
+            --angle: 0deg;
+        }
+
+        .item:nth-child(2) {
+            --angle: 72deg;
+        }
+
+        .item:nth-child(3) {
+            --angle: 144deg;
+        }
+
+        .item:nth-child(4) {
+            --angle: 216deg;
+        }
+
+        .item:nth-child(5) {
+            --angle: 288deg;
+        }
+
+        /* The trick: Translation pushes them out. Rotation spins the whole system. Common counter-rotation keeps them upright. */
+
+        .quote-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 300px;
+            z-index: 0;
+        }
+
+        .quote-box h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .quote-box p {
+            color: #aaa;
+            font-size: 14px;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="quote-box">
+        <h3 id="author">James Chen</h3>
+        <p id="quote">"This platform revolutionized our workflow. Absolutely stunning UI components!"</p>
+    </div>
+
+    <div class="wrapper">
+        <div class="item" style="transform: rotate(0deg) translate(150px) rotate(0deg);">
+            <img src="https://i.pravatar.cc/150?img=11" alt="User 1">
+        </div>
+        <div class="item" style="transform: rotate(72deg) translate(150px) rotate(-72deg);">
+            <img src="https://i.pravatar.cc/150?img=32" alt="User 2">
+        </div>
+        <div class="item" style="transform: rotate(144deg) translate(150px) rotate(-144deg);">
+            <img src="https://i.pravatar.cc/150?img=13" alt="User 3">
+        </div>
+        <div class="item" style="transform: rotate(216deg) translate(150px) rotate(-216deg);">
+            <img src="https://i.pravatar.cc/150?img=44" alt="User 4">
+        </div>
+        <div class="item" style="transform: rotate(288deg) translate(150px) rotate(-288deg);">
+            <img src="https://i.pravatar.cc/150?img=5" alt="User 5">
+        </div>
+    </div>
+
+    <script>
+        // JS isn't needed for the pure rotation if CSS is right, 
+        // but for the "Interactive" part, let's make it so hovering an item stops animation and shows that user's quote.
+
+        const wrapper = document.querySelector('.wrapper');
+        const items = document.querySelectorAll('.item');
+        const author = document.getElementById('author');
+        const quote = document.getElementById('quote');
+
+        const testimonials = [
+            { name: "James Chen", text: "This platform revolutionized our workflow. Absolutely stunning UI components!" },
+            { name: "Sarah Jones", text: "Ideally clean code and beautiful designs. Saved me weeks of work." },
+            { name: "Mike Ross", text: "The animations are buttery smooth. Highly recommended." },
+            { name: "Emily Blunt", text: "Customer support is top notch, but the design is even better." },
+            { name: "David Kim", text: "A game changer for my freelance projects. My clients love it." }
+        ];
+
+        items.forEach((item, index) => {
+            // Apply initial rotation for placement
+            // Note: The inline styles in HTML perform the static layout in a circle.
+            // Be careful mixing this with keyframe animation of the wrapper. 
+            // If the wrapper spins, the children spin with it.
+            // To keep images upright, children need a counter-spin animation.
+
+            item.style.animation = 'counterSpin 20s linear infinite';
+
+            item.addEventListener('mouseenter', () => {
+                author.innerText = testimonials[index].name;
+                author.style.opacity = 0;
+                quote.style.opacity = 0;
+                setTimeout(() => {
+                    author.innerText = testimonials[index].name;
+                    quote.innerText = '"' + testimonials[index].text + '"';
+                    author.style.opacity = 1;
+                    quote.style.opacity = 1;
+                }, 200);
+            });
+        });
+
+        // CSS in head needs to be adjusted so the loop works perfectly with the inline styles
+        // The previous CSS had issues. Let's fix the CSS via JS injection or overwrite.
+
+    </script>
+
+    <style>
+        /* Re-fix animation logic: 
+           Wrapper spins 0 to 360.
+           Item is placed at specific angle X.
+           Item must counter-rotate 0 to -360 to stay upright relative to screen?
+           Actually: 
+           If wrapper rotates +10deg. Item at 0deg moves to 10deg physically. User sees it rotate +10deg.
+           To reset orientation, item must rotate -10deg locally.
+        */
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes counterSpin {
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+        }
+
+        /* Counter needs to go opposite to the wrapper's spin effectively? Wait. */
+
+        /* If wrapper goes 0 -> 360.
+           Item needs to go 0 -> -360 (relative to its parent) to stay upright? 
+           Yes.
+        */
+        @keyframes counterSpin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+
+        /* But wait, the item has an initial transform like `rotate(72deg) translate(150px) rotate(-72deg)`.
+           If we animate `transform`, we overwrite that.
+           Solution: Nesting.
+           Item-Container (Static placement on circle) -> Item-inner (Counter-spin animation).
+        */
+    </style>
+
+    <!-- Corrected Logic in v2 style block below (overriding previous) for simplicity -->
+    <script>
+        // Refactoring structure for robustness
+        const wrap = document.querySelector('.wrapper');
+        wrap.innerHTML = ''; // clear
+
+        testimonials.forEach((t, i) => {
+            const angle = (360 / testimonials.length) * i;
+            const itemContainer = document.createElement('div');
+            itemContainer.style.position = 'absolute';
+            itemContainer.style.left = '50%';
+            itemContainer.style.top = '50%';
+            itemContainer.style.width = '0';
+            itemContainer.style.height = '0';
+            itemContainer.style.transform = `rotate(${angle}deg) translate(140px)`; // Place on circle
+
+            const itemInner = document.createElement('div');
+            itemInner.className = 'planet-inner';
+            itemInner.style.width = '60px';
+            itemInner.style.height = '60px';
+            itemInner.style.borderRadius = '50%';
+            itemInner.style.overflow = 'hidden';
+            itemInner.style.transform = `rotate(-${angle}deg)`; // Initial upright correction
+            itemInner.style.border = '3px solid white';
+            itemInner.style.marginLeft = '-30px';
+            itemInner.style.marginTop = '-30px';
+            itemInner.style.cursor = 'pointer';
+            itemInner.style.transition = '0.3s';
+
+            // Animation: The wrapper spins. This inner item must spin opposite.
+            // Actually, if we spin the wrapper, we don't need to change `itemContainer`.
+            // But `itemContainer` moves.
+            // `itemInner` needs to rotate opposite to `wrapper` spin.
+            // Current `itemInner` rotation is static `-${angle}deg`.
+            // We need to add continuous rotation to it.
+            // transform: rotate(-angle - time)
+
+            itemInner.style.animation = `keepUpright 20s linear infinite`;
+
+            const img = document.createElement('img');
+            img.src = `https://i.pravatar.cc/150?img=${i * 10 + 10}`;
+            img.style.width = '100%';
+            img.style.height = '100%';
+
+            itemInner.appendChild(img);
+            itemContainer.appendChild(itemInner);
+            wrap.appendChild(itemContainer); // Wrap must have the spin animation
+
+            itemInner.addEventListener('mouseenter', () => {
+                author.style.transition = '0.3s';
+                quote.style.transition = '0.3s';
+                author.style.opacity = 0;
+                quote.style.opacity = 0;
+
+                wrap.style.animationPlayState = 'paused';
+                document.querySelectorAll('.planet-inner').forEach(el => el.style.animationPlayState = 'paused');
+
+                setTimeout(() => {
+                    author.innerText = t.name;
+                    quote.innerText = '"' + t.text + '"';
+                    author.style.opacity = 1;
+                    quote.style.opacity = 1;
+                }, 300);
+            });
+
+            itemInner.addEventListener('mouseleave', () => {
+                wrap.style.animationPlayState = 'running';
+                document.querySelectorAll('.planet-inner').forEach(el => el.style.animationPlayState = 'running');
+            });
+        });
+
+        // Add dynamic style for the animation taking into account initial angle
+        const styleSheet = document.createElement("style");
+        let keyframes = "";
+
+        testimonials.forEach((t, i) => {
+            const angle = (360 / testimonials.length) * i;
+            // Start: -angle. End: -angle - 360
+            keyframes += `
+                @keyframes upright-${i} {
+                    from { transform: rotate(-${angle}deg); }
+                    to { transform: rotate(-${angle + 360}deg); }
+                }
+                
+                .wrapper > div:nth-child(${i + 1}) .planet-inner {
+                    animation-name: upright-${i} !important;
+                }
+             `;
+        });
+
+        styleSheet.innerText = keyframes;
+        document.head.appendChild(styleSheet);
+
+    </script>
+</body>
+
+</html>
