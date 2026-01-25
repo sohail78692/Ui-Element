@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacked Notification Feed</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #e0e5ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .trigger-btn {
+            padding: 15px 30px;
+            background: #6c5ce7;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .trigger-btn:active {
+            transform: scale(0.95);
+        }
+
+        .notification-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 350px;
+            height: 400px;
+            /* Limit height to showing a few */
+            pointer-events: none;
+            /* Let clicks pass through empty space */
+            display: flex;
+            flex-direction: column-reverse;
+            /* Newest at bottom visually? No, stacking usually pushes up. */
+            /* Actually, "Stacked" often means one behind another. Let's do a vertical list effectively. */
+            align-items: flex-end;
+        }
+
+        .toast {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 320px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0;
+            transform: translateY(100px) scale(0.8);
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #a29bfe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex-grow: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #2d3436;
+            margin-bottom: 4px;
+        }
+
+        .toast-message {
+            font-size: 12px;
+            color: #636e72;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            color: #b2bec3;
+            cursor: pointer;
+            font-size: 18px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <button class="trigger-btn" onclick="addNotification()">Show Notification</button>
+
+    <div class="notification-container" id="container">
+        <!-- Toasts go here -->
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const titles = ["New Message", "System Update", "Download Complete", "Friend Request", "Reminder"];
+        const messages = [
+            "You have received a new message from Sarah.",
+            "System version 2.0.4 has been successfully installed.",
+            "Your file 'project_v2.zip' is ready to open.",
+            "John Doe wants to connect with you.",
+            "Meeting with the design team in 15 minutes."
+        ];
+        const icons = ["fa-envelope", "fa-cog", "fa-check", "fa-user-plus", "fa-clock"];
+        const colors = ["#0984e3", "#6c5ce7", "#00b894", "#e17055", "#fdcb6e"];
+
+        let toasts = [];
+
+        function addNotification() {
+            const index = Math.floor(Math.random() * titles.length);
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+
+            toast.innerHTML = `
+                <div class="toast-icon" style="background: ${colors[index]}">
+                    <i class="fas ${icons[index]}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${titles[index]}</div>
+                    <div class="toast-message">${messages[index]}</div>
+                </div>
+                <div class="toast-close" onclick="this.parentElement.remove(); updatePositions();">&times;</div>
+            `;
+
+            container.appendChild(toast);
+            toasts.push(toast);
+
+            // Trigger animation
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0) scale(1)';
+                updatePositions();
+            }, 10);
+
+            // Auto remove
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100px)';
+                    setTimeout(() => {
+                        if (toast.parentElement) {
+                            toast.remove();
+                            toasts = toasts.filter(t => t !== toast);
+                            updatePositions();
+                        }
+                    }, 500);
+                }
+            }, 4000);
+
+            // Limit visible toasts
+            if (toasts.length > 4) {
+                // Remove the oldest
+                const oldest = toasts.shift();
+                if (oldest.parentElement) oldest.remove();
+            }
+        }
+
+        function updatePositions() {
+            // Re-query in case of manual removal
+            const currentToasts = document.querySelectorAll('.toast');
+            // Iterate backwards (newest is last in DOM)
+            // But we want newest at bottom (y=0).
+            // Previous ones move UP (-y).
+
+            let offset = 0;
+            let scale = 1;
+            let opacity = 1;
+            let zIndex = 100;
+
+            // DOM order: [Oldest, ..., Newest]
+            // We want Newest to be front, bottom.
+            // Oldest to be back, top.
+
+            for (let i = currentToasts.length - 1; i >= 0; i--) {
+                const toast = currentToasts[i];
+                let dist = currentToasts.length - 1 - i; // 0 for newest, 1 for previous...
+
+                // Visual Effect: Stack behind
+                // We want them to stack slightly visible behind each other
+                // translateY = -15px * dist
+                // scale = 1 - 0.05 * dist
+                // zIndex = 100 - dist
+
+                let yPos = -(dist * 15);
+                let sc = 1 - (dist * 0.05);
+
+                // To make them "stack", visible at bottom
+                // If we want a list, yPos should be accumulated height.
+                // But user asked for "Stacked Notification Feed" - often implies the 3D stack effect or a list.
+                // Let's do the "Stack behind" effect as it's more "Wow" / "Premium".
+
+                // If dist > 3, hide or fade out strongly
+                if (dist > 3) opacity = 0;
+                else opacity = 1;
+
+                toast.style.zIndex = zIndex - dist;
+                // Move older ones up and scale down
+                // Also we need to ensure we don't override the entrance animation if it's running?
+                // The entrance sets transform to T(0) S(1). 
+                // We should apply these styles.
+
+                // Wait, if we set style directly, we override the entrance animation logic
+                // Entrance animation sets it to specific state from "initial".
+                // Since this function runs immediately after append (via setTimeout 10), it overrides.
+
+                // Let's just set the final target state here.
+
+                // "Newest" (dist=0) -> scale(1) translateY(0)
+                // "Older" (dist=1) -> scale(0.95) translateY(-20px) 
+
+                // But wait, if they are "absolute" positioned at bottom:0, right:0.
+
+                // If we want them to pop in from bottom:
+                // Newest needs to start low and come up to 0.
+
+                // Let's refine the logic.
+
+                if (dist === 0) {
+                    // The newest one is "Active".
+                    // Check if it's just added (no inline style or scaling up?)
+                    // Handled by the setTimeout(10) in addNotification calling this.
+                }
+
+                // We force the styles
+                toast.style.transform = `translateY(${yPos * 3}px) scale(${sc})`; // *3 to spread them out vertically a bit (negative goes UP)
+                // Actually translateY(-60px) puts it higher.
+
+                // To create a "pile" effect at the bottom right.
+            }
+        }
+    </script>
+</body>
+
+</html>
