@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Galaxy Globe</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --primary-color: #00f3ff;
+            --secondary-color: #bc13fe;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            mix-blend-mode: exclusion;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 300;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-top: 10px;
+            opacity: 0.6;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <canvas id="galaxyCanvas"></canvas>
+        <div class="overlay">
+            <h1>Galaxy Globe</h1>
+            <p>Interactive Particle Sphere</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('galaxyCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+        const particleCount = 1500;
+        const radius = 250;
+        let angleX = 0;
+        let angleY = 0;
+        let mouseX = 0;
+        let mouseY = 0;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                // Spherical distribution
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+
+                const x = radius * Math.sin(phi) * Math.cos(theta);
+                const y = radius * Math.sin(phi) * Math.sin(theta);
+                const z = radius * Math.cos(phi);
+
+                particles.push({
+                    x, y, z,
+                    baseX: x,
+                    baseY: y,
+                    baseZ: z,
+                    size: Math.random() * 2 + 0.5,
+                    color: Math.random() > 0.5 ? '#00f3ff' : '#bc13fe'
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Mouse interaction for rotation
+            const targetAngleX = (mouseY - height / 2) * 0.0005;
+            const targetAngleY = (mouseX - width / 2) * 0.0005;
+
+            angleX += (targetAngleX - angleX) * 0.1;
+            angleY += (targetAngleY - angleY) * 0.1;
+
+            // Sort particles by Z position for depth rendering
+            particles.sort((a, b) => {
+                const zA = a.y * Math.sin(angleX) + a.z * Math.cos(angleX);
+                const zB = b.y * Math.sin(angleX) + b.z * Math.cos(angleX);
+                return zA - zB;
+            });
+
+            particles.forEach(p => {
+                // 3D Rotation Matrix
+                // Rotate around X
+                let y1 = p.y * Math.cos(angleX) - p.z * Math.sin(angleX);
+                let z1 = p.y * Math.sin(angleX) + p.z * Math.cos(angleX);
+
+                // Rotate around Y
+                let x2 = p.x * Math.cos(angleY) - z1 * Math.sin(angleY);
+                let z2 = p.x * Math.sin(angleY) + z1 * Math.cos(angleY);
+
+                // Perspective projection
+                const scale = 800 / (800 + z2);
+                const x2d = x2 * scale + width / 2;
+                const y2d = y1 * scale + height / 2;
+
+                // Draw Particle
+                ctx.beginPath();
+                ctx.arc(x2d, y2d, p.size * scale, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+
+                // Add glow if close to front
+                if (z2 > 0) {
+                    ctx.shadowBlur = 10 * scale;
+                    ctx.shadowColor = p.color;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+
+                ctx.fill();
+
+                // Reset shadow for next iteration
+                ctx.shadowBlur = 0;
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            resize();
+            initParticles();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        resize();
+        initParticles();
+        animate();
+    </script>
+</body>
+
+</html>
