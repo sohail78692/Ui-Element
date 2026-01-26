@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Matrix Rain</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: monospace;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+            width: 200px;
+        }
+
+        .controls label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 10px;
+            accent-color: #0F0;
+        }
+
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 15px;
+            border: none;
+            padding: 0;
+            background: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <label for="colorPicker">Matrix Color</label>
+        <input type="color" id="colorPicker" value="#00ff00">
+
+        <label for="speed">Speed (FPS)</label>
+        <input type="range" id="speed" min="10" max="60" value="30">
+
+        <label for="density">Font Size</label>
+        <input type="range" id="density" min="10" max="40" value="16">
+    </div>
+
+    <canvas id="matrixCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const controls = {
+            color: document.getElementById('colorPicker'),
+            speed: document.getElementById('speed'),
+            size: document.getElementById('density')
+        };
+
+        let width, height;
+        let drops = [];
+        let fontSize = parseInt(controls.size.value);
+        const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%';
+
+        // Animation Loop Control
+        let lastTime = 0;
+        let fps = parseInt(controls.speed.value);
+        let interval = 1000 / fps;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+
+            const columns = Math.ceil(width / fontSize);
+
+            // Re-initialize drops if column count changes significantly
+            if (drops.length !== columns) {
+                drops = [];
+                for (let i = 0; i < columns; i++) {
+                    drops[i] = Math.random() * -100; // Start off-screen
+                }
+            }
+        }
+
+        function draw(timestamp) {
+            requestAnimationFrame(draw);
+
+            if (!lastTime) lastTime = timestamp;
+            const delta = timestamp - lastTime;
+
+            if (delta > interval) {
+                lastTime = timestamp - (delta % interval);
+
+                // Trail effect
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, width, height);
+
+                ctx.fillStyle = controls.color.value;
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    // Reset drop if it goes off screen randomly
+                    if (drops[i] * fontSize > height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+
+                    drops[i]++;
+                }
+            }
+        }
+
+        // Listeners
+        window.addEventListener('resize', resize);
+
+        controls.size.addEventListener('input', (e) => {
+            fontSize = parseInt(e.target.value);
+            resize();
+        });
+
+        controls.speed.addEventListener('input', (e) => {
+            fps = parseInt(e.target.value);
+            interval = 1000 / fps;
+        });
+
+        // Initial setup
+        resize();
+        requestAnimationFrame(draw);
+    </script>
+</body>
+
+</html>
