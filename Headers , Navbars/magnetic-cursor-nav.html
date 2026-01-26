@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Cursor Navigation</title>
+    <style>
+        :root {
+            --bg-color: #111;
+            --text-color: #fff;
+            --accent-color: #ff3e3e;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: none;
+            /* Hide default cursor */
+        }
+
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-color);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hovered {
+            width: 50px;
+            height: 50px;
+            background-color: var(--text-color);
+            border-color: transparent;
+            opacity: 0.5;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: color 0.3s;
+            overflow: hidden;
+            display: inline-block;
+            /* Essential for transform */
+        }
+
+        .nav-link span {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            border-radius: 50px;
+            transform: scale(0);
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: 1;
+        }
+
+        .nav-link:hover::before {
+            transform: scale(1);
+        }
+
+        .nav-link:hover {
+            color: #000;
+            border-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor" id="customCursor"></div>
+
+    <nav>
+        <a href="#" class="nav-link" data-magnetic><span>Home</span></a>
+        <a href="#" class="nav-link" data-magnetic><span>Work</span></a>
+        <a href="#" class="nav-link" data-magnetic><span>About</span></a>
+        <a href="#" class="nav-link" data-magnetic><span>Contact</span></a>
+    </nav>
+
+    <script>
+        const cursor = document.getElementById('customCursor');
+        const magneticElements = document.querySelectorAll('[data-magnetic]');
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+
+        // Smooth cursor movement
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animate() {
+            // Lerp for smooth cursor trailing
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Magnetic Effect
+        magneticElements.forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const elCenterX = rect.left + rect.width / 2;
+                const elCenterY = rect.top + rect.height / 2;
+
+                // Distance from center
+                const distDesc = 0.4; // Magnetic strength
+                const x = (e.clientX - elCenterX) * distDesc;
+                const y = (e.clientY - elCenterY) * distDesc;
+
+                el.style.transform = `translate(${x}px, ${y}px)`;
+
+                // Cursor interaction
+                cursor.classList.add('hovered');
+            });
+
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = `translate(0px, 0px)`;
+                cursor.classList.remove('hovered');
+            });
+        });
+    </script>
+</body>
+
+</html>
