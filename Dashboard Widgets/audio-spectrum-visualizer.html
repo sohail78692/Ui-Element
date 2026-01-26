@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Spectrum Visualizer</title>
+    <style>
+        :root {
+            --visualizer-color: #00d2ff;
+            --bg-color: #0c0c0c;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            color: white;
+        }
+
+        .visualizer-card {
+            width: 400px;
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .visualizer-container {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .bar {
+            width: 6px;
+            background: linear-gradient(to top, var(--visualizer-color), #3a7bd5);
+            border-radius: 3px;
+            height: 20px;
+            transition: height 0.1s ease;
+        }
+
+        .info {
+            margin-top: 10px;
+        }
+
+        .track-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        .artist {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .btn:hover {
+            color: var(--visualizer-color);
+            transform: scale(1.1);
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--visualizer-color);
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .play-btn:hover {
+            background: #fff;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="visualizer-card">
+        <div class="visualizer-container" id="visualizer">
+            <!-- Bars will be generated here -->
+        </div>
+        <div class="info">
+            <div class="track-name" id="trackName">Stellar Pulse</div>
+            <div class="artist">Cybernetic Waves</div>
+        </div>
+        <div class="controls">
+            <button class="btn">⏮</button>
+            <button class="btn play-btn" id="playBtn">▶</button>
+            <button class="btn">⏭</button>
+        </div>
+    </div>
+
+    <script>
+        const visualizer = document.getElementById('visualizer');
+        const playBtn = document.getElementById('playBtn');
+        const barCount = 30;
+        const bars = [];
+        let isPlaying = false;
+        let animationFrame;
+
+        // Initialize bars
+        for (let i = 0; i < barCount; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            visualizer.appendChild(bar);
+            bars.push(bar);
+        }
+
+        function updateVisualizer() {
+            if (!isPlaying) return;
+
+            bars.forEach((bar, index) => {
+                // Simulate audio frequency peaks
+                const time = Date.now() / 1000;
+                const freq = Math.sin(time * 5 + index * 0.5) * 40 + 60;
+                const random = Math.random() * 20;
+                const height = Math.max(10, freq + random);
+                bar.style.height = height + '%';
+            });
+
+            animationFrame = requestAnimationFrame(updateVisualizer);
+        }
+
+        playBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            playBtn.textContent = isPlaying ? '⏸' : '▶';
+
+            if (isPlaying) {
+                updateVisualizer();
+            } else {
+                cancelAnimationFrame(animationFrame);
+                bars.forEach(bar => bar.style.height = '20%');
+            }
+        });
+    </script>
+</body>
+
+</html>
