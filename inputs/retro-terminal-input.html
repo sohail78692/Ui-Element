@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Terminal Input</title>
+    <style>
+        :root {
+            --terminal-green: #33ff33;
+            --terminal-bg: #0a0a0a;
+            --glow: 0 0 10px rgba(51, 255, 51, 0.5);
+        }
+
+        body {
+            background-color: var(--terminal-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        /* CRT Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .terminal-container {
+            width: 600px;
+            height: 400px;
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(51, 255, 51, 0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history {
+            flex-grow: 1;
+            color: var(--terminal-green);
+            font-size: 14px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            text-shadow: var(--glow);
+        }
+
+        .history div {
+            margin-bottom: 5px;
+        }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            color: var(--terminal-green);
+            font-size: 16px;
+            text-shadow: var(--glow);
+        }
+
+        .prompt {
+            margin-right: 10px;
+        }
+
+        #terminal-input {
+            background: transparent;
+            border: none;
+            color: var(--terminal-green);
+            font-family: inherit;
+            font-size: inherit;
+            width: 100%;
+            outline: none;
+            text-shadow: var(--glow);
+        }
+
+        .cursor {
+            width: 10px;
+            height: 18px;
+            background: var(--terminal-green);
+            animation: blink 1s step-end infinite;
+            display: inline-block;
+            box-shadow: var(--glow);
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .header {
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            color: #555;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="terminal-container">
+        <div class="header">
+            <span>TERMINAL v1.0.4 - SYSTEM CONNECTED</span>
+            <span>2026-01-27</span>
+        </div>
+        <div class="history" id="history">
+            <div>[SYS] Welcome to the neural interface.</div>
+            <div>[SYS] Initialize sequence successful.</div>
+        </div>
+        <div class="input-line">
+            <span class="prompt">guest@mainframe:~$</span>
+            <input type="text" id="terminal-input" autofocus>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('terminal-input');
+        const history = document.getElementById('history');
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value.trim();
+                if (cmd) {
+                    // Add to history
+                    const line = document.createElement('div');
+                    line.textContent = `guest@mainframe:~$ ${cmd}`;
+                    history.appendChild(line);
+
+                    // Response logic
+                    processCommand(cmd);
+
+                    input.value = '';
+                    history.scrollTop = history.scrollHeight;
+                }
+            }
+        });
+
+        function processCommand(cmd) {
+            const response = document.createElement('div');
+            response.style.color = '#fff';
+            response.style.opacity = '0.7';
+
+            const lowCmd = cmd.toLowerCase();
+            if (lowCmd === 'help') {
+                response.textContent = '[SYS] Available: HELP, CLEAR, STATUS, EXIT, WHOAMI';
+            } else if (lowCmd === 'clear') {
+                history.innerHTML = '';
+                return;
+            } else if (lowCmd === 'status') {
+                response.textContent = '[SYS] All systems operational. Core temp: 42°C';
+            } else if (lowCmd === 'whoami') {
+                response.textContent = '[USER] Guest Access Level 1';
+            } else {
+                response.textContent = `[ERR] Command '${cmd}' not recognized.`;
+            }
+
+            history.appendChild(response);
+        }
+
+        // Keep focus on input
+        document.body.addEventListener('click', () => input.focus());
+    </script>
+</body>
+
+</html>
