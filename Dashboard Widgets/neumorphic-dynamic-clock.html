@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neumorphic Dynamic Clock</title>
+    <style>
+        :root {
+            --bg-color: #e0e5ec;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --accent-color: #4d76fd;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .clock-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            background: var(--bg-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 20px 20px 60px var(--shadow-dark),
+                -20px -20px 60px var(--shadow-light);
+            border: 8px solid var(--bg-color);
+        }
+
+        .clock-face {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                inset -6px -6px 12px var(--shadow-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(77, 118, 253, 0.5);
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            border-radius: 10px;
+            z-index: 5;
+            transition: transform 0.05s cubic-bezier(0.1, 2.7, 0.58, 1);
+        }
+
+        .hour-hand {
+            width: 6px;
+            height: 60px;
+            background: #2d3436;
+            transform: translateX(-50%);
+        }
+
+        .min-hand {
+            width: 4px;
+            height: 80px;
+            background: #636e72;
+            transform: translateX(-50%);
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 100px;
+            background: var(--accent-color);
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(77, 118, 253, 0.3);
+        }
+
+        /* Digital Display */
+        .digital-time {
+            position: absolute;
+            bottom: 60px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #7f8c8d;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            box-shadow: inset 2px 2px 5px var(--shadow-dark),
+                inset -2px -2px 5px var(--shadow-light);
+        }
+
+        /* Numbers */
+        .number {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            text-align: center;
+            font-weight: 800;
+            color: #a3b1c6;
+            font-size: 18px;
+        }
+
+        .n3 {
+            transform: rotate(90deg);
+        }
+
+        .n3 span {
+            transform: rotate(-90deg);
+            display: inline-block;
+        }
+
+        .n6 {
+            transform: rotate(180deg);
+        }
+
+        .n6 span {
+            transform: rotate(-180deg);
+            display: inline-block;
+        }
+
+        .n9 {
+            transform: rotate(270deg);
+        }
+
+        .n9 span {
+            transform: rotate(-270deg);
+            display: inline-block;
+        }
+
+        .n12 {
+            transform: rotate(0deg);
+        }
+
+        .n12 span {
+            transform: rotate(0deg);
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="clock-container">
+        <div class="number n12"><span>12</span></div>
+        <div class="number n3"><span>3</span></div>
+        <div class="number n6"><span>6</span></div>
+        <div class="number n9"><span>9</span></div>
+
+        <div class="clock-face">
+            <div class="dot"></div>
+            <div class="hand hour-hand" id="hour"></div>
+            <div class="hand min-hand" id="min"></div>
+            <div class="hand second-hand" id="sec"></div>
+            <div class="digital-time" id="digital">12:00:00</div>
+        </div>
+    </div>
+
+    <script>
+        const hourHand = document.getElementById('hour');
+        const minHand = document.getElementById('min');
+        const secHand = document.getElementById('sec');
+        const digital = document.getElementById('digital');
+
+        function setClock() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
+
+            const secondsDegrees = ((seconds / 60) * 360);
+            const minutesDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6);
+            const hoursDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30);
+
+            secHand.style.transform = `translateX(-50%) rotate(${secondsDegrees}deg)`;
+            minHand.style.transform = `translateX(-50%) rotate(${minutesDegrees}deg)`;
+            hourHand.style.transform = `translateX(-50%) rotate(${hoursDegrees}deg)`;
+
+            // Digital format
+            const h = hours.toString().padStart(2, '0');
+            const m = minutes.toString().padStart(2, '0');
+            const s = seconds.toString().padStart(2, '0');
+            digital.innerText = `${h}:${m}:${s}`;
+        }
+
+        setInterval(setClock, 1000);
+        setClock(); // Initial call
+    </script>
+</body>
+
+</html>
