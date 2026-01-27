@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Blob Progress Bar</title>
+    <style>
+        :root {
+            --liquid-color: #3b82f6;
+            --liquid-color-glow: rgba(59, 130, 246, 0.5);
+            --bg: #050505;
+        }
+
+        body {
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            gap: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        .container {
+            position: relative;
+            width: 400px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-fill {
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            background: var(--liquid-color);
+            border-radius: 30px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px var(--liquid-color-glow);
+        }
+
+        /* Waves */
+        .wave {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 100%;
+            background: var(--liquid-color);
+            filter: blur(8px);
+            transform: translateX(50%);
+        }
+
+        .blob-container {
+            position: absolute;
+            height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            filter: url('#gooey');
+        }
+
+        .liquid-surface {
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            width: 60px;
+            height: 100px;
+            background: var(--liquid-color);
+            border-radius: 50%;
+            animation: moveBlob 3s infinite ease-in-out;
+        }
+
+        @keyframes moveBlob {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(10px) scale(1.1);
+            }
+        }
+
+        input[type="range"] {
+            width: 300px;
+            cursor: pointer;
+            accent-color: var(--liquid-color);
+        }
+
+        .percentage {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(to bottom, #fff, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        svg {
+            width: 0;
+            height: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="percentage" id="percentText">0%</div>
+
+    <div class="container">
+        <div class="blob-container">
+            <div class="progress-fill" id="progressFill">
+                <div class="liquid-surface"></div>
+                <div class="liquid-surface" style="animation-delay: -1.5s; right: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <input type="range" id="progressInput" min="0" max="100" value="0">
+
+    <svg>
+        <defs>
+            <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10"
+                    result="gooey" />
+                <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        const input = document.getElementById('progressInput');
+        const fill = document.getElementById('progressFill');
+        const text = document.getElementById('percentText');
+
+        input.addEventListener('input', (e) => {
+            const val = e.target.value;
+            fill.style.width = val + '%';
+            text.innerText = val + '%';
+
+            // Subtle color shift based on progress
+            const hue = 210 + (val * 0.5);
+            document.documentElement.style.setProperty('--liquid-color', `hsl(${hue}, 80%, 60%)`);
+            document.documentElement.style.setProperty('--liquid-color-glow', `hsla(${hue}, 80%, 60%, 0.5)`);
+        });
+    </script>
+</body>
+
+</html>
