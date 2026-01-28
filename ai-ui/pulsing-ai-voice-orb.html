@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Assistant Orb</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+        :root {
+            --orb-size: 200px;
+            --color-1: #6366f1;
+            --color-2: #ec4899;
+            --color-3: #22d3ee;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #020617;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+
+        .orb-wrapper {
+            position: relative;
+            width: var(--orb-size);
+            height: var(--orb-size);
+            cursor: pointer;
+        }
+
+        .orb {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-1), var(--color-2));
+            filter: blur(20px);
+            opacity: 0.6;
+            animation: pulse-main 4s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .orb-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .waves {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 40px;
+        }
+
+        .wave {
+            width: 4px;
+            height: 10px;
+            background: white;
+            border-radius: 4px;
+            animation: wave-anim 1.5s ease-in-out infinite;
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .wave:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .wave:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse-main {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes wave-anim {
+
+            0%,
+            100% {
+                height: 10px;
+                opacity: 0.5;
+            }
+
+            50% {
+                height: 35px;
+                opacity: 1;
+            }
+        }
+
+        .glow-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            border: 2px solid var(--color-3);
+            border-radius: 50%;
+            opacity: 0;
+            animation: ripple 3s linear infinite;
+        }
+
+        .glow-ring:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .glow-ring:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .status-text {
+            margin-top: 60px;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .status-text span {
+            color: var(--color-3);
+            text-shadow: 0 0 10px var(--color-3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb-wrapper" onclick="toggleActive()">
+        <div class="glow-ring"></div>
+        <div class="glow-ring"></div>
+        <div class="glow-ring"></div>
+        <div class="orb"></div>
+        <div class="orb-inner">
+            <div class="waves">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-text" id="status">Listening<span>...</span></div>
+
+    <script>
+        let active = true;
+        const waves = document.querySelectorAll('.wave');
+        const status = document.getElementById('status');
+
+        function toggleActive() {
+            active = !active;
+            if (active) {
+                waves.forEach(w => w.style.animationPlayState = 'running');
+                status.innerHTML = 'Listening<span>...</span>';
+            } else {
+                waves.forEach(w => w.style.animationPlayState = 'paused');
+                status.innerHTML = 'System <span>Ready</span>';
+            }
+        }
+    </script>
+</body>
+
+</html>
