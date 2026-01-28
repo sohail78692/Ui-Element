@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Glass Credit Card</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap');
+
+        :root {
+            --card-width: 420px;
+            --card-height: 260px;
+            --glass-white: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Space Grotesk', sans-serif;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .bg-mesh {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, #4f46e5 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #9333ea 0%, transparent 40%);
+            opacity: 0.3;
+            filter: blur(100px);
+            z-index: -1;
+        }
+
+        .card-container {
+            width: var(--card-width);
+            height: var(--card-height);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            background: var(--glass-white);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-sizing: border-box;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.1),
+                    transparent);
+            transition: 0.5s;
+        }
+
+        .card-container:hover .card::before {
+            left: 100%;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chipset {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chipset::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(90deg, transparent 0, transparent 10px, rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0.1) 11px);
+        }
+
+        .v-logo {
+            font-weight: 700;
+            font-style: italic;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.4));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6rem;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 20px 0;
+        }
+
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .value {
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .shine {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-mesh"></div>
+
+    <div class="card-container" id="cardContainer">
+        <div class="card">
+            <div class="shine" id="shine"></div>
+            <div class="top-section">
+                <div class="chipset"></div>
+                <div class="v-logo">VISA</div>
+            </div>
+
+            <div class="card-number">
+                4532 8291 0034 9928
+            </div>
+
+            <div class="bottom-section">
+                <div class="holder-info">
+                    <div class="label">Card Holder</div>
+                    <div class="value">ALEXANDER RIVERS</div>
+                </div>
+                <div class="expiry-info">
+                    <div class="label">Expires</div>
+                    <div class="value">12/28</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('cardContainer');
+        const shine = document.getElementById('shine');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+
+            container.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+            const shineX = (x / rect.width) * 100;
+            const shineY = (y / rect.height) * 100;
+            shine.style.setProperty('--x', `${shineX}%`);
+            shine.style.setProperty('--y', `${shineY}%`);
+        });
+
+        container.addEventListener('mouseleave', () => {
+            container.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        });
+    </script>
+</body>
+
+</html>
