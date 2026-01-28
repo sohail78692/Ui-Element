@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Radial Menu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap');
+
+        :root {
+            --holo-cyan: #00f2ff;
+            --holo-pink: #ff00ff;
+            --holo-bg: rgba(0, 242, 255, 0.05);
+            --holo-border: rgba(0, 242, 255, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        .menu-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .center-trigger {
+            width: 80px;
+            height: 80px;
+            background: var(--holo-bg);
+            border: 2px solid var(--holo-cyan);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--holo-cyan);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3),
+                inset 0 0 15px rgba(0, 242, 255, 0.2);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+        }
+
+        .center-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.5),
+                inset 0 0 20px rgba(0, 242, 255, 0.4);
+            text-shadow: 0 0 10px var(--holo-cyan);
+        }
+
+        .menu-items {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.8) rotate(-45deg);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .menu-container:hover .menu-items {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+            pointer-events: auto;
+        }
+
+        .menu-item {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--holo-border);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--holo-cyan);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.1);
+            transform: translate(-50%, -50%);
+        }
+
+        .menu-item:hover {
+            background: var(--holo-bg);
+            border-color: var(--holo-pink);
+            color: var(--holo-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .menu-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Circular Path Logic */
+        .menu-item:nth-child(1) {
+            top: 15%;
+            left: 50%;
+        }
+
+        .menu-item:nth-child(2) {
+            top: 32.5%;
+            left: 82.5%;
+        }
+
+        .menu-item:nth-child(3) {
+            top: 67.5%;
+            left: 82.5%;
+        }
+
+        .menu-item:nth-child(4) {
+            top: 85%;
+            left: 50%;
+        }
+
+        .menu-item:nth-child(5) {
+            top: 67.5%;
+            left: 17.5%;
+        }
+
+        .menu-item:nth-child(6) {
+            top: 32.5%;
+            left: 17.5%;
+        }
+
+        /* Holographic Rings */
+        .ring {
+            position: absolute;
+            border: 1px solid var(--holo-border);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .ring-1 {
+            width: 160px;
+            height: 160px;
+            animation: rotate 10s linear infinite;
+            border-style: dashed;
+        }
+
+        .ring-2 {
+            width: 240px;
+            height: 240px;
+            animation: rotate 15s linear infinite reverse;
+            border-style: double;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 242, 255, 0.2);
+            box-shadow: 0 0 10px var(--holo-cyan);
+            animation: scan 3s linear infinite;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes scan {
+            0% {
+                top: -10%;
+            }
+
+            100% {
+                top: 110%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu-container">
+        <div class="center-trigger">SYSTEM</div>
+
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="scanline"></div>
+
+        <div class="menu-items">
+            <div class="menu-item" title="Network">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.193c5.857-5.857 15.355-5.857 21.213 0">
+                    </path>
+                </svg>
+            </div>
+            <div class="menu-item" title="Data">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4">
+                    </path>
+                </svg>
+            </div>
+            <div class="menu-item" title="Security">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                    </path>
+                </svg>
+            </div>
+            <div class="menu-item" title="Settings">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                    </path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </div>
+            <div class="menu-item" title="Power">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+            </div>
+            <div class="menu-item" title="Storage">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
