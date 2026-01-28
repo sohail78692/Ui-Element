@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Stepper</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;600&display=swap');
+
+        :root {
+            --neon-yellow: #fde047;
+            --neon-blue: #0ea5e9;
+            --dark-bg: #0a0a0c;
+            --step-bg: #1a1a1e;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .stepper-container {
+            display: flex;
+            gap: 40px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-hex {
+            width: 60px;
+            height: 60px;
+            background: var(--step-bg);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .step.active .step-hex {
+            background: var(--neon-yellow);
+            color: black;
+            box-shadow: 0 0 20px rgba(253, 224, 71, 0.4);
+        }
+
+        .step.completed .step-hex {
+            background: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .step-number {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .step-label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            transition: color 0.3s;
+        }
+
+        .step.active .step-label {
+            color: var(--neon-yellow);
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            right: 30px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--neon-blue);
+            width: 33%;
+            transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -5px;
+            width: 12px;
+            height: 12px;
+            background: var(--neon-blue);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Glitch effect on hover */
+        .step:hover .step-hex {
+            transform: scale(1.1);
+        }
+
+        .step:hover .step-hex::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(253, 224, 71, 0.2);
+            clip-path: inherit;
+            animation: glitch 0.3s linear infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-2px, 2px);
+            }
+
+            40% {
+                transform: translate(-2px, -2px);
+            }
+
+            60% {
+                transform: translate(2px, 2px);
+            }
+
+            80% {
+                transform: translate(2px, -2px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stepper-container">
+        <div class="progress-line">
+            <div class="progress-fill" style="width: 35%;"></div>
+        </div>
+
+        <div class="step completed">
+            <div class="step-hex">
+                <span class="step-number">01</span>
+            </div>
+            <span class="step-label">Identify</span>
+        </div>
+
+        <div class="step active">
+            <div class="step-hex">
+                <span class="step-number">02</span>
+            </div>
+            <span class="step-label">Analyze</span>
+        </div>
+
+        <div class="step">
+            <div class="step-hex">
+                <span class="step-number">03</span>
+            </div>
+            <span class="step-label">Process</span>
+        </div>
+
+        <div class="step">
+            <div class="step-hex">
+                <span class="step-number">04</span>
+            </div>
+            <span class="step-label">Deploy</span>
+        </div>
+    </div>
+</body>
+
+</html>
