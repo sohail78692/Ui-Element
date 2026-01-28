@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Digital Clock & Weather Widget</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;600&display=swap');
+
+        :root {
+            --bg-color: #020617;
+            --accent-neon: #22d3ee;
+            --secondary-neon: #a855f7;
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at top right, #1e1b4b, #020617);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        .widget-card {
+            width: 420px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8),
+                inset 0 0 40px rgba(34, 211, 238, 0.05);
+        }
+
+        .widget-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 70% 30%, rgba(34, 211, 238, 0.1), transparent 40%);
+            pointer-events: none;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .location svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent-neon);
+        }
+
+        .date-display {
+            text-align: right;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .time-display {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 4.5rem;
+            font-weight: 300;
+            background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .seconds {
+            font-size: 1.5rem;
+            vertical-align: top;
+            margin-left: 4px;
+            color: var(--accent-neon);
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .temp-main {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .weather-icon {
+            width: 48px;
+            height: 48px;
+            position: relative;
+        }
+
+        /* Sun Animation */
+        .sun {
+            width: 24px;
+            height: 24px;
+            background: #fbbf24;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px #fbbf24;
+        }
+
+        .degrees {
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+
+        .degrees span {
+            font-size: 1.2rem;
+            color: var(--accent-neon);
+            margin-left: 2px;
+        }
+
+        .weather-details {
+            text-align: right;
+        }
+
+        .condition {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .stats {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            gap: 10px;
+        }
+
+        .glow {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 4px;
+            background: var(--accent-neon);
+            border-radius: 10px;
+            box-shadow: 0 0 30px 10px rgba(34, 211, 238, 0.3);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="widget-card">
+        <div class="header">
+            <div class="location">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span>New York, NY</span>
+            </div>
+            <div class="date-display">
+                <div id="date">Wednesday, Jan 28</div>
+                <div id="year">2026</div>
+            </div>
+        </div>
+
+        <div class="time-display">
+            <span class="time" id="clock">12:45<span class="seconds" id="secs">32</span></span>
+        </div>
+
+        <div class="weather-info">
+            <div class="temp-main">
+                <div class="weather-icon">
+                    <div class="sun"></div>
+                </div>
+                <div class="degrees">24<span>°C</span></div>
+            </div>
+            <div class="weather-details">
+                <span class="condition">Mostly Sunny</span>
+                <div class="stats">
+                    <span>H: 26°</span>
+                    <span>L: 18°</span>
+                    <span>W: 12km/h</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glow"></div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            document.getElementById('clock').childNodes[0].nodeValue = `${hours}:${minutes}`;
+            document.getElementById('secs').innerText = seconds;
+
+            const options = { weekday: 'long', month: 'short', day: 'numeric' };
+            document.getElementById('date').innerText = now.toLocaleDateString('en-US', options);
+            document.getElementById('year').innerText = now.getFullYear();
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+
+</html>
