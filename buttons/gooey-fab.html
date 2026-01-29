@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organic Gooey FAB</title>
+    <style>
+        :root {
+            --primary: #ff0055;
+            --bg: #111;
+        }
+
+        body {
+            background: var(--bg);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .fab-wrapper {
+            position: relative;
+            filter: url('#goo');
+        }
+
+        .fab-main,
+        .fab-item {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+            border: none;
+            outline: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .fab-main {
+            z-index: 10;
+            font-size: 24px;
+        }
+
+        .fab-item {
+            z-index: 5;
+            text-decoration: none;
+            font-size: 18px;
+            background: #ff4d88;
+        }
+
+        /* Hover Reveal */
+        .fab-wrapper:hover .fab-item:nth-child(1) {
+            transform: translate(0, -80px);
+        }
+
+        .fab-wrapper:hover .fab-item:nth-child(2) {
+            transform: translate(-70px, -40px);
+        }
+
+        .fab-wrapper:hover .fab-item:nth-child(3) {
+            transform: translate(70px, -40px);
+        }
+
+        .fab-main i {
+            transition: transform 0.4s ease;
+        }
+
+        .fab-wrapper:hover .fab-main i {
+            transform: rotate(45deg);
+        }
+
+        /* SVG Goo Filter */
+        .goo-filter {
+            position: absolute;
+            visibility: hidden;
+        }
+
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+
+<body>
+
+    <svg class="goo-filter">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+                    result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
+    <div class="fab-wrapper">
+        <a href="#" class="fab-item"><i class="fas fa-camera"></i></a>
+        <a href="#" class="fab-item"><i class="fas fa-video"></i></a>
+        <a href="#" class="fab-item"><i class="fas fa-image"></i></a>
+        <button class="fab-main">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+</body>
+
+</html>
