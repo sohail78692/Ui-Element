@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereal Aura Background Effect</title>
+    <style>
+        :root {
+            --color1: #4f46e5;
+            --color2: #9333ea;
+            --color3: #db2777;
+            --color4: #2563eb;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .aura-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(100px);
+            opacity: 0.7;
+        }
+
+        .aura {
+            position: absolute;
+            border-radius: 50%;
+            mix-blend-mode: screen;
+            animation: move linear infinite;
+        }
+
+        .aura-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--color1);
+            top: -10%;
+            left: -10%;
+            animation-duration: 20s;
+        }
+
+        .aura-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--color2);
+            bottom: -5%;
+            right: -5%;
+            animation-duration: 25s;
+            animation-direction: reverse;
+        }
+
+        .aura-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--color3);
+            top: 40%;
+            left: 50%;
+            animation-duration: 15s;
+        }
+
+        .aura-4 {
+            width: 700px;
+            height: 700px;
+            background: var(--color4);
+            bottom: 20%;
+            left: 10%;
+            animation-duration: 30s;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(100px, 50px) scale(1.2);
+            }
+
+            66% {
+                transform: translate(-50px, 150px) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        /* Noise Texture Overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.2rem;
+            opacity: 0.6;
+            max-width: 600px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="aura-container">
+        <div class="aura aura-1"></div>
+        <div class="aura aura-2"></div>
+        <div class="aura aura-3"></div>
+        <div class="aura aura-4"></div>
+    </div>
+
+    <div class="content">
+        <h1>ETHEREAL</h1>
+        <p>A premium background effect using multi-layer animated auras and noise grain for a cinematic feel.</p>
+    </div>
+
+</body>
+
+</html>
