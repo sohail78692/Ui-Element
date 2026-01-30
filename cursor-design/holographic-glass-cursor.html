@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Glass Cursor - UI Elements</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&display=swap');
+
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --prism-1: rgba(255, 0, 255, 0.4);
+            --prism-2: rgba(0, 255, 255, 0.4);
+            --prism-3: rgba(255, 255, 0, 0.4);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: none;
+            /* Hide default cursor */
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.2rem;
+            opacity: 0.7;
+            font-weight: 300;
+        }
+
+        /* The Custom Cursor */
+        .cursor-outer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            z-index: 10000;
+        }
+
+        .cursor-inner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 10001;
+        }
+
+        /* Holographic Trail Elements */
+        .trail-dot {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            pointer-events: none;
+            z-index: 9999;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%) rotate(45deg);
+            opacity: 0;
+            mix-blend-mode: overlay;
+        }
+
+        .interactive-area {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hover-box {
+            display: inline-block;
+            padding: 20px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-top: 2rem;
+            pointer-events: auto;
+            transition: background 0.3s;
+        }
+
+        .hover-box:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="interactive-area"></div>
+
+    <div class="container">
+        <h1>Holographic Glass</h1>
+        <p>Move your mouse around to see the prism trail effect. This cursor uses multiple glass-morphic trail elements
+            with CSS backdrop filters.</p>
+        <div class="hover-box">Hover implementation</div>
+    </div>
+
+    <!-- Cursor Elements -->
+    <div class="cursor-outer" id="cursor-outer"></div>
+    <div class="cursor-inner" id="cursor-inner"></div>
+
+    <script>
+        const cursorOuter = document.getElementById('cursor-outer');
+        const cursorInner = document.getElementById('cursor-inner');
+        const trailCount = 12;
+        const trails = [];
+
+        // Create trail elements
+        for (let i = 0; i < trailCount; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'trail-dot';
+            document.body.appendChild(dot);
+            trails.push({
+                el: dot,
+                x: 0,
+                y: 0,
+                targetX: 0,
+                targetY: 0
+            });
+        }
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Move inner cursor instantly
+            cursorInner.style.left = mouseX + 'px';
+            cursorInner.style.top = mouseY + 'px';
+        });
+
+        function animate() {
+            // Smoothly move outer cursor
+            const outerX = parseFloat(cursorOuter.style.left) || 0;
+            const outerY = parseFloat(cursorOuter.style.top) || 0;
+
+            const dx = mouseX - outerX;
+            const dy = mouseY - outerY;
+
+            cursorOuter.style.left = (outerX + dx * 0.15) + 'px';
+            cursorOuter.style.top = (outerY + dy * 0.15) + 'px';
+
+            // Animate trails
+            trails.forEach((trail, index) => {
+                const nextTrail = index === 0 ? { x: mouseX, y: mouseY } : trails[index - 1];
+
+                // Slow down the following trail
+                const delay = 0.5 - (index / trailCount) * 0.4;
+                trail.x += (nextTrail.x - trail.x) * delay;
+                trail.y += (nextTrail.y - trail.y) * delay;
+
+                trail.el.style.left = trail.x + 'px';
+                trail.el.style.top = trail.y + 'px';
+
+                // Fade out and scale down based on index
+                const opacity = 1 - (index / trailCount);
+                const scale = 1 - (index / trailCount) * 0.8;
+                const rotation = 45 + (index * 10);
+
+                trail.el.style.opacity = opacity * 0.6;
+                trail.el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale})`;
+
+                // Colors change slightly
+                const hue = (index * 20) % 360;
+                trail.el.style.borderColor = `hsla(${hue}, 100%, 70%, 0.3)`;
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Interaction
+        const hoverable = document.querySelector('.hover-box');
+        hoverable.addEventListener('mouseenter', () => {
+            cursorOuter.style.width = '60px';
+            cursorOuter.style.height = '60px';
+            cursorOuter.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+        });
+
+        hoverable.addEventListener('mouseleave', () => {
+            cursorOuter.style.width = '40px';
+            cursorOuter.style.height = '40px';
+            cursorOuter.style.backgroundColor = 'transparent';
+        });
+    </script>
+</body>
+
+</html>
