@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Arcade Scoreboard - UI Elements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-yellow: #ffff00;
+            --bg-dark: #0a0a0a;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-image:
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+        }
+
+        .scoreboard {
+            background: #111;
+            border: 4px solid #333;
+            padding: 40px;
+            box-shadow:
+                0 0 20px rgba(0, 0, 0, 0.5),
+                inset 0 0 15px rgba(255, 255, 255, 0.05);
+            position: relative;
+            transform: skew(-2deg);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .scoreboard::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid var(--neon-blue);
+            z-index: -1;
+            box-shadow: 0 0 15px var(--neon-blue);
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+
+            0%,
+            18%,
+            22%,
+            25%,
+            53%,
+            57%,
+            100% {
+                opacity: 1;
+            }
+
+            20%,
+            24%,
+            55% {
+                opacity: 0.4;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px dashed #444;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+            margin: 0;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .rank {
+            color: var(--neon-blue);
+            width: 40px;
+        }
+
+        .name {
+            flex-grow: 1;
+            margin-left: 20px;
+            color: #fff;
+        }
+
+        .score {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .blink {
+            animation: blinker 1s step-start infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .insert-coin {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: var(--neon-yellow);
+            cursor: pointer;
+        }
+
+        .insert-coin:hover {
+            text-shadow: 0 0 15px var(--neon-yellow);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            font-size: 0.6rem;
+            color: #666;
+        }
+
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            z-index: 100;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="crt-overlay"></div>
+
+    <div class="scoreboard">
+        <div class="header">
+            <h1>HIGH SCORES</h1>
+        </div>
+
+        <div class="row">
+            <span class="rank">1ST</span>
+            <span class="name">PLAYER ONE</span>
+            <span class="score">999,999</span>
+        </div>
+        <div class="row">
+            <span class="rank">2ND</span>
+            <span class="name">ANTIGRAV</span>
+            <span class="score">850,230</span>
+        </div>
+        <div class="row">
+            <span class="rank">3RD</span>
+            <span class="name">CYBERPUNK</span>
+            <span class="score">742,100</span>
+        </div>
+        <div class="row">
+            <span class="rank">4TH</span>
+            <span class="name" id="user-name">GUEST_USER</span>
+            <span class="score" id="user-score">120,500</span>
+        </div>
+
+        <div class="stats">
+            <span>CREDITS: 04</span>
+            <span>RANK: B+</span>
+        </div>
+
+        <div class="insert-coin blink">
+            INSERT COIN TO CONTINUE
+        </div>
+    </div>
+
+    <script>
+        // Simple interactivity to update score
+        let score = 120500;
+        const scoreEl = document.getElementById('user-score');
+
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                score += Math.floor(Math.random() * 100);
+                scoreEl.textContent = score.toLocaleString();
+            }
+        }, 1000);
+
+        // Name animation
+        const nameEl = document.getElementById('user-name');
+        const names = ["GUEST_USER", "VISITOR_42", "DEV_MODE", "ALPHA_ONE"];
+        let nameIdx = 0;
+
+        nameEl.addEventListener('click', () => {
+            nameIdx = (nameIdx + 1) % names.length;
+            nameEl.textContent = names[nameIdx];
+        });
+    </script>
+</body>
+
+</html>
