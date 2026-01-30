@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neumorphic Calculator - UI Elements</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        :root {
+            --bg-color: #e0e5ec;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --text-color: #444;
+            --accent: #6d5dfc;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: var(--bg-color);
+            padding: 30px;
+            border-radius: 40px;
+            box-shadow: 20px 20px 60px var(--shadow-dark),
+                -20px -20px 60px var(--shadow-light);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 320px;
+        }
+
+        .display {
+            grid-column: span 4;
+            height: 70px;
+            background-color: var(--bg-color);
+            border: none;
+            border-radius: 15px;
+            box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                inset -6px -6px 12px var(--shadow-light);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 20px;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            overflow: hidden;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--bg-color);
+            box-shadow: 6px 6px 12px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light);
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark),
+                inset -4px -4px 8px var(--shadow-light);
+            transform: scale(0.95);
+        }
+
+        button.op {
+            color: var(--accent);
+        }
+
+        button.equals {
+            background-color: var(--accent);
+            color: #fff;
+            box-shadow: 6px 6px 12px rgba(109, 93, 252, 0.3),
+                -6px -6px 12px rgba(255, 255, 255, 0.5);
+        }
+
+        button.equals:active {
+            box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button.clear {
+            color: #ff5e5e;
+        }
+
+        .heading {
+            position: absolute;
+            top: 40px;
+            text-align: center;
+        }
+
+        .heading h2 {
+            font-weight: 400;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="heading">
+        <h2>Neumorphic Calc</h2>
+    </div>
+
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button class="op" onclick="append('/')">÷</button>
+        <button class="op" onclick="append('*')">×</button>
+        <button class="op" onclick="backspace()">←</button>
+
+        <button onclick="append('7')">7</button>
+        <button onclick="append('8')">8</button>
+        <button onclick="append('9')">9</button>
+        <button class="op" onclick="append('-')">-</button>
+
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button class="op" onclick="append('+')">+</button>
+
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+        <button onclick="append('3')">3</button>
+        <button class="equals" onclick="calculate()">=</button>
+
+        <button style="grid-column: span 2; width: 100%; border-radius: 30px;" onclick="append('0')">0</button>
+        <button onclick="append('.')">.</button>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+        let currentInput = '';
+
+        function append(val) {
+            if (currentInput === '0' && val !== '.') {
+                currentInput = val;
+            } else {
+                currentInput += val;
+            }
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            updateDisplay();
+        }
+
+        function backspace() {
+            currentInput = currentInput.slice(0, -1);
+            if (currentInput === '') currentInput = '0';
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            display.textContent = currentInput || '0';
+        }
+
+        function calculate() {
+            try {
+                // Using a safer evaluation method would be better for production, 
+                // but for a UI element demo, this is functional.
+                const result = eval(currentInput);
+                currentInput = result.toString();
+                updateDisplay();
+            } catch (e) {
+                display.textContent = 'Error';
+                currentInput = '';
+            }
+        }
+    </script>
+</body>
+
+</html>
