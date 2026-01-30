@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Floating Parallax Menu - UI Elements</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
+        :root {
+            --bg: #0a0a14;
+            --accent: #3b82f6;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .container {
+            position: relative;
+            width: 500px;
+            height: 400px;
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.2), transparent 70%);
+            border-radius: 30px;
+            transform: translateZ(-50px);
+            pointer-events: none;
+        }
+
+        .menu-card {
+            width: 300px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            transform-style: preserve-3d;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.1s ease-out;
+        }
+
+        .menu-item {
+            list-style: none;
+            margin: 20px 0;
+            transform-style: preserve-3d;
+        }
+
+        .menu-link {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+            position: relative;
+            transition: color 0.3s, transform 0.3s;
+            transform: translateZ(20px);
+        }
+
+        .menu-link::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: var(--accent);
+            transform: translateZ(-10px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .menu-link:hover {
+            color: var(--accent);
+            transform: translateZ(40px) translateX(10px);
+        }
+
+        .menu-link:hover::before {
+            opacity: 0.5;
+            transform: translateZ(-20px) translateX(-20px) skewX(10deg);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            transform-style: preserve-3d;
+        }
+
+        .element {
+            position: absolute;
+            background: var(--accent);
+            filter: blur(40px);
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .e1 {
+            width: 100px;
+            height: 100px;
+            top: -20%;
+            left: -10%;
+            transform: translateZ(30px);
+        }
+
+        .e2 {
+            width: 150px;
+            height: 150px;
+            bottom: -20%;
+            right: -10%;
+            transform: translateZ(60px);
+            background: #8b5cf6;
+        }
+
+        .hint {
+            position: fixed;
+            bottom: 40px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="parallax-bg" id="bg"></div>
+
+        <div class="floating-elements">
+            <div class="element e1" id="e1"></div>
+            <div class="element e2" id="e2"></div>
+        </div>
+
+        <nav class="menu-card" id="card">
+            <ul style="padding: 0; margin: 0;">
+                <li class="menu-item"><a href="#" class="menu-link" data-text="DASHBOARD">DASHBOARD</a></li>
+                <li class="menu-item"><a href="#" class="menu-link" data-text="PROJECTS">PROJECTS</a></li>
+                <li class="menu-item"><a href="#" class="menu-link" data-text="SERVICES">SERVICES</a></li>
+                <li class="menu-item"><a href="#" class="menu-link" data-text="CONTACT">CONTACT</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="hint">Move mouse to explore the 3D parallax effect</div>
+
+    <script>
+        const container = document.getElementById('container');
+        const card = document.getElementById('card');
+        const bg = document.getElementById('bg');
+        const e1 = document.getElementById('e1');
+        const e2 = document.getElementById('e2');
+
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+
+            // Move background and floating elements in opposite directions for parallax
+            bg.style.transform = `translateZ(-50px) translateX(${xAxis * 2}px) translateY(${yAxis * 2}px)`;
+
+            e1.style.transform = `translateZ(30px) translateX(${-xAxis * 3}px) translateY(${-yAxis * 3}px)`;
+            e2.style.transform = `translateZ(60px) translateX(${-xAxis * 5}px) translateY(${-yAxis * 5}px)`;
+        });
+
+        // Reset on mouse leave
+        container.addEventListener('mouseleave', () => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+
+            bg.style.transition = 'all 0.5s ease';
+            bg.style.transform = `translateZ(-50px) translateX(0px) translateY(0px)`;
+        });
+
+        container.addEventListener('mouseenter', () => {
+            card.style.transition = 'none';
+            bg.style.transition = 'none';
+        });
+    </script>
+</body>
+
+</html>
