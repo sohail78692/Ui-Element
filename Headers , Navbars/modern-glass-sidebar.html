@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Glass Sidebar</title>
+    <style>
+        :root {
+            --bg-body: #f0f2f5;
+            --sidebar-bg: rgba(255, 255, 255, 0.7);
+            --sidebar-border: rgba(255, 255, 255, 0.3);
+            --accent-color: #6366f1;
+            --text-main: #1e293b;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --sidebar-bg: rgba(15, 23, 42, 0.8);
+            --sidebar-border: rgba(255, 255, 255, 0.05);
+            --text-main: #f8fafc;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: background 0.3s;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            bottom: 20px;
+            width: 260px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--sidebar-border);
+            border-radius: 24px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 60px;
+            padding: 0 10px;
+        }
+
+        .logo-box {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-color);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: inherit;
+            opacity: 0.6;
+            border-radius: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            opacity: 1;
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .icon {
+            font-size: 18px;
+        }
+
+        .spacer {
+            flex-grow: 1;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 40px;
+            border-top: 1px solid var(--sidebar-border);
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #cbd5e1;
+            object-fit: cover;
+        }
+
+        .user-info div {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-info span {
+            font-size: 11px;
+            opacity: 0.5;
+        }
+
+        /* Demo content */
+        .main-content {
+            margin-left: 320px;
+            padding: 60px;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            padding: 10px;
+            background: var(--sidebar-bg);
+            border-radius: 10px;
+            border: 1px solid var(--sidebar-border);
+        }
+    </style>
+</head>
+
+<body data-theme="dark">
+
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-box"></div>
+            FLUX UI
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <span class="icon">🏠</span> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="icon">📊</span> Analytics
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="icon">📁</span> Projects
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="icon">💬</span> Messages
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="icon">⚙️</span> Settings
+                </a>
+            </li>
+        </ul>
+
+        <div class="spacer"></div>
+
+        <div class="user-profile">
+            <img src="https://i.pravatar.cc/100?u=antigravity" class="avatar" alt="User">
+            <div class="user-info">
+                <div>Alex Morgan</div>
+                <span>Pro Member</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Welcome Back</h1>
+        <p>This is a modern glassmorphic sidebar implementation.</p>
+        <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const theme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', theme);
+        }
+    </script>
+</body>
+
+</html>
