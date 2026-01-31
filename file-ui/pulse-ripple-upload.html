@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Ripple File Upload</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --dashed-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .upload-container {
+            position: relative;
+            width: 400px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
+            border: 2px dashed var(--dashed-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .upload-container:hover {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .ripple-effect {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .upload-container:hover .ripple-effect {
+            opacity: 1;
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .upload-icon {
+            font-size: 50px;
+            color: var(--accent);
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+            z-index: 1;
+        }
+
+        .upload-text {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .upload-text b {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .upload-text span {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .file-input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-list {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .file-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <div class="upload-container" id="drop-zone">
+            <div class="ripple-effect"></div>
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">
+                <b>Drop files here</b>
+                <span>or click to browse your computer</span>
+            </div>
+            <input type="file" class="file-input" multiple id="file-input">
+        </div>
+
+        <div class="file-list" id="file-list"></div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#3b82f6';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = 'rgba(255, 255, 255, 1)';
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            fileList.innerHTML = '';
+            Array.from(files).forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `<span>${file.name}</span> <span style="color: #666;">${(file.size / 1024).toFixed(1)} KB</span>`;
+                fileList.appendChild(item);
+            });
+        }
+    </script>
+</body>
+
+</html>
