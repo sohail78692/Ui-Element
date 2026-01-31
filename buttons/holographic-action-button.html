@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Action Button</title>
+    <style>
+        :root {
+            --holographic-gradient: linear-gradient(45deg,
+                    #ff00ff,
+                    #00ffff,
+                    #ff00ff,
+                    #00ffff,
+                    #ffff00,
+                    #ff00ff);
+            --bg-color: #050505;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .btn-container {
+            position: relative;
+            padding: 4px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-container:hover {
+            transform: scale(1.05);
+        }
+
+        .holographic-btn {
+            position: relative;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            background: #111;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .holographic-btn::before {
+            content: '';
+            position: absolute;
+            top: -150%;
+            left: -150%;
+            width: 400%;
+            height: 400%;
+            background: var(--holographic-gradient);
+            background-size: 200% 200%;
+            animation: rotate 4s linear infinite;
+            z-index: -1;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-container:hover .holographic-btn::before {
+            opacity: 0.8;
+            animation-duration: 2s;
+        }
+
+        .holographic-btn::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            background: #111;
+            border-radius: 9px;
+            z-index: -1;
+        }
+
+        .shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.4),
+                    transparent);
+            transition: 0.5s;
+            z-index: 2;
+        }
+
+        .btn-container:hover .shine {
+            left: 100%;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-text {
+            position: relative;
+            z-index: 3;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
+        }
+
+        /* Glow effect underlying */
+        .glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--holographic-gradient);
+            background-size: 200% 200%;
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -2;
+        }
+
+        .btn-container:hover .glow {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="btn-container">
+        <div class="glow"></div>
+        <button class="holographic-btn">
+            <span class="shine"></span>
+            <span class="btn-text">LAUNCH CORE</span>
+        </button>
+    </div>
+
+</body>
+
+</html>
