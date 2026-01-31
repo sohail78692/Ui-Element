@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Stats Widget</title>
+    <style>
+        :root {
+            --bg-color: #0d0d12;
+            --accent-green: #00ffa3;
+            --accent-blue: #00d1ff;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .stats-card {
+            width: 380px;
+            padding: 30px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 32px;
+            backdrop-filter: blur(20px);
+            perspective: 1000px;
+            transition: transform 0.1s ease;
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .stats-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .stats-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .chart-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            transform-style: preserve-3d;
+        }
+
+        .ring-svg {
+            width: 180px;
+            height: 180px;
+            transform: rotate(-90deg);
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 12;
+        }
+
+        .ring-progress {
+            fill: none;
+            stroke: var(--accent-green);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            animation: progressAnim 2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            filter: drop-shadow(0 0 8px var(--accent-green));
+        }
+
+        @keyframes progressAnim {
+            to {
+                stroke-dashoffset: 110;
+                /* 75% */
+            }
+        }
+
+        .stats-value {
+            position: absolute;
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            transform: translateZ(50px);
+        }
+
+        .stats-value span {
+            display: block;
+            font-size: 14px;
+            font-weight: 400;
+            color: #666;
+        }
+
+        .footer-stats {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .stat-item {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .stat-num {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        .trend {
+            font-size: 12px;
+            margin-top: 4px;
+            color: #00ff88;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="stats-card" id="card">
+        <div class="stats-header">
+            <div>
+                <div class="stats-title">Performance</div>
+                <div class="stats-subtitle">Weekly overview</div>
+            </div>
+            <div
+                style="background: rgba(255,255,255,0.05); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                ⚙️
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <svg class="ring-svg">
+                <circle class="ring-bg" cx="90" cy="90" r="70"></circle>
+                <circle class="ring-progress" cx="90" cy="90" r="70"></circle>
+            </svg>
+            <div class="stats-value">
+                75%
+                <span>Efficiency</span>
+            </div>
+        </div>
+
+        <div class="footer-stats">
+            <div class="stat-item">
+                <div class="stat-label">Active Users</div>
+                <div class="stat-num">1.2k</div>
+                <div class="trend">+12%</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Processing</div>
+                <div class="stat-num">48ms</div>
+                <div class="trend">+5%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('card');
+
+        document.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            } else {
+                card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+            }
+        });
+    </script>
+</body>
+
+</html>
