@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Marquee Logo Cloud</title>
+    <style>
+        :root {
+            --bg-color: #080808;
+            --text-color: rgba(255, 255, 255, 0.6);
+            --marquee-speed: 30s;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: white;
+            font-family: 'Inter', system-ui, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .marquee-section {
+            width: 100%;
+            max-width: 1200px;
+            padding: 60px 0;
+            position: relative;
+        }
+
+        .marquee-title {
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .marquee-wrapper {
+            display: flex;
+            overflow: hidden;
+            mask-image: linear-gradient(to right,
+                    transparent,
+                    black 15%,
+                    black 85%,
+                    transparent);
+            user-select: none;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 80px;
+            padding: 20px 0;
+            animation: scroll var(--marquee-speed) linear infinite;
+        }
+
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+
+        .logo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-color);
+            white-space: nowrap;
+            transition: color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .logo-item:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .logo-item svg {
+            width: 32px;
+            height: 32px;
+            fill: currentColor;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(calc(-100% - 80px));
+            }
+        }
+
+        /* Reverse Marquee for depth */
+        .marquee-reverse .marquee-content {
+            animation-direction: reverse;
+            animation-delay: -5s;
+        }
+
+        .spacer {
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="marquee-section">
+        <div class="marquee-title">Trusted by industry leaders</div>
+
+        <div class="marquee-wrapper">
+            <div class="marquee-content" id="marquee1">
+                <div class="logo-item"><span>✦</span> LUMINA</div>
+                <div class="logo-item"><span>🚀</span> VORTEX</div>
+                <div class="logo-item"><span>⚡</span> QUANTUM</div>
+                <div class="logo-item"><span>◈</span> NEXUS</div>
+                <div class="logo-item"><span>⚛</span> ATOMIC</div>
+                <div class="logo-item"><span>☘</span> ZENITH</div>
+                <div class="logo-item"><span>★</span> STELLAR</div>
+                <!-- Duplicate for seamless loop -->
+                <div class="logo-item"><span>✦</span> LUMINA</div>
+                <div class="logo-item"><span>🚀</span> VORTEX</div>
+                <div class="logo-item"><span>⚡</span> QUANTUM</div>
+                <div class="logo-item"><span>◈</span> NEXUS</div>
+                <div class="logo-item"><span>⚛</span> ATOMIC</div>
+                <div class="logo-item"><span>☘</span> ZENITH</div>
+                <div class="logo-item"><span>★</span> STELLAR</div>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="marquee-wrapper marquee-reverse">
+            <div class="marquee-content" id="marquee2">
+                <div class="logo-item"><span>⬖</span> PRISM</div>
+                <div class="logo-item"><span>☁</span> CLOUDLY</div>
+                <div class="logo-item"><span>◉</span> ORBIT</div>
+                <div class="logo-item"><span>☯</span> HARMONY</div>
+                <div class=" logo-item"><span>◆</span> MATRIX</div>
+                <div class="logo-item"><span>▽</span> VELOCITY</div>
+                <div class="logo-item"><span>⚙</span> SYSTEM</div>
+                <!-- Duplicate for seamless loop -->
+                <div class="logo-item"><span>⬖</span> PRISM</div>
+                <div class="logo-item"><span>☁</span> CLOUDLY</div>
+                <div class="logo-item"><span>◉</span> ORBIT</div>
+                <div class="logo-item"><span>☯</span> HARMONY</div>
+                <div class="logo-item"><span>◆</span> MATRIX</div>
+                <div class="logo-item"><span>▽</span> VELOCITY</div>
+                <div class="logo-item"><span>⚙</span> SYSTEM</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Optional JS to dynamically clone items for true infinite effect if needed
+        // But for this simple case, manual duplication in HTML is cleaner for a single file.
+    </script>
+</body>
+
+</html>
