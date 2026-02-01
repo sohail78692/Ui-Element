@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Text Navigation | Modern UI Elements</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@300;500&display=swap');
+
+        :root {
+            --bg: #000;
+            --text: #fff;
+            --accent: #ff3e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        .nav-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            color: var(--text);
+            font-family: 'Syncopate', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            padding: 10px 40px;
+            display: inline-block;
+            transition: color 0.3s ease;
+            z-index: 1;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-link span {
+            display: inline-block;
+            pointer-events: none;
+            transition: transform 0.1s linear;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: difference;
+            transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        .link-subtext {
+            position: absolute;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            bottom: -5px;
+            right: 40px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: var(--text);
+        }
+
+        .nav-link:hover .link-subtext {
+            opacity: 0.5;
+            transform: translateY(-10px);
+        }
+
+        /* Magnetic Area */
+        .magnetic-wrap {
+            display: inline-block;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor-follower" id="cursor"></div>
+
+    <nav class="nav-container">
+        <div class="magnetic-wrap">
+            <a href="#" class="nav-link">
+                <span class="text">WORK</span>
+                <div class="link-subtext">SELECTED PROJECTS</div>
+            </a>
+        </div>
+        <div class="magnetic-wrap">
+            <a href="#" class="nav-link">
+                <span class="text">ABOUT</span>
+                <div class="link-subtext">THE STUDIO</div>
+            </a>
+        </div>
+        <div class="magnetic-wrap">
+            <a href="#" class="nav-link">
+                <span class="text">STUDIO</span>
+                <div class="link-subtext">OUR PROCESS</div>
+            </a>
+        </div>
+        <div class="magnetic-wrap">
+            <a href="#" class="nav-link">
+                <span class="text">CONTACT</span>
+                <div class="link-subtext">GET IN TOUCH</div>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const links = document.querySelectorAll('.nav-link');
+        const wraps = document.querySelectorAll('.magnetic-wrap');
+
+        // Cursor Follower
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Magnetic Effect
+        wraps.forEach(wrap => {
+            const link = wrap.querySelector('.nav-link');
+            const span = link.querySelector('.text');
+
+            wrap.addEventListener('mousemove', (e) => {
+                const rect = wrap.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                // Move link
+                link.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
+                // Move text inside link even more
+                span.style.transform = `translate(${x * 0.1}px, ${y * 0.2}px)`;
+
+                // Scale cursor
+                cursor.style.transform = 'translate(-50%, -50%) scale(4)';
+                cursor.style.background = 'white';
+            });
+
+            wrap.addEventListener('mouseleave', () => {
+                link.style.transform = 'translate(0px, 0px)';
+                span.style.transform = 'translate(0px, 0px)';
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.background = 'var(--accent)';
+            });
+        });
+    </script>
+</body>
+
+</html>
