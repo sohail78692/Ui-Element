@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neumorphic Smart Thermostat | Modern UI Elements</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+        :root {
+            --bg: #e0e5ec;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --accent: #4a90e2;
+            --text: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thermostat-container {
+            width: 320px;
+            height: 320px;
+            background: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 20px 20px 60px var(--shadow-dark),
+                -20px -20px 60px var(--shadow-light);
+            position: relative;
+        }
+
+        .inner-ring {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 10px 10px 20px var(--shadow-dark),
+                inset -10px -10px 20px var(--shadow-light);
+            position: relative;
+        }
+
+        .dial {
+            width: 200px;
+            height: 200px;
+            background: var(--bg);
+            border-radius: 50%;
+            box-shadow: 10px 10px 30px var(--shadow-dark),
+                -10px -10px 30px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5;
+            transition: transform 0.1s linear;
+        }
+
+        .temp-display {
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .temp-display span {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            margin-left: 2px;
+        }
+
+        .status-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: -5px;
+        }
+
+        .mode-icons {
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--accent);
+            pointer-events: none;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: -80px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text);
+            box-shadow: 6px 6px 12px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light);
+            transition: all 0.2s ease;
+        }
+
+        .btn:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark),
+                inset -4px -4px 8px var(--shadow-light);
+        }
+
+        .btn i {
+            font-size: 1.2rem;
+        }
+
+        svg {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            transform: rotate(-90deg);
+            pointer-events: none;
+        }
+
+        .progress-bar {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 8;
+            stroke-dasharray: 691;
+            /* 2 * PI * 110 */
+            stroke-dashoffset: 400;
+            stroke-linecap: round;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="thermostat-container">
+        <div class="inner-ring">
+            <svg>
+                <circle class="progress-bar" cx="130" cy="130" r="110"></circle>
+            </svg>
+            <div class="dial" id="dial">
+                <span class="status-label" id="mode">Heating</span>
+                <div class="temp-display" id="tempText">22<span>°</span></div>
+                <div class="mode-icons">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364l-1.414 1.414M7.05 16.95l-1.414 1.414M16.95 16.95l1.414 1.414M7.05 7.05L5.636 5.636" />
+                    </svg>
+                </div>
+            </div>
+            <div class="dot" id="dot"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="adjustTemp(-1)">-</button>
+            <button class="btn" onclick="adjustTemp(1)">+</button>
+        </div>
+    </div>
+
+    <script>
+        let temp = 22;
+        const tempText = document.getElementById('tempText');
+        const progressBar = document.querySelector('.progress-bar');
+        const dot = document.getElementById('dot');
+        const maxTemp = 32;
+        const minTemp = 16;
+        const totalGap = maxTemp - minTemp;
+        const dashArray = 691;
+
+        function updateUI() {
+            tempText.innerHTML = `${temp}<span>°</span>`;
+
+            // Update progress circle
+            const percentage = (temp - minTemp) / totalGap;
+            const offset = dashArray - (percentage * dashArray * 0.75); // Using 75% of circle
+            progressBar.style.strokeDashoffset = offset;
+
+            // Update mode label
+            const mode = document.getElementById('mode');
+            if (temp > 24) {
+                mode.innerText = 'Hot';
+                document.documentElement.style.setProperty('--accent', '#ff4d4d');
+            } else if (temp < 19) {
+                mode.innerText = 'Cooling';
+                document.documentElement.style.setProperty('--accent', '#4a90e2');
+            } else {
+                mode.innerText = 'Heating';
+                document.documentElement.style.setProperty('--accent', '#ff9f43');
+            }
+
+            // Rotate dot
+            const rotation = (percentage * 270) - 135; // Map to -135deg to +135deg
+            dot.style.transform = `rotate(${rotation}deg) translateY(-110px) translateX(-50%)`;
+            dot.style.transformOrigin = 'bottom left';
+        }
+
+        function adjustTemp(amount) {
+            temp += amount;
+            if (temp > maxTemp) temp = maxTemp;
+            if (temp < minTemp) temp = minTemp;
+            updateUI();
+        }
+
+        // Mouse interaction with dial
+        let isDragging = false;
+        const dial = document.getElementById('dial');
+
+        dial.addEventListener('mousedown', () => isDragging = true);
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const rect = dial.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI;
+
+            // Simple mapping of angle to temperature
+            let adjustedAngle = (angle + 180 + 90) % 360;
+            if (adjustedAngle > 270) adjustedAngle = 270;
+            if (adjustedAngle < 0) adjustedAngle = 0;
+
+            const newTemp = Math.round(minTemp + (adjustedAngle / 270) * totalGap);
+            if (newTemp !== temp) {
+                temp = newTemp;
+                updateUI();
+            }
+        });
+
+        // Initialize
+        updateUI();
+    </script>
+</body>
+
+</html>
