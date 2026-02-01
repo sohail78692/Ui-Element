@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Isometric File Stack | Modern UI Elements</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap');
+
+        :root {
+            --bg: #1a1c2c;
+            --primary: #5d2de1;
+            --accent: #ff4a9b;
+            --card-shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .stack-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            transform-style: preserve-3d;
+            transform: rotateX(50deg) rotateZ(-30deg);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+        }
+
+        .stack-container:hover {
+            transform: rotateX(40deg) rotateZ(-20deg) scale(1.1);
+        }
+
+        .file-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* 3D Stack Offsets */
+        .file-card:nth-child(1) {
+            transform: translateZ(0);
+            z-index: 10;
+            background: white;
+        }
+
+        .file-card:nth-child(2) {
+            transform: translateZ(-20px) translateY(10px);
+            z-index: 9;
+            background: #f8f9fa;
+        }
+
+        .file-card:nth-child(3) {
+            transform: translateZ(-40px) translateY(20px);
+            z-index: 8;
+            background: #e9ecef;
+        }
+
+        .file-card:nth-child(4) {
+            transform: translateZ(-60px) translateY(30px);
+            z-index: 7;
+            background: #dee2e6;
+        }
+
+        .stack-container:hover .file-card:nth-child(1) {
+            transform: translateZ(60px) translateY(-30px);
+        }
+
+        .stack-container:hover .file-card:nth-child(2) {
+            transform: translateZ(40px) translateY(-10px);
+        }
+
+        .stack-container:hover .file-card:nth-child(3) {
+            transform: translateZ(20px) translateY(10px);
+        }
+
+        .stack-container:hover .file-card:nth-child(4) {
+            transform: translateZ(0) translateY(30px);
+        }
+
+        .file-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .file-tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(93, 45, 225, 0.1);
+            color: var(--primary);
+        }
+
+        .file-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a1c2c;
+            margin-bottom: 8px;
+        }
+
+        .file-info {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: auto;
+        }
+
+        .file-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #cbd5e0;
+        }
+
+        .user-name {
+            font-size: 0.8rem;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        /* Decorative Fold */
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 30px 30px 0;
+            border-color: transparent transparent #e2e8f0 transparent;
+            border-top-right-radius: 12px;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(93, 45, 225, 0.2) 0%, transparent 70%);
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+
+    <div class="stack-container">
+        <!-- Card 1 -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z" />
+                    </svg>
+                </div>
+                <div class="file-tag">Document</div>
+            </div>
+            <h3 class="file-title">Annual_Report.pdf</h3>
+            <p class="file-info">Updated 2 hours ago • 4.2 MB</p>
+            <div class="file-footer">
+                <div class="avatar"></div>
+                <span class="user-name">Alex M.</span>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon" style="background: #e53e3e;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h2v2h-2v-2zm0-10h2v8h-2V6z" />
+                    </svg>
+                </div>
+                <div class="file-tag" style="background: rgba(229, 62, 62, 0.1); color: #e53e3e;">Draft</div>
+            </div>
+            <h3 class="file-title">Project_Proposal.docx</h3>
+            <p class="file-info">Updated yesterday • 1.1 MB</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon" style="background: #38a169;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                    </svg>
+                </div>
+                <div class="file-tag" style="background: rgba(56, 161, 105, 0.1); color: #38a169;">Spreadsheet</div>
+            </div>
+            <h3 class="file-title">Budget_2024.xlsx</h3>
+            <p class="file-info">Updated 3 days ago • 850 KB</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon" style="background: #3182ce;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                    </svg>
+                </div>
+                <div class="file-tag" style="background: rgba(49, 130, 206, 0.1); color: #3182ce;">Image</div>
+            </div>
+            <h3 class="file-title">Logo_Final_v2.png</h3>
+            <p class="file-info">Updated 1 week ago • 12 MB</p>
+        </div>
+    </div>
+</body>
+
+</html>
