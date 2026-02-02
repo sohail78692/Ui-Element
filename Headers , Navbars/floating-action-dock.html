@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic Floating Dock | UI Elements</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dock-bg: rgba(15, 23, 42, 0.6);
+            --item-bg: rgba(255, 255, 255, 0.05);
+            --accent: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #020617;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 3rem;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .dock-container {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--dock-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 0.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .dock-item {
+            position: relative;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--item-bg);
+            border-radius: 16px;
+            color: #94a3b8;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+        }
+
+        .dock-item:hover {
+            transform: translateY(-15px) scale(1.2);
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Tooltip */
+        .dock-item::before {
+            content: attr(data-label);
+            position: absolute;
+            bottom: 70px;
+            padding: 0.5rem 1rem;
+            background: #1e293b;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 8px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dock-item:hover::before {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Indication Dot */
+        .dock-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .separator {
+            width: 1px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 0.5rem;
+        }
+
+        /* Background Visuals */
+        .gradient-sphere {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            bottom: -300px;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="gradient-sphere"></div>
+
+    <nav class="dock-container">
+        <a href="#" class="dock-item active" data-label="Dashboard">
+            <i class="fas fa-th-large"></i>
+        </a>
+        <a href="#" class="dock-item" data-label="Messages">
+            <i class="fas fa-comment-dots"></i>
+        </a>
+        <a href="#" class="dock-item" data-label="Analytics">
+            <i class="fas fa-chart-line"></i>
+        </a>
+
+        <div class="separator"></div>
+
+        <a href="#" class="dock-item" data-label="Settings">
+            <i class="fas fa-cog"></i>
+        </a>
+        <a href="#" class="dock-item" data-label="Profile">
+            <i class="fas fa-user"></i>
+        </a>
+
+        <div class="separator"></div>
+
+        <a href="#" class="dock-item" data-label="Search" style="background: rgba(255,255,255,0.1);">
+            <i class="fas fa-search"></i>
+        </a>
+    </nav>
+</body>
+
+</html>
