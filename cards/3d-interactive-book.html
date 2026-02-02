@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Interactive Book Mockup | UI Elements</title>
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            --book-width: 200px;
+            --book-height: 300px;
+            --book-depth: 40px;
+            --cover-color: #3b82f6;
+            --spine-color: #2563eb;
+            --page-color: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--primary-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            perspective: 2000px;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: var(--book-width);
+            height: var(--book-height);
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .container:hover {
+            transform: rotateY(-30deg) rotateX(10deg);
+        }
+
+        .book {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .book-cover {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--cover-color), var(--spine-color));
+            border-radius: 4px 12px 12px 4px;
+            transform-origin: left;
+            transform-style: preserve-3d;
+            z-index: 5;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1.5rem;
+            box-shadow: inset -4px 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .container:hover .book-cover {
+            transform: rotateY(-110deg);
+        }
+
+        .cover-design {
+            pointer-events: none;
+        }
+
+        .cover-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cover-author {
+            font-size: 0.875rem;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-top: 1rem;
+        }
+
+        .cover-badges {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+        }
+
+        .book-spine {
+            position: absolute;
+            width: var(--book-depth);
+            height: 100%;
+            background: var(--spine-color);
+            left: 0;
+            transform: rotateY(-90deg) translateZ(calc(var(--book-depth) / 2)) translateX(calc(var(--book-depth) / -2));
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .book-pages {
+            position: absolute;
+            width: calc(var(--book-width) - 5px);
+            height: calc(var(--book-height) - 10px);
+            background: var(--page-color);
+            top: 5px;
+            left: 2px;
+            transform: translateZ(calc(var(--book-depth) / -2));
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            color: #1e293b;
+        }
+
+        .page-content {
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .page-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--spine-color);
+        }
+
+        .page-content p {
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .book-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--cover-color);
+            transform: translateZ(calc(var(--book-depth) * -1));
+            border-radius: 4px 12px 12px 4px;
+        }
+
+        /* Ambient Light */
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotateY(-15deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotateY(-15deg);
+            }
+        }
+
+        .container {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .container:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glow"></div>
+
+    <div class="container">
+        <div class="book">
+            <div class="book-cover">
+                <div class="cover-design">
+                    <div class="cover-badges">
+                        <div class="badge"></div>
+                        <div class="badge"></div>
+                    </div>
+                    <h1 class="cover-title">The Art of UI Design</h1>
+                    <p class="cover-author">by Antigravity</p>
+                </div>
+                <div class="cover-footer">
+                    <p style="font-size: 0.6rem; opacity: 0.5;">VOLUME I</p>
+                </div>
+            </div>
+            <div class="book-spine"></div>
+            <div class="book-pages">
+                <div class="page-content">
+                    <h3>Chapter 1</h3>
+                    <p>Typography is the foundation of digital experiences. It guides the eye and sets the tone.</p>
+                    <h3>Chapter 2</h3>
+                    <p>Color theory is not just about aesthetics; it's about accessibility and psychology.</p>
+                    <div style="width: 100%; height: 2px; background: #e2e8f0; margin-top: 1rem;"></div>
+                </div>
+            </div>
+            <div class="book-back"></div>
+        </div>
+    </div>
+</body>
+
+</html>
