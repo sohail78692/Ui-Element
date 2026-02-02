@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Progress Ring Stats | UI Elements</title>
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --card-bg: #151921;
+            --primary: #3b82f6;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-circle {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 1.5rem;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        circle {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+        }
+
+        .bg-circle {
+            stroke: rgba(255, 255, 255, 0.05);
+        }
+
+        .progress-bar {
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+
+        .stat-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.75rem;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-trend {
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .trend-up {
+            color: var(--secondary);
+        }
+
+        .trend-down {
+            color: #ef4444;
+        }
+
+        /* Animation Trigger */
+        .loaded .bar-1 {
+            stroke-dashoffset: 110;
+        }
+
+        /* 75% */
+        .loaded .bar-2 {
+            stroke-dashoffset: 176;
+        }
+
+        /* 60% */
+        .loaded .bar-3 {
+            stroke-dashoffset: 44;
+        }
+
+        /* 90% */
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-grid" id="grid">
+        <!-- Storage -->
+        <div class="stat-card">
+            <div class="progress-circle">
+                <svg>
+                    <circle class="bg-circle" cx="75" cy="75" r="70"></circle>
+                    <circle class="progress-bar bar-1" cx="75" cy="75" r="70" style="stroke: var(--primary);"></circle>
+                </svg>
+                <div class="stat-value">75%</div>
+            </div>
+            <p class="stat-label">Storage Used</p>
+            <div class="stat-trend trend-up">
+                <span>↑ 12%</span>
+                <span style="color: #64748b; font-weight: 400;">this month</span>
+            </div>
+        </div>
+
+        <!-- Performance -->
+        <div class="stat-card">
+            <div class="progress-circle">
+                <svg>
+                    <circle class="bg-circle" cx="75" cy="75" r="70"></circle>
+                    <circle class="progress-bar bar-2" cx="75" cy="75" r="70" style="stroke: var(--secondary);">
+                    </circle>
+                </svg>
+                <div class="stat-value">60%</div>
+            </div>
+            <p class="stat-label">System Health</p>
+            <div class="stat-trend trend-down">
+                <span>↓ 2%</span>
+                <span style="color: #64748b; font-weight: 400;">from peak</span>
+            </div>
+        </div>
+
+        <!-- CPU Load -->
+        <div class="stat-card">
+            <div class="progress-circle">
+                <svg>
+                    <circle class="bg-circle" cx="75" cy="75" r="70"></circle>
+                    <circle class="progress-bar bar-3" cx="75" cy="75" r="70" style="stroke: var(--accent);"></circle>
+                </svg>
+                <div class="stat-value">90%</div>
+            </div>
+            <p class="stat-label">CPU Load</p>
+            <div class="stat-trend trend-up">
+                <span>↑ 45%</span>
+                <span style="color: #64748b; font-weight: 400;">heavy tasks</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Trigger animations after a small delay
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('grid').classList.add('loaded');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>
