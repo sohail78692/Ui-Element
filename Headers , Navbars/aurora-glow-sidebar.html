@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Glow Sidebar | UI Elements</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sidebar-width: 280px;
+            --aurora-1: #3b82f6;
+            --aurora-2: #8b5cf6;
+            --aurora-3: #ec4899;
+            --bg-dark: #020617;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            height: 100vh;
+            display: flex;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: relative;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+            z-index: 10;
+        }
+
+        /* Aurora Animated Background */
+        .aurora-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .aurora-blob {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: move 20s infinite alternate;
+        }
+
+        .blob-1 {
+            background: var(--aurora-1);
+            top: -100px;
+            left: -100px;
+            animation-duration: 25s;
+        }
+
+        .blob-2 {
+            background: var(--aurora-2);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            background: var(--aurora-3);
+            top: 50%;
+            left: 50%;
+            animation-duration: 18s;
+            animation-delay: -10s;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(50px, 80px) scale(1.2);
+            }
+
+            66% {
+                transform: translate(-40px, 20px) scale(0.8);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--aurora-1), var(--aurora-2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-sections {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .nav-group-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .nav-items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link i {
+            font-size: 1.125rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 25%;
+            height: 50%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--aurora-1), var(--aurora-2));
+            border-radius: 0 4px 4px 0;
+        }
+
+        .user-profile {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #1e293b, #334155);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="aurora-bg">
+            <div class="aurora-blob blob-1"></div>
+            <div class="aurora-blob blob-2"></div>
+            <div class="aurora-blob blob-3"></div>
+        </div>
+
+        <a href="#" class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <span class="logo-text">Aurora</span>
+        </a>
+
+        <div class="nav-sections">
+            <div class="nav-group">
+                <p class="nav-group-title">Main Menu</p>
+                <ul class="nav-items">
+                    <li><a href="#" class="nav-link active"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-chart-pie"></i> <span>Analytics</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-wallet"></i> <span>Payments</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-users"></i> <span>Customers</span></a></li>
+                </ul>
+            </div>
+
+            <div class="nav-group">
+                <p class="nav-group-title">Settings</p>
+                <ul class="nav-items">
+                    <li><a href="#" class="nav-link"><i class="fas fa-cog"></i> <span>General</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-shield-halved"></i> <span>Security</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="user-profile">
+            <div class="avatar"></div>
+            <div class="user-info">
+                <p class="user-name">Alex Rivera</p>
+                <p class="user-role">Premium Member</p>
+            </div>
+            <i class="fas fa-ellipsis-v" style="color: var(--text-dim); font-size: 0.875rem;"></i>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="hero-text">
+            <h1>Aurora UI System</h1>
+            <p style="color: var(--text-dim); font-size: 1.25rem;">Modern sidebar with animated mesh gradient effects.
+            </p>
+        </div>
+    </main>
+</body>
+
+</html>
