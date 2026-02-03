@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Navigation Link</title>
+    <style>
+        :root {
+            --bg-color: #000;
+            --text-color: #fff;
+            --magnetic-area: 100px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-item {
+            position: relative;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .link-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+            display: block;
+        }
+
+        .magnetic-target {
+            position: relative;
+            display: inline-block;
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .dot {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translateX(-50%) scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover .dot {
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+            transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.expand {
+            width: 60px;
+            height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor" id="custom-cursor"></div>
+
+    <nav>
+        <div class="nav-item">
+            <span class="magnetic-target">
+                <span class="link-text">Home</span>
+                <span class="dot"></span>
+            </span>
+        </div>
+        <div class="nav-item">
+            <span class="magnetic-target">
+                <span class="link-text">Projects</span>
+                <span class="dot"></span>
+            </span>
+        </div>
+        <div class="nav-item">
+            <span class="magnetic-target">
+                <span class="link-text">About</span>
+                <span class="dot"></span>
+            </span>
+        </div>
+        <div class="nav-item">
+            <span class="magnetic-target">
+                <span class="link-text">Contact</span>
+                <span class="dot"></span>
+            </span>
+        </div>
+    </nav>
+
+    <script>
+        const navItems = document.querySelectorAll('.nav-item');
+        const cursor = document.getElementById('custom-cursor');
+
+        // Custom Cursor movement
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+
+            navItems.forEach(item => {
+                const target = item.querySelector('.magnetic-target');
+                const rect = item.getBoundingClientRect();
+
+                // Distance from mouse to center of item
+                const dx = e.clientX - (rect.left + rect.width / 2);
+                const dy = e.clientY - (rect.top + rect.height / 2);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                const magnetRadius = 80;
+
+                if (distance < magnetRadius) {
+                    // Calculate magnetic force
+                    const x = dx * 0.4;
+                    const y = dy * 0.4;
+                    target.style.transform = `translate(${x}px, ${y}px)`;
+                    cursor.classList.add('expand');
+                } else {
+                    target.style.transform = `translate(0px, 0px)`;
+                    // Only remove expand if all items are far enough
+                    checkAllDistances(e.clientX, e.clientY);
+                }
+            });
+        });
+
+        function checkAllDistances(mx, my) {
+            let isClose = false;
+            navItems.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                const dx = mx - (rect.left + rect.width / 2);
+                const dy = my - (rect.top + rect.height / 2);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 80) isClose = true;
+            });
+            if (!isClose) cursor.classList.remove('expand');
+        }
+
+        // Handle window resize or scroll
+        window.addEventListener('scroll', () => {
+            navItems.forEach(item => {
+                const target = item.querySelector('.magnetic-target');
+                target.style.transform = `translate(0px, 0px)`;
+            });
+        });
+    </script>
+</body>
+
+</html>
