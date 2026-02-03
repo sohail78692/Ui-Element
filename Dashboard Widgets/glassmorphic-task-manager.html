@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphic Task Manager Widget</title>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent-color: #7000ff;
+            --text-color: #ffffff;
+            --sub-text: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top left, #1a1a2e, #16213e);
+            padding: 20px;
+        }
+
+        .task-widget {
+            width: 100%;
+            max-width: 400px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            color: var(--text-color);
+            transition: transform 0.3s ease;
+        }
+
+        .task-widget:hover {
+            transform: translateY(-5px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .date {
+            font-size: 0.875rem;
+            color: var(--sub-text);
+        }
+
+        .stats {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stats-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.875rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 65%;
+            background: linear-gradient(90deg, var(--accent-color), #bc13fe);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(112, 0, 255, 0.5);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.5s ease backwards;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--glass-border);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .checkbox::after {
+            content: '✓';
+            color: #fff;
+            font-size: 12px;
+            display: none;
+        }
+
+        .task-item.completed .checkbox {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .task-item.completed .checkbox::after {
+            display: block;
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: var(--sub-text);
+        }
+
+        .task-text {
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .add-task {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .add-task input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px 16px;
+            color: #fff;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .add-task input:focus {
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .add-btn {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(112, 0, 255, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="task-widget">
+        <div class="header">
+            <div>
+                <h2>Tasks</h2>
+                <div class="date" id="current-date">October 24, 2023</div>
+            </div>
+            <div style="font-size: 1.2rem; cursor: pointer; opacity: 0.7;">⋮</div>
+        </div>
+
+        <div class="stats">
+            <div class="stats-info">
+                <span>Weekly Progress</span>
+                <span id="progress-percent">65%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <ul class="task-list" id="task-list">
+            <li class="task-item">
+                <div class="checkbox" onclick="toggleTask(this)"></div>
+                <span class="task-text">Review design system</span>
+            </li>
+            <li class="task-item">
+                <div class="checkbox" onclick="toggleTask(this)"></div>
+                <span class="task-text">Meeting with Stakeholders</span>
+            </li>
+            <li class="task-item">
+                <div class="checkbox" onclick="toggleTask(this)"></div>
+                <span class="task-text">Update project documentation</span>
+            </li>
+            <li class="task-item completed">
+                <div class="checkbox" onclick="toggleTask(this)"></div>
+                <span class="task-text">Email clients regarding updates</span>
+            </li>
+        </ul>
+
+        <div class="add-task">
+            <input type="text" id="task-input" placeholder="Add a new task...">
+            <button class="add-btn" onclick="addTask()">+</button>
+        </div>
+    </div>
+
+    <script>
+        // Set current date
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', options);
+
+        function toggleTask(checkbox) {
+            const item = checkbox.parentElement;
+            item.classList.toggle('completed');
+            updateProgress();
+        }
+
+        function addTask() {
+            const input = document.getElementById('task-input');
+            const text = input.value.trim();
+
+            if (text) {
+                const list = document.getElementById('task-list');
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                li.innerHTML = `
+                    <div class="checkbox" onclick="toggleTask(this)"></div>
+                    <span class="task-text">${text}</span>
+                `;
+                list.insertBefore(li, list.firstChild);
+                input.value = '';
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.task-item').length;
+            const completed = document.querySelectorAll('.task-item.completed').length;
+            const percent = Math.round((completed / total) * 100) || 0;
+
+            const fill = document.getElementById('progress-fill');
+            const text = document.getElementById('progress-percent');
+
+            fill.style.width = percent + '%';
+            text.textContent = percent + '%';
+        }
+
+        // Handle Enter key in input
+        document.getElementById('task-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+</body>
+
+</html>
