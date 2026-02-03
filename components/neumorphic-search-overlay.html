@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neumorphic Search Overlay</title>
+    <style>
+        :root {
+            --bg-color: #e0e5ec;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --text-color: #4a5568;
+            --accent-color: #6d5dfc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background-color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+        }
+
+        .trigger-btn {
+            padding: 15px 30px;
+            background: var(--bg-color);
+            border-radius: 12px;
+            border: none;
+            box-shadow: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .trigger-btn:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+            transform: scale(0.98);
+        }
+
+        .kbd {
+            padding: 2px 6px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light);
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 15vh;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .overlay.active {
+            transform: translateY(0);
+        }
+
+        .search-container {
+            width: 90%;
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 20px 30px;
+            background: var(--bg-color);
+            border: none;
+            border-radius: 20px;
+            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            font-size: 1.25rem;
+            color: var(--text-color);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            box-shadow: inset 8px 8px 16px var(--shadow-dark), inset -8px -8px 16px var(--shadow-light);
+        }
+
+        .results {
+            width: 90%;
+            max-width: 600px;
+            max-height: 50vh;
+            overflow-y: auto;
+            list-style: none;
+        }
+
+        .result-item {
+            padding: 20px;
+            margin-bottom: 20px;
+            background: var(--bg-color);
+            border-radius: 16px;
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .overlay.active .result-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result-item:hover {
+            box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+            transform: scale(0.99);
+        }
+
+        .result-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .result-item p {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-color);
+            border-radius: 50%;
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .close-btn:active {
+            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+        }
+
+        /* Staggered animation */
+        .result-item:nth-child(1) {
+            transition-delay: 0.3s;
+        }
+
+        .result-item:nth-child(2) {
+            transition-delay: 0.4s;
+        }
+
+        .result-item:nth-child(3) {
+            transition-delay: 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="trigger-btn" onclick="toggleSearch()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        Search... <span class="kbd">/</span>
+    </button>
+
+    <div class="overlay" id="search-overlay">
+        <button class="close-btn" onclick="toggleSearch()">✕</button>
+
+        <div class="search-container">
+            <input type="text" class="search-bar" id="search-input" placeholder="What are you looking for?">
+        </div>
+
+        <ul class="results">
+            <li class="result-item">
+                <h3>Glassmorphism UI Kit</h3>
+                <p>A comprehensive set of semi-transparent components for modern apps.</p>
+            </li>
+            <li class="result-item">
+                <h3>Neumorphism Deep Dive</h3>
+                <p>Learn how to master soft shadows and light-driven design.</p>
+            </li>
+            <li class="result-item">
+                <h3>Advanced CSS Animations</h3>
+                <p>Techniques for creating high-performance smooth transitions.</p>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const overlay = document.getElementById('search-overlay');
+        const input = document.getElementById('search-input');
+
+        function toggleSearch() {
+            overlay.classList.toggle('active');
+            if (overlay.classList.contains('active')) {
+                setTimeout(() => input.focus(), 500);
+            }
+        }
+
+        // Shortcut key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/') {
+                e.preventDefault();
+                if (!overlay.classList.contains('active')) {
+                    toggleSearch();
+                }
+            }
+            if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                toggleSearch();
+            }
+        });
+    </script>
+</body>
+
+</html>
