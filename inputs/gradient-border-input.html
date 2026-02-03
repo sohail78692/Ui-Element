@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Gradient Border Input</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --input-bg: #111;
+            --text-color: #fff;
+            --placeholder-color: #666;
+            --accent-gradient: linear-gradient(90deg, #ff0080, #7928ca, #4299e1, #ff0080);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-color);
+            padding: 20px;
+        }
+
+        .input-group {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            padding: 2px;
+            /* Border thickness */
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        /* The Animated Gradient Border */
+        .input-group::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--accent-gradient);
+            background-size: 50% 100%;
+            animation: rotate 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .input-group.focused::before {
+            opacity: 1;
+        }
+
+        .input-group.focused {
+            box-shadow: 0 0 20px rgba(121, 40, 202, 0.3);
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .input-container {
+            position: relative;
+            background: var(--input-bg);
+            border-radius: 10px;
+            z-index: 1;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--placeholder-color);
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+            z-index: 3;
+        }
+
+        input:focus+label,
+        input:not(:placeholder-shown)+label {
+            top: 0;
+            left: 12px;
+            font-size: 0.75rem;
+            color: #4299e1;
+            background: var(--input-bg);
+            padding: 0 8px;
+            transform: translateY(-50%);
+        }
+
+        /* Validation Glows */
+        .input-group.success {
+            box-shadow: 0 0 20px rgba(0, 255, 128, 0.3);
+        }
+
+        .input-group.success::before {
+            background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe);
+            opacity: 1;
+        }
+
+        .input-group.error {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .input-group.error::before {
+            background: linear-gradient(90deg, #f093fb, #f5576c, #f093fb);
+            opacity: 1;
+        }
+
+        .hint {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--placeholder-color);
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .input-group.error+.hint {
+            color: #f5576c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="width: 100%; max-width: 400px;">
+        <div class="input-group" id="input-group">
+            <div class="input-container">
+                <input type="text" id="gradient-input" placeholder=" " autocomplete="off">
+                <label for="gradient-input">Email Address</label>
+            </div>
+        </div>
+        <div class="hint" id="hint">Focus to see the gradient animation</div>
+    </div>
+
+    <script>
+        const input = document.getElementById('gradient-input');
+        const group = document.getElementById('input-group');
+        const hint = document.getElementById('hint');
+
+        input.addEventListener('focus', () => {
+            group.classList.add('focused');
+        });
+
+        input.addEventListener('blur', () => {
+            group.classList.remove('focused');
+
+            // Basic validation for demonstration
+            const val = input.value;
+            if (val.includes('@') && val.includes('.')) {
+                group.classList.add('success');
+                group.classList.remove('error');
+                hint.textContent = "Looks good!";
+            } else if (val.length > 0) {
+                group.classList.add('error');
+                group.classList.remove('success');
+                hint.textContent = "Please enter a valid email address";
+            } else {
+                group.classList.remove('success', 'error');
+                hint.textContent = "Focus to see the gradient animation";
+            }
+        });
+    </script>
+</body>
+
+</html>
