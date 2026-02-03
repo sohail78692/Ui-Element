@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morphing Geometric Background</title>
+    <style>
+        :root {
+            --color1: #ff0080;
+            --color2: #7928ca;
+            --color3: #4299e1;
+            --color4: #00f2fe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(80px);
+            opacity: 0.8;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            mix-blend-mode: screen;
+            transition: transform 0.8s ease-out;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--color1);
+            top: -100px;
+            left: -100px;
+            animation: morph 20s infinite alternate, move 25s infinite alternate;
+        }
+
+        .blob-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--color2);
+            bottom: -200px;
+            right: -100px;
+            animation: morph 15s infinite alternate-reverse, move 30s infinite alternate-reverse;
+        }
+
+        .blob-3 {
+            width: 450px;
+            height: 450px;
+            background: var(--color3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: morph 18s infinite alternate, move 20s infinite alternate-reverse;
+        }
+
+        .blob-4 {
+            width: 400px;
+            height: 400px;
+            background: var(--color4);
+            bottom: 20%;
+            left: 10%;
+            animation: morph 22s infinite alternate-reverse, move 28s infinite alternate;
+        }
+
+        @keyframes morph {
+            0% {
+                border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+            }
+
+            33% {
+                border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%;
+            }
+
+            66% {
+                border-radius: 40% 60% 40% 60% / 40% 60% 40% 60%;
+            }
+
+            100% {
+                border-radius: 50%;
+            }
+        }
+
+        @keyframes move {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(10vw, 10vh);
+            }
+        }
+
+        .overlay {
+            width: 90%;
+            max-width: 600px;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        .cursor-glow {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-container">
+        <div class="blob blob-1" id="blob-1"></div>
+        <div class="blob blob-2" id="blob-2"></div>
+        <div class="blob blob-3" id="blob-3"></div>
+        <div class="blob blob-4" id="blob-4"></div>
+    </div>
+
+    <div class="overlay">
+        <h1>Ethereal.</h1>
+        <p>A fluid, organic background effect designed for modern landing pages. Move your cursor to interact with the
+            environment.</p>
+    </div>
+
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <script>
+        const blobs = document.querySelectorAll('.blob');
+        const glow = document.getElementById('cursor-glow');
+
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+
+            // Move glow
+            glow.style.left = clientX + 'px';
+            glow.style.top = clientY + 'px';
+
+            // Influence blobs
+            blobs.forEach((blob, index) => {
+                const rect = blob.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                const deltaX = (clientX - centerX) / 50;
+                const deltaY = (clientY - centerY) / 50;
+
+                // Add a small offset based on the mouse position
+                blob.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            });
+        });
+    </script>
+</body>
+
+</html>
