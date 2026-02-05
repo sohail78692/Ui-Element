@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floating Social Menu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ecf0f1;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .share-btn-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            filter: url('#goo');
+            /* Key to the effect */
+        }
+
+        .share-btn {
+            width: 80px;
+            height: 80px;
+            background: #ff4757;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        .share-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .share-btn i {
+            transition: transform 0.3s;
+        }
+
+        .share-btn-container.active .share-btn i {
+            transform: rotate(45deg);
+        }
+
+        .social-link {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #2f3542;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.5s ease-in-out;
+            transform: translate(0, 0);
+            z-index: 1;
+            opacity: 0;
+        }
+
+        /* Positions when active */
+        .share-btn-container.active .link-1 {
+            transform: translate(0, -100px);
+            opacity: 1;
+            background: #3b5998;
+        }
+
+        /* FB */
+        .share-btn-container.active .link-2 {
+            transform: translate(85px, -50px);
+            opacity: 1;
+            background: #0088cc;
+        }
+
+        /* Telegram */
+        .share-btn-container.active .link-3 {
+            transform: translate(85px, 50px);
+            opacity: 1;
+            background: #25d366;
+        }
+
+        /* Whatsapp */
+        .share-btn-container.active .link-4 {
+            transform: translate(0, 100px);
+            opacity: 1;
+            background: #1da1f2;
+        }
+
+        /* Twitter */
+        .share-btn-container.active .link-5 {
+            transform: translate(-85px, 50px);
+            opacity: 1;
+            background: #c32aa3;
+        }
+
+        /* Insta */
+        .share-btn-container.active .link-6 {
+            transform: translate(-85px, -50px);
+            opacity: 1;
+            background: #ff0000;
+        }
+
+        /* YT */
+
+        /* SVG Filter */
+        svg {
+            position: absolute;
+            visibility: hidden;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="share-btn-container" id="shareContainer">
+        <!-- Main Button -->
+        <div class="share-btn" onclick="toggleShare()">
+            <i class="fas fa-plus"></i>
+        </div>
+
+        <!-- Links -->
+        <a href="#" class="social-link link-1"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-link link-2"><i class="fab fa-telegram-plane"></i></a>
+        <a href="#" class="social-link link-3"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="social-link link-4"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link link-5"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link link-6"><i class="fab fa-youtube"></i></a>
+    </div>
+
+    <!-- Gooey Filter -->
+    <svg>
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+                    result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        function toggleShare() {
+            document.getElementById('shareContainer').classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>
