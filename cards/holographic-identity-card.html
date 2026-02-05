@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Identity Card</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;500;700&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            background-image:
+                radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
+            font-family: 'Rajdhani', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        .scene {
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 380px;
+            height: 240px;
+            position: relative;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.1s;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        /* Holographic Overlay */
+        .hologram {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                    transparent 40%,
+                    rgba(255, 0, 150, 0.1) 45%,
+                    rgba(0, 255, 255, 0.1) 50%,
+                    rgba(255, 0, 150, 0.1) 55%,
+                    transparent 60%);
+            background-size: 200% 200%;
+            opacity: 0.7;
+            pointer-events: none;
+            mix-blend-mode: color-dodge;
+            z-index: 2;
+            transition: background-position 0.2s;
+        }
+
+        /* Content Layout */
+        .content {
+            position: relative;
+            z-index: 3;
+            padding: 25px;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.4), transparent);
+        }
+
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header {
+            border-bottom: 2px solid cyan;
+            padding-bottom: 5px;
+            width: fit-content;
+        }
+
+        .header h3 {
+            margin: 0;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: cyan;
+            text-transform: uppercase;
+        }
+
+        .main-info h1 {
+            margin: 0;
+            font-size: 2rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .main-info p {
+            margin: 5px 0 0;
+            font-size: 1rem;
+            color: #ccc;
+            letter-spacing: 1px;
+        }
+
+        .details {
+            display: flex;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .detail-item strong {
+            display: block;
+            color: cyan;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .photo-frame {
+            width: 80px;
+            height: 90px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.2);
+        }
+
+        .photo-frame::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(transparent 50%, rgba(0, 255, 255, 0.2) 51%, transparent 52%);
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+
+        .qr-code {
+            width: 50px;
+            height: 50px;
+            background: white;
+            padding: 2px;
+            border-radius: 4px;
+            opacity: 0.8;
+        }
+
+        .chip {
+            width: 35px;
+            height: 25px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 35"><rect width="50" height="35" rx="5" fill="%23d4af37"/><path d="M5,10 h10 v5 h-10 z M35,10 h10 v5 h-10 z M10,0 v35 M25,0 v35 M40,0 v35" stroke="black" stroke-width="0.5" fill="none"/></svg>') no-repeat center/cover;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Decorative Elements */
+        .decor-line {
+            position: absolute;
+            bottom: 20px;
+            right: 0;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, cyan);
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 0 10px cyan;
+            animation: scan 3s linear infinite;
+            z-index: 10;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scene">
+        <div class="card" id="idCard">
+            <div class="hologram"></div>
+            <div class="scan-line"></div>
+
+            <div class="content">
+                <div class="left-section">
+                    <div class="header">
+                        <h3>Cyber Identity</h3>
+                    </div>
+                    <div class="main-info">
+                        <h1>ALEX REN</h1>
+                        <p>SYS-ADMIN-04</p>
+                    </div>
+                    <div class="chip"></div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <strong>Level</strong>
+                            <span>05</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Access</strong>
+                            <span>UNLIMITED</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Exp</strong>
+                            <span>2099</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-section">
+                    <div class="photo-frame">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80"
+                            alt="User Photo">
+                    </div>
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=AccessGranted" alt="QR">
+                    </div>
+                </div>
+            </div>
+            <div class="decor-line"></div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('idCard');
+        const hologram = document.querySelector('.hologram');
+
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const { left, top, width, height } = card.getBoundingClientRect();
+
+            const centerX = left + width / 2;
+            const centerY = top + height / 2;
+
+            const rotateX = ((clientY - centerY) / height) * -20; // Max rotation deg
+            const rotateY = ((clientX - centerX) / width) * 20;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+            // Move hologram gradient background opposite to mouse
+            const holoX = ((clientX - left) / width) * 100;
+            const holoY = ((clientY - top) / height) * 100;
+
+            hologram.style.backgroundPosition = `${holoX}% ${holoY}%`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+    </script>
+</body>
+
+</html>
