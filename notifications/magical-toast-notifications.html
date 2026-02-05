@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Toast Notifications</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #fce4ec;
+            font-family: 'Fredoka', sans-serif;
+            gap: 20px;
+        }
+
+        /* Toast Container */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        /* Toast Item */
+        .toast {
+            width: 320px;
+            padding: 16px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            cursor: pointer;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.hide {
+            transform: translateX(120%);
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex-grow: 1;
+        }
+
+        .toast-title {
+            margin: 0;
+            font-size: 1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .toast-msg {
+            margin: 4px 0 0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .toast-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .toast-close:hover {
+            color: #333;
+        }
+
+        /* Progress Bar */
+        .progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 100%;
+            background: currentColor;
+            /* Inherits from text color context or set specifically */
+            transform-origin: left;
+            animation: progress linear forwards;
+        }
+
+        @keyframes progress {
+            to {
+                transform: scaleX(0);
+            }
+        }
+
+        /* Types */
+        .toast.success .toast-icon {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .toast.success .progress-bar {
+            background: #28a745;
+        }
+
+        .toast.success {
+            border-left: 5px solid #28a745;
+        }
+
+        .toast.error .toast-icon {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .toast.error .progress-bar {
+            background: #dc3545;
+        }
+
+        .toast.error {
+            border-left: 5px solid #dc3545;
+        }
+
+        .toast.info .toast-icon {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .toast.info .progress-bar {
+            background: #17a2b8;
+        }
+
+        .toast.info {
+            border-left: 5px solid #17a2b8;
+        }
+
+        .toast.warning .toast-icon {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .toast.warning .progress-bar {
+            background: #ffc107;
+        }
+
+        .toast.warning {
+            border-left: 5px solid #ffc107;
+        }
+
+        /* Trigger Buttons */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-error {
+            background: #dc3545;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="btn-group">
+        <button class="btn btn-success" onclick="createToast('success')">Success</button>
+        <button class="btn btn-error" onclick="createToast('error')">Error</button>
+        <button class="btn btn-info" onclick="createToast('info')">Info</button>
+        <button class="btn btn-warning" onclick="createToast('warning')">Warning</button>
+    </div>
+
+    <script>
+        const container = document.getElementById('toastContainer');
+
+        const toastDetails = {
+            success: {
+                icon: 'fa-check-circle',
+                title: 'Success',
+                text: 'Your changes have been saved successfully.'
+            },
+            error: {
+                icon: 'fa-times-circle',
+                title: 'Error',
+                text: 'Something went wrong. Please try again.'
+            },
+            info: {
+                icon: 'fa-info-circle',
+                title: 'Did you know?',
+                text: 'You can swipe these to dismiss!'
+            },
+            warning: {
+                icon: 'fa-exclamation-triangle',
+                title: 'Warning',
+                text: 'Your session is about to expire.'
+            }
+        }
+
+        function createToast(type) {
+            const { icon, title, text } = toastDetails[type];
+            const duration = 5000;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="toast-content">
+                    <h4 class="toast-title">${title}</h4>
+                    <p class="toast-msg">${text}</p>
+                </div>
+                <i class="fas fa-times toast-close" onclick="removeToast(this.parentElement)"></i>
+                <div class="progress">
+                    <div class="progress-bar" style="animation-duration: ${duration}ms"></div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            // Animate In
+            // Needed simple timeout to allow render
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            // Auto remove
+            const autoRemove = setTimeout(() => {
+                removeToast(toast);
+            }, duration);
+
+            // Click to remove
+            toast.addEventListener('click', (e) => {
+                if (e.target.classList.contains('toast-close')) return;
+                removeToast(toast);
+                clearTimeout(autoRemove);
+            });
+        }
+
+        function removeToast(toast) {
+            toast.classList.remove('show');
+            toast.classList.add('hide');
+            // Wait for transition
+            setTimeout(() => {
+                if (toast.parentElement) toast.parentElement.removeChild(toast);
+            }, 400);
+        }
+
+    </script>
+</body>
+
+</html>
