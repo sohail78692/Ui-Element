@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Pill Navigation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a1b1e;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .nav-wrapper {
+            position: relative;
+            background: #25262b;
+            padding: 10px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 15px 30px;
+            color: #909296;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-link.active {
+            color: white;
+        }
+
+        /* The Moving Pill */
+        .pill {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, #364fc7, #4c6ef5);
+            border-radius: 40px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(54, 79, 199, 0.4);
+            opacity: 0;
+            /* Hidden initially until JS sets pos */
+        }
+
+        /* Glare effect on Pill */
+        .pill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+            border-radius: 40px 40px 0 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav-wrapper">
+        <div class="pill" id="pill"></div>
+        <ul class="nav-list">
+            <li class="nav-item"><a class="nav-link active" data-target="home">Home</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="products">Products</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="services">Services</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="about">About</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        const links = document.querySelectorAll('.nav-link');
+        const pill = document.getElementById('pill');
+
+        function movePillTo(element) {
+            const width = element.offsetWidth;
+            const left = element.offsetLeft;
+
+            // The links are inside LI, so we need offset relative to the UL which is relative to Wrapper
+            // Actually offsetLeft of the A tag is relative to the LI if LI is positioned? No, LI is static.
+            // Let's use getBoundingClientRect for precision relative to container.
+
+            const wrapperRect = document.querySelector('.nav-wrapper').getBoundingClientRect();
+            const elRect = element.getBoundingClientRect();
+
+            const relLeft = elRect.left - wrapperRect.left;
+            const relTop = elRect.top - wrapperRect.top; // Should be consistent padding
+
+            // Adjust for padding of wrapper (10px) if we want pill to be same size as link or cover it?
+            // The pill is inside .nav-wrapper, absolute.
+            // The links have padding.
+
+            // Let's match the link dimension exactly but maybe a bit smaller height inside wrapper?
+            // The Wrapper padding is 10px.
+
+            // We'll trust offsetLeft if items are simple block flow
+            // But getBounding is safer.
+
+            pill.style.width = `${elRect.width}px`;
+            // Using transform for performance
+            pill.style.transform = `translateX(${relLeft - 10}px)`; // -10 because wrapper has 10px padding, making 0,0 inside padding-box? 
+            // no, wrapper is relative. Child absolute is relative to padding box.
+            // If wrapper padding is 10px, the first item starts at 10px.
+            // If we want pill at 10px, translateX should be 0? 
+
+            // Let's simplified approach:
+            // Pill is child of Nav-Wrapper.
+            // Nav-Wrapper has padding 10px.
+            // List is flow content.
+
+            // Actually, best way:
+            pill.style.width = `${element.offsetWidth}px`;
+            pill.style.height = `${element.offsetHeight}px`;
+            // element.offsetLeft is relative to parent LI... LI is relative to UL...
+            // Let's just find the LI parent.
+            const li = element.parentElement;
+
+            // Calculate position relative to the UL
+            const ul = document.querySelector('.nav-list');
+
+            // The pill is sibling to UL.
+            // We need position relative to Wrapper.
+
+            // easiest:
+            pill.style.opacity = '1';
+            pill.style.left = '10px'; // Wrapper padding
+            pill.style.top = '10px';  // Wrapper padding
+            pill.style.transform = `translateX(${li.offsetLeft}px)`;
+        }
+
+        // Init with active
+        const active = document.querySelector('.nav-link.active');
+        // Wait formatting
+        setTimeout(() => movePillTo(active), 100);
+
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // Remove active class
+                links.forEach(l => l.classList.remove('active'));
+
+                // Add active
+                e.target.classList.add('active');
+
+                // Move
+                movePillTo(e.target);
+            });
+        });
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            const active = document.querySelector('.nav-link.active');
+            if (active) movePillTo(active);
+        });
+
+    </script>
+</body>
+
+</html>
