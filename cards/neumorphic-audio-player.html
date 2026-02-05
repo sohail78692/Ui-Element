@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neumorphic Audio Player</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0e5ec;
+            font-family: 'Montserrat', sans-serif;
+            color: #4a4a4a;
+        }
+
+        .player {
+            width: 300px;
+            padding: 30px;
+            border-radius: 30px;
+            background: #e0e5ec;
+            box-shadow:
+                20px 20px 60px #bec3c9,
+                -20px -20px 60px #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cover-art {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=500&q=80') center/cover;
+            box-shadow:
+                inset 5px 5px 10px rgba(190, 195, 201, 0.5),
+                inset -5px -5px 10px rgba(255, 255, 255, 0.8),
+                10px 10px 20px #bec3c9,
+                -10px -10px 20px #ffffff;
+            border: 5px solid #e0e5ec;
+            margin-bottom: 30px;
+            position: relative;
+            animation: rotate 20s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .cover-art.playing {
+            animation-play-state: running;
+        }
+
+        .cover-art::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #e0e5ec;
+            border-radius: 50%;
+            box-shadow:
+                inset 2px 2px 5px #bec3c9,
+                inset -2px -2px 5px #ffffff;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .song-info {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            color: #333;
+        }
+
+        .artist {
+            margin: 5px 0 0;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 8px;
+            width: 100%;
+            background: #e0e5ec;
+            border-radius: 5px;
+            box-shadow:
+                inset 3px 3px 6px #bec3c9,
+                inset -3px -3px 6px #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, #ff7675, #fab1a0);
+            border-radius: 5px;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn {
+            background: #e0e5ec;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+            cursor: pointer;
+            box-shadow:
+                6px 6px 12px #bec3c9,
+                -6px -6px 12px #ffffff;
+            transition: all 0.2s;
+        }
+
+        .btn:active {
+            box-shadow:
+                inset 4px 4px 8px #bec3c9,
+                inset -4px -4px 8px #ffffff;
+            transform: scale(0.95);
+        }
+
+        .btn.small {
+            width: 40px;
+            height: 40px;
+            font-size: 0.9rem;
+        }
+
+        .btn.large {
+            width: 60px;
+            height: 60px;
+            font-size: 1.2rem;
+            color: #ff7675;
+        }
+
+        .btn.active-state {
+            box-shadow:
+                inset 4px 4px 8px #bec3c9,
+                inset -4px -4px 8px #ffffff;
+            color: #ff7675;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="player">
+        <div class="cover-art" id="coverArt"></div>
+
+        <div class="song-info">
+            <h2 class="title">Sunset Vibes</h2>
+            <p class="artist">Chill Hop Essentials</p>
+        </div>
+
+        <div class="progress-container" id="progContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progFill"></div>
+            </div>
+            <div class="time-info">
+                <span id="currTime">1:24</span>
+                <span id="durTime">3:45</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn small"><i class="fas fa-backward"></i></button>
+            <button class="btn large" id="playBtn"><i class="fas fa-play"></i></button>
+            <button class="btn small"><i class="fas fa-forward"></i></button>
+        </div>
+    </div>
+
+    <script>
+        const playBtn = document.getElementById('playBtn');
+        const coverArt = document.getElementById('coverArt');
+        const progFill = document.getElementById('progFill');
+        const playIcon = playBtn.querySelector('i');
+
+        let isPlaying = false;
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                pauseSong();
+            } else {
+                playSong();
+            }
+        });
+
+        function playSong() {
+            isPlaying = true;
+            playBtn.classList.add('active-state');
+            playIcon.classList.remove('fa-play');
+            playIcon.classList.add('fa-pause');
+            coverArt.classList.add('playing');
+        }
+
+        function pauseSong() {
+            isPlaying = false;
+            playBtn.classList.remove('active-state');
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            coverArt.classList.remove('playing');
+        }
+
+        // Mock Progress
+        setInterval(() => {
+            if (isPlaying) {
+                // Just a visual loop for demo
+                // In real app, update based on audio.currentTime
+            }
+        }, 1000);
+
+    </script>
+</body>
+
+</html>
