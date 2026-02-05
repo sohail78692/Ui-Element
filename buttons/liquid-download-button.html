@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Download Button</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f4f8;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .button-container {
+            position: relative;
+            width: 200px;
+            height: 60px;
+            cursor: pointer;
+            filter: url('#gooey');
+            /* Keep if using SVG filter, otherwise clean look */
+        }
+
+        .btn-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.1s;
+        }
+
+        .button-container:active .btn-bg {
+            transform: scale(0.95);
+        }
+
+        .liquid {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #4facfe;
+            transition: top 2s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .liquid::before {
+            content: '';
+            position: absolute;
+            top: -25px;
+            left: 0;
+            width: 200%;
+            height: 50px;
+            background: #4facfe;
+            border-radius: 40%;
+            animation: wave 5s linear infinite;
+            opacity: 0.9;
+            transform: translateX(-25%);
+        }
+
+        .liquid::after {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 200%;
+            height: 60px;
+            background: #4facfe;
+            border-radius: 45%;
+            animation: wave 7s linear infinite reverse;
+            opacity: 0.5;
+            transform: translateX(-25%);
+        }
+
+        @keyframes wave {
+            0% {
+                transform: translateX(-25%) rotate(0deg);
+            }
+
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+
+        .content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            color: #4facfe;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .button-container.downloading .liquid {
+            top: 0;
+        }
+
+        .button-container.downloading .content {
+            color: white;
+        }
+
+        .icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .check-icon {
+            display: none;
+            font-size: 1.5rem;
+        }
+
+        /* Success State */
+        .button-container.finished .liquid {
+            background: #00ba9d;
+        }
+
+        .button-container.finished .liquid::before,
+        .button-container.finished .liquid::after {
+            background: #00ba9d;
+            animation: none;
+            border-radius: 0;
+            top: 0;
+            height: 0;
+        }
+
+        .button-container.finished .content {
+            animation: bounceIn 0.5s;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="button-container" id="dlBtn" onclick="startDownload()">
+        <div class="btn-bg">
+            <div class="liquid"></div>
+        </div>
+        <div class="content" id="btnContent">
+            <i class="fas fa-cloud-download-alt icon"></i>
+            <span class="text">Download</span>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('dlBtn');
+        const content = document.getElementById('btnContent');
+        let isDownloading = false;
+
+        function startDownload() {
+            if (isDownloading) return;
+            isDownloading = true;
+
+            // Start animation
+            btn.classList.add('downloading');
+
+            // Change text
+            const textSpan = content.querySelector('.text');
+            const icon = content.querySelector('.icon');
+
+            textSpan.textContent = "Loading...";
+            icon.className = "fas fa-spinner fa-spin icon";
+
+            // Mock download process
+            setTimeout(() => {
+                finishDownload();
+            }, 2500); // 2.5s duration
+        }
+
+        function finishDownload() {
+            btn.classList.add('finished');
+
+            const textSpan = content.querySelector('.text');
+            const icon = content.querySelector('.icon');
+
+            textSpan.textContent = "Complete";
+            icon.className = "fas fa-check icon";
+
+            // Optional: reset after a delay
+            setTimeout(() => {
+                resetButton();
+            }, 3000);
+        }
+
+        function resetButton() {
+            btn.classList.remove('downloading', 'finished');
+
+            const textSpan = content.querySelector('.text');
+            const icon = content.querySelector('.icon');
+
+            textSpan.textContent = "Download";
+            icon.className = "fas fa-cloud-download-alt icon";
+
+            isDownloading = false;
+        }
+    </script>
+</body>
+
+</html>
