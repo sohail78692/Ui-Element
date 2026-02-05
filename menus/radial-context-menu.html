@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radial Context Menu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .menu-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Central Trigger Button */
+        .menu-toggle {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .menu-toggle i {
+            font-size: 1.5rem;
+            color: #ff6b81;
+            transition: transform 0.3s;
+        }
+
+        .menu-container.active .menu-toggle {
+            transform: rotate(45deg);
+            box-shadow: 0 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Radial Items */
+        .menu-items {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+            pointer-events: auto;
+            color: #555;
+            opacity: 0;
+        }
+
+        .item:hover {
+            background: #ff6b81;
+            color: white;
+            box-shadow: 0 8px 15px rgba(255, 107, 129, 0.4);
+        }
+
+        /* Icons (using text for simplicity or emojis) */
+        .item span {
+            font-size: 1.2rem;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #555;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .item:hover .tooltip {
+            opacity: 1;
+            bottom: -35px;
+        }
+    </style>
+    <!-- Using FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="menu-container" id="radialMenu">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-plus"></i>
+        </div>
+        <div class="menu-items">
+            <!-- Items will be positioned by JS -->
+            <div class="item" title="Home"><i class="fas fa-home"></i></div>
+            <div class="item" title="Profile"><i class="fas fa-user"></i></div>
+            <div class="item" title="Settings"><i class="fas fa-cog"></i></div>
+            <div class="item" title="Messages"><i class="fas fa-comment"></i></div>
+            <div class="item" title="Favorites"><i class="fas fa-heart"></i></div>
+            <div class="item" title="Share"><i class="fas fa-share-alt"></i></div>
+            <div class="item" title="Search"><i class="fas fa-search"></i></div>
+            <div class="item" title="Cloud"><i class="fas fa-cloud"></i></div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('radialMenu');
+        const items = document.querySelectorAll('.item');
+        let isActive = false;
+
+        function toggleMenu() {
+            isActive = !isActive;
+            container.classList.toggle('active');
+
+            if (isActive) {
+                const radius = 100; // Distance from center
+                const total = items.length;
+                const step = (2 * Math.PI) / total;
+
+                items.forEach((item, index) => {
+                    // Start from -90deg (top)
+                    const angle = (step * index) - (Math.PI / 2);
+                    const x = Math.round(radius * Math.cos(angle));
+                    const y = Math.round(radius * Math.sin(angle));
+
+                    // Staggered delay based on index
+                    setTimeout(() => {
+                        item.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1)`;
+                        item.style.opacity = 1;
+                    }, index * 50);
+                });
+            } else {
+                items.forEach((item, index) => {
+                    item.style.transform = `translate(-50%, -50%) scale(0)`;
+                    item.style.opacity = 0;
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
