@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Pricing Switch</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;600&family=Inter:wght@400;500&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0f172a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toggle-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            cursor: pointer;
+            z-index: 2;
+            transition: color 0.3s;
+            padding: 0 10px;
+        }
+
+        .toggle-label.active {
+            color: white;
+            font-weight: 500;
+        }
+
+        .switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #1e293b;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.5, 0, 0.2, 1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .switch.on {
+            background: #6366f1;
+        }
+
+        .switch.on::after {
+            transform: translateX(24px);
+        }
+
+        /* Pricing Cards Container */
+        .cards-container {
+            display: flex;
+            gap: 2rem;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #6366f1;
+        }
+
+        .card.featured {
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(30, 41, 59, 0.8));
+            border: 1px solid #6366f1;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .plan-name {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            height: 3rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .currency {
+            font-size: 1.5rem;
+            margin-right: 4px;
+        }
+
+        .amount {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 3rem;
+            font-weight: 600;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.5, 0, 0, 1), opacity 0.2s;
+        }
+
+        /* Animation class for price change */
+        .amount.updating {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        .amount.updated {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .period {
+            color: #64748b;
+            margin-left: 8px;
+        }
+
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2.5rem 0;
+            flex-grow: 1;
+        }
+
+        .features li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        .features li i {
+            color: #6366f1;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+
+        .cta-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            background: white;
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .card.featured .cta-btn {
+            background: #6366f1;
+            color: white;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-badge {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            background: #ef4444;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            transform: rotate(45deg);
+            padding-bottom: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .save-badge.visible {
+            opacity: 1;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="toggle-container">
+            <span class="toggle-label active" id="labelMonthly" onclick="setBilling(false)">Monthly</span>
+            <div class="switch" id="billingSwitch" onclick="toggleBilling()"></div>
+            <span class="toggle-label" id="labelYearly" onclick="setBilling(true)">Yearly</span>
+        </div>
+
+        <div class="cards-container">
+            <!-- Basic Plan -->
+            <div class="card">
+                <h3 class="plan-name">Starter</h3>
+                <div class="price-container">
+                    <span class="currency">$</span>
+                    <span class="amount" data-monthly="19" data-yearly="15">19</span>
+                    <span class="period">/mo</span>
+                </div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> 5 Projects</li>
+                    <li><i class="fas fa-check"></i> Basic Analytics</li>
+                    <li><i class="fas fa-check"></i> 24/7 Support</li>
+                </ul>
+                <button class="cta-btn">Get Started</button>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="card featured">
+                <div class="save-badge" id="saveBadge">SAVE 20%</div>
+                <h3 class="plan-name">Professional</h3>
+                <div class="price-container">
+                    <span class="currency">$</span>
+                    <span class="amount" data-monthly="49" data-yearly="39">49</span>
+                    <span class="period">/mo</span>
+                </div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Unlimited Projects</li>
+                    <li><i class="fas fa-check"></i> Advanced Analytics</li>
+                    <li><i class="fas fa-check"></i> Team Collaboration</li>
+                    <li><i class="fas fa-check"></i> Priority Support</li>
+                </ul>
+                <button class="cta-btn">Start Free Trial</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isYearly = false;
+
+        const switchEl = document.getElementById('billingSwitch');
+        const labelMonthly = document.getElementById('labelMonthly');
+        const labelYearly = document.getElementById('labelYearly');
+        const saveBadge = document.getElementById('saveBadge');
+        const amounts = document.querySelectorAll('.amount');
+
+        function toggleBilling() {
+            setBilling(!isYearly);
+        }
+
+        function setBilling(yearly) {
+            if (isYearly === yearly) return;
+            isYearly = yearly;
+
+            // UI Updates
+            if (isYearly) {
+                switchEl.classList.add('on');
+                labelYearly.classList.add('active');
+                labelMonthly.classList.remove('active');
+                saveBadge.classList.add('visible');
+            } else {
+                switchEl.classList.remove('on');
+                labelMonthly.classList.add('active');
+                labelYearly.classList.remove('active');
+                saveBadge.classList.remove('visible');
+            }
+
+            // Animate Numbers
+            amounts.forEach(amount => {
+                const newValue = isYearly ? amount.dataset.yearly : amount.dataset.monthly;
+
+                // Animation out
+                amount.style.transform = 'translateY(-30px)';
+                amount.style.opacity = '0';
+
+                setTimeout(() => {
+                    amount.textContent = newValue;
+                    amount.style.transition = 'none';
+                    amount.style.transform = 'translateY(30px)';
+
+                    // Trigger reflow
+                    amount.offsetHeight;
+
+                    amount.style.transition = 'transform 0.3s cubic-bezier(0.5, 0, 0, 1), opacity 0.2s';
+                    amount.style.transform = 'translateY(0)';
+                    amount.style.opacity = '1';
+                }, 200);
+            });
+        }
+    </script>
+</body>
+
+</html>
