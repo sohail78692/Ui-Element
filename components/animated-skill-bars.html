@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Skill Bars</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            padding: 2rem;
+        }
+
+        .skills-container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .skill {
+            margin-bottom: 2rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .skill-percentage {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1rem;
+        }
+
+        .skill-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            position: relative;
+            width: 0;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        .skill-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Different color schemes for variety */
+        .skill:nth-child(2) .skill-bar-fill {
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            box-shadow: 0 2px 8px rgba(245, 87, 108, 0.4);
+        }
+
+        .skill:nth-child(2) .skill-percentage {
+            color: #f5576c;
+        }
+
+        .skill:nth-child(3) .skill-bar-fill {
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            box-shadow: 0 2px 8px rgba(0, 242, 254, 0.4);
+        }
+
+        .skill:nth-child(3) .skill-percentage {
+            color: #00f2fe;
+        }
+
+        .skill:nth-child(4) .skill-bar-fill {
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+            box-shadow: 0 2px 8px rgba(56, 249, 215, 0.4);
+        }
+
+        .skill:nth-child(4) .skill-percentage {
+            color: #38f9d7;
+        }
+
+        .skill:nth-child(5) .skill-bar-fill {
+            background: linear-gradient(90deg, #fa709a, #fee140);
+            box-shadow: 0 2px 8px rgba(254, 225, 64, 0.4);
+        }
+
+        .skill:nth-child(5) .skill-percentage {
+            color: #fa709a;
+        }
+
+        /* Animated on scroll/load */
+        .skill.animate .skill-bar-fill {
+            animation: fillBar 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Icon styles */
+        .skill-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .skill-name-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .skills-container {
+                padding: 2rem 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="skills-container">
+        <h2>My Skills</h2>
+
+        <div class="skill">
+            <div class="skill-header">
+                <div class="skill-name-wrapper">
+                    <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    <span class="skill-name">JavaScript</span>
+                </div>
+                <span class="skill-percentage">90%</span>
+            </div>
+            <div class="skill-bar-bg">
+                <div class="skill-bar-fill" data-percentage="90"></div>
+            </div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-header">
+                <div class="skill-name-wrapper">
+                    <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="#f5576c" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span class="skill-name">React</span>
+                </div>
+                <span class="skill-percentage">85%</span>
+            </div>
+            <div class="skill-bar-bg">
+                <div class="skill-bar-fill" data-percentage="85"></div>
+            </div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-header">
+                <div class="skill-name-wrapper">
+                    <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span class="skill-name">CSS/Tailwind</span>
+                </div>
+                <span class="skill-percentage">95%</span>
+            </div>
+            <div class="skill-bar-bg">
+                <div class="skill-bar-fill" data-percentage="95"></div>
+            </div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-header">
+                <div class="skill-name-wrapper">
+                    <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="#38f9d7" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                        </path>
+                    </svg>
+                    <span class="skill-name">Node.js</span>
+                </div>
+                <span class="skill-percentage">80%</span>
+            </div>
+            <div class="skill-bar-bg">
+                <div class="skill-bar-fill" data-percentage="80"></div>
+            </div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-header">
+                <div class="skill-name-wrapper">
+                    <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="#fa709a" stroke-width="2">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                        <polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline>
+                        <polyline points="7.5 19.79 7.5 14.6 3 12"></polyline>
+                        <polyline points="21 12 16.5 14.6 16.5 19.79"></polyline>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    <span class="skill-name">UI/UX Design</span>
+                </div>
+                <span class="skill-percentage">75%</span>
+            </div>
+            <div class="skill-bar-bg">
+                <div class="skill-bar-fill" data-percentage="75"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animate skill bars on page load
+        window.addEventListener('load', () => {
+            const skillBars = document.querySelectorAll('.skill-bar-fill');
+
+            setTimeout(() => {
+                skillBars.forEach(bar => {
+                    const percentage = bar.getAttribute('data-percentage');
+                    bar.style.width = percentage + '%';
+                });
+            }, 300);
+        });
+
+        // Optional: Intersection Observer for scroll-triggered animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bar = entry.target.querySelector('.skill-bar-fill');
+                    const percentage = bar.getAttribute('data-percentage');
+                    bar.style.width = percentage + '%';
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.skill').forEach(skill => {
+            observer.observe(skill);
+        });
+    </script>
+</body>
+
+</html>
