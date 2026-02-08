@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isometric Product Showcase - UI Elements</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .scene {
+            perspective: 1000px;
+        }
+
+        .card {
+            position: relative;
+            width: 320px;
+            height: 450px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            transform-style: preserve-3d;
+            transform: rotateX(20deg) rotateY(-15deg);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            box-shadow:
+                -20px 20px 50px rgba(0, 0, 0, 0.5),
+                inset 1px 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .card:hover {
+            transform: rotateX(0deg) rotateY(0deg) scale(1.05);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            border-color: var(--accent);
+        }
+
+        .product-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+        }
+
+        .product-image {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--accent), #818cf8);
+            border-radius: 20%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateZ(50px);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .card:hover .product-image {
+            transform: translateZ(100px) rotateY(10deg);
+        }
+
+        .product-info {
+            margin-top: 30px;
+            transform: translateZ(30px);
+        }
+
+        h2 {
+            color: var(--text-primary);
+            font-size: 24px;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .buy-btn {
+            padding: 12px 24px;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px var(--accent-glow);
+            filter: brightness(1.1);
+        }
+
+        .glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at var(--x) var(--y), rgba(56, 189, 248, 0.15), transparent 40%);
+            border-radius: 24px;
+            pointer-events: none;
+        }
+
+        /* Floating elements on the sides */
+        .decor {
+            position: absolute;
+            background: var(--accent);
+            opacity: 0.1;
+            filter: blur(40px);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .decor-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            left: -100px;
+        }
+
+        .decor-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            right: -150px;
+            background: #818cf8;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="decor decor-1"></div>
+    <div class="decor decor-2"></div>
+
+    <div class="scene">
+        <div class="card" id="card">
+            <div class="glow" id="glow"></div>
+
+            <div class="product-image-container">
+                <div class="product-image">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="product-info">
+                <div class="tags">
+                    <span class="tag">Premium</span>
+                    <span class="tag">Edition</span>
+                </div>
+                <h2>Quantum Nexus 7</h2>
+                <p>The next generation of isometric interface modules. Precision engineered for high-performance
+                    workflows.</p>
+
+                <div class="price-row">
+                    <span class="price">$599</span>
+                    <button class="buy-btn">Acquire</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('card');
+        const glow = document.getElementById('glow');
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            glow.style.setProperty('--x', `${x}px`);
+            glow.style.setProperty('--y', `${y}px`);
+
+            // Dynamic rotation based on mouse position
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (centerY - y) / 10;
+            const rotateY = (x - centerX) / 10;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateX(20deg) rotateY(-15deg) scale(1)`;
+        });
+    </script>
+</body>
+
+</html>
