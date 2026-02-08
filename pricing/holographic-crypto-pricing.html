@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Crypto Pricing - UI Elements</title>
+    <style>
+        :root {
+            --bg-color: #030305;
+            --hologram-1: #00f2ff;
+            --hologram-2: #7000ff;
+            --hologram-3: #ff00c8;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .pricing-container {
+            position: relative;
+            width: 380px;
+            height: 520px;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease;
+        }
+
+        .hologram-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            backdrop-filter: blur(15px);
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Holographic Glitch Effect Background */
+        .hologram-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent,
+                    rgba(0, 242, 255, 0.1) 40%,
+                    rgba(112, 0, 255, 0.1) 50%,
+                    rgba(255, 0, 200, 0.1) 60%,
+                    transparent);
+            transform: rotate(45deg);
+            z-index: 0;
+            opacity: 0.5;
+            animation: holo-slide 10s infinite linear;
+        }
+
+        @keyframes holo-slide {
+            0% {
+                transform: translate(-10%, -10%) rotate(45deg);
+            }
+
+            100% {
+                transform: translate(10%, 10%) rotate(45deg);
+            }
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--hologram-1);
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .price {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .price span {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            -webkit-text-fill-color: rgba(255, 255, 255, 0.5);
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: auto;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+        }
+
+        li svg {
+            color: var(--hologram-1);
+            flex-shrink: 0;
+        }
+
+        .btn-holo {
+            width: 100%;
+            padding: 18px;
+            background: white;
+            border: none;
+            border-radius: 16px;
+            color: black;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-holo:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
+        }
+
+        /* Scanning Line Effect on Hover */
+        .scanning-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: linear-gradient(to bottom,
+                    transparent,
+                    rgba(0, 242, 255, 0.2),
+                    transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pricing-container:hover .scanning-line {
+            opacity: 1;
+            animation: scan 4s infinite linear;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="pricing-container" id="container">
+        <div class="hologram-card">
+            <div class="scanning-line"></div>
+            <div class="content">
+                <span class="badge">Quantum Node</span>
+                <h2>Explorer</h2>
+                <div class="price">$29<span> / mo</span></div>
+
+                <ul>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Unlimited Transactions
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Priority Smart Execution
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Advanced Wallet Metrics
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        24/7 AI-Powered Support
+                    </li>
+                </ul>
+
+                <button class="btn-holo">Initialize Node</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = (centerY - y) / 15;
+            const rotateY = (x - centerX) / 15;
+
+            container.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            container.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+    </script>
+</body>
+
+</html>
