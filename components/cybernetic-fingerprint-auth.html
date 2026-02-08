@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybernetic Fingerprint Auth - UI Elements</title>
+    <style>
+        :root {
+            --auth-bg: #030712;
+            --scan-color: #3b82f6;
+            --scan-error: #ef4444;
+            --scan-success: #10b981;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--auth-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+            overflow: hidden;
+        }
+
+        .auth-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 40px;
+            width: 380px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .fingerprint-case {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px;
+            cursor: pointer;
+        }
+
+        .fingerprint-icon {
+            width: 100%;
+            height: 100%;
+            stroke: rgba(255, 255, 255, 0.2);
+            stroke-width: 1.5;
+            transition: all 0.5s ease;
+        }
+
+        /* The Animated Scanner Line */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--scan-color);
+            box-shadow: 0 0 15px var(--scan-color), 0 0 30px var(--scan-color);
+            border-radius: 2px;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        @keyframes scanning {
+            0% {
+                top: 0;
+            }
+
+            50% {
+                top: 100%;
+            }
+
+            100% {
+                top: 0;
+            }
+        }
+
+        .scanning .scan-line {
+            opacity: 1;
+            animation: scanning 2s infinite linear;
+        }
+
+        .scanning .fingerprint-icon {
+            stroke: var(--scan-color);
+            filter: drop-shadow(0 0 8px var(--scan-color));
+        }
+
+        /* Status Colors */
+        .success .fingerprint-icon {
+            stroke: var(--scan-success);
+            filter: drop-shadow(0 0 12px var(--scan-success));
+        }
+
+        .error .fingerprint-icon {
+            stroke: var(--scan-error);
+            filter: drop-shadow(0 0 12px var(--scan-error));
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-auth:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--scan-color);
+        }
+
+        .auth-status {
+            margin-top: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            height: 18px;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .show-status {
+            opacity: 1;
+        }
+
+        /* Success/Error text colors */
+        .status-success {
+            color: var(--scan-success);
+        }
+
+        .status-error {
+            color: var(--scan-error);
+        }
+
+        .status-scanning {
+            color: var(--scan-color);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="auth-card">
+        <div class="fingerprint-case" id="scanner">
+            <div class="scan-line"></div>
+            <svg class="fingerprint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M2 12c0-2.8 2.2-5 5-5s5 2.2 5 5"></path>
+                <path d="M7 12c0-1.4 1.1-2.5 2.5-2.5S12 10.6 12 12"></path>
+                <path d="M12 12c0 1.4-1.1 2.5-2.5 2.5S7 13.4 7 12"></path>
+                <path d="M17 12c0-5.5-4.5-10-10-10S0 6.5 0 12"></path>
+                <path d="M22 12c0-8.3-6.7-15-15-15"></path>
+                <path d="M12 17c0 2.8-2.2 5-5 5s-5-2.2-5-5"></path>
+                <path d="M7 17c0 1.4 1.1 2.5 2.5 2.5S12 18.4 12 17"></path>
+                <path d="M12 17c0-1.4 1.1-2.5 2.5-2.5S17 15.6 17 17"></path>
+            </svg>
+        </div>
+
+        <h2 class="title">Secure Identity Access</h2>
+        <p class="subtitle">Please place your finger on the sensor for verification.</p>
+
+        <button class="btn-auth" id="auth-btn">Manual Override</button>
+
+        <div class="auth-status" id="status-text">Ready to scan</div>
+    </div>
+
+    <script>
+        const scanner = document.getElementById('scanner');
+        const statusText = document.getElementById('status-text');
+        let isScanning = false;
+
+        scanner.addEventListener('click', () => {
+            if (isScanning) return;
+            startScan();
+        });
+
+        function startScan() {
+            isScanning = true;
+            scanner.classList.remove('success', 'error');
+            scanner.classList.add('scanning');
+
+            statusText.textContent = 'Scanning Identity...';
+            statusText.className = 'auth-status show-status status-scanning';
+
+            // Simulate server check
+            setTimeout(() => {
+                const isSuccess = Math.random() > 0.3; // 70% chance of success
+                finishScan(isSuccess);
+            }, 3000);
+        }
+
+        function finishScan(success) {
+            scanner.classList.remove('scanning');
+            isScanning = false;
+
+            if (success) {
+                scanner.classList.add('success');
+                statusText.textContent = 'Identity Verified';
+                statusText.className = 'auth-status show-status status-success';
+            } else {
+                scanner.classList.add('error');
+                statusText.textContent = 'Access Denied';
+                statusText.className = 'auth-status show-status status-error';
+
+                // Reset after error
+                setTimeout(() => {
+                    scanner.classList.remove('error');
+                    statusText.textContent = 'Ready to scan';
+                    statusText.className = 'auth-status';
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+
+</html>
