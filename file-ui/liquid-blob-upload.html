@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Blob File Upload - UI Elements</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --secondary: #ec4899;
+            --secondary-glow: rgba(236, 72, 153, 0.4);
+            --text-color: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        .upload-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* SVG Blob Filters */
+        .blobs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            filter: url(#goo);
+            z-index: 1;
+        }
+
+        .blob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 0 50px var(--primary-glow);
+        }
+
+        .blob-2 {
+            width: 150px;
+            height: 150px;
+            background: var(--secondary);
+            box-shadow: 0 0 40px var(--secondary-glow);
+            animation: move-blobs 10s infinite alternate;
+        }
+
+        @keyframes move-blobs {
+            0% {
+                transform: translate(-80%, -50%);
+            }
+
+            100% {
+                transform: translate(-20%, -50%);
+            }
+        }
+
+        /* Interaction states */
+        .upload-container.dragging .blob {
+            width: 250px;
+            height: 250px;
+            background: white;
+            box-shadow: 0 0 80px rgba(255, 255, 255, 0.4);
+        }
+
+        .upload-container.dragging .blob-2 {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .drop-zone {
+            position: relative;
+            z-index: 10;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .drop-zone:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .icon-wrapper {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+        }
+
+        .drop-zone:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.5;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* Success Animation */
+        .success-blob {
+            position: absolute;
+            width: 0;
+            height: 0;
+            background: #10b981;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            transition: width 0.8s ease, height 0.8s ease;
+            filter: blur(20px);
+        }
+
+        .uploaded .success-blob {
+            width: 150%;
+            height: 150%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="upload-container" id="upload-box">
+        <div class="blobs">
+            <div class="blob"></div>
+            <div class="blob blob-2"></div>
+        </div>
+
+        <div class="success-blob" id="success-overlay"></div>
+
+        <label for="file-input" class="drop-zone" id="drop-zone">
+            <div class="icon-wrapper">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+            </div>
+            <h3 id="upload-status">Deploy Assets</h3>
+            <p id="upload-hint">Drag & drop files or click to explore system</p>
+            <input type="file" id="file-input">
+        </label>
+    </div>
+
+    <!-- Gooey Filter -->
+    <svg style="display: none;">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+                    result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const uploadBox = document.getElementById('upload-box');
+        const fileInput = document.getElementById('file-input');
+        const statusText = document.getElementById('upload-status');
+        const hintText = document.getElementById('upload-hint');
+
+        // Drag and Drop events
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                uploadBox.classList.add('dragging');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                uploadBox.classList.remove('dragging');
+            });
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleUpload(files[0].name);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleUpload(e.target.files[0].name);
+            }
+        });
+
+        function handleUpload(filename) {
+            statusText.textContent = 'Processing...';
+            hintText.textContent = `Uploading ${filename}`;
+
+            // Simulate upload
+            setTimeout(() => {
+                uploadBox.classList.add('uploaded');
+                statusText.textContent = 'Success';
+                hintText.textContent = 'Resource deployed to cluster';
+
+                setTimeout(() => {
+                    uploadBox.classList.remove('uploaded');
+                    statusText.textContent = 'Deploy Assets';
+                    hintText.textContent = 'Drag & drop files or click to explore system';
+                }, 3000);
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>
