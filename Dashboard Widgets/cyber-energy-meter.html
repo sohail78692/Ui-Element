@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Energy Meter - UI Elements</title>
+    <style>
+        :root {
+            --cyber-bg: #050505;
+            --cyber-primary: #00ffaa;
+            --cyber-secondary: #0088ff;
+            --cyber-text: #e0e0e0;
+            --cyber-glow: rgba(0, 255, 170, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        body {
+            background-color: var(--cyber-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--cyber-text);
+        }
+
+        .meter-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .svg-meter {
+            width: 280px;
+            height: 280px;
+            transform: rotate(-90deg);
+        }
+
+        .meter-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 10;
+        }
+
+        .meter-progress {
+            fill: none;
+            stroke: var(--cyber-primary);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 753;
+            /* 2 * PI * R (120) ≈ 753 */
+            stroke-dashoffset: 753;
+            transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 10px var(--cyber-primary));
+        }
+
+        .meter-secondary {
+            fill: none;
+            stroke: var(--cyber-secondary);
+            stroke-width: 4;
+            stroke-dasharray: 628;
+            /* 2 * PI * R (100) ≈ 628 */
+            stroke-dashoffset: 628;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.5;
+        }
+
+        /* Animated Ring Pulse */
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.2;
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 0.5;
+            }
+        }
+
+        .pulse-circle {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 1px solid var(--cyber-primary);
+            border-radius: 50%;
+            animation: pulse-ring 4s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        .info-center {
+            position: absolute;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .value {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--cyber-primary);
+            text-shadow: 0 0 20px var(--cyber-glow);
+        }
+
+        .label {
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--cyber-text);
+            opacity: 0.6;
+        }
+
+        .status-badge {
+            margin-top: 10px;
+            padding: 4px 12px;
+            background: rgba(0, 255, 170, 0.1);
+            border: 1px solid var(--cyber-primary);
+            font-size: 10px;
+            border-radius: 4px;
+        }
+
+        /* Tick Marks */
+        .ticks {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            pointer-events: none;
+        }
+
+        .tick {
+            position: absolute;
+            width: 2px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 -140px;
+        }
+
+        .tick.highlight {
+            background: var(--cyber-primary);
+            box-shadow: 0 0 5px var(--cyber-primary);
+        }
+
+        .controls {
+            position: absolute;
+            bottom: -80px;
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            border-color: var(--cyber-primary);
+            color: var(--cyber-primary);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="meter-container">
+        <div class="pulse-circle"></div>
+
+        <svg class="svg-meter">
+            <circle class="meter-bg" cx="140" cy="140" r="120"></circle>
+            <circle class="meter-secondary" id="secondary-progress" cx="140" cy="140" r="100"></circle>
+            <circle class="meter-progress" id="main-progress" cx="140" cy="140" r="120"></circle>
+        </svg>
+
+        <div class="ticks" id="tick-container"></div>
+
+        <div class="info-center">
+            <span class="label">Power Output</span>
+            <span class="value" id="val-display">0</span>
+            <span class="label">GigaWatts</span>
+            <div class="status-badge" id="status-badge">SYSTEM STABLE</div>
+        </div>
+
+        <div class="controls">
+            <button onclick="updateValue(25)">LOW</button>
+            <button onclick="updateValue(60)">MED</button>
+            <button onclick="updateValue(95)">MAX</button>
+        </div>
+    </div>
+
+    <script>
+        const tickContainer = document.getElementById('tick-container');
+        const mainProgress = document.getElementById('main-progress');
+        const secondaryProgress = document.getElementById('secondary-progress');
+        const valDisplay = document.getElementById('val-display');
+        const statusBadge = document.getElementById('status-badge');
+
+        // Create ticks
+        for (let i = 0; i < 60; i++) {
+            const tick = document.createElement('div');
+            tick.className = 'tick';
+            tick.style.transform = `rotate(${i * 6}deg) translate(-50%, 140px)`;
+            tickContainer.appendChild(tick);
+        }
+
+        function updateValue(percent) {
+            // Main progress (Circumference calculation)
+            const mainCirc = 2 * Math.PI * 120;
+            const offset = mainCirc - (percent / 100 * mainCirc);
+            mainProgress.style.strokeDashoffset = offset;
+
+            // Secondary progress
+            const secCirc = 2 * Math.PI * 100;
+            const secOffset = secCirc - ((percent * 0.8) / 100 * secCirc);
+            secondaryProgress.style.strokeDashoffset = secOffset;
+
+            // Animate number
+            animateValue(percent);
+
+            // Update ticks
+            const ticks = document.querySelectorAll('.tick');
+            ticks.forEach((t, index) => {
+                if (index < (percent / 100 * 60)) {
+                    t.classList.add('highlight');
+                } else {
+                    t.classList.remove('highlight');
+                }
+            });
+
+            // Update status
+            if (percent > 90) {
+                statusBadge.textContent = 'CRITICAL OVERLOAD';
+                statusBadge.style.borderColor = '#ff4444';
+                statusBadge.style.color = '#ff4444';
+                statusBadge.style.background = 'rgba(255, 68, 68, 0.1)';
+            } else {
+                statusBadge.textContent = 'SYSTEM STABLE';
+                statusBadge.style.borderColor = 'var(--cyber-primary)';
+                statusBadge.style.color = 'var(--cyber-primary)';
+                statusBadge.style.background = 'rgba(0, 255, 170, 0.1)';
+            }
+        }
+
+        function animateValue(target) {
+            let current = parseInt(valDisplay.textContent);
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Ease out expo
+                const ease = 1 - Math.pow(2, -10 * progress);
+                const val = Math.floor(current + (target - current) * ease);
+
+                valDisplay.textContent = val;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            requestAnimationFrame(update);
+        }
+
+        // Initial state
+        setTimeout(() => updateValue(72), 500);
+
+    </script>
+</body>
+
+</html>
