@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Plasma Button - UI Elements</title>
+    <style>
+        :root {
+            --plasma-bg: #0a0a0c;
+            --plasma-glow: #00f2ff;
+            --plasma-secondary: #7000ff;
+            --text-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--plasma-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .btn-container {
+            position: relative;
+            padding: 40px;
+        }
+
+        .plasma-btn {
+            position: relative;
+            padding: 20px 45px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
+                background 0.3s ease,
+                border-color 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 2;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .plasma-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .plasma-btn span {
+            position: relative;
+            z-index: 3;
+        }
+
+        /* The Plasma Glow Effect */
+        .glow-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .plasma-blob {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--plasma-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+        }
+
+        .plasma-blob.secondary {
+            background: radial-gradient(circle, var(--plasma-secondary) 0%, transparent 70%);
+            width: 120px;
+            height: 120px;
+        }
+
+        .btn-container:hover .plasma-blob {
+            opacity: 0.6;
+        }
+
+        /* Subtle Inner Pulse */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        .plasma-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 242, 255, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .plasma-btn:hover::after {
+            opacity: 1;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        /* SVG Icon Animation */
+        .plasma-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .plasma-btn:hover svg {
+            transform: translateX(5px) rotate(-10deg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="btn-container" id="magnetic-area">
+        <div class="plasma-blob" id="blob-1"></div>
+        <div class="plasma-blob secondary" id="blob-2"></div>
+
+        <button class="plasma-btn" id="plasma-button">
+            <span>Core Initialize</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        const container = document.getElementById('magnetic-area');
+        const btn = document.getElementById('plasma-button');
+        const blob1 = document.getElementById('blob-1');
+        const blob2 = document.getElementById('blob-2');
+
+        const magneticRadius = 150;
+        const btnStrength = 0.3;
+        const blobStrength = 0.6;
+
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const bcr = container.getBoundingClientRect();
+            const centerX = bcr.left + bcr.width / 2;
+            const centerY = bcr.top + bcr.height / 2;
+
+            const deltaX = clientX - centerX;
+            const deltaY = clientY - centerY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            if (distance < magneticRadius) {
+                // Move button
+                const moveX = deltaX * btnStrength;
+                const moveY = deltaY * btnStrength;
+                btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+                // Move blobs with different speeds for parallax effect
+                blob1.style.opacity = '0.6';
+                blob2.style.opacity = '0.4';
+
+                blob1.style.left = `${clientX - bcr.left}px`;
+                blob1.style.top = `${clientY - bcr.top}px`;
+
+                blob2.style.left = `${(clientX - bcr.left) * 0.9}px`;
+                blob2.style.top = `${(clientY - bcr.top) * 0.9}px`;
+            } else {
+                // Reset positions
+                btn.style.transform = 'translate(0, 0)';
+                blob1.style.opacity = '0';
+                blob2.style.opacity = '0';
+            }
+        });
+
+        btn.addEventListener('mousedown', () => {
+            btn.style.transform += ' scale(0.95)';
+        });
+
+        btn.addEventListener('mouseup', () => {
+            // Re-apply the translation from mousemove logic
+            // for simplicity just reset scale
+            const bcr = container.getBoundingClientRect();
+            const centerX = bcr.left + bcr.width / 2;
+            const centerY = bcr.top + bcr.height / 2;
+        });
+    </script>
+</body>
+
+</html>
