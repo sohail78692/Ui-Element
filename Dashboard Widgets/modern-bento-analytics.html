@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Bento Analytics</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.2);
+        }
+
+        body {
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', system-ui, sans-serif;
+            color: var(--text-main);
+        }
+
+        .bento-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto;
+            gap: 20px;
+            width: 1000px;
+            max-width: 95vw;
+            padding: 20px;
+        }
+
+        .bento-item {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .bento-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px -10px var(--accent-glow);
+        }
+
+        .item-1 {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .item-2 {
+            grid-column: span 2;
+        }
+
+        .item-3 {
+            grid-column: span 1;
+        }
+
+        .item-4 {
+            grid-column: span 1;
+        }
+
+        .label {
+            color: var(--text-sub);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .value {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .growth {
+            display: inline-flex;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .growth.plus {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+        }
+
+        .growth.minus {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+        }
+
+        .mini-chart {
+            margin-top: 24px;
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .bar {
+            flex: 1;
+            background: var(--accent);
+            opacity: 0.3;
+            border-radius: 4px 4px 0 0;
+            transition: opacity 0.3s, height 0.6s ease;
+        }
+
+        .bento-item:hover .bar {
+            opacity: 0.8;
+        }
+
+        .accent-circle {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--accent);
+            filter: blur(80px);
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .bento-container {
+                grid-template-columns: 1fr;
+            }
+
+            .item-1,
+            .item-2,
+            .item-3,
+            .item-4 {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bento-container">
+        <div class="bento-item item-1">
+            <div class="accent-circle"></div>
+            <div class="icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);">
+                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                    <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                </svg>
+            </div>
+            <div class="label">User Engagement</div>
+            <div class="value">84.2%</div>
+            <div class="growth plus">+12.4% from last week</div>
+
+            <div class="mini-chart">
+                <div class="bar" style="height: 40%"></div>
+                <div class="bar" style="height: 60%"></div>
+                <div class="bar" style="height: 50%"></div>
+                <div class="bar" style="height: 80%"></div>
+                <div class="bar" style="height: 70%"></div>
+                <div class="bar" style="height: 90%"></div>
+                <div class="bar" style="height: 45%"></div>
+                <div class="bar" style="height: 55%"></div>
+            </div>
+        </div>
+
+        <div class="bento-item item-2">
+            <div class="label">Total Conversion</div>
+            <div class="value">$42,900</div>
+            <div class="growth plus">+5.2%</div>
+        </div>
+
+        <div class="bento-item item-3">
+            <div class="label">Avg. Latency</div>
+            <div class="value">124ms</div>
+            <div class="growth minus" style="background: rgba(34, 197, 94, 0.1); color: #4ade80;">-12ms</div>
+        </div>
+
+        <div class="bento-item item-4">
+            <div class="label">Errors</div>
+            <div class="value">0.02%</div>
+            <div class="growth plus">Stable</div>
+        </div>
+    </div>
+
+</body>
+
+</html>
