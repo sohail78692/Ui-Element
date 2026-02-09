@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Terminal Palette</title>
+    <style>
+        :root {
+            --term-bg: #0c0c0c;
+            --term-green: #00ff41;
+            --term-dim: rgba(0, 255, 65, 0.4);
+        }
+
+        body {
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .palette-window {
+            width: 600px;
+            background: var(--term-bg);
+            border: 2px solid var(--term-green);
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Scanlines Effect */
+        .palette-window::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .header {
+            background: var(--term-green);
+            color: black;
+            padding: 8px 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .search-area {
+            padding: 20px;
+            border-bottom: 1px solid var(--term-dim);
+        }
+
+        .search-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--term-green);
+            font-family: inherit;
+            font-size: 18px;
+            outline: none;
+            caret-color: var(--term-green);
+        }
+
+        .results {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .result-item {
+            padding: 12px 20px;
+            color: var(--term-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item:hover,
+        .result-item.active {
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--term-green);
+        }
+
+        .result-item:hover::before {
+            content: "> ";
+        }
+
+        .shortcut {
+            font-size: 12px;
+            opacity: 0.6;
+            border: 1px solid currentColor;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        /* CRT Flicker */
+        @keyframes flicker {
+            0% {
+                opacity: 0.97;
+            }
+
+            5% {
+                opacity: 0.95;
+            }
+
+            10% {
+                opacity: 0.9;
+            }
+
+            15% {
+                opacity: 0.95;
+            }
+
+            20% {
+                opacity: 0.98;
+            }
+
+            25% {
+                opacity: 0.95;
+            }
+
+            30% {
+                opacity: 0.9;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .palette-window {
+            animation: flicker 0.15s infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="palette-window">
+        <div class="header">
+            <span>COMMAND_PALETTE.EXE</span>
+            <span>v1.0.4</span>
+        </div>
+        <div class="search-area">
+            <input type="text" class="search-input" placeholder="Enter command..." autofocus>
+        </div>
+        <div class="results">
+            <div class="result-item active">
+                <span>CREATE_NEW_FILE</span>
+                <span class="shortcut">CTRL+N</span>
+            </div>
+            <div class="result-item">
+                <span>OPEN_REPOSITORY</span>
+                <span class="shortcut">CTRL+O</span>
+            </div>
+            <div class="result-item">
+                <span>DEPLOY_TO_PRODUCTION</span>
+                <span class="shortcut">F5</span>
+            </div>
+            <div class="result-item">
+                <span>CLEAR_CACHE</span>
+                <span class="shortcut">ALT+C</span>
+            </div>
+            <div class="result-item">
+                <span>SYSTEM_REBOOT</span>
+                <span class="shortcut">ESC</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
