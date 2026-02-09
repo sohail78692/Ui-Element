@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Hover Button</title>
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --btn-bg: #fff;
+            --btn-text: #000;
+        }
+
+        body {
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-wrapper {
+            position: relative;
+            padding: 100px;
+            /* Magnetic area */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .magnetic-btn {
+            position: relative;
+            padding: 20px 50px;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .magnetic-btn span {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .btn-glow {
+            position: absolute;
+            inset: 0;
+            background: white;
+            border-radius: 50px;
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+
+        .magnetic-btn:hover .btn-glow {
+            opacity: 0.3;
+        }
+
+        .btn-bg-fill {
+            position: absolute;
+            inset: 0;
+            background: #f0f0f0;
+            border-radius: 50px;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 1;
+        }
+
+        .magnetic-btn:hover .btn-bg-fill {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="btn-wrapper" id="wrapper">
+        <button class="magnetic-btn" id="btn">
+            <span class="btn-bg-fill"></span>
+            <div class="btn-glow"></div>
+            <span>Explore Now</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        const btn = document.getElementById('btn');
+        const wrapper = document.getElementById('wrapper');
+
+        wrapper.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - (rect.left + rect.width / 2);
+            const y = e.clientY - (rect.top + rect.height / 2);
+
+            // Move button 30% towards the mouse
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+
+            // Subtle rotation
+            const rotateX = -y * 0.1;
+            const rotateY = x * 0.1;
+            btn.style.transform += ` rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        wrapper.addEventListener('mouseleave', () => {
+            btn.style.transform = `translate(0px, 0px) rotateX(0deg) rotateY(0deg)`;
+        });
+    </script>
+</body>
+
+</html>
