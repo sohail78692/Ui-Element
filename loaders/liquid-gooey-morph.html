@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Gooey Loader</title>
+    <style>
+        body {
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .loader-container {
+            position: relative;
+            filter: url('#goo');
+        }
+
+        .circle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #00ffcc;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            margin-left: -25px;
+        }
+
+        .main-circle {
+            width: 80px;
+            height: 80px;
+            margin-top: -40px;
+            margin-left: -40px;
+            background: #00ffcc;
+            box-shadow: 0 0 30px #00ffcc;
+        }
+
+        .circle:nth-child(2) {
+            animation: move1 2s ease-in-out infinite;
+        }
+
+        .circle:nth-child(3) {
+            animation: move2 2.5s ease-in-out infinite;
+        }
+
+        .circle:nth-child(4) {
+            animation: move3 3s ease-in-out infinite;
+        }
+
+        .circle:nth-child(5) {
+            animation: move4 1.5s ease-in-out infinite;
+        }
+
+        @keyframes move1 {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(80px, 40px);
+            }
+        }
+
+        @keyframes move2 {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-80px, -40px);
+            }
+        }
+
+        @keyframes move3 {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(40px, -80px);
+            }
+        }
+
+        @keyframes move4 {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-40px, 80px);
+            }
+        }
+
+        svg {
+            width: 0;
+            height: 0;
+        }
+
+        .loading-text {
+            position: absolute;
+            top: calc(50% + 100px);
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00ffcc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            font-size: 12px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loader-container">
+        <div class="circle main-circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <div class="loading-text">Synchronizing</div>
+
+    <!-- Gooey Filter -->
+    <svg>
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+                    result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
+</body>
+
+</html>
