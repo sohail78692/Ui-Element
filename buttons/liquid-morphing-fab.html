@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Morphing FAB</title>
+    <style>
+        :root {
+            --bg: #08080a;
+            --fab-color: #00ffcc;
+            --icon-color: #0a0a0a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .fab-wrapper {
+            position: relative;
+            filter: url('#gooey');
+        }
+
+        .fab-main {
+            width: 70px;
+            height: 70px;
+            background: var(--fab-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 255, 204, 0.3);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .fab-main:hover {
+            transform: scale(1.1) rotate(45deg);
+        }
+
+        .fab-child {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 60px;
+            height: 60px;
+            background: var(--fab-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0;
+            z-index: 5;
+        }
+
+        .fab-wrapper.active .fab-child:nth-child(1) {
+            transform: translateY(-100px);
+            opacity: 1;
+        }
+
+        .fab-wrapper.active .fab-child:nth-child(2) {
+            transform: translateX(-90px) translateY(-50px);
+            opacity: 1;
+        }
+
+        .fab-wrapper.active .fab-child:nth-child(3) {
+            transform: translateX(90px) translateY(-50px);
+            opacity: 1;
+        }
+
+        .fab-wrapper.active .fab-child:nth-child(4) {
+            transform: translateY(100px);
+            opacity: 1;
+        }
+
+        .icon {
+            font-size: 24px;
+            color: var(--icon-color);
+            font-weight: bold;
+        }
+
+        svg {
+            position: absolute;
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="fab-wrapper" id="fab">
+        <div class="fab-child">
+            <span class="icon">★</span>
+        </div>
+        <div class="fab-child">
+            <span class="icon">✉</span>
+        </div>
+        <div class="fab-child">
+            <span class="icon">☎</span>
+        </div>
+        <div class="fab-child">
+            <span class="icon">❤</span>
+        </div>
+        <div class="fab-main">
+            <span class="icon">+</span>
+        </div>
+    </div>
+
+    <!-- Gooey Filter -->
+    <svg>
+        <defs>
+            <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+                    result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        const fab = document.getElementById('fab');
+        fab.addEventListener('click', () => {
+            fab.classList.toggle('active');
+        });
+    </script>
+
+</body>
+
+</html>
