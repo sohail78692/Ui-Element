@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Floating Metric Card</title>
+    <style>
+        :root {
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --neon-blue: #00f2ff;
+            --neon-purple: #bd00ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: #050508;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1200px;
+        }
+
+        .container {
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out;
+        }
+
+        .metric-card {
+            width: 320px;
+            height: 400px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transform-style: preserve-3d;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(0, 242, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transform: translateZ(20px);
+        }
+
+        .value {
+            font-size: 72px;
+            font-weight: 800;
+            color: white;
+            margin: 10px 0;
+            transform: translateZ(50px);
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+            line-height: 1;
+        }
+
+        .unit {
+            font-size: 24px;
+            color: var(--neon-blue);
+            vertical-align: super;
+        }
+
+        .trend {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00ffaa;
+            font-weight: 600;
+            transform: translateZ(30px);
+        }
+
+        .chart-mock {
+            height: 60px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            transform: translateZ(40px);
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--neon-blue), var(--neon-purple));
+            border-radius: 10px;
+            animation: grow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes grow {
+            from {
+                height: 10%;
+            }
+
+            to {
+                height: 80%;
+            }
+        }
+
+        /* Ambient Glow effect around the card */
+        .glow-orb {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--neon-blue);
+            filter: blur(80px);
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="cardContainer">
+        <div class="metric-card">
+            <div class="label">Daily Transactions</div>
+            <div class="value">
+                84.2<span class="unit">K</span>
+            </div>
+            <div class="trend">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="M5 15l5-5 5 5M10 10V3M10 3L6 7M10 3l4 4" />
+                </svg>
+                +12.4%
+            </div>
+            <div class="chart-mock">
+                <div class="bar" style="animation-delay: 0.1s; height: 40%"></div>
+                <div class="bar" style="animation-delay: 0.3s; height: 70%"></div>
+                <div class="bar" style="animation-delay: 0.5s; height: 50%"></div>
+                <div class="bar" style="animation-delay: 0.2s; height: 90%"></div>
+                <div class="bar" style="animation-delay: 0.4s; height: 60%"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('cardContainer');
+        const card = container.querySelector('.metric-card');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = (centerY - y) / 10;
+            const rotateY = (x - centerX) / 10;
+
+            container.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            container.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        });
+    </script>
+
+</body>
+
+</html>
