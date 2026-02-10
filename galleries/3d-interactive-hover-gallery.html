@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Interactive Hover Gallery</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --accent-color: #00f2ff;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --transition-speed: 0.6s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .gallery-container {
+            display: flex;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            height: 500px;
+            transform-style: preserve-3d;
+        }
+
+        .gallery-item {
+            position: relative;
+            flex: 1;
+            height: 100%;
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all var(--transition-speed) cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform-origin: center center;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.8));
+            z-index: 1;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .gallery-item:hover {
+            flex: 4;
+            transform: translateZ(50px);
+            border-color: var(--accent-color);
+            box-shadow: 0 20px 50px rgba(0, 242, 255, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s;
+            filter: grayscale(80%);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+
+        .item-content {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s 0.2s;
+        }
+
+        .gallery-item:hover .item-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .item-content h3 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .item-content p {
+            color: var(--accent-color);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Glass Glow Effect */
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.1),
+                    transparent);
+            transition: 0.5s;
+        }
+
+        .gallery-item:hover::after {
+            left: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .gallery-item {
+                flex: none;
+                height: 200px;
+                width: 100%;
+            }
+
+            .gallery-item:hover {
+                flex: none;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="gallery-container">
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800"
+                alt="Cyberpunk City">
+            <div class="item-content">
+                <h3>Neon District</h3>
+                <p>Explore the future</p>
+            </div>
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800"
+                alt="Retro Tech">
+            <div class="item-content">
+                <h3>Cyber Core</h3>
+                <p>Digital evolution</p>
+            </div>
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"
+                alt="Space">
+            <div class="item-content">
+                <h3>Void Runner</h3>
+                <p>Beyond the stars</p>
+            </div>
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800"
+                alt="Circuits">
+            <div class="item-content">
+                <h3>Mainframe</h3>
+                <p>Neural connectivity</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
