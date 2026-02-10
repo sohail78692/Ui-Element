@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Cyberpunk FAQ</title>
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-pink: #ff00c8;
+            --dark-bg: #08080c;
+            --card-rgba: rgba(16, 16, 24, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(0, 242, 255, 0.05), transparent 25%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 200, 0.05), transparent 25%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .faq-wrapper {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+        }
+
+        .header span {
+            color: var(--neon-blue);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .faq-item {
+            background: var(--card-rgba);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.03), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .faq-item:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .faq-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .faq-question {
+            padding: 24px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .faq-question .icon {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--neon-blue);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .faq-question .icon::after {
+            content: '+';
+            font-size: 20px;
+            color: var(--neon-blue);
+        }
+
+        .faq-item.active .faq-question .icon {
+            transform: rotate(45deg);
+            background: var(--neon-blue);
+        }
+
+        .faq-item.active .faq-question .icon::after {
+            color: black;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            line-height: 1.6;
+            padding: 0 30px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 30px 30px 30px;
+            transition: all 0.5s cubic-bezier(1, 0, 1, 0);
+        }
+
+        /* Holographic Scanline Effect */
+        .scanlines {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                    transparent 50%,
+                    rgba(0, 242, 255, 0.02) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="faq-wrapper">
+        <div class="header">
+            <span>Accessing Knowledge Base</span>
+            <h1>NEURAL FAQ</h1>
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="scanlines"></div>
+                <div class="faq-question">
+                    What is Neural Link Integration?
+                    <div class="icon"></div>
+                </div>
+                <div class="faq-answer">
+                    Neural Link Integration allows for direct biological connection between the user's cerebral cortex
+                    and the mainframe, enabling data transfer rates up to 100 TB/s with minimal synaptic latency.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="scanlines"></div>
+                <div class="faq-question">
+                    Is the holographic interface safe?
+                    <div class="icon"></div>
+                </div>
+                <div class="faq-answer">
+                    Yes, all holographic emissions are filtered through UV-blockers and meet standard safety protocols.
+                    Minor retinal flickering may occur during the calibration phase.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="scanlines"></div>
+                <div class="faq-question">
+                    How do I reset my biometric key?
+                    <div class="icon"></div>
+                </div>
+                <div class="faq-answer">
+                    Biometric keys can be reset at any authorized district terminal using your original DNA sequence or
+                    a verified neural signature backup.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
