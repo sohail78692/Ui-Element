@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Search Reveal</title>
+    <style>
+        :root {
+            --bg: #030305;
+            --accent: #ff007a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .search-box {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(15px);
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-box.active {
+            width: 400px;
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(255, 0, 122, 0.3);
+        }
+
+        .search-input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 0 80px 0 30px;
+            color: white;
+            font-size: 18px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .search-box.active .search-input {
+            opacity: 1;
+            pointer-events: all;
+            transition-delay: 0.3s;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            transition: all 0.6s;
+        }
+
+        .search-box.active .search-btn {
+            background: var(--accent);
+            color: black;
+            transform: scale(0.8);
+            right: 10px;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            transition: 0.3s;
+        }
+
+        .search-box::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 45px;
+            border: 1px solid var(--accent);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: 0.4s;
+        }
+
+        .search-box.active::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .search-indicator {
+            position: absolute;
+            bottom: -40px;
+            color: var(--accent);
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .search-box.active+.search-indicator {
+            opacity: 1;
+            bottom: -25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="search-box" id="searchBox">
+        <input type="text" class="search-input" placeholder="Neural Search Engine...">
+        <div class="search-btn">
+            <svg class="icon" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </div>
+    </div>
+    <div class="search-indicator">Awaiting Input_</div>
+
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        searchBox.addEventListener('click', () => {
+            searchBox.classList.toggle('active');
+            if (searchBox.classList.contains('active')) {
+                searchBox.querySelector('input').focus();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
