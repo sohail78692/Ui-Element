@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Cursor Trail Navigation</title>
+    <style>
+        :root {
+            --nav-bg: rgba(10, 10, 15, 0.8);
+            --glow-color: #00f2ff;
+            --text-color: #ffffff;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #050505;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-container {
+            position: relative;
+            background: var(--nav-bg);
+            padding: 10px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-link {
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-link:hover {
+            color: var(--text-color);
+        }
+
+        /* The Glow Orb */
+        .cursor-glow {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.5s ease;
+            filter: blur(10px);
+        }
+
+        /* The Pill Shape Highlighter */
+        .nav-pill {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
+            z-index: 1;
+            top: 0;
+            left: 0;
+        }
+
+        /* Content spacing for demo */
+        .page-content {
+            position: absolute;
+            top: 20%;
+            text-align: center;
+            color: white;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-content">
+        <h1>Hover over the navigation</h1>
+    </div>
+
+    <nav class="nav-container" id="main-nav">
+        <div class="cursor-glow" id="glow"></div>
+        <div class="nav-pill" id="pill"></div>
+        <ul class="nav-list">
+            <li><a href="#" class="nav-link">Home</a></li>
+            <li><a href="#" class="nav-link">Universe</a></li>
+            <li><a href="#" class="nav-link">Nebula</a></li>
+            <li><a href="#" class="nav-link">Pulsar</a></li>
+            <li><a href="#" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        const nav = document.getElementById('main-nav');
+        const glow = document.getElementById('glow');
+        const pill = document.getElementById('pill');
+        const links = document.querySelectorAll('.nav-link');
+
+        nav.addEventListener('mousemove', (e) => {
+            const rect = nav.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            glow.style.left = x + 'px';
+            glow.style.top = y + 'px';
+            glow.style.opacity = '0.5';
+        });
+
+        nav.addEventListener('mouseleave', () => {
+            glow.style.opacity = '0';
+            pill.style.opacity = '0';
+        });
+
+        links.forEach(link => {
+            link.addEventListener('mouseenter', (e) => {
+                const rect = e.target.getBoundingClientRect();
+                const navRect = nav.getBoundingClientRect();
+
+                pill.style.width = rect.width + 'px';
+                pill.style.height = rect.height + 'px';
+                pill.style.left = (rect.left - navRect.left) + 'px';
+                pill.style.top = (rect.top - navRect.top) + 'px';
+                pill.style.opacity = '1';
+            });
+        });
+    </script>
+
+</body>
+
+</html>
