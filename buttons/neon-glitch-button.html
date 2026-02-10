@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Glitch Button</title>
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-pink: #ff00c1;
+            --bg: #050505;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Syne', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glitch-btn {
+            position: relative;
+            padding: 20px 50px;
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: white;
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            cursor: pointer;
+            transition: 0.3s;
+            overflow: hidden;
+            outline: none;
+        }
+
+        .glitch-btn:hover {
+            background: var(--neon-blue);
+            color: black;
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        .glitch-btn::before,
+        .glitch-btn::after {
+            content: 'TERMINATE';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+            opacity: 0;
+        }
+
+        .glitch-btn::before {
+            color: var(--neon-pink);
+            z-index: -1;
+        }
+
+        .glitch-btn::after {
+            color: var(--neon-blue);
+            z-index: -2;
+        }
+
+        .glitch-btn:hover::before {
+            opacity: 1;
+            animation: glitch 0.3s infinite;
+        }
+
+        .glitch-btn:hover::after {
+            opacity: 1;
+            animation: glitch 0.3s infinite reverse;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-3px, 3px);
+            }
+
+            40% {
+                transform: translate(-3px, -3px);
+            }
+
+            60% {
+                transform: translate(3px, 3px);
+            }
+
+            80% {
+                transform: translate(3px, -3px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        .btn-label {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="glitch-btn">
+        <span class="btn-label">TERMINATE</span>
+    </button>
+
+</body>
+
+</html>
