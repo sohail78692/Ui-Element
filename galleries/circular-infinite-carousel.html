@@ -4,24 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circular Infinite Carousel - UI Elements</title>
+    <title>Circular Infinite Carousel</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&display=swap');
-
         :root {
-            --bg-color: #0d0d12;
-            --accent: #6366f1;
-            --card-w: 220px;
-            --card-h: 300px;
-            --radius: 400px;
+            --bg: #050505;
+            --accent: #00f2ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: #fff;
-            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -30,79 +27,15 @@
             perspective: 2000px;
         }
 
-        .scene {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform-style: preserve-3d;
-        }
-
-        .carousel {
-            width: var(--card-w);
-            height: var(--card-h);
+        .carousel-view {
             position: relative;
+            width: 300px;
+            height: 400px;
             transform-style: preserve-3d;
-            transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
-            animation: rotate 20s linear infinite;
+            animation: rotateWorld 20s linear infinite;
         }
 
-        .carousel:hover {
-            animation-play-state: paused;
-        }
-
-        .card {
-            position: absolute;
-            width: var(--card-w);
-            height: var(--card-h);
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            backface-visibility: hidden;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: all 0.5s ease;
-            overflow: hidden;
-        }
-
-        .card-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-        }
-
-        .card:hover .card-img {
-            opacity: 1;
-        }
-
-        .card-info {
-            z-index: 1;
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-            width: 100%;
-            position: absolute;
-            bottom: 0;
-        }
-
-        .card h3 {
-            margin: 0;
-            font-size: 1.2rem;
-            color: var(--accent);
-        }
-
-        @keyframes rotate {
+        @keyframes rotateWorld {
             from {
                 transform: rotateY(0deg);
             }
@@ -112,112 +45,107 @@
             }
         }
 
-        .controls {
-            position: fixed;
-            bottom: 40px;
+        .carousel-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             display: flex;
-            gap: 20px;
-            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 80px;
+            color: var(--accent);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+            transition: all 0.5s;
+            backface-visibility: hidden;
         }
 
-        button {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 30px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s;
-            font-family: 'Outfit';
+        /* Position items in a circle */
+        .item-1 {
+            transform: rotateY(0deg) translateZ(500px);
         }
 
-        button:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            transform: translateY(-2px);
+        .item-2 {
+            transform: rotateY(45deg) translateZ(500px);
         }
 
-        .heading {
-            position: fixed;
-            top: 40px;
+        .item-3 {
+            transform: rotateY(90deg) translateZ(500px);
+        }
+
+        .item-4 {
+            transform: rotateY(135deg) translateZ(500px);
+        }
+
+        .item-5 {
+            transform: rotateY(180deg) translateZ(500px);
+        }
+
+        .item-6 {
+            transform: rotateY(225deg) translateZ(500px);
+        }
+
+        .item-7 {
+            transform: rotateY(270deg) translateZ(500px);
+        }
+
+        .item-8 {
+            transform: rotateY(315deg) translateZ(500px);
+        }
+
+        .carousel-view:hover {
+            animation-play-state: paused;
+        }
+
+        .item-content {
             text-align: center;
-            pointer-events: none;
         }
 
-        .heading h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
+        .item-content span {
+            display: block;
+            font-size: 14px;
             text-transform: uppercase;
+            letter-spacing: 4px;
+            color: white;
+            opacity: 0.5;
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="heading">
-        <h1>Infinite Circular Gallery</h1>
-        <p>3D rotation with CSS preserve-3d and smooth transitions</p>
-    </div>
-
-    <div class="scene">
-        <div class="carousel" id="carousel">
-            <!-- Cards will be generated by JS -->
+    <div class="carousel-view">
+        <div class="carousel-item item-1">
+            <div class="item-content">01<span>Artifact</span></div>
+        </div>
+        <div class="carousel-item item-2">
+            <div class="item-content">02<span>Relic</span></div>
+        </div>
+        <div class="carousel-item item-3">
+            <div class="item-content">03<span>Core</span></div>
+        </div>
+        <div class="carousel-item item-4">
+            <div class="item-content">04<span>Zenith</span></div>
+        </div>
+        <div class="carousel-item item-5">
+            <div class="item-content">05<span>Portal</span></div>
+        </div>
+        <div class="carousel-item item-6">
+            <div class="item-content">06<span>Nexus</span></div>
+        </div>
+        <div class="carousel-item item-7">
+            <div class="item-content">07<span>Vortex</span></div>
+        </div>
+        <div class="carousel-item item-8">
+            <div class="item-content">08<span>Prism</span></div>
         </div>
     </div>
 
-    <div class="controls">
-        <button onclick="prev()">Previous</button>
-        <button onclick="next()">Next</button>
-    </div>
-
-    <script>
-        const carousel = document.getElementById('carousel');
-        const itemCount = 8;
-        const angle = 360 / itemCount;
-        let currentRotation = 0;
-
-        // Colors for placeholders
-        const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4'];
-
-        for (let i = 0; i < itemCount; i++) {
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            // Calculate position in 3D circle
-            // Radius of 400px
-            const rotationY = i * angle;
-            card.style.transform = `rotateY(${rotationY}deg) translateZ(400px)`;
-
-            card.innerHTML = `
-                <div style="width: 100%; height: 100%; background: linear-gradient(45deg, ${colors[i]}, #000); position:absolute; top:0; left:0; z-index:-1; opacity:0.4;"></div>
-                <div class="card-info">
-                    <h3>UI Element ${i + 1}</h3>
-                    <p>Modern Design Showcase</p>
-                </div>
-            `;
-            carousel.appendChild(card);
-        }
-
-        function next() {
-            currentRotation -= angle;
-            updateRotation();
-        }
-
-        function prev() {
-            currentRotation += angle;
-            updateRotation();
-        }
-
-        function updateRotation() {
-            carousel.style.animation = 'none';
-            carousel.style.transform = `rotateY(${currentRotation}deg)`;
-
-            // Resume animation after a delay if desired, or keep it manual
-            // For this version, let's keep it manual after clicking
-        }
-    </script>
 </body>
 
 </html>
