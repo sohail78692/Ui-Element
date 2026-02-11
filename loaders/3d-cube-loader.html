@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Isometric Cube Loader</title>
+    <style>
+        :root {
+            --cube-size: 80px;
+            --cube-color: #00f2ff;
+            --bg: #050505;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .cube-container {
+            width: var(--cube-size);
+            height: var(--cube-size);
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 4s linear infinite;
+        }
+
+        @keyframes rotateCube {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            }
+
+            100% {
+                transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+            }
+        }
+
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 242, 255, 0.1);
+            border: 2px solid var(--cube-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .front {
+            transform: translateZ(calc(var(--cube-size) / 2));
+        }
+
+        .back {
+            transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2));
+        }
+
+        .right {
+            transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2));
+        }
+
+        .left {
+            transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2));
+        }
+
+        .top {
+            transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2));
+        }
+
+        .bottom {
+            transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2));
+        }
+
+        .face::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--cube-color);
+            border-radius: 50%;
+            animation: moveDot 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes moveDot {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.2;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 1;
+                box-shadow: 0 0 15px var(--cube-color);
+            }
+        }
+
+        .shadow {
+            position: absolute;
+            width: var(--cube-size);
+            height: var(--cube-size);
+            background: rgba(0, 242, 255, 0.1);
+            filter: blur(20px);
+            border-radius: 50%;
+            bottom: -100px;
+            transform: rotateX(90deg);
+            animation: shadowPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes shadowPulse {
+            from {
+                transform: rotateX(90deg) scale(0.8);
+                opacity: 0.1;
+            }
+
+            to {
+                transform: rotateX(90deg) scale(1.2);
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cube-container">
+        <div class="face front"></div>
+        <div class="face back"></div>
+        <div class="face right"></div>
+        <div class="face left"></div>
+        <div class="face top"></div>
+        <div class="face bottom"></div>
+    </div>
+    <div class="shadow"></div>
+
+</body>
+
+</html>
