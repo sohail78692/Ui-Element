@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinetic Ribbon Button - UI Elements</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-1: #09131f;
+            --bg-2: #13283d;
+            --accent-a: #0dd4b3;
+            --accent-b: #ff8a3d;
+            --text: #f4f7fb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(70rem 45rem at 10% 0%, #113457 0%, transparent 55%),
+                radial-gradient(55rem 30rem at 90% 100%, #4b220f 0%, transparent 58%),
+                linear-gradient(160deg, var(--bg-1), var(--bg-2));
+            padding: 2rem;
+            font-family: "Bricolage Grotesque", sans-serif;
+        }
+
+        .button-wrap {
+            position: relative;
+        }
+
+        .kinetic-btn {
+            --px: 50%;
+            --py: 50%;
+            position: relative;
+            isolation: isolate;
+            border: 0;
+            cursor: pointer;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font: 700 1.05rem/1 "Bricolage Grotesque", sans-serif;
+            padding: 1.1rem 2.1rem;
+            border-radius: 1rem;
+            background: rgba(8, 14, 25, 0.65);
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.18) inset,
+                0 20px 38px rgba(0, 0, 0, 0.36);
+            transition: transform 0.24s ease, box-shadow 0.24s ease;
+            overflow: hidden;
+            outline: 1px solid rgba(255, 255, 255, 0.18);
+            outline-offset: 0;
+        }
+
+        .kinetic-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background:
+                linear-gradient(120deg, transparent 20%, rgba(13, 212, 179, 0.45) 38%, rgba(255, 138, 61, 0.45) 50%, transparent 72%),
+                radial-gradient(circle at var(--px) var(--py), rgba(255, 255, 255, 0.24), transparent 35%);
+            transform: translateX(-70%);
+            transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+            mix-blend-mode: screen;
+            z-index: -1;
+        }
+
+        .kinetic-btn::after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            border-radius: calc(1rem - 2px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            z-index: -1;
+        }
+
+        .kinetic-btn:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.22) inset,
+                0 30px 45px rgba(0, 0, 0, 0.45);
+        }
+
+        .kinetic-btn:hover::before {
+            transform: translateX(70%);
+        }
+
+        .kinetic-btn:active {
+            transform: translateY(0) scale(0.985);
+        }
+
+        .btn-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .btn-label small {
+            font: 700 0.72rem/1 "Space Mono", monospace;
+            color: rgba(244, 247, 251, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 999px;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .burst {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 999px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0.35);
+            opacity: 0.85;
+            animation: burst 0.52s ease-out forwards;
+        }
+
+        @keyframes burst {
+            to {
+                transform: translate(-50%, -50%) scale(8.2);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .kinetic-btn {
+                width: min(92vw, 22rem);
+                text-align: center;
+                justify-content: center;
+                padding: 1rem 1.2rem;
+                font-size: 0.96rem;
+            }
+
+            .btn-label {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="button-wrap">
+        <button class="kinetic-btn" id="kineticButton" aria-label="Deploy build">
+            <span class="btn-label">Deploy Build <small>LIVE</small></span>
+        </button>
+    </div>
+
+    <script>
+        const button = document.getElementById("kineticButton");
+
+        button.addEventListener("pointermove", (event) => {
+            const rect = button.getBoundingClientRect();
+            const x = ((event.clientX - rect.left) / rect.width) * 100;
+            const y = ((event.clientY - rect.top) / rect.height) * 100;
+            button.style.setProperty("--px", `${x}%`);
+            button.style.setProperty("--py", `${y}%`);
+        });
+
+        button.addEventListener("click", (event) => {
+            const ring = document.createElement("span");
+            ring.className = "burst";
+
+            const rect = button.getBoundingClientRect();
+            ring.style.left = `${event.clientX - rect.left}px`;
+            ring.style.top = `${event.clientY - rect.top}px`;
+
+            button.appendChild(ring);
+            ring.addEventListener("animationend", () => ring.remove(), { once: true });
+        });
+    </script>
+</body>
+
+</html>
