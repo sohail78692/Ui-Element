@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Tab Navigation</title>
+    <style>
+        :root {
+            --primary: #ff4d4d;
+            --bg: #121212;
+            --nav-bg: #1e1e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .nav {
+            background: var(--nav-bg);
+            padding: 10px;
+            border-radius: 50px;
+            display: flex;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-item {
+            position: relative;
+            z-index: 2;
+            padding: 15px 30px;
+            cursor: pointer;
+            color: #777;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            user-select: none;
+        }
+
+        .nav-item.active {
+            color: white;
+        }
+
+        .indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: calc(100% - 20px);
+            background: var(--primary);
+            border-radius: 40px;
+            z-index: 1;
+            transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            filter: url('#gooey');
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+        }
+
+        /* Gooey effect svg filter */
+        svg {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="indicator"></div>
+        <div class="nav-item active" data-index="0">Home</div>
+        <div class="nav-item" data-index="1">Search</div>
+        <div class="nav-item" data-index="2">Explore</div>
+        <div class="nav-item" data-index="3">Settings</div>
+    </nav>
+
+    <svg>
+        <filter id="gooey">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+                result="gooey" />
+            <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
+        </filter>
+    </svg>
+
+    <script>
+        const nav = document.querySelector('.nav');
+        const items = document.querySelectorAll('.nav-item');
+        const indicator = document.querySelector('.indicator');
+
+        function moveIndicator(el) {
+            indicator.style.width = `${el.offsetWidth}px`;
+            indicator.style.left = `${el.offsetLeft}px`;
+        }
+
+        // Initialize indicator
+        moveIndicator(items[0]);
+
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                items.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                moveIndicator(item);
+            });
+        });
+    </script>
+</body>
+
+</html>
