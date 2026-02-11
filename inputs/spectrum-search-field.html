@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spectrum Search Field - UI Elements</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #061220;
+            --ink: #eef5ff;
+            --subtle: #9bb0c8;
+            --line: rgba(255, 255, 255, 0.14);
+            --accent-a: #25c8f8;
+            --accent-b: #ffd166;
+            --accent-c: #ff6b57;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(55rem 28rem at 5% 20%, rgba(37, 200, 248, 0.18), transparent 65%),
+                radial-gradient(50rem 28rem at 95% 100%, rgba(255, 107, 87, 0.18), transparent 70%),
+                var(--bg);
+            padding: 1.4rem;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            color: var(--ink);
+        }
+
+        .search-shell {
+            width: min(92vw, 44rem);
+        }
+
+        .search-card {
+            border-radius: 1.2rem;
+            border: 1px solid var(--line);
+            background: rgba(5, 16, 29, 0.76);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 28px 44px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+        }
+
+        .search-top {
+            position: relative;
+            padding: 1rem;
+        }
+
+        .search-top::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(95deg, rgba(37, 200, 248, 0.3), rgba(255, 209, 102, 0.18), rgba(255, 107, 87, 0.28));
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .row {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.45rem;
+            border-radius: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(2, 9, 17, 0.7);
+        }
+
+        .mode-chip {
+            border: 1px solid rgba(255, 255, 255, 0.23);
+            border-radius: 999px;
+            padding: 0.42rem 0.65rem;
+            font: 700 0.73rem/1 "JetBrains Mono", monospace;
+            color: #d8e7fb;
+            background: rgba(255, 255, 255, 0.08);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .search-input {
+            flex: 1;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: var(--ink);
+            font: 600 0.98rem/1.3 "Plus Jakarta Sans", sans-serif;
+            min-width: 0;
+        }
+
+        .search-input::placeholder {
+            color: #97abc1;
+        }
+
+        .go {
+            border: 0;
+            border-radius: 0.72rem;
+            padding: 0.62rem 0.85rem;
+            color: #061220;
+            background: linear-gradient(100deg, var(--accent-a), var(--accent-b));
+            font: 700 0.78rem/1 "JetBrains Mono", monospace;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .go:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .go:active {
+            transform: translateY(0);
+        }
+
+        .hints {
+            display: grid;
+            gap: 0.6rem;
+            padding: 0.95rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.09);
+            background: rgba(2, 9, 17, 0.55);
+        }
+
+        .hint-title {
+            font: 700 0.7rem/1 "JetBrains Mono", monospace;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #a5bad3;
+        }
+
+        .hint-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .hint {
+            border: 1px solid rgba(255, 255, 255, 0.19);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--ink);
+            padding: 0.45rem 0.7rem;
+            font: 600 0.8rem/1 "Plus Jakarta Sans", sans-serif;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .hint:hover {
+            border-color: rgba(37, 200, 248, 0.75);
+            transform: translateY(-1px);
+        }
+
+        .hint small {
+            color: var(--subtle);
+            font: 700 0.66rem/1 "JetBrains Mono", monospace;
+            margin-left: 0.35rem;
+        }
+
+        .status {
+            padding: 0 1rem 1rem;
+            color: #9ab1cb;
+            font: 500 0.83rem/1.4 "Plus Jakarta Sans", sans-serif;
+            min-height: 1.2rem;
+        }
+
+        .status strong {
+            color: #dff1ff;
+        }
+
+        @media (max-width: 620px) {
+            .row {
+                flex-wrap: wrap;
+            }
+
+            .mode-chip {
+                order: 1;
+            }
+
+            .search-input {
+                order: 3;
+                width: 100%;
+                padding-top: 0.25rem;
+            }
+
+            .go {
+                order: 2;
+                margin-left: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="search-shell">
+        <div class="search-card">
+            <div class="search-top">
+                <div class="row">
+                    <span class="mode-chip" id="modeChip">mode: docs</span>
+                    <input class="search-input" id="searchInput" type="text" placeholder="Try: motion on scroll" autocomplete="off">
+                    <button class="go" id="runSearch" type="button">run</button>
+                </div>
+            </div>
+
+            <div class="hints">
+                <p class="hint-title">quick prompts</p>
+                <div class="hint-list">
+                    <button class="hint" data-mode="docs" data-query="glassmorphism cards">Search docs <small>docs</small></button>
+                    <button class="hint" data-mode="code" data-query="button hover effect">Find snippets <small>code</small></button>
+                    <button class="hint" data-mode="design" data-query="warm gradient palette">Color idea <small>design</small></button>
+                    <button class="hint" data-mode="assets" data-query="icon pack minimal">Asset source <small>assets</small></button>
+                </div>
+            </div>
+
+            <p class="status" id="status">Input ready. Pick a quick prompt or type your own query.</p>
+        </div>
+    </section>
+
+    <script>
+        const modeChip = document.getElementById("modeChip");
+        const searchInput = document.getElementById("searchInput");
+        const runSearch = document.getElementById("runSearch");
+        const status = document.getElementById("status");
+        const hints = document.querySelectorAll(".hint");
+
+        let activeMode = "docs";
+
+        function updateStatus() {
+            const value = searchInput.value.trim();
+            if (!value) {
+                status.textContent = "Input ready. Pick a quick prompt or type your own query.";
+                return;
+            }
+            status.innerHTML = `Queued <strong>${value}</strong> in <strong>${activeMode}</strong> mode.`;
+        }
+
+        function setMode(mode) {
+            activeMode = mode;
+            modeChip.textContent = `mode: ${mode}`;
+        }
+
+        hints.forEach((hint) => {
+            hint.addEventListener("click", () => {
+                setMode(hint.dataset.mode);
+                searchInput.value = hint.dataset.query;
+                updateStatus();
+                searchInput.focus();
+            });
+        });
+
+        searchInput.addEventListener("input", updateStatus);
+
+        runSearch.addEventListener("click", () => {
+            const query = searchInput.value.trim();
+            if (!query) {
+                status.textContent = "Add a search phrase before running.";
+                return;
+            }
+            status.innerHTML = `Running <strong>${query}</strong> in <strong>${activeMode}</strong> mode...`;
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+                event.preventDefault();
+                searchInput.focus();
+            }
+
+            if (event.key === "Enter" && document.activeElement === searchInput) {
+                runSearch.click();
+            }
+        });
+    </script>
+</body>
+
+</html>
