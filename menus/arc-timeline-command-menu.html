@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arc Timeline Command Menu - UI Elements</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-a: #120f24;
+            --bg-b: #28183a;
+            --line: #ff6a4c;
+            --line-soft: #ffc17f;
+            --ink: #f9eee8;
+            --muted: #dfc9c0;
+            --panel: rgba(18, 11, 26, 0.68);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
+            font-family: "Sora", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(42rem 28rem at 10% 0%, rgba(255, 106, 76, 0.28), transparent 60%),
+                radial-gradient(38rem 24rem at 100% 100%, rgba(255, 193, 127, 0.22), transparent 62%),
+                linear-gradient(150deg, var(--bg-a), var(--bg-b));
+        }
+
+        .timeline-menu {
+            width: min(94vw, 40rem);
+            border-radius: 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: var(--panel);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 28px 54px rgba(0, 0, 0, 0.42);
+            overflow: hidden;
+        }
+
+        .head {
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .head h1 {
+            font-size: 1.02rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .chip {
+            font: 500 0.7rem/1 "JetBrains Mono", monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 999px;
+            padding: 0.33rem 0.58rem;
+            color: var(--muted);
+        }
+
+        .lane {
+            position: relative;
+            padding: 1.25rem 1.2rem 1.35rem;
+        }
+
+        .lane::before {
+            content: "";
+            position: absolute;
+            left: 1.95rem;
+            top: 1.6rem;
+            bottom: 1.6rem;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(255, 106, 76, 0.8), rgba(255, 193, 127, 0.2));
+        }
+
+        .item {
+            position: relative;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 0.9rem;
+            align-items: center;
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+            padding: 0.65rem 0.2rem;
+            border-radius: 0.75rem;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .item + .item {
+            margin-top: 0.35rem;
+        }
+
+        .item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(2px);
+        }
+
+        .dot {
+            width: 1.15rem;
+            height: 1.15rem;
+            border-radius: 999px;
+            border: 2px solid rgba(255, 193, 127, 0.56);
+            background: rgba(18, 11, 26, 0.95);
+            box-shadow: 0 0 0 4px rgba(18, 11, 26, 0.95);
+            position: relative;
+            z-index: 1;
+            transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+        }
+
+        .item[data-active="true"] .dot {
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--line), var(--line-soft));
+            transform: scale(1.08);
+        }
+
+        .copy {
+            display: grid;
+            gap: 0.22rem;
+        }
+
+        .copy strong {
+            font-size: 0.94rem;
+            font-weight: 600;
+        }
+
+        .copy span {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .key {
+            font: 500 0.7rem/1 "JetBrains Mono", monospace;
+            letter-spacing: 0.05em;
+            color: #301812;
+            border-radius: 0.45rem;
+            padding: 0.33rem 0.44rem;
+            background: linear-gradient(140deg, rgba(255, 193, 127, 0.95), rgba(255, 106, 76, 0.88));
+            box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview {
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.95rem 1.2rem 1.15rem;
+            min-height: 4.4rem;
+            display: grid;
+            align-content: center;
+            gap: 0.35rem;
+        }
+
+        .preview h2 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .preview p {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        @media (max-width: 620px) {
+            .item {
+                grid-template-columns: auto 1fr;
+            }
+
+            .key {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="timeline-menu" aria-label="Command timeline menu">
+        <header class="head">
+            <h1>Mission Timeline</h1>
+            <span class="chip">Live Route</span>
+        </header>
+
+        <div class="lane" id="lane">
+            <button class="item" type="button" data-active="true" data-title="Initialize" data-desc="Boot all services and preflight check the environment.">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="copy">
+                    <strong>Initialize Stack</strong>
+                    <span>Prepare runtime</span>
+                </span>
+                <span class="key">ALT+1</span>
+            </button>
+
+            <button class="item" type="button" data-active="false" data-title="Sync Data" data-desc="Pull latest queue state from all connected nodes.">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="copy">
+                    <strong>Sync Data Streams</strong>
+                    <span>Import latest packets</span>
+                </span>
+                <span class="key">ALT+2</span>
+            </button>
+
+            <button class="item" type="button" data-active="false" data-title="Validate" data-desc="Run checksum and schema validation before launch.">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="copy">
+                    <strong>Validate Matrix</strong>
+                    <span>Integrity check</span>
+                </span>
+                <span class="key">ALT+3</span>
+            </button>
+
+            <button class="item" type="button" data-active="false" data-title="Deploy" data-desc="Ship build to edge regions and monitor cold starts.">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="copy">
+                    <strong>Deploy Command</strong>
+                    <span>Release to production</span>
+                </span>
+                <span class="key">ALT+4</span>
+            </button>
+        </div>
+
+        <section class="preview">
+            <h2 id="previewTitle">Initialize</h2>
+            <p id="previewDesc">Boot all services and preflight check the environment.</p>
+        </section>
+    </nav>
+
+    <script>
+        const lane = document.getElementById("lane");
+        const steps = lane.querySelectorAll(".item");
+        const previewTitle = document.getElementById("previewTitle");
+        const previewDesc = document.getElementById("previewDesc");
+
+        const activateStep = (targetStep) => {
+            steps.forEach((step) => step.setAttribute("data-active", "false"));
+            targetStep.setAttribute("data-active", "true");
+            previewTitle.textContent = targetStep.dataset.title;
+            previewDesc.textContent = targetStep.dataset.desc;
+        };
+
+        steps.forEach((step) => {
+            step.addEventListener("click", () => activateStep(step));
+        });
+
+        window.addEventListener("keydown", (event) => {
+            if (!event.altKey) {
+                return;
+            }
+
+            const keyIndex = Number(event.key) - 1;
+            if (keyIndex >= 0 && keyIndex < steps.length) {
+                event.preventDefault();
+                activateStep(steps[keyIndex]);
+            }
+        });
+    </script>
+</body>
+
+</html>
