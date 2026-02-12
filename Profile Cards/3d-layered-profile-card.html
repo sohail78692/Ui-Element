@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Multi-Layer Profile Card</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            perspective: 1500px;
+        }
+
+        .card {
+            position: relative;
+            width: 320px;
+            height: 400px;
+            background: var(--card);
+            border-radius: 30px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card:hover {
+            transform: rotateX(25deg) rotateY(-15deg);
+        }
+
+        /* Avatar Layer */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            margin-bottom: 20px;
+            transform: translateZ(50px);
+            transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .avatar span {
+            font-size: 50px;
+            color: white;
+        }
+
+        .card:hover .avatar {
+            transform: translateZ(100px) translateY(-20px);
+        }
+
+        /* Name Layer */
+        .name-box {
+            transform: translateZ(30px);
+            transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            text-align: center;
+        }
+
+        .card:hover .name-box {
+            transform: translateZ(60px);
+        }
+
+        .name-box h2 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .name-box p {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Info/Bio Layer */
+        .bio {
+            padding: 20px 30px;
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: center;
+            transform: translateZ(10px);
+            transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .card:hover .bio {
+            transform: translateZ(40px);
+        }
+
+        /* Shadow Layer */
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            filter: blur(40px);
+            opacity: 0;
+            transition: opacity 0.8s;
+            z-index: -1;
+            transform: translateZ(-50px);
+        }
+
+        .card:hover::after {
+            opacity: 0.15;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="avatar">
+            <span>👤</span>
+        </div>
+        <div class="name-box">
+            <h2>Julian Vance</h2>
+            <p>UI UX Architect</p>
+        </div>
+        <div class="bio">
+            Creating immersive digital experiences through precision and innovative design systems.
+        </div>
+    </div>
+</body>
+
+</html>
