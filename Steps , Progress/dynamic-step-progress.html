@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Step Progress</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --text: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background: white;
+            padding: 60px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 25px;
+            left: 0;
+            width: 33%;
+            /* Progress based on steps */
+            height: 4px;
+            background: var(--primary);
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+
+        .step {
+            position: relative;
+            z-index: 3;
+            width: 54px;
+            height: 54px;
+            background: white;
+            border: 4px solid #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            color: #94a3b8;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .step.completed {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .step.completed::after {
+            content: '✓';
+            font-size: 20px;
+        }
+
+        .step-label {
+            position: absolute;
+            top: 65px;
+            width: 100px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .next {
+            background: var(--primary);
+            color: white;
+        }
+
+        .prev {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="steps">
+            <div class="progress-line" id="line"></div>
+            <div class="step completed" data-step="1">
+                <div class="step-label">Identity</div>
+            </div>
+            <div class="step active" data-step="2">2
+                <div class="step-label">Location</div>
+            </div>
+            <div class="step" data-step="3">3
+                <div class="step-label">Plan</div>
+            </div>
+            <div class="step" data-step="4">4
+                <div class="step-label">Finish</div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="prev">Back</button>
+            <button class="next">Next Step</button>
+        </div>
+    </div>
+
+    <script>
+        const steps = document.querySelectorAll('.step');
+        const line = document.getElementById('line');
+        const next = document.querySelector('.next');
+        const prev = document.querySelector('.prev');
+
+        let currentStep = 2;
+
+        function updateSteps() {
+            steps.forEach((step, idx) => {
+                if (idx < currentStep - 1) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                    step.textContent = '';
+                } else if (idx === currentStep - 1) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                    step.textContent = idx + 1;
+                } else {
+                    step.classList.remove('active', 'completed');
+                    step.textContent = idx + 1;
+                }
+            });
+
+            const progress = ((currentStep - 1) / (steps.length - 1)) * 100;
+            line.style.width = progress + '%';
+        }
+
+        next.addEventListener('click', () => {
+            if (currentStep < steps.length) {
+                currentStep++;
+                updateSteps();
+            }
+        });
+
+        prev.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateSteps();
+            }
+        });
+    </script>
+</body>
+
+</html>
