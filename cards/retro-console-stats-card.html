@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Console Stats Card - UI Elements</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #130f1d;
+            --panel: #1c162b;
+            --line: #2cfcb8;
+            --line-soft: #1aa27e;
+            --warn: #ffb86f;
+            --ink: #d9f3ea;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
+            color: var(--ink);
+            background:
+                radial-gradient(44rem 22rem at 0% 100%, rgba(44, 252, 184, 0.14), transparent 62%),
+                radial-gradient(38rem 20rem at 100% 0%, rgba(255, 184, 111, 0.12), transparent 58%),
+                linear-gradient(140deg, #0d0a14, var(--bg));
+            font-family: "Chakra Petch", sans-serif;
+        }
+
+        .console-card {
+            width: min(92vw, 27rem);
+            border-radius: 1.2rem;
+            border: 1px solid rgba(44, 252, 184, 0.26);
+            background:
+                repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 4px),
+                var(--panel);
+            box-shadow:
+                0 0 0 1px rgba(44, 252, 184, 0.2) inset,
+                0 24px 40px rgba(0, 0, 0, 0.48);
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.24s ease, box-shadow 0.24s ease;
+        }
+
+        .console-card:hover {
+            box-shadow:
+                0 0 0 1px rgba(44, 252, 184, 0.3) inset,
+                0 30px 54px rgba(0, 0, 0, 0.56);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.1rem;
+            border-bottom: 1px solid rgba(44, 252, 184, 0.22);
+            background: linear-gradient(90deg, rgba(44, 252, 184, 0.08), rgba(44, 252, 184, 0.01));
+        }
+
+        .title {
+            font-size: 1.05rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .status {
+            font: 600 0.72rem/1 "IBM Plex Mono", monospace;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #081814;
+            background: linear-gradient(120deg, var(--line), #8efed8);
+            border-radius: 999px;
+            padding: 0.36rem 0.62rem;
+        }
+
+        .graph {
+            height: 11rem;
+            margin: 1rem 1.1rem 0.9rem;
+            border: 1px solid rgba(44, 252, 184, 0.2);
+            border-radius: 0.9rem;
+            padding: 0.7rem;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(44, 252, 184, 0.08), rgba(44, 252, 184, 0.01));
+        }
+
+        .grid {
+            position: absolute;
+            inset: 0;
+            background:
+                repeating-linear-gradient(90deg, transparent 0 38px, rgba(44, 252, 184, 0.08) 38px 39px),
+                repeating-linear-gradient(180deg, transparent 0 22px, rgba(44, 252, 184, 0.08) 22px 23px);
+            opacity: 0.8;
+        }
+
+        .line {
+            position: absolute;
+            inset: 1rem 0.9rem 1rem;
+            display: flex;
+            align-items: flex-end;
+            gap: 0.45rem;
+        }
+
+        .bar {
+            flex: 1;
+            border-radius: 0.45rem 0.45rem 0 0;
+            background: linear-gradient(180deg, #8efed8, var(--line-soft));
+            box-shadow: 0 0 12px rgba(44, 252, 184, 0.35);
+            transform-origin: bottom;
+            animation: rise 1s ease both;
+        }
+
+        .bar:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+
+        .bar:nth-child(3) {
+            animation-delay: 0.16s;
+        }
+
+        .bar:nth-child(4) {
+            animation-delay: 0.24s;
+        }
+
+        .bar:nth-child(5) {
+            animation-delay: 0.32s;
+        }
+
+        .bar:nth-child(6) {
+            animation-delay: 0.4s;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.7rem;
+            padding: 0 1.1rem 1.15rem;
+        }
+
+        .metric {
+            border: 1px solid rgba(44, 252, 184, 0.2);
+            border-radius: 0.75rem;
+            padding: 0.62rem;
+            background: rgba(0, 0, 0, 0.18);
+        }
+
+        .metric small {
+            display: block;
+            font: 600 0.68rem/1 "IBM Plex Mono", monospace;
+            color: #9fdccc;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+
+        .metric strong {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .metric[data-tone="warn"] strong {
+            color: var(--warn);
+        }
+
+        .footer {
+            border-top: 1px solid rgba(44, 252, 184, 0.18);
+            padding: 0.7rem 1.1rem 0.95rem;
+            font: 400 0.74rem/1.5 "IBM Plex Mono", monospace;
+            color: #9fdccc;
+        }
+
+        @keyframes rise {
+            from {
+                transform: scaleY(0.15);
+                opacity: 0.5;
+            }
+
+            to {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <article class="console-card" id="consoleCard">
+        <header class="header">
+            <h1 class="title">Node Cluster</h1>
+            <span class="status">Stable</span>
+        </header>
+
+        <section class="graph" aria-hidden="true">
+            <div class="grid"></div>
+            <div class="line">
+                <span class="bar" style="height: 28%"></span>
+                <span class="bar" style="height: 43%"></span>
+                <span class="bar" style="height: 58%"></span>
+                <span class="bar" style="height: 70%"></span>
+                <span class="bar" style="height: 62%"></span>
+                <span class="bar" style="height: 81%"></span>
+            </div>
+        </section>
+
+        <section class="metrics">
+            <div class="metric">
+                <small>Latency</small>
+                <strong>42 ms</strong>
+            </div>
+            <div class="metric">
+                <small>Throughput</small>
+                <strong>8.4k/s</strong>
+            </div>
+            <div class="metric" data-tone="warn">
+                <small>Warnings</small>
+                <strong>03</strong>
+            </div>
+        </section>
+
+        <footer class="footer">Last sync 18s ago | Zone us-east-2</footer>
+    </article>
+
+    <script>
+        const card = document.getElementById("consoleCard");
+
+        card.addEventListener("pointermove", (event) => {
+            const bounds = card.getBoundingClientRect();
+            const x = (event.clientX - bounds.left) / bounds.width;
+            const y = (event.clientY - bounds.top) / bounds.height;
+            const tiltX = (0.5 - y) * 7;
+            const tiltY = (x - 0.5) * 9;
+
+            card.style.transform = `perspective(960px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        });
+
+        card.addEventListener("pointerleave", () => {
+            card.style.transform = "perspective(960px) rotateX(0deg) rotateY(0deg)";
+        });
+    </script>
+</body>
+
+</html>
