@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallax Testimonial Card</title>
+    <style>
+        :root {
+            --primary: #f87171;
+            --bg: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .testimonial-container {
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 450px;
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 24px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            cursor: move;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        .card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 120px;
+            color: var(--primary);
+            opacity: 0.1;
+            transform: translateZ(20px);
+        }
+
+        .quote {
+            color: #f1f5f9;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            transform: translateZ(40px);
+            font-style: italic;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateZ(60px);
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary), #fb923c);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .info h4 {
+            color: white;
+            font-size: 16px;
+        }
+
+        .info p {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        /* Decorative Particles in 3D Space */
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .p1 {
+            width: 40px;
+            height: 40px;
+            top: -20px;
+            right: -20px;
+            opacity: 0.2;
+            transform: translateZ(80px);
+        }
+
+        .p2 {
+            width: 20px;
+            height: 20px;
+            bottom: 30px;
+            left: -10px;
+            opacity: 0.3;
+            transform: translateZ(30px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="testimonial-container" id="container">
+        <div class="card" id="card">
+            <div class="particle p1"></div>
+            <div class="particle p2"></div>
+
+            <p class="quote">
+                "Finding a design system that balances performance with aesthetic brilliance is rare. This library has
+                completely transformed our workflow and elevated our client builds to a new level."
+            </p>
+
+            <div class="author">
+                <div class="avatar">S</div>
+                <div class="info">
+                    <h4>Sarah Jenkins</h4>
+                    <p>Lead Developer @ TechVerse</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('card');
+        const container = document.getElementById('container');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            const rotateX = -y / 15;
+            const rotateY = x / 15;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        });
+    </script>
+</body>
+
+</html>
