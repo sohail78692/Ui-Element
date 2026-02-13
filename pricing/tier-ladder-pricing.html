@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tier Ladder Pricing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4e8d3;
+            --ink: #1d2529;
+            --muted: #556168;
+            --panel: #fffaf0;
+            --line: rgba(29, 37, 41, 0.14);
+            --tone-a: #166f6a;
+            --tone-b: #d36440;
+            --tone-c: #f2b24e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 2rem 1rem;
+            background:
+                radial-gradient(58rem 24rem at 0% 0%, rgba(22, 111, 106, 0.2), transparent 70%),
+                radial-gradient(52rem 26rem at 100% 100%, rgba(211, 100, 64, 0.2), transparent 72%),
+                var(--bg);
+            font-family: "Sora", sans-serif;
+            color: var(--ink);
+        }
+
+        .pricing {
+            width: min(94vw, 54rem);
+            border: 1px solid var(--line);
+            border-radius: 1.3rem;
+            background: var(--panel);
+            box-shadow: 0 28px 52px rgba(29, 37, 41, 0.18);
+            overflow: hidden;
+        }
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.1rem 1.2rem;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .head h2 {
+            font-size: clamp(1.1rem, 2.3vw, 1.35rem);
+            font-weight: 800;
+        }
+
+        .switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font: 700 0.7rem/1 "Space Mono", monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #314048;
+        }
+
+        .switch button {
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 999px;
+            padding: 0.28rem 0.52rem;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .switch button.active {
+            color: #fff;
+            background: linear-gradient(120deg, var(--tone-a), var(--tone-b));
+            border-color: transparent;
+        }
+
+        .ladder {
+            display: grid;
+            gap: 0.8rem;
+            padding: 1rem;
+        }
+
+        .step {
+            border: 1px solid var(--line);
+            border-radius: 1rem;
+            padding: 0.95rem;
+            display: grid;
+            grid-template-columns: 1.2fr auto auto;
+            gap: 0.9rem;
+            align-items: center;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 22px rgba(29, 37, 41, 0.12);
+        }
+
+        .step.featured {
+            border-color: rgba(22, 111, 106, 0.45);
+            background: linear-gradient(145deg, rgba(22, 111, 106, 0.08), rgba(242, 178, 78, 0.09));
+        }
+
+        .badge {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.6rem;
+            border-radius: 999px;
+            font: 700 0.58rem/1 "Space Mono", monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.48rem;
+            color: #fff;
+            background: linear-gradient(120deg, var(--tone-a), var(--tone-b));
+        }
+
+        .left h3 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .left p {
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.45;
+            max-width: 34ch;
+        }
+
+        .limits {
+            font: 700 0.62rem/1 "Space Mono", monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #3f5058;
+            border: 1px dashed rgba(29, 37, 41, 0.28);
+            border-radius: 0.62rem;
+            padding: 0.48rem 0.55rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .price {
+            text-align: right;
+            min-width: 7.4rem;
+        }
+
+        .price strong {
+            display: block;
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        .price small {
+            color: var(--muted);
+            font-size: 0.78rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0 1rem 1rem;
+        }
+
+        .note {
+            color: #4e5f66;
+            font-size: 0.8rem;
+        }
+
+        .cta {
+            border: 0;
+            border-radius: 0.75rem;
+            padding: 0.65rem 0.9rem;
+            font: 700 0.85rem/1 "Sora", sans-serif;
+            color: #fff;
+            cursor: pointer;
+            background: linear-gradient(120deg, var(--tone-a), var(--tone-b));
+            box-shadow: 0 12px 20px rgba(29, 37, 41, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .cta:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 760px) {
+            .step {
+                grid-template-columns: 1fr;
+            }
+
+            .limits,
+            .price {
+                text-align: left;
+                width: fit-content;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cta {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="pricing" aria-label="Pricing component demo">
+        <header class="head">
+            <h2>Tier Ladder Pricing</h2>
+            <div class="switch" aria-label="Billing period toggle">
+                <button type="button" id="monthlyBtn" class="active">Monthly</button>
+                <button type="button" id="yearlyBtn">Yearly</button>
+            </div>
+        </header>
+
+        <div class="ladder">
+            <article class="step" data-month="19" data-year="15">
+                <div class="left">
+                    <h3>Starter Dock</h3>
+                    <p>Ship compact products with core UI blocks and lightweight analytics.</p>
+                </div>
+                <div class="limits">5 projects</div>
+                <div class="price"><strong>$19</strong><small>per seat / mo</small></div>
+            </article>
+
+            <article class="step featured" data-month="39" data-year="31">
+                <span class="badge">Popular</span>
+                <div class="left">
+                    <h3>Growth Relay</h3>
+                    <p>Scale teams with premium sections, variant packs, and workflow automations.</p>
+                </div>
+                <div class="limits">20 projects</div>
+                <div class="price"><strong>$39</strong><small>per seat / mo</small></div>
+            </article>
+
+            <article class="step" data-month="79" data-year="64">
+                <div class="left">
+                    <h3>Enterprise Foundry</h3>
+                    <p>Unified design governance, custom integration lanes, and priority support.</p>
+                </div>
+                <div class="limits">Unlimited</div>
+                <div class="price"><strong>$79</strong><small>per seat / mo</small></div>
+            </article>
+        </div>
+
+        <footer class="actions">
+            <p class="note" id="note">Billed monthly. Cancel anytime.</p>
+            <button class="cta" type="button">Start 14-day trial</button>
+        </footer>
+    </section>
+
+    <script>
+        const monthlyBtn = document.getElementById("monthlyBtn");
+        const yearlyBtn = document.getElementById("yearlyBtn");
+        const note = document.getElementById("note");
+        const cards = Array.from(document.querySelectorAll(".step"));
+
+        function setMode(mode) {
+            const yearly = mode === "yearly";
+            monthlyBtn.classList.toggle("active", !yearly);
+            yearlyBtn.classList.toggle("active", yearly);
+
+            cards.forEach((card) => {
+                const value = yearly ? card.dataset.year : card.dataset.month;
+                const price = card.querySelector(".price strong");
+                const small = card.querySelector(".price small");
+
+                price.textContent = `$${value}`;
+                small.textContent = yearly ? "per seat / mo, billed yearly" : "per seat / mo";
+            });
+
+            note.textContent = yearly ? "Billed yearly. Save up to 20%." : "Billed monthly. Cancel anytime.";
+        }
+
+        monthlyBtn.addEventListener("click", () => setMode("monthly"));
+        yearlyBtn.addEventListener("click", () => setMode("yearly"));
+    </script>
+</body>
+
+</html>
