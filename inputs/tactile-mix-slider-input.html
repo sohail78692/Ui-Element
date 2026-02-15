@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactile Mix Slider Input</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --panel: #ffffff;
+            --ink: #1f2a3e;
+            --muted: #637088;
+            --track: #d9e3f2;
+            --fill-a: #ff7b58;
+            --fill-b: #ffd16a;
+            --fill-c: #1eb18b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.5rem;
+            background:
+                radial-gradient(46rem 30rem at 8% -12%, rgba(30, 177, 139, 0.16), transparent 58%),
+                radial-gradient(43rem 24rem at 98% 112%, rgba(255, 123, 88, 0.18), transparent 62%),
+                var(--bg);
+            font-family: "Outfit", sans-serif;
+            color: var(--ink);
+        }
+
+        .panel {
+            width: min(100%, 23.5rem);
+            padding: 1rem;
+            border-radius: 1.1rem;
+            border: 1px solid rgba(31, 42, 62, 0.14);
+            background: linear-gradient(150deg, rgba(255, 255, 255, 0.95), rgba(247, 251, 255, 0.98));
+            box-shadow:
+                0 18px 36px rgba(31, 42, 62, 0.16),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .label {
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .status {
+            font-family: "Space Mono", monospace;
+            font-size: 0.76rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .value-chip {
+            margin-top: 0.8rem;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.35rem;
+            border-radius: 999px;
+            padding: 0.45rem 0.72rem;
+            border: 1px solid rgba(31, 42, 62, 0.16);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .value-number {
+            font-family: "Space Mono", monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .value-unit {
+            font-size: 0.76rem;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .slider-wrap {
+            margin-top: 1rem;
+            position: relative;
+            padding-bottom: 0.55rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 0.85rem;
+            border-radius: 999px;
+            outline: none;
+            border: 1px solid rgba(31, 42, 62, 0.1);
+            background: linear-gradient(90deg, var(--fill-a), var(--fill-b), var(--fill-c)) 0/var(--progress, 0%) 100% no-repeat, var(--track);
+            transition: background-size 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 1.45rem;
+            height: 1.45rem;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: #20304e;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(32, 48, 78, 0.35);
+            transition: transform 0.16s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.06);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 1.45rem;
+            height: 1.45rem;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: #20304e;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(32, 48, 78, 0.35);
+        }
+
+        .ticks {
+            margin-top: 0.62rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--muted);
+            font-family: "Space Mono", monospace;
+        }
+
+        .note {
+            margin-top: 0.88rem;
+            font-size: 0.83rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 500px) {
+            .panel {
+                padding: 0.88rem;
+            }
+
+            .value-number {
+                font-size: 1rem;
+            }
+
+            .ticks {
+                font-size: 0.66rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="panel" aria-label="Tactile mix input">
+        <header class="header">
+            <h1 class="label">Blend Intensity</h1>
+            <p class="status" id="stateText">Balanced</p>
+        </header>
+
+        <div class="value-chip" aria-live="polite">
+            <span class="value-number" id="value">55</span>
+            <span class="value-unit">percent</span>
+        </div>
+
+        <div class="slider-wrap">
+            <input id="slider" type="range" min="0" max="100" value="55" step="1" aria-label="Blend intensity percentage">
+            <div class="ticks">
+                <span>Calm</span>
+                <span>Balanced</span>
+                <span>Punchy</span>
+            </div>
+        </div>
+
+        <p class="note">Use this tactile slider style for audio mix, image filter amount, or custom product personalization controls.</p>
+    </section>
+
+    <script>
+        const slider = document.getElementById("slider");
+        const value = document.getElementById("value");
+        const stateText = document.getElementById("stateText");
+
+        const setSliderState = () => {
+            const current = Number(slider.value);
+            const pct = `${current}%`;
+            slider.style.setProperty("--progress", pct);
+            value.textContent = String(current);
+
+            if (current < 35) {
+                stateText.textContent = "Calm";
+            } else if (current > 70) {
+                stateText.textContent = "Punchy";
+            } else {
+                stateText.textContent = "Balanced";
+            }
+        };
+
+        slider.addEventListener("input", setSliderState);
+        setSliderState();
+    </script>
+</body>
+
+</html>
