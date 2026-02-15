@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Spotlight Metrics Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1f2230;
+            --muted: #636977;
+            --paper: #fff9f1;
+            --card: #fffefb;
+            --accent: #e85d3f;
+            --accent-soft: #ffcf7a;
+            --mint: #1f9a7c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.5rem;
+            background:
+                radial-gradient(55rem 30rem at 0% -10%, rgba(232, 93, 63, 0.15), transparent 58%),
+                radial-gradient(52rem 28rem at 100% 110%, rgba(31, 154, 124, 0.14), transparent 62%),
+                var(--paper);
+            font-family: "DM Sans", sans-serif;
+            color: var(--ink);
+        }
+
+        .card {
+            width: min(100%, 24rem);
+            border-radius: 1.2rem;
+            background: var(--card);
+            border: 1px solid rgba(31, 34, 48, 0.14);
+            box-shadow:
+                0 20px 34px rgba(24, 25, 35, 0.14),
+                inset 0 1px 0 rgba(255, 255, 255, 0.75);
+            overflow: hidden;
+        }
+
+        .banner {
+            padding: 1rem 1rem 0.9rem;
+            background: linear-gradient(115deg, rgba(232, 93, 63, 0.16), rgba(255, 207, 122, 0.22));
+            border-bottom: 1px solid rgba(31, 34, 48, 0.08);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            color: rgba(31, 34, 48, 0.8);
+        }
+
+        .tag::before {
+            content: "";
+            width: 0.5rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 0.22rem rgba(232, 93, 63, 0.2);
+        }
+
+        h1 {
+            margin-top: 0.72rem;
+            font-family: "Fraunces", serif;
+            font-size: clamp(1.42rem, 3.1vw, 1.8rem);
+            line-height: 1.08;
+            letter-spacing: 0.01em;
+        }
+
+        .meta {
+            margin-top: 0.5rem;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.65rem;
+            padding: 0.9rem 1rem;
+        }
+
+        .stat {
+            border-radius: 0.8rem;
+            border: 1px solid rgba(31, 34, 48, 0.12);
+            background: linear-gradient(155deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 239, 0.9));
+            padding: 0.62rem;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 0.66rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(31, 34, 48, 0.58);
+        }
+
+        .stat-value {
+            display: block;
+            margin-top: 0.34rem;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .timeline {
+            margin: 0.15rem 1rem 1rem;
+            border-radius: 0.9rem;
+            border: 1px solid rgba(31, 34, 48, 0.12);
+            background: #ffffff;
+            padding: 0.76rem 0.84rem;
+        }
+
+        .timeline-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            margin-bottom: 0.58rem;
+        }
+
+        .timeline-head strong {
+            font-size: 0.87rem;
+        }
+
+        .timeline-head span {
+            font-size: 0.74rem;
+            color: var(--mint);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .track {
+            height: 0.72rem;
+            border-radius: 999px;
+            background: rgba(31, 34, 48, 0.08);
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            width: 0%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+            transition: width 0.6s ease;
+        }
+
+        .foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 0.58rem;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .pulse {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .pulse::before {
+            content: "";
+            width: 0.44rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: var(--mint);
+            animation: blink 1.3s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                transform: scale(0.75);
+                opacity: 0.55;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .stats {
+                gap: 0.5rem;
+                padding: 0.8rem 0.8rem;
+            }
+
+            .timeline {
+                margin: 0.1rem 0.8rem 0.8rem;
+            }
+
+            .stat {
+                padding: 0.54rem;
+            }
+
+            .stat-value {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <article class="card">
+        <section class="banner">
+            <p class="tag">Live Campaign</p>
+            <h1>Editorial Spring Drop</h1>
+            <p class="meta">Interactive fashion issue with curated product notes.</p>
+        </section>
+
+        <section class="stats">
+            <div class="stat">
+                <span class="stat-label">Readers</span>
+                <span class="stat-value">18.4k</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Save Rate</span>
+                <span class="stat-value">42%</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">CTR</span>
+                <span class="stat-value">7.3%</span>
+            </div>
+        </section>
+
+        <section class="timeline">
+            <div class="timeline-head">
+                <strong>Launch Progress</strong>
+                <span id="progressText">0%</span>
+            </div>
+            <div class="track" aria-label="Launch progress">
+                <div class="fill" id="fill"></div>
+            </div>
+            <div class="foot">
+                <span>Target: 22k reads this week</span>
+                <span class="pulse">Trending</span>
+            </div>
+        </section>
+    </article>
+
+    <script>
+        const fill = document.getElementById("fill");
+        const progressText = document.getElementById("progressText");
+        const target = 84;
+        let current = 0;
+
+        const tick = () => {
+            current += 2;
+            fill.style.width = `${current}%`;
+            progressText.textContent = `${current}%`;
+
+            if (current < target) {
+                requestAnimationFrame(tick);
+            }
+        };
+
+        requestAnimationFrame(tick);
+    </script>
+</body>
+
+</html>
