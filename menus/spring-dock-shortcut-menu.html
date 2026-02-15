@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Dock Shortcut Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f4ee;
+            --ink: #1e2531;
+            --dock: #ffffff;
+            --line: rgba(30, 37, 49, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.4rem;
+            background:
+                radial-gradient(44rem 26rem at -10% -10%, rgba(255, 180, 105, 0.2), transparent 58%),
+                radial-gradient(42rem 24rem at 108% 110%, rgba(111, 188, 255, 0.16), transparent 62%),
+                var(--bg);
+            font-family: "Urbanist", sans-serif;
+            color: var(--ink);
+        }
+
+        .shell {
+            display: grid;
+            gap: 0.7rem;
+            justify-items: center;
+        }
+
+        .title {
+            font-size: 0.84rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(30, 37, 49, 0.65);
+            font-weight: 700;
+        }
+
+        .dock {
+            display: flex;
+            gap: 0.45rem;
+            align-items: flex-end;
+            padding: 0.48rem;
+            border-radius: 1.2rem;
+            border: 1px solid var(--line);
+            background: linear-gradient(170deg, rgba(255, 255, 255, 0.95), rgba(245, 248, 255, 0.92));
+            box-shadow: 0 14px 24px rgba(30, 37, 49, 0.12);
+        }
+
+        .item {
+            width: 3rem;
+            aspect-ratio: 1;
+            border-radius: 0.86rem;
+            border: 1px solid rgba(30, 37, 49, 0.14);
+            background: var(--c);
+            display: grid;
+            place-items: center;
+            color: #081423;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .item:hover,
+        .item:focus-visible {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 10px 20px rgba(30, 37, 49, 0.22);
+            outline: none;
+        }
+
+        .item[data-near="1"] {
+            transform: translateY(-4px) scale(1.04);
+        }
+
+        .item[data-near="2"] {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .label {
+            min-height: 1.2rem;
+            font-size: 0.8rem;
+            color: rgba(30, 37, 49, 0.75);
+        }
+
+        @media (max-width: 520px) {
+            .item {
+                width: 2.6rem;
+                font-size: 0.9rem;
+            }
+
+            .dock {
+                gap: 0.36rem;
+                padding: 0.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="shell" aria-label="Dock style shortcut menu">
+        <p class="title">Quick Dock</p>
+        <nav class="dock" id="dock">
+            <button class="item" style="--c:#8fd7ff" data-name="Inbox" type="button">IN</button>
+            <button class="item" style="--c:#ffd286" data-name="Tasks" type="button">TK</button>
+            <button class="item" style="--c:#9effcc" data-name="Calendar" type="button">CL</button>
+            <button class="item" style="--c:#d1b5ff" data-name="Assets" type="button">AS</button>
+            <button class="item" style="--c:#ffb1ba" data-name="Deploy" type="button">DP</button>
+        </nav>
+        <p class="label" id="label">Hover an icon</p>
+    </section>
+
+    <script>
+        const dock = document.getElementById("dock");
+        const label = document.getElementById("label");
+        const items = [...dock.querySelectorAll(".item")];
+
+        const clearNear = () => {
+            items.forEach((item) => {
+                item.removeAttribute("data-near");
+            });
+        };
+
+        items.forEach((item, index) => {
+            item.addEventListener("mouseenter", () => {
+                clearNear();
+                label.textContent = item.dataset.name;
+
+                const left1 = items[index - 1];
+                const right1 = items[index + 1];
+                const left2 = items[index - 2];
+                const right2 = items[index + 2];
+
+                if (left1) left1.dataset.near = "1";
+                if (right1) right1.dataset.near = "1";
+                if (left2) left2.dataset.near = "2";
+                if (right2) right2.dataset.near = "2";
+            });
+
+            item.addEventListener("mouseleave", () => {
+                clearNear();
+                label.textContent = "Hover an icon";
+            });
+
+            item.addEventListener("focus", () => {
+                label.textContent = item.dataset.name;
+            });
+
+            item.addEventListener("blur", () => {
+                label.textContent = "Hover an icon";
+            });
+        });
+    </script>
+</body>
+
+</html>
