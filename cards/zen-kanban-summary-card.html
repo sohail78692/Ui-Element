@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Kanban Summary Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Space+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4f7ef;
+            --ink: #1d2432;
+            --muted: #667086;
+            --panel: #fffef9;
+            --line: rgba(29, 36, 50, 0.15);
+            --a: #5f8cff;
+            --b: #5fd8ad;
+            --c: #f7b35f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.4rem;
+            background:
+                radial-gradient(44rem 28rem at -10% -10%, rgba(95, 140, 255, 0.16), transparent 58%),
+                radial-gradient(42rem 25rem at 108% 110%, rgba(95, 216, 173, 0.15), transparent 62%),
+                var(--bg);
+            font-family: "Outfit", sans-serif;
+            color: var(--ink);
+        }
+
+        .card {
+            width: min(100%, 24rem);
+            border-radius: 1.1rem;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            box-shadow: 0 18px 28px rgba(29, 36, 50, 0.12);
+            padding: 0.92rem;
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        h1 {
+            font-size: 1.05rem;
+            letter-spacing: 0.01em;
+        }
+
+        .sub {
+            margin-top: 0.18rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-family: "Space Mono", monospace;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .badge {
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            padding: 0.3rem 0.52rem;
+            font-size: 0.7rem;
+            color: var(--muted);
+            font-family: "Space Mono", monospace;
+        }
+
+        .lanes {
+            display: grid;
+            gap: 0.54rem;
+        }
+
+        .lane {
+            border-radius: 0.8rem;
+            border: 1px solid var(--line);
+            padding: 0.58rem;
+            background: rgba(255, 255, 255, 0.84);
+        }
+
+        .lane-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.45rem;
+            font-size: 0.8rem;
+        }
+
+        .label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.38rem;
+            color: var(--muted);
+            font-family: "Space Mono", monospace;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+
+        .dot {
+            width: 0.46rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+        }
+
+        .count {
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        .bar {
+            height: 0.52rem;
+            border-radius: 999px;
+            background: #e7edf7;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            transition: width 0.6s ease;
+        }
+
+        .foot {
+            border-radius: 0.75rem;
+            border: 1px dashed var(--line);
+            padding: 0.56rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        @media (max-width: 520px) {
+            .card {
+                padding: 0.82rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <article class="card" aria-label="Kanban summary card">
+        <div class="top">
+            <div>
+                <h1>Design Sprint Board</h1>
+                <p class="sub">Week 07 Overview</p>
+            </div>
+            <span class="badge">12 tasks</span>
+        </div>
+
+        <div class="lanes">
+            <section class="lane" data-progress="58">
+                <div class="lane-head">
+                    <span class="label"><span class="dot" style="background: var(--a);"></span>In Progress</span>
+                    <span class="count">7</span>
+                </div>
+                <div class="bar"><div class="fill" style="background: var(--a);"></div></div>
+            </section>
+
+            <section class="lane" data-progress="32">
+                <div class="lane-head">
+                    <span class="label"><span class="dot" style="background: var(--c);"></span>Review</span>
+                    <span class="count">3</span>
+                </div>
+                <div class="bar"><div class="fill" style="background: var(--c);"></div></div>
+            </section>
+
+            <section class="lane" data-progress="76">
+                <div class="lane-head">
+                    <span class="label"><span class="dot" style="background: var(--b);"></span>Done</span>
+                    <span class="count">9</span>
+                </div>
+                <div class="bar"><div class="fill" style="background: var(--b);"></div></div>
+            </section>
+        </div>
+
+        <p class="foot">Focus today: close review queue and ship two UI cards before standup.</p>
+    </article>
+
+    <script>
+        const lanes = document.querySelectorAll(".lane");
+        requestAnimationFrame(() => {
+            lanes.forEach((lane, index) => {
+                const fill = lane.querySelector(".fill");
+                const progress = Number(lane.dataset.progress);
+                setTimeout(() => {
+                    fill.style.width = `${progress}%`;
+                }, index * 90);
+            });
+        });
+    </script>
+</body>
+
+</html>
