@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helix Dash Loader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#10192b; --a:#59b7ff; --b:#72eac8; --c:#ffc06f; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { min-height:100vh; display:grid; place-items:center; padding:1rem; background:var(--bg); color:#dff0ff; font-family:"Space Mono",monospace; }
+        .wrap { text-align:center; }
+        .ring {
+            width:7rem; aspect-ratio:1; border-radius:50%; position:relative; margin:0 auto .8rem;
+            background:conic-gradient(from 0deg, var(--a), var(--b), var(--c), var(--a));
+            animation:spin 1.2s linear infinite;
+            -webkit-mask:radial-gradient(circle, transparent 52%, #000 53%);
+                    mask:radial-gradient(circle, transparent 52%, #000 53%);
+        }
+        .ring::before, .ring::after {
+            content:""; position:absolute; inset:.7rem; border-radius:50%; border:.22rem dashed rgba(223,240,255,.5);
+            animation:spin 2s linear infinite reverse;
+        }
+        .ring::after { inset:1.35rem; border-color:rgba(223,240,255,.3); animation-duration:3s; }
+        p { font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; opacity:.86; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="wrap" aria-label="Loading animation">
+        <div class="ring" aria-hidden="true"></div>
+        <p>Compiling Interface</p>
+    </div>
+</body>
+</html>
