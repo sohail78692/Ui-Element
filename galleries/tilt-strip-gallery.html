@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tilt Strip Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#edf4ff; --ink:#1b2744; --line:rgba(27,39,68,.15); }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { min-height:100vh; display:grid; place-items:center; padding:1.4rem; background:var(--bg); font-family:"Manrope",sans-serif; color:var(--ink); }
+        .gallery { width:min(94vw,40rem); display:grid; gap:.75rem; }
+        .strip {
+            border:1px solid var(--line); border-radius:.95rem; padding:.9rem 1rem; background:#fff;
+            box-shadow:0 12px 20px rgba(18,28,48,.12); transform-origin:center; transition:transform .18s ease;
+        }
+        .strip:nth-child(1) { transform:rotate(-1.3deg); }
+        .strip:nth-child(2) { transform:rotate(1.1deg); }
+        .strip:nth-child(3) { transform:rotate(-.8deg); }
+        .strip:hover { transform:rotate(0deg) translateY(-2px); }
+        .strip h3 { font-size:1rem; margin-bottom:.35rem; }
+        .strip p { font-size:.83rem; color:#586787; line-height:1.4; }
+    </style>
+</head>
+<body>
+    <section class="gallery" aria-label="Tilt strip gallery">
+        <article class="strip"><h3>Hero Concepts</h3><p>Three polished hero variants tuned for conversion-first landing pages.</p></article>
+        <article class="strip"><h3>Dashboard Blocks</h3><p>Metrics, charts, and command surfaces designed for dense product workflows.</p></article>
+        <article class="strip"><h3>Checkout Modules</h3><p>Payment, summary, and confirmation views with compact interaction patterns.</p></article>
+    </section>
+</body>
+</html>
