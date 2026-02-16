@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Pill Range Input</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ecf3ff;
+            --ink: #1c2742;
+            --muted: #617193;
+            --a: #3a78ff;
+            --b: #24b7a1;
+            --warm: #ff9d59;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.2rem;
+            background:
+                radial-gradient(42rem 25rem at 0% 0%, rgba(58, 120, 255, 0.22), transparent 62%),
+                radial-gradient(40rem 22rem at 100% 100%, rgba(36, 183, 161, 0.2), transparent 64%),
+                var(--bg);
+            font-family: "Outfit", sans-serif;
+            color: var(--ink);
+        }
+
+        .panel {
+            width: min(92vw, 24rem);
+            border-radius: 1.05rem;
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(28, 39, 66, 0.14);
+            box-shadow: 0 16px 28px rgba(20, 30, 52, 0.16);
+            padding: 1rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.6rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .top h2 {
+            font-size: 1rem;
+            line-height: 1.1;
+        }
+
+        .top p {
+            margin-top: 0.24rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 0.34rem 0.56rem;
+            font: 600 0.62rem/1 "IBM Plex Mono", monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #35527f;
+            border: 1px solid rgba(58, 120, 255, 0.3);
+            background: rgba(58, 120, 255, 0.1);
+        }
+
+        .meter-wrap {
+            border: 1px solid rgba(28, 39, 66, 0.12);
+            border-radius: 0.9rem;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(245, 250, 255, 0.8));
+            padding: 0.72rem 0.76rem 0.8rem;
+        }
+
+        .labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font: 600 0.65rem/1 "IBM Plex Mono", monospace;
+            color: #627294;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .value {
+            margin-top: 0.68rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .value strong {
+            font-size: 1.4rem;
+            line-height: 1;
+            letter-spacing: -0.01em;
+        }
+
+        .value span {
+            font-size: 0.74rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            appearance: none;
+            height: 0.6rem;
+            border-radius: 999px;
+            background:
+                linear-gradient(90deg, var(--a), var(--b), var(--warm));
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 1.15rem;
+            height: 1.15rem;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            background: #1f2f52;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.24);
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 1.15rem;
+            height: 1.15rem;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            background: #1f2f52;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.24);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="panel" aria-label="Range control">
+        <div class="top">
+            <div>
+                <h2>Intensity Control</h2>
+                <p>Adjust visual energy for live UI previews.</p>
+            </div>
+            <span class="pill">Live</span>
+        </div>
+        <div class="meter-wrap">
+            <div class="labels">
+                <span>Low</span>
+                <span>High</span>
+            </div>
+            <input id="range" type="range" min="0" max="100" value="64" aria-label="Intensity level">
+            <div class="value">
+                <strong id="value">64%</strong>
+                <span>Current Mix</span>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const range = document.getElementById("range");
+        const value = document.getElementById("value");
+
+        range.addEventListener("input", () => {
+            value.textContent = `${range.value}%`;
+        });
+    </script>
+</body>
+
+</html>
