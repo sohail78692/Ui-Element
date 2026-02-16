@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagonal Pulse Loader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1627;
+            --panel: #111d34;
+            --ink: #dbebff;
+            --a: #57b4ff;
+            --b: #6ef0c5;
+            --c: #ffb86a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.2rem;
+            font-family: "Sora", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(38rem 22rem at -10% -10%, rgba(87, 180, 255, 0.2), transparent 62%),
+                radial-gradient(34rem 20rem at 110% 110%, rgba(110, 240, 197, 0.2), transparent 60%),
+                var(--bg);
+        }
+
+        .loader-card {
+            width: min(90vw, 20rem);
+            border-radius: 1rem;
+            border: 1px solid rgba(219, 235, 255, 0.16);
+            background: linear-gradient(170deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)), var(--panel);
+            padding: 1.1rem;
+            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .top h2 {
+            font-size: 0.98rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .top span {
+            font: 700 0.65rem/1 "JetBrains Mono", monospace;
+            color: #8eabcf;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .rails {
+            position: relative;
+            border-radius: 0.82rem;
+            border: 1px solid rgba(219, 235, 255, 0.12);
+            padding: 0.56rem;
+            display: grid;
+            gap: 0.52rem;
+            overflow: hidden;
+            background: rgba(3, 10, 20, 0.26);
+        }
+
+        .bar {
+            height: 0.6rem;
+            border-radius: 999px;
+            background: rgba(169, 203, 242, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            width: 42%;
+            border-radius: inherit;
+            transform: translateX(-120%);
+            animation: pass 1.35s cubic-bezier(0.55, 0.08, 0.45, 0.95) infinite;
+        }
+
+        .bar:nth-child(1)::before { background: linear-gradient(90deg, transparent, var(--a)); animation-delay: 0ms; }
+        .bar:nth-child(2)::before { background: linear-gradient(90deg, transparent, var(--b)); animation-delay: 180ms; }
+        .bar:nth-child(3)::before { background: linear-gradient(90deg, transparent, var(--c)); animation-delay: 340ms; }
+        .bar:nth-child(4)::before { background: linear-gradient(90deg, transparent, var(--a)); animation-delay: 520ms; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.38rem;
+        }
+
+        .dot {
+            width: 0.42rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: #6f8eb4;
+            animation: bounce 850ms ease-in-out infinite;
+        }
+
+        .dot:nth-child(2) { animation-delay: 120ms; }
+        .dot:nth-child(3) { animation-delay: 240ms; }
+        .dot:nth-child(4) { animation-delay: 360ms; }
+
+        .hint {
+            margin-top: 0.75rem;
+            text-align: center;
+            font: 700 0.67rem/1 "JetBrains Mono", monospace;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #89a4c8;
+        }
+
+        @keyframes pass {
+            to { transform: translateX(250%); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); opacity: 0.35; }
+            50% { transform: translateY(-4px); opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="loader-card" aria-label="Loading panel">
+        <div class="top">
+            <h2>Asset Compiler</h2>
+            <span>Running</span>
+        </div>
+        <div class="rails" aria-hidden="true">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="dots" aria-hidden="true">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+        <p class="hint">Processing layers</p>
+    </section>
+</body>
+
+</html>
