@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacked Plan Strip Pricing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f1f6ff;
+            --ink: #1d2845;
+            --muted: #5f6f8f;
+            --line: rgba(29, 40, 69, 0.14);
+            --pro-a: #3f7dff;
+            --pro-b: #1fb39a;
+            --lite: #f7f9ff;
+            --elite: #fff5ea;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.4rem;
+            font-family: "Sora", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(44rem 24rem at 0% 0%, rgba(63, 125, 255, 0.2), transparent 62%),
+                radial-gradient(42rem 24rem at 100% 100%, rgba(31, 179, 154, 0.18), transparent 64%),
+                var(--bg);
+        }
+
+        .panel {
+            width: min(94vw, 42rem);
+            border-radius: 1.1rem;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.82);
+            box-shadow: 0 20px 34px rgba(20, 30, 52, 0.16);
+            overflow: hidden;
+        }
+
+        .head {
+            padding: 1rem 1.05rem 0.86rem;
+            border-bottom: 1px solid rgba(29, 40, 69, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .head h2 {
+            font-size: 1.06rem;
+            line-height: 1.1;
+        }
+
+        .head span {
+            font: 600 0.66rem/1 "JetBrains Mono", monospace;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: #647596;
+        }
+
+        .list {
+            display: grid;
+            gap: 0.62rem;
+            padding: 0.78rem;
+        }
+
+        .row {
+            border: 1px solid rgba(29, 40, 69, 0.12);
+            border-radius: 0.92rem;
+            padding: 0.82rem 0.85rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 0.8rem;
+            align-items: center;
+            background: var(--lite);
+        }
+
+        .row.pro {
+            background:
+                radial-gradient(80% 120% at 100% 0%, rgba(63, 125, 255, 0.2), transparent 60%),
+                linear-gradient(135deg, rgba(63, 125, 255, 0.11), rgba(31, 179, 154, 0.1)),
+                #f4f9ff;
+            border-color: rgba(63, 125, 255, 0.36);
+        }
+
+        .row.elite {
+            background: var(--elite);
+        }
+
+        .plan strong {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.14rem;
+        }
+
+        .plan span {
+            font-size: 0.76rem;
+            color: var(--muted);
+        }
+
+        .price {
+            font-weight: 800;
+            font-size: 1.02rem;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+        }
+
+        .price small {
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+
+        .cta {
+            border: 0;
+            border-radius: 0.62rem;
+            padding: 0.5rem 0.66rem;
+            font: 700 0.64rem/1 "JetBrains Mono", monospace;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: #384b71;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(29, 40, 69, 0.16);
+        }
+
+        .row.pro .cta {
+            color: #ffffff;
+            border: 0;
+            background: linear-gradient(135deg, var(--pro-a), var(--pro-b));
+            box-shadow: 0 10px 16px rgba(63, 125, 255, 0.3);
+        }
+
+        @media (max-width: 700px) {
+            .row {
+                grid-template-columns: 1fr;
+                align-items: start;
+            }
+
+            .price {
+                margin-top: -0.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="panel" aria-label="Pricing plans">
+        <header class="head">
+            <h2>Choose Your Plan</h2>
+            <span>Monthly Billing</span>
+        </header>
+        <div class="list">
+            <article class="row">
+                <div class="plan">
+                    <strong>Starter</strong>
+                    <span>Essential components and updates</span>
+                </div>
+                <p class="price">$19 <small>/mo</small></p>
+                <button class="cta" type="button">Select</button>
+            </article>
+            <article class="row pro">
+                <div class="plan">
+                    <strong>Pro Team</strong>
+                    <span>Shared libraries and advanced templates</span>
+                </div>
+                <p class="price">$49 <small>/mo</small></p>
+                <button class="cta" type="button">Get Pro</button>
+            </article>
+            <article class="row elite">
+                <div class="plan">
+                    <strong>Enterprise</strong>
+                    <span>Custom systems with priority support</span>
+                </div>
+                <p class="price">$129 <small>/mo</small></p>
+                <button class="cta" type="button">Contact</button>
+            </article>
+        </div>
+    </section>
+</body>
+
+</html>
