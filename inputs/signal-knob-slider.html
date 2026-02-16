@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Knob Slider</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700&family=IBM+Plex+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#edf4ff; --ink:#1d2843; --a:#3b79ff; --b:#20b19b; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { min-height:100vh; display:grid; place-items:center; padding:1.2rem; background:var(--bg); font-family:"Outfit",sans-serif; color:var(--ink); }
+        .panel {
+            width:min(92vw,22rem); border-radius:1rem; padding:1rem; background:#fff;
+            border:1px solid rgba(29,40,67,.14); box-shadow:0 15px 24px rgba(17,26,43,.14);
+        }
+        .row { display:flex; justify-content:space-between; align-items:center; margin-bottom:.7rem; }
+        .row h2 { font-size:.98rem; }
+        .val { font:700 .78rem/1 "IBM Plex Mono",monospace; color:#47618f; }
+        input[type="range"] { width:100%; appearance:none; height:.55rem; border-radius:999px; background:linear-gradient(90deg,var(--a),var(--b)); }
+        input[type="range"]::-webkit-slider-thumb {
+            appearance:none; width:1.1rem; height:1.1rem; border-radius:50%; border:2px solid #fff; background:#172643;
+            box-shadow:0 4px 10px rgba(0,0,0,.25); cursor:pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width:1.1rem; height:1.1rem; border-radius:50%; border:2px solid #fff; background:#172643; cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <section class="panel" aria-label="Signal slider">
+        <div class="row"><h2>Signal Gain</h2><span class="val" id="value">48%</span></div>
+        <input id="slider" type="range" min="0" max="100" value="48">
+    </section>
+    <script>
+        const slider = document.getElementById("slider");
+        const value = document.getElementById("value");
+        slider.addEventListener("input", () => value.textContent = `${slider.value}%`);
+    </script>
+</body>
+</html>
