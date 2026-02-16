@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ribbon KPI Slate Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#edf1f7; --ink:#1a2432; --muted:#5f6b7c; --panel:#ffffff; --r:#f06a3f; --g:#1ea782; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body {
+            min-height:100vh; display:grid; place-items:center; padding:1.5rem; font-family:"Sora",sans-serif; color:var(--ink);
+            background:
+                radial-gradient(42rem 22rem at 0% 0%, rgba(240,106,63,.18), transparent 62%),
+                radial-gradient(42rem 22rem at 100% 100%, rgba(30,167,130,.16), transparent 64%),
+                var(--bg);
+        }
+        .card {
+            width:min(92vw,24rem); border-radius:1rem; background:var(--panel); border:1px solid rgba(26,36,50,.14);
+            box-shadow:0 18px 28px rgba(17,25,37,.17); overflow:hidden;
+        }
+        .ribbon {
+            padding:.38rem .8rem; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:#fff;
+            background:linear-gradient(120deg,var(--r),#ff9f59);
+        }
+        .body { padding:1rem; }
+        h2 { font-size:1.02rem; margin-bottom:.65rem; }
+        p { font-size:.82rem; color:var(--muted); line-height:1.45; margin-bottom:.9rem; }
+        .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
+        .kpi { border:1px solid rgba(26,36,50,.12); border-radius:.7rem; padding:.6rem .5rem; text-align:center; background:#f8fbff; }
+        .kpi strong { display:block; font-size:.95rem; margin-bottom:.15rem; }
+        .kpi span { font-size:.65rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+        .cta {
+            margin-top:.85rem; border:0; border-radius:.65rem; padding:.62rem .76rem; font:700 .69rem/1 "Sora",sans-serif;
+            letter-spacing:.07em; text-transform:uppercase; cursor:pointer; color:#fff; background:linear-gradient(120deg,#2f78f7,var(--g));
+        }
+    </style>
+</head>
+<body>
+    <article class="card">
+        <div class="ribbon">Weekly Snapshot</div>
+        <div class="body">
+            <h2>Product Pulse</h2>
+            <p>A compact KPI card with a headline band and quick metrics for executive dashboards.</p>
+            <div class="kpis">
+                <div class="kpi"><strong>92%</strong><span>Uptime</span></div>
+                <div class="kpi"><strong>3.1x</strong><span>Growth</span></div>
+                <div class="kpi"><strong>14m</strong><span>Tasks</span></div>
+            </div>
+            <button class="cta" type="button">Open Report</button>
+        </div>
+    </article>
+</body>
+</html>
