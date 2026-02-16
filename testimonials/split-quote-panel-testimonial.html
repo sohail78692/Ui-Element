@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Quote Panel Testimonial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f0efe8;
+            --ink: #1e252b;
+            --muted: #4f5a62;
+            --tone-a: #d1643e;
+            --tone-b: #2e7877;
+            --panel: #faf7f1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.5rem;
+            background:
+                radial-gradient(42rem 24rem at 0% 0%, rgba(209, 100, 62, 0.18), transparent 62%),
+                radial-gradient(38rem 22rem at 100% 100%, rgba(46, 120, 119, 0.2), transparent 64%),
+                var(--bg);
+            font-family: "Manrope", sans-serif;
+            color: var(--ink);
+        }
+
+        .card {
+            width: min(94vw, 38rem);
+            border-radius: 1.2rem;
+            overflow: hidden;
+            border: 1px solid rgba(30, 37, 43, 0.14);
+            background: var(--panel);
+            box-shadow: 0 22px 36px rgba(21, 27, 34, 0.18);
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+        }
+
+        .side {
+            background:
+                linear-gradient(160deg, rgba(46, 120, 119, 0.95), rgba(25, 80, 79, 0.95)),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0 8px, transparent 8px 16px);
+            color: #ffffff;
+            padding: 1.2rem;
+            display: grid;
+            align-content: end;
+            gap: 0.5rem;
+        }
+
+        .side .tag {
+            width: fit-content;
+            font-size: 0.66rem;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.44);
+            border-radius: 999px;
+            padding: 0.3rem 0.54rem;
+        }
+
+        .side .score {
+            font: 800 2rem/1 "Fraunces", serif;
+            letter-spacing: 0.01em;
+        }
+
+        .copy {
+            padding: 1.2rem 1.25rem;
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        blockquote {
+            font-family: "Fraunces", serif;
+            font-size: clamp(1.2rem, 3vw, 1.58rem);
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+        }
+
+        .line {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(30, 37, 43, 0.3), rgba(30, 37, 43, 0.08));
+        }
+
+        .author strong {
+            display: block;
+            font-size: 0.94rem;
+            margin-bottom: 0.12rem;
+        }
+
+        .author span {
+            font-size: 0.79rem;
+            color: var(--muted);
+        }
+
+        .marks {
+            display: flex;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+        }
+
+        .marks span {
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid rgba(30, 37, 43, 0.2);
+            border-radius: 999px;
+            padding: 0.3rem 0.54rem;
+            color: #3f4b56;
+            background: rgba(255, 255, 255, 0.72);
+        }
+
+        @media (max-width: 720px) {
+            .card {
+                grid-template-columns: 1fr;
+            }
+
+            .side {
+                align-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <article class="card">
+        <section class="side">
+            <span class="tag">Customer Story</span>
+            <p class="score">4.9</p>
+        </section>
+        <section class="copy">
+            <blockquote>"This component library reduced our front-end decision time from days to minutes."</blockquote>
+            <div class="line"></div>
+            <div class="author">
+                <strong>Maya Lennon</strong>
+                <span>Product Design Lead, Northline Labs</span>
+            </div>
+            <div class="marks">
+                <span>Speed</span>
+                <span>Consistency</span>
+                <span>Scale</span>
+            </div>
+        </section>
+    </article>
+</body>
+
+</html>
