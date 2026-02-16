@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact Briefing Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#eef4ff; --ink:#1a2542; --line:rgba(26,37,66,.15); --a:#3c79ff; --b:#1ea782; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { min-height:100vh; display:grid; place-items:center; padding:1.2rem; font-family:"Plus Jakarta Sans",sans-serif; color:var(--ink); background:var(--bg); }
+        form {
+            width:min(92vw,24rem); border-radius:1rem; background:#fff; border:1px solid var(--line);
+            box-shadow:0 16px 26px rgba(18,27,46,.14); padding:1rem; display:grid; gap:.65rem;
+        }
+        h2 { font-size:1rem; margin-bottom:.2rem; }
+        label { display:grid; gap:.3rem; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:#556582; }
+        input, textarea {
+            border:1px solid rgba(26,37,66,.17); border-radius:.65rem; padding:.62rem .7rem; font:500 .88rem/1.3 inherit; color:var(--ink);
+            background:#fbfdff;
+        }
+        textarea { min-height:5.8rem; resize:vertical; }
+        input:focus, textarea:focus { outline:none; border-color:rgba(60,121,255,.6); box-shadow:0 0 0 3px rgba(60,121,255,.14); }
+        button {
+            border:0; border-radius:.68rem; padding:.68rem .76rem; cursor:pointer; color:#fff; font-weight:700; font-size:.75rem;
+            letter-spacing:.07em; text-transform:uppercase; background:linear-gradient(130deg,var(--a),var(--b));
+        }
+    </style>
+</head>
+<body>
+    <form aria-label="Project briefing form">
+        <h2>Project Brief</h2>
+        <label>Name<input type="text" placeholder="Alex Kim" required></label>
+        <label>Email<input type="email" placeholder="alex@studio.com" required></label>
+        <label>Summary<textarea placeholder="Describe scope, timeline, and outcomes..."></textarea></label>
+        <button type="submit">Send Brief</button>
+    </form>
+</body>
+</html>
