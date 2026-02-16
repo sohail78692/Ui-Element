@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Rail Pricing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#eef5ff; --ink:#1c2845; --muted:#607090; --a:#3b79ff; --b:#20b39c; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { min-height:100vh; display:grid; place-items:center; padding:1.4rem; background:var(--bg); font-family:"Sora",sans-serif; color:var(--ink); }
+        .rail {
+            width:min(94vw,32rem); border-radius:1rem; border:1px solid rgba(28,40,69,.13); background:#fff;
+            box-shadow:0 16px 26px rgba(17,26,43,.13); overflow:hidden;
+        }
+        .row { display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:.7rem; padding:.8rem .9rem; border-bottom:1px solid rgba(28,40,69,.09); }
+        .row:last-child { border-bottom:0; }
+        .row.pro { background:linear-gradient(120deg, rgba(59,121,255,.12), rgba(32,179,156,.1)); }
+        .plan strong { display:block; font-size:.88rem; margin-bottom:.15rem; }
+        .plan span { font-size:.74rem; color:var(--muted); }
+        .price { font-size:.95rem; font-weight:800; white-space:nowrap; }
+        button {
+            border:0; border-radius:.62rem; padding:.5rem .65rem; cursor:pointer; font-size:.67rem; font-weight:700; letter-spacing:.07em;
+            text-transform:uppercase; color:#fff; background:linear-gradient(120deg,var(--a),var(--b));
+        }
+        @media (max-width:640px) { .row { grid-template-columns:1fr; } }
+    </style>
+</head>
+<body>
+    <section class="rail" aria-label="Pricing rail">
+        <article class="row">
+            <div class="plan"><strong>Starter</strong><span>Personal projects</span></div>
+            <p class="price">$12/mo</p><button type="button">Choose</button>
+        </article>
+        <article class="row pro">
+            <div class="plan"><strong>Team Pro</strong><span>Collaboration and advanced kits</span></div>
+            <p class="price">$39/mo</p><button type="button">Choose</button>
+        </article>
+        <article class="row">
+            <div class="plan"><strong>Enterprise</strong><span>Custom workflows and support</span></div>
+            <p class="price">$99/mo</p><button type="button">Contact</button>
+        </article>
+    </section>
+</body>
+</html>
