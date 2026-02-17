@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Shadow Button</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f1f4fb;
+            --ink: #111827;
+            --left: #0ea5e9;
+            --right: #22c55e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(55rem 30rem at 0% 0%, #d8efff, transparent 60%), var(--bg);
+            font-family: "Manrope", sans-serif;
+        }
+
+        .split-btn {
+            position: relative;
+            border: 0;
+            cursor: pointer;
+            color: white;
+            font: 800 1rem/1 "Manrope", sans-serif;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 1rem 1.8rem;
+            border-radius: 0.9rem;
+            background: linear-gradient(90deg, var(--left) 0 50%, var(--right) 50% 100%);
+            box-shadow: 0 16px 28px rgba(17, 24, 39, 0.2);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .split-btn::before,
+        .split-btn::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transition: transform 0.35s ease;
+            pointer-events: none;
+        }
+
+        .split-btn::before {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.22), transparent 60%);
+            transform: translateX(-100%);
+        }
+
+        .split-btn::after {
+            background: linear-gradient(90deg, transparent 40%, rgba(255, 255, 255, 0.22));
+            transform: translateX(100%);
+        }
+
+        .split-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 32px rgba(17, 24, 39, 0.28);
+        }
+
+        .split-btn:hover::before,
+        .split-btn:hover::after {
+            transform: translateX(0);
+        }
+
+        .split-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+    </style>
+</head>
+
+<body>
+    <button class="split-btn" type="button">Approve Deploy</button>
+</body>
+
+</html>
