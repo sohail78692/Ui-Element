@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dock Spotlight Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #eef3ff;
+            --surface: #ffffff;
+            --line: #d6e0f5;
+            --ink: #24324a;
+            --accent: #6366f1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: var(--bg);
+            font-family: "Outfit", sans-serif;
+            padding: 1rem;
+        }
+
+        .dock {
+            display: flex;
+            gap: 0.55rem;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 0.55rem;
+            box-shadow: 0 14px 24px rgba(36, 50, 74, 0.12);
+        }
+
+        .item {
+            width: 3rem;
+            aspect-ratio: 1;
+            border-radius: 0.8rem;
+            border: 0;
+            background: #f8faff;
+            color: var(--ink);
+            font: 700 0.85rem/1 "Outfit", sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .item:hover,
+        .item:focus-visible {
+            transform: translateY(-6px) scale(1.1);
+            background: var(--accent);
+            color: white;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dock" aria-label="Dock menu">
+        <button class="item" type="button" aria-label="Home">H</button>
+        <button class="item" type="button" aria-label="Search">S</button>
+        <button class="item" type="button" aria-label="Files">F</button>
+        <button class="item" type="button" aria-label="Chat">C</button>
+        <button class="item" type="button" aria-label="Settings">G</button>
+    </div>
+</body>
+
+</html>
