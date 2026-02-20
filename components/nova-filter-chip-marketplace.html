@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Filter Chip Marketplace</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&display=swap');
+
+        :root {
+            --ink: #1d1b2c;
+            --line: rgba(29, 27, 44, 0.14);
+            --berry: #7c3aed;
+            --indigo: #4f46e5;
+            --teal: #0f766e;
+            --amber: #d97706;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Archivo", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 14% 18%, rgba(124, 58, 237, 0.28), transparent 33%),
+                radial-gradient(circle at 84% 82%, rgba(15, 118, 110, 0.24), transparent 30%),
+                linear-gradient(145deg, #e7e2fb, #f4f2ff 45%, #d8efe9);
+        }
+
+        .shell {
+            width: min(1040px, 100%);
+            border-radius: 26px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.84);
+            box-shadow: 0 24px 42px rgba(29, 27, 44, 0.16);
+            backdrop-filter: blur(8px);
+            padding: clamp(16px, 2.8vw, 30px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.45rem, 2.8vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .lead {
+            margin: 10px 0 18px;
+            max-width: 60ch;
+            color: rgba(29, 27, 44, 0.76);
+            line-height: 1.52;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .chips button {
+            border: 1px solid rgba(29, 27, 44, 0.15);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font: inherit;
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #4c4770;
+            background: #efedfb;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .chips button.active {
+            color: #fff;
+            border-color: rgba(79, 70, 229, 0.44);
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
+        }
+
+        .chips button:hover {
+            transform: translateY(-1px);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .card {
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            padding: 12px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(238, 244, 251, 0.84));
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(124, 58, 237, 0.34);
+        }
+
+        .card h2 {
+            margin: 0 0 6px;
+            font-size: 1rem;
+        }
+
+        .card p {
+            margin: 0;
+            color: rgba(29, 27, 44, 0.74);
+            font-size: 0.86rem;
+            line-height: 1.48;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #0f172a;
+            background: #dbeafe;
+        }
+
+        .pill.productivity {
+            background: #ddd6fe;
+            color: #4c1d95;
+        }
+
+        .pill.analytics {
+            background: #ccfbf1;
+            color: #115e59;
+        }
+
+        .pill.marketing {
+            background: #fef3c7;
+            color: #78350f;
+        }
+
+        .meta strong {
+            font-size: 0.88rem;
+            color: #352f57;
+        }
+
+        @media (max-width: 940px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="shell">
+        <h1>Nova Filter Chip Marketplace</h1>
+        <p class="lead">
+            Product card gallery with fast filter chips for marketplace pages.
+            Tap categories to instantly re-render card sets with pricing and type labels.
+        </p>
+
+        <div class="chips" id="chips">
+            <button type="button" class="active" data-filter="all">All</button>
+            <button type="button" data-filter="productivity">Productivity</button>
+            <button type="button" data-filter="analytics">Analytics</button>
+            <button type="button" data-filter="marketing">Marketing</button>
+        </div>
+
+        <div class="cards" id="cards"></div>
+    </section>
+
+    <script>
+        const catalog = [
+            { name: "Sprint Planner", desc: "Roadmap board with dependency tracking and sprint health metrics.", type: "productivity", price: "$24/mo" },
+            { name: "Insight Radar", desc: "Behavior dashboard with funnel snapshots and cohort exploration.", type: "analytics", price: "$39/mo" },
+            { name: "Campaign Forge", desc: "Email and launch orchestration with variant scoring.", type: "marketing", price: "$29/mo" },
+            { name: "Focus Hub", desc: "Task concentration workspace with daily ritual automation.", type: "productivity", price: "$19/mo" },
+            { name: "Signal Stream", desc: "Live KPI feed for anomaly detection and trend alerts.", type: "analytics", price: "$34/mo" },
+            { name: "Audience Pulse", desc: "Segment builder with personalized messaging templates.", type: "marketing", price: "$27/mo" }
+        ];
+
+        const chips = [...document.querySelectorAll("#chips button")];
+        const cards = document.getElementById("cards");
+        let activeFilter = "all";
+
+        function render() {
+            const rows = catalog.filter((item) => activeFilter === "all" || item.type === activeFilter);
+            cards.innerHTML = rows.map((item) => `
+                <article class="card">
+                    <h2>${item.name}</h2>
+                    <p>${item.desc}</p>
+                    <div class="meta">
+                        <span class="pill ${item.type}">${item.type}</span>
+                        <strong>${item.price}</strong>
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        chips.forEach((button) => {
+            button.addEventListener("click", () => {
+                activeFilter = button.dataset.filter;
+                chips.forEach((chip) => chip.classList.remove("active"));
+                button.classList.add("active");
+                render();
+            });
+        });
+
+        render();
+    </script>
+</body>
+
+</html>
