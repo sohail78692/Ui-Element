@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flux Command Center Widget</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap');
+
+        :root {
+            --ink: #10233a;
+            --paper: #eff6fb;
+            --line: rgba(16, 35, 58, 0.16);
+            --cobalt: #0f6cbf;
+            --teal: #0a8f7a;
+            --amber: #f29f05;
+            --brick: #c2410c;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Sora", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 15% 18%, rgba(15, 108, 191, 0.34), transparent 30%),
+                radial-gradient(circle at 84% 78%, rgba(10, 143, 122, 0.34), transparent 32%),
+                linear-gradient(145deg, #dbeaf6, #f2f7fb 45%, #d3e3f1);
+        }
+
+        .widget {
+            width: min(980px, 100%);
+            border-radius: 24px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.84);
+            box-shadow: 0 24px 44px rgba(16, 35, 58, 0.18);
+            padding: clamp(16px, 2.8vw, 30px);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 2.9vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .lead {
+            margin: 10px 0 18px;
+            max-width: 58ch;
+            color: rgba(16, 35, 58, 0.78);
+            line-height: 1.52;
+        }
+
+        .switch {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            background: #e3edf6;
+            border-radius: 14px;
+            padding: 6px;
+        }
+
+        .switch button {
+            border: none;
+            background: transparent;
+            color: #365978;
+            font: inherit;
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .switch button:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        .switch button.is-active {
+            color: #fff;
+            background: linear-gradient(135deg, #0f6cbf, #0a8f7a);
+            box-shadow: 0 8px 16px rgba(15, 108, 191, 0.25);
+        }
+
+        .board {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 14px;
+        }
+
+        .panel,
+        .log {
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: linear-gradient(150deg, rgba(255, 255, 255, 0.9), rgba(234, 243, 250, 0.84));
+            padding: 14px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .metric {
+            border-radius: 12px;
+            padding: 12px;
+            color: #f5fbff;
+            background: linear-gradient(155deg, rgba(16, 35, 58, 0.88), rgba(40, 73, 103, 0.92));
+        }
+
+        .metric span {
+            display: block;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.82;
+            margin-bottom: 6px;
+        }
+
+        .metric strong {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 5px 9px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: #d8ecff;
+            color: #0f4d80;
+        }
+
+        .panel h2 {
+            margin: 10px 0 8px;
+            font-size: 1.2rem;
+        }
+
+        .panel p {
+            margin: 0;
+            color: rgba(16, 35, 58, 0.76);
+            line-height: 1.5;
+        }
+
+        .log h3 {
+            margin: 2px 0 10px;
+            font-size: 1rem;
+        }
+
+        .timeline {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 8px;
+        }
+
+        .timeline li {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+            align-items: start;
+            padding: 9px 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.74);
+            border: 1px solid rgba(16, 35, 58, 0.08);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-top: 4px;
+            background: var(--teal);
+            box-shadow: 0 0 0 4px rgba(10, 143, 122, 0.16);
+        }
+
+        .timeline strong {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .timeline small {
+            color: rgba(16, 35, 58, 0.7);
+        }
+
+        @media (max-width: 820px) {
+            .board {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .switch {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="widget">
+        <h1>Flux Command Center Widget</h1>
+        <p class="lead">
+            A dashboard control card for multi-team snapshots. Switch workstreams to update context,
+            metrics, and live activity notes inside one compact component.
+        </p>
+
+        <div class="switch" id="switch" role="tablist" aria-label="Workstream switch">
+            <button type="button" class="is-active" data-key="ops">Ops</button>
+            <button type="button" data-key="growth">Growth</button>
+            <button type="button" data-key="support">Support</button>
+            <button type="button" data-key="risk">Risk</button>
+        </div>
+
+        <div class="board">
+            <article class="panel">
+                <span class="tag" id="tag">Operations</span>
+                <h2 id="title">Pipeline is healthy</h2>
+                <p id="summary">Delivery flow is balanced with only minor queue pressure during peak hours.</p>
+                <div class="metrics" id="metrics"></div>
+            </article>
+
+            <aside class="log">
+                <h3>Live activity</h3>
+                <ul class="timeline" id="timeline"></ul>
+            </aside>
+        </div>
+    </section>
+
+    <script>
+        const views = {
+            ops: {
+                tag: "Operations",
+                title: "Pipeline is healthy",
+                summary: "Delivery flow is balanced with only minor queue pressure during peak hours.",
+                metrics: [["Throughput", "2,840"], ["SLA hit", "97.8%"], ["Backlog", "41"]],
+                feed: [["08:42", "Night sync finished cleanly"], ["09:05", "Release queue auto-balanced"], ["09:18", "Region east latency normalized"]]
+            },
+            growth: {
+                tag: "Growth",
+                title: "Acquisition momentum is up",
+                summary: "Campaign refresh improved qualified trials and reduced paid channel leakage.",
+                metrics: [["Trials", "+1,132"], ["CAC", "$18.40"], ["Activation", "43.6%"]],
+                feed: [["08:36", "Onboarding A/B crossed significance"], ["08:58", "Referral stream converted above target"], ["09:21", "Partner cohort retained +6%"]]
+            },
+            support: {
+                tag: "Support",
+                title: "Response times are stable",
+                summary: "Priority queues remain under control while first-response quality improved.",
+                metrics: [["Open tickets", "124"], ["FRT", "4m 18s"], ["CSAT", "4.8/5"]],
+                feed: [["08:31", "Tier-2 queue routed automatically"], ["08:54", "Refund policy macro updated"], ["09:15", "Escalation backlog cleared"]]
+            },
+            risk: {
+                tag: "Risk",
+                title: "Watchlist remains contained",
+                summary: "Signals are concentrated in low-severity buckets with no critical anomalies.",
+                metrics: [["Alerts", "19"], ["Critical", "0"], ["Fraud score", "0.14"]],
+                feed: [["08:29", "Velocity anomaly dismissed"], ["08:51", "Geo-spike matched travel pattern"], ["09:12", "Auth challenge auto-throttled bot wave"]]
+            }
+        };
+
+        const tabs = [...document.querySelectorAll("#switch button")];
+        const tag = document.getElementById("tag");
+        const title = document.getElementById("title");
+        const summary = document.getElementById("summary");
+        const metrics = document.getElementById("metrics");
+        const timeline = document.getElementById("timeline");
+
+        function paint(view) {
+            tag.textContent = view.tag;
+            title.textContent = view.title;
+            summary.textContent = view.summary;
+            metrics.innerHTML = view.metrics.map(([label, value]) => `
+                <article class="metric">
+                    <span>${label}</span>
+                    <strong>${value}</strong>
+                </article>
+            `).join("");
+
+            timeline.innerHTML = view.feed.map(([time, note]) => `
+                <li>
+                    <span class="dot"></span>
+                    <div>
+                        <strong>${time}</strong>
+                        <small>${note}</small>
+                    </div>
+                </li>
+            `).join("");
+        }
+
+        function activate(button) {
+            tabs.forEach((tab) => tab.classList.remove("is-active"));
+            button.classList.add("is-active");
+            paint(views[button.dataset.key]);
+        }
+
+        tabs.forEach((button) => {
+            button.addEventListener("click", () => activate(button));
+        });
+
+        paint(views.ops);
+    </script>
+</body>
+
+</html>
