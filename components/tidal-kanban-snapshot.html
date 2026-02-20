@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidal Kanban Snapshot</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@500;700;800&display=swap');
+
+        :root {
+            --ink: #10243a;
+            --line: rgba(16, 36, 58, 0.12);
+            --ocean: #0a84b7;
+            --reef: #0e9f8a;
+            --sand: #f59e0b;
+            --bg: #e6f1fa;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Urbanist", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 14% 18%, rgba(10, 132, 183, 0.3), transparent 34%),
+                radial-gradient(circle at 84% 78%, rgba(14, 159, 138, 0.3), transparent 32%),
+                linear-gradient(145deg, #d8e9f7, #edf5fb 48%, #d6e8f5);
+        }
+
+        .board {
+            width: min(1040px, 100%);
+            border-radius: 26px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.82);
+            box-shadow: 0 24px 42px rgba(16, 36, 58, 0.16);
+            backdrop-filter: blur(9px);
+            padding: clamp(16px, 2.8vw, 30px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.45rem, 2.7vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .lead {
+            margin: 10px 0 18px;
+            max-width: 60ch;
+            color: rgba(16, 36, 58, 0.74);
+            line-height: 1.5;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            padding: 6px;
+            background: #dfeaf5;
+            border-radius: 14px;
+            margin-bottom: 14px;
+        }
+
+        .toolbar button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font: inherit;
+            font-weight: 700;
+            color: #355a7f;
+            background: transparent;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .toolbar button:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .toolbar button.active {
+            background: linear-gradient(145deg, var(--ocean), var(--reef));
+            color: #fff;
+            box-shadow: 0 8px 16px rgba(10, 132, 183, 0.24);
+        }
+
+        .lanes {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .lane {
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(234, 244, 250, 0.8));
+            padding: 12px;
+        }
+
+        .lane h2 {
+            margin: 0 0 10px;
+            font-size: 1rem;
+        }
+
+        .cards {
+            display: grid;
+            gap: 8px;
+        }
+
+        .card {
+            border-radius: 12px;
+            padding: 10px;
+            border: 1px solid rgba(16, 36, 58, 0.1);
+            background: rgba(255, 255, 255, 0.86);
+        }
+
+        .card strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.92rem;
+        }
+
+        .card small {
+            color: rgba(16, 36, 58, 0.7);
+        }
+
+        .chip {
+            display: inline-block;
+            margin-top: 8px;
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: #d9eeff;
+            color: #0a507c;
+        }
+
+        @media (max-width: 920px) {
+            .lanes {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="board">
+        <h1>Tidal Kanban Snapshot</h1>
+        <p class="lead">
+            Compact kanban overview for product and delivery teams. Switch the focus filter
+            to repaint lane cards for planning, execution, and post-release operations.
+        </p>
+
+        <div class="toolbar" id="toolbar">
+            <button type="button" class="active" data-view="product">Product</button>
+            <button type="button" data-view="engineering">Engineering</button>
+            <button type="button" data-view="marketing">Marketing</button>
+            <button type="button" data-view="operations">Operations</button>
+        </div>
+
+        <div class="lanes" id="lanes"></div>
+    </section>
+
+    <script>
+        const boards = {
+            product: [
+                { lane: "Backlog", cards: [["Improve onboarding copy", "Owner: Aditi", "Spec"], ["Audit empty states", "Owner: Reza", "UX"]] },
+                { lane: "In Progress", cards: [["Roadmap v2 scoring", "Owner: Lina", "Planning"], ["Pricing narrative test", "Owner: Omar", "Experiment"]] },
+                { lane: "Ready", cards: [["Feature launch checklist", "Owner: Zoya", "Release"], ["Quarterly retrospective", "Owner: Team", "Ops"]] }
+            ],
+            engineering: [
+                { lane: "Backlog", cards: [["Refactor auth middleware", "Owner: Dev A", "Core"], ["Queue visibility metrics", "Owner: Dev C", "Infra"]] },
+                { lane: "In Progress", cards: [["Billing retry policy", "Owner: Dev B", "Payments"], ["Feed pagination tuning", "Owner: Dev D", "API"]] },
+                { lane: "Ready", cards: [["Canary rollout batch 3", "Owner: SRE", "Deploy"], ["Error budget report", "Owner: SRE", "Reliability"]] }
+            ],
+            marketing: [
+                { lane: "Backlog", cards: [["Partner webinar brief", "Owner: Mira", "Campaign"], ["Homepage social proof", "Owner: Nikhil", "Content"]] },
+                { lane: "In Progress", cards: [["Lifecycle email refresh", "Owner: Tara", "CRM"], ["Q2 landing page polish", "Owner: Arman", "Web"]] },
+                { lane: "Ready", cards: [["Podcast placements", "Owner: Dana", "Media"], ["Attribution sync", "Owner: Data", "Analytics"]] }
+            ],
+            operations: [
+                { lane: "Backlog", cards: [["SLA escalation matrix", "Owner: Ops A", "Policy"], ["Vendor compliance pass", "Owner: Ops C", "Audit"]] },
+                { lane: "In Progress", cards: [["Support queue balancing", "Owner: Ops B", "Workflow"], ["Incident drill prep", "Owner: Ops D", "Resilience"]] },
+                { lane: "Ready", cards: [["Weekly review packet", "Owner: PMO", "Report"], ["Shift handoff template", "Owner: PMO", "Playbook"]] }
+            ]
+        };
+
+        const tabs = [...document.querySelectorAll("#toolbar button")];
+        const lanes = document.getElementById("lanes");
+
+        function render(viewKey) {
+            lanes.innerHTML = boards[viewKey].map((lane) => `
+                <article class="lane">
+                    <h2>${lane.lane}</h2>
+                    <div class="cards">
+                        ${lane.cards.map(([title, owner, chip]) => `
+                            <article class="card">
+                                <strong>${title}</strong>
+                                <small>${owner}</small>
+                                <span class="chip">${chip}</span>
+                            </article>
+                        `).join("")}
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        function activate(button) {
+            tabs.forEach((tab) => tab.classList.remove("active"));
+            button.classList.add("active");
+            render(button.dataset.view);
+        }
+
+        tabs.forEach((button) => {
+            button.addEventListener("click", () => activate(button));
+        });
+
+        render("product");
+    </script>
+</body>
+
+</html>
