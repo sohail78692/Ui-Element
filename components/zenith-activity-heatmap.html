@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Activity Heatmap</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+
+        :root {
+            --ink: #10231e;
+            --line: rgba(16, 35, 30, 0.14);
+            --mint-0: #ecf8f2;
+            --mint-1: #d1f0df;
+            --mint-2: #94dfb8;
+            --mint-3: #4cc98d;
+            --mint-4: #1f9f67;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 16% 16%, rgba(76, 201, 141, 0.28), transparent 33%),
+                radial-gradient(circle at 84% 82%, rgba(148, 223, 184, 0.32), transparent 30%),
+                linear-gradient(140deg, #dff2e7, #f3fbf7 46%, #d2eadf);
+        }
+
+        .shell {
+            width: min(960px, 100%);
+            border-radius: 24px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.82);
+            box-shadow: 0 24px 42px rgba(9, 36, 28, 0.16);
+            backdrop-filter: blur(8px);
+            padding: clamp(16px, 2.8vw, 30px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.45rem, 2.8vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .lead {
+            margin: 10px 0 18px;
+            max-width: 58ch;
+            line-height: 1.52;
+            color: rgba(16, 35, 30, 0.76);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 12px;
+        }
+
+        .map,
+        .detail {
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(236, 248, 242, 0.8));
+            padding: 14px;
+        }
+
+        .labels {
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            gap: 10px;
+        }
+
+        .days {
+            display: grid;
+            gap: 8px;
+            padding-top: 34px;
+            color: rgba(16, 35, 30, 0.74);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .grid-area {
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .week-head {
+            display: grid;
+            grid-template-columns: repeat(12, 28px);
+            gap: 6px;
+            margin-bottom: 8px;
+            color: rgba(16, 35, 30, 0.66);
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(12, 28px);
+            grid-auto-rows: 28px;
+            gap: 6px;
+        }
+
+        .cell {
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--mint-0);
+            transition: transform 0.18s ease, outline-color 0.18s ease;
+            outline: 2px solid transparent;
+        }
+
+        .cell.l1 {
+            background: var(--mint-1);
+        }
+
+        .cell.l2 {
+            background: var(--mint-2);
+        }
+
+        .cell.l3 {
+            background: var(--mint-3);
+        }
+
+        .cell.l4 {
+            background: var(--mint-4);
+        }
+
+        .cell:hover {
+            transform: translateY(-1px);
+        }
+
+        .cell.active {
+            outline-color: #104b34;
+        }
+
+        .detail h2 {
+            margin: 0;
+            font-size: 1.15rem;
+        }
+
+        .meta {
+            margin: 6px 0 14px;
+            color: rgba(16, 35, 30, 0.72);
+            font-size: 0.9rem;
+        }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .stat {
+            border-radius: 10px;
+            padding: 10px;
+            background: linear-gradient(150deg, rgba(16, 35, 30, 0.88), rgba(35, 68, 57, 0.92));
+            color: #ebfff5;
+        }
+
+        .stat span {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.8;
+            margin-bottom: 6px;
+        }
+
+        .stat strong {
+            font-size: 1.15rem;
+            line-height: 1;
+        }
+
+        .notes {
+            margin: 0;
+            padding-left: 18px;
+            line-height: 1.48;
+            color: rgba(16, 35, 30, 0.82);
+        }
+
+        @media (max-width: 860px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="shell">
+        <h1>Zenith Activity Heatmap</h1>
+        <p class="lead">
+            A compact weekly heatmap component for product activity. Click any cell to inspect
+            daily performance context, conversion signal, and notes for that session block.
+        </p>
+
+        <div class="layout">
+            <article class="map">
+                <div class="labels">
+                    <div class="days">
+                        <span>Mon</span>
+                        <span>Wed</span>
+                        <span>Fri</span>
+                        <span>Sun</span>
+                    </div>
+                    <div class="grid-area">
+                        <div class="week-head">
+                            <span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span>
+                            <span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span>
+                        </div>
+                        <div class="heatmap" id="heatmap"></div>
+                    </div>
+                </div>
+            </article>
+
+            <aside class="detail">
+                <h2 id="day">Monday, Week 1</h2>
+                <p class="meta" id="meta">Moderate traffic with strong user intent.</p>
+                <div class="stat-row">
+                    <article class="stat"><span>Sessions</span><strong id="sessions">684</strong></article>
+                    <article class="stat"><span>Conv%</span><strong id="conversion">5.9</strong></article>
+                    <article class="stat"><span>Drop-off</span><strong id="dropoff">18%</strong></article>
+                </div>
+                <ul class="notes" id="notes"></ul>
+            </aside>
+        </div>
+    </section>
+
+    <script>
+        const tones = [0, 1, 2, 3, 4];
+        const remarks = [
+            "Traffic arrived from onboarding prompts and search.",
+            "Checkout friction remained low during this block.",
+            "Repeat visitors contributed most high-value events.",
+            "Notification nudges lifted return sessions.",
+            "No anomaly detected in latency or error rate."
+        ];
+
+        const entries = Array.from({ length: 84 }, (_, index) => {
+            const week = Math.floor(index / 7) + 1;
+            const day = (index % 7) + 1;
+            const intensity = tones[(index + (week % 3)) % tones.length];
+            return {
+                label: `Day ${day}, Week ${week}`,
+                week,
+                day,
+                intensity,
+                sessions: 420 + week * 32 + day * 11 + intensity * 34,
+                conversion: (3.4 + intensity * 0.8 + (day % 3) * 0.22).toFixed(1),
+                dropoff: `${24 - intensity * 2 - (day % 2)}%`,
+                summary: intensity >= 3 ? "High engagement window with strong conversion flow." : "Moderate traffic with strong user intent.",
+                notes: [remarks[(index + 1) % remarks.length], remarks[(index + 3) % remarks.length], remarks[(index + 4) % remarks.length]]
+            };
+        });
+
+        const heatmap = document.getElementById("heatmap");
+        const day = document.getElementById("day");
+        const meta = document.getElementById("meta");
+        const sessions = document.getElementById("sessions");
+        const conversion = document.getElementById("conversion");
+        const dropoff = document.getElementById("dropoff");
+        const notes = document.getElementById("notes");
+
+        function renderDetail(entry) {
+            day.textContent = `${["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][entry.day - 1]}, Week ${entry.week}`;
+            meta.textContent = entry.summary;
+            sessions.textContent = entry.sessions;
+            conversion.textContent = entry.conversion;
+            dropoff.textContent = entry.dropoff;
+            notes.innerHTML = entry.notes.map((note) => `<li>${note}</li>`).join("");
+        }
+
+        function renderMap() {
+            heatmap.innerHTML = entries.map((entry, index) => `
+                <button type="button" class="cell l${entry.intensity}${index === 0 ? " active" : ""}" data-index="${index}" aria-label="${entry.label}"></button>
+            `).join("");
+
+            const cells = [...document.querySelectorAll(".cell")];
+            cells.forEach((cell) => {
+                cell.addEventListener("click", () => {
+                    cells.forEach((item) => item.classList.remove("active"));
+                    cell.classList.add("active");
+                    renderDetail(entries[Number(cell.dataset.index)]);
+                });
+            });
+        }
+
+        renderMap();
+        renderDetail(entries[0]);
+    </script>
+</body>
+
+</html>
