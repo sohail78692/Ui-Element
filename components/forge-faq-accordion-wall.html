@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forge FAQ Accordion Wall</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@400;700;800&display=swap');
+
+        :root {
+            --ink: #2a2118;
+            --line: rgba(42, 33, 24, 0.14);
+            --clay: #b45309;
+            --copper: #ea580c;
+            --sand: #ffedd5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Chivo", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 16% 16%, rgba(234, 88, 12, 0.26), transparent 32%),
+                radial-gradient(circle at 83% 78%, rgba(180, 83, 9, 0.24), transparent 30%),
+                linear-gradient(145deg, #f6dfbf, #fff0dd 44%, #f2d8bb);
+        }
+
+        .shell {
+            width: min(980px, 100%);
+            border-radius: 26px;
+            border: 1px solid var(--line);
+            background: rgba(255, 250, 243, 0.84);
+            box-shadow: 0 24px 40px rgba(65, 41, 24, 0.2);
+            padding: clamp(16px, 2.8vw, 30px);
+            backdrop-filter: blur(8px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.45rem, 2.7vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .lead {
+            margin: 10px 0 18px;
+            max-width: 60ch;
+            color: rgba(42, 33, 24, 0.76);
+            line-height: 1.52;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .chips button {
+            border: 1px solid rgba(42, 33, 24, 0.15);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font: inherit;
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: #fff6ea;
+            color: #754726;
+            cursor: pointer;
+            transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .chips button.active {
+            border-color: rgba(234, 88, 12, 0.45);
+            background: linear-gradient(135deg, #ea580c, #c2410c);
+            color: #fff7ef;
+        }
+
+        .chips button:hover {
+            transform: translateY(-1px);
+        }
+
+        .list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .item {
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: linear-gradient(155deg, rgba(255, 255, 255, 0.9), rgba(255, 245, 231, 0.8));
+            overflow: hidden;
+        }
+
+        .item button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            text-align: left;
+            font: inherit;
+            font-weight: 700;
+            color: #3f2c1e;
+            cursor: pointer;
+        }
+
+        .item button span {
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            background: #ffe5ca;
+            color: #b45309;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .item.open button span {
+            transform: rotate(45deg);
+            background: #ffd4ae;
+        }
+
+        .answer {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.25s ease;
+        }
+
+        .answer div {
+            overflow: hidden;
+        }
+
+        .answer p {
+            margin: 0;
+            padding: 0 14px 14px;
+            color: rgba(42, 33, 24, 0.76);
+            line-height: 1.5;
+        }
+
+        .item.open .answer {
+            grid-template-rows: 1fr;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="shell">
+        <h1>Forge FAQ Accordion Wall</h1>
+        <p class="lead">
+            Category-driven FAQ wall with expandable answers. Designed for docs pages, billing help,
+            and onboarding support flows where quick scanning matters.
+        </p>
+
+        <div class="chips" id="chips">
+            <button type="button" class="active" data-topic="all">All</button>
+            <button type="button" data-topic="billing">Billing</button>
+            <button type="button" data-topic="security">Security</button>
+            <button type="button" data-topic="workflow">Workflow</button>
+        </div>
+
+        <div class="list" id="list"></div>
+    </section>
+
+    <script>
+        const faq = [
+            {
+                topic: "billing",
+                q: "Can I switch from monthly to yearly at any time?",
+                a: "Yes. Your current cycle is prorated automatically and the next invoice reflects the new billing cadence."
+            },
+            {
+                topic: "security",
+                q: "Do you support single sign-on for teams?",
+                a: "SSO is available on Business and Enterprise plans with SAML providers and optional domain enforcement."
+            },
+            {
+                topic: "workflow",
+                q: "How many automations can I run per workspace?",
+                a: "Starter includes 10 active automations, Scale includes 100, and Enterprise offers custom limits."
+            },
+            {
+                topic: "billing",
+                q: "Where can I download old invoices?",
+                a: "Open Settings, choose Billing, then export invoices directly as PDF for any historical period."
+            },
+            {
+                topic: "security",
+                q: "Is customer data encrypted at rest?",
+                a: "All customer data is encrypted at rest with managed key rotation and transport is protected via TLS."
+            },
+            {
+                topic: "workflow",
+                q: "Can I assign approval gates before publish?",
+                a: "Yes. You can configure stage-based approvals and route requests to specific owners per environment."
+            }
+        ];
+
+        const chips = [...document.querySelectorAll("#chips button")];
+        const list = document.getElementById("list");
+        let activeTopic = "all";
+
+        function render() {
+            const rows = faq.filter((item) => activeTopic === "all" || item.topic === activeTopic);
+            list.innerHTML = rows.map((item, idx) => `
+                <article class="item ${idx === 0 ? "open" : ""}">
+                    <button type="button">
+                        ${item.q}
+                        <span>+</span>
+                    </button>
+                    <div class="answer"><div><p>${item.a}</p></div></div>
+                </article>
+            `).join("");
+
+            const items = [...document.querySelectorAll(".item")];
+            items.forEach((item) => {
+                item.querySelector("button").addEventListener("click", () => {
+                    const open = item.classList.contains("open");
+                    items.forEach((entry) => entry.classList.remove("open"));
+                    if (!open) item.classList.add("open");
+                });
+            });
+        }
+
+        function setTopic(button) {
+            activeTopic = button.dataset.topic;
+            chips.forEach((chip) => chip.classList.remove("active"));
+            button.classList.add("active");
+            render();
+        }
+
+        chips.forEach((button) => {
+            button.addEventListener("click", () => setTopic(button));
+        });
+
+        render();
+    </script>
+</body>
+
+</html>
