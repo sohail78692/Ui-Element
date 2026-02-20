@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunset Pricing Switchboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+
+        :root {
+            --ink: #2a1a11;
+            --line: rgba(42, 26, 17, 0.14);
+            --sun: #f97316;
+            --gold: #fbbf24;
+            --plum: #7c2d12;
+            --cloud: #fff7ec;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 24px;
+            display: grid;
+            place-items: center;
+            font-family: "Outfit", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 10% 18%, rgba(251, 191, 36, 0.36), transparent 35%),
+                radial-gradient(circle at 82% 80%, rgba(249, 115, 22, 0.3), transparent 34%),
+                linear-gradient(145deg, #f9e6c8, #fff1dc 44%, #f4d9be);
+        }
+
+        .shell {
+            width: min(1020px, 100%);
+            border-radius: 28px;
+            border: 1px solid var(--line);
+            background: rgba(255, 252, 247, 0.8);
+            box-shadow: 0 24px 46px rgba(72, 39, 23, 0.2);
+            backdrop-filter: blur(8px);
+            padding: clamp(16px, 2.7vw, 30px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 2.8vw, 2.3rem);
+            letter-spacing: -0.02em;
+        }
+
+        .intro {
+            margin: 10px 0 18px;
+            max-width: 56ch;
+            line-height: 1.52;
+            color: rgba(42, 26, 17, 0.78);
+        }
+
+        .topbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .switch {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            padding: 6px;
+            border-radius: 999px;
+            background: #f5dfc6;
+            width: min(300px, 100%);
+        }
+
+        .switch button {
+            border: none;
+            background: transparent;
+            border-radius: 999px;
+            padding: 10px 14px;
+            font: inherit;
+            font-weight: 700;
+            color: #7c4f2f;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .switch button.active {
+            color: #fff;
+        }
+
+        .switch .track {
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            width: calc(50% - 9px);
+            height: calc(100% - 12px);
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--sun), #ea580c);
+            box-shadow: 0 10px 18px rgba(234, 88, 12, 0.3);
+            transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: #2a1a11;
+            color: #ffedd4;
+            border-radius: 999px;
+            padding: 6px 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .plan {
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.94), rgba(255, 245, 230, 0.8));
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .plan::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto auto 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .plan.active {
+            border-color: rgba(234, 88, 12, 0.4);
+            box-shadow: 0 14px 28px rgba(72, 39, 23, 0.16);
+            transform: translateY(-3px);
+        }
+
+        .plan.active::before {
+            opacity: 1;
+        }
+
+        .plan h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .price {
+            margin: 8px 0;
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .price small {
+            font-size: 0.9rem;
+            color: rgba(42, 26, 17, 0.66);
+            font-weight: 600;
+        }
+
+        ul {
+            margin: 10px 0 14px;
+            padding-left: 18px;
+            color: rgba(42, 26, 17, 0.82);
+            line-height: 1.5;
+        }
+
+        .plan button {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font: inherit;
+            font-weight: 700;
+            background: #2a1a11;
+            color: #fff4e5;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .plan button:hover {
+            transform: translateY(-1px);
+            background: #3c2619;
+        }
+
+        @media (max-width: 860px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="shell">
+        <h1>Sunset Pricing Switchboard</h1>
+        <p class="intro">
+            Flexible pricing selector with monthly and yearly billing views.
+            Switch billing cadence to update all plans, then pick a highlighted option.
+        </p>
+
+        <div class="topbar">
+            <div class="switch" id="billing-switch">
+                <div class="track" id="track"></div>
+                <button type="button" class="active" data-cycle="monthly">Monthly</button>
+                <button type="button" data-cycle="yearly">Yearly</button>
+            </div>
+            <span class="badge">Yearly saves 22%</span>
+        </div>
+
+        <div class="grid" id="plans"></div>
+    </section>
+
+    <script>
+        const pricing = {
+            monthly: [
+                { name: "Starter", price: 19, suffix: "/mo", perks: ["3 team members", "5 projects", "Email support"] },
+                { name: "Scale", price: 49, suffix: "/mo", perks: ["15 team members", "Unlimited projects", "Priority support"] },
+                { name: "Enterprise", price: 129, suffix: "/mo", perks: ["Unlimited seats", "Advanced security", "Dedicated manager"] }
+            ],
+            yearly: [
+                { name: "Starter", price: 15, suffix: "/mo", perks: ["3 team members", "5 projects", "Email support"] },
+                { name: "Scale", price: 38, suffix: "/mo", perks: ["15 team members", "Unlimited projects", "Priority support"] },
+                { name: "Enterprise", price: 99, suffix: "/mo", perks: ["Unlimited seats", "Advanced security", "Dedicated manager"] }
+            ]
+        };
+
+        const switchButtons = [...document.querySelectorAll("#billing-switch button")];
+        const track = document.getElementById("track");
+        const plans = document.getElementById("plans");
+        let cycle = "monthly";
+
+        function renderPlans() {
+            plans.innerHTML = pricing[cycle].map((plan, index) => `
+                <article class="plan ${index === 1 ? "active" : ""}">
+                    <h2>${plan.name}</h2>
+                    <div class="price">$${plan.price}<small>${plan.suffix}</small></div>
+                    <ul>${plan.perks.map((perk) => `<li>${perk}</li>`).join("")}</ul>
+                    <button type="button">Choose ${plan.name}</button>
+                </article>
+            `).join("");
+
+            const cards = [...document.querySelectorAll(".plan")];
+            cards.forEach((card) => {
+                card.addEventListener("click", () => {
+                    cards.forEach((item) => item.classList.remove("active"));
+                    card.classList.add("active");
+                });
+            });
+        }
+
+        function setCycle(button) {
+            cycle = button.dataset.cycle;
+            switchButtons.forEach((item) => item.classList.remove("active"));
+            button.classList.add("active");
+
+            const index = switchButtons.indexOf(button);
+            track.style.transform = `translateX(${index * 100}%)`;
+            renderPlans();
+        }
+
+        switchButtons.forEach((button) => {
+            button.addEventListener("click", () => setCycle(button));
+        });
+
+        renderPlans();
+    </script>
+</body>
+
+</html>
