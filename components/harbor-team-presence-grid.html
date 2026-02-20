@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harbor Team Presence Grid</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap');
+
+        :root {
+            --ink: #132433;
+            --line: rgba(19, 36, 51, 0.13);
+            --sky: #2563eb;
+            --mint: #059669;
+            --sun: #d97706;
+            --rose: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Manrope", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 15% 16%, rgba(37, 99, 235, 0.26), transparent 34%),
+                radial-gradient(circle at 84% 80%, rgba(5, 150, 105, 0.22), transparent 32%),
+                linear-gradient(145deg, #dbe9f7, #eef5fb 45%, #d4e7f2);
+        }
+
+        .shell {
+            width: min(1020px, 100%);
+            border-radius: 26px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.84);
+            box-shadow: 0 24px 42px rgba(19, 36, 51, 0.16);
+            backdrop-filter: blur(8px);
+            padding: clamp(16px, 2.8vw, 30px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.45rem, 2.8vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .lead {
+            margin: 10px 0 18px;
+            max-width: 58ch;
+            color: rgba(19, 36, 51, 0.76);
+            line-height: 1.52;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            padding: 6px;
+            border-radius: 14px;
+            background: #e0ebf6;
+            margin-bottom: 14px;
+        }
+
+        .filters button {
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            padding: 10px;
+            font: inherit;
+            font-weight: 700;
+            color: #355777;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .filters button.active {
+            color: #fff;
+            background: linear-gradient(135deg, #2563eb, #0f766e);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.24);
+        }
+
+        .filters button:hover {
+            transform: translateY(-1px);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 12px;
+        }
+
+        .grid,
+        .detail {
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(233, 243, 251, 0.82));
+            padding: 14px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .card {
+            border-radius: 12px;
+            border: 1px solid rgba(19, 36, 51, 0.1);
+            background: rgba(255, 255, 255, 0.86);
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-1px);
+        }
+
+        .card.active {
+            border-color: rgba(37, 99, 235, 0.44);
+        }
+
+        .name {
+            margin: 0 0 4px;
+            font-size: 0.94rem;
+            font-weight: 800;
+        }
+
+        .role {
+            margin: 0;
+            font-size: 0.82rem;
+            color: rgba(19, 36, 51, 0.68);
+        }
+
+        .pill {
+            margin-top: 8px;
+            display: inline-block;
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #0f172a;
+            background: #dbeafe;
+        }
+
+        .pill.online {
+            background: #dcfce7;
+            color: #14532d;
+        }
+
+        .pill.busy {
+            background: #fef3c7;
+            color: #78350f;
+        }
+
+        .pill.offline {
+            background: #fee2e2;
+            color: #7f1d1d;
+        }
+
+        .detail h2 {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .detail p {
+            margin: 8px 0 10px;
+            color: rgba(19, 36, 51, 0.76);
+            line-height: 1.48;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .stats article {
+            border-radius: 10px;
+            padding: 10px;
+            color: #f8fbff;
+            background: linear-gradient(150deg, rgba(19, 36, 51, 0.9), rgba(42, 69, 93, 0.92));
+        }
+
+        .stats span {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.82;
+            margin-bottom: 6px;
+        }
+
+        .stats strong {
+            font-size: 1.06rem;
+            line-height: 1;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="shell">
+        <h1>Harbor Team Presence Grid</h1>
+        <p class="lead">
+            Presence board component for distributed teams. Filter by availability
+            and click a member card to inspect workload and current focus details.
+        </p>
+
+        <div class="filters" id="filters">
+            <button type="button" class="active" data-filter="all">All</button>
+            <button type="button" data-filter="online">Online</button>
+            <button type="button" data-filter="busy">Busy</button>
+            <button type="button" data-filter="offline">Offline</button>
+        </div>
+
+        <div class="layout">
+            <article class="grid">
+                <div class="cards" id="cards"></div>
+            </article>
+
+            <aside class="detail">
+                <h2 id="title">Select a teammate</h2>
+                <p id="summary">Choose a card to view current assignment details.</p>
+                <div class="stats">
+                    <article><span>Tasks</span><strong id="tasks">-</strong></article>
+                    <article><span>Meetings</span><strong id="meetings">-</strong></article>
+                    <article><span>ETA</span><strong id="eta">-</strong></article>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <script>
+        const people = [
+            { name: "Aarav Patel", role: "Frontend Engineer", state: "online", summary: "Polishing dashboard navigation and responsive states.", tasks: "4", meetings: "1", eta: "Today 6PM" },
+            { name: "Nina Flores", role: "Product Designer", state: "busy", summary: "Running usability review and handoff for onboarding.", tasks: "3", meetings: "3", eta: "Tomorrow" },
+            { name: "Luca Moretti", role: "Backend Engineer", state: "online", summary: "Stabilizing webhook retries and queue metrics.", tasks: "5", meetings: "0", eta: "Today 4PM" },
+            { name: "Maya Kim", role: "Support Lead", state: "offline", summary: "Out of office. Coverage delegated to support pod B.", tasks: "0", meetings: "0", eta: "Mon 9AM" },
+            { name: "Rohan Mehta", role: "Growth Analyst", state: "busy", summary: "Preparing weekly funnel report and attribution notes.", tasks: "2", meetings: "2", eta: "Today 8PM" },
+            { name: "Elsa Novak", role: "QA Engineer", state: "online", summary: "Executing regression suite for release candidate.", tasks: "6", meetings: "1", eta: "Tonight" }
+        ];
+
+        const filters = [...document.querySelectorAll("#filters button")];
+        const cards = document.getElementById("cards");
+        const title = document.getElementById("title");
+        const summary = document.getElementById("summary");
+        const tasks = document.getElementById("tasks");
+        const meetings = document.getElementById("meetings");
+        const eta = document.getElementById("eta");
+
+        let activeFilter = "all";
+        let activeName = "";
+
+        function renderDetail(person) {
+            title.textContent = `${person.name} - ${person.role}`;
+            summary.textContent = person.summary;
+            tasks.textContent = person.tasks;
+            meetings.textContent = person.meetings;
+            eta.textContent = person.eta;
+        }
+
+        function renderCards() {
+            const subset = people.filter((person) => activeFilter === "all" || person.state === activeFilter);
+            cards.innerHTML = subset.map((person, idx) => `
+                <article class="card ${person.name === activeName || (!activeName && idx === 0) ? "active" : ""}" data-name="${person.name}">
+                    <p class="name">${person.name}</p>
+                    <p class="role">${person.role}</p>
+                    <span class="pill ${person.state}">${person.state}</span>
+                </article>
+            `).join("");
+
+            const cardNodes = [...cards.querySelectorAll(".card")];
+            if (cardNodes.length) {
+                const initialName = activeName || cardNodes[0].dataset.name;
+                const initial = subset.find((item) => item.name === initialName) || subset[0];
+                activeName = initial.name;
+                renderDetail(initial);
+            } else {
+                title.textContent = "No teammates in this filter";
+                summary.textContent = "Try a different status filter.";
+                tasks.textContent = "-";
+                meetings.textContent = "-";
+                eta.textContent = "-";
+            }
+
+            cardNodes.forEach((card) => {
+                card.addEventListener("click", () => {
+                    cardNodes.forEach((node) => node.classList.remove("active"));
+                    card.classList.add("active");
+                    const match = people.find((person) => person.name === card.dataset.name);
+                    activeName = match.name;
+                    renderDetail(match);
+                });
+            });
+        }
+
+        filters.forEach((button) => {
+            button.addEventListener("click", () => {
+                activeFilter = button.dataset.filter;
+                activeName = "";
+                filters.forEach((item) => item.classList.remove("active"));
+                button.classList.add("active");
+                renderCards();
+            });
+        });
+
+        renderCards();
+    </script>
+</body>
+
+</html>
