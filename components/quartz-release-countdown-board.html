@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quartz Release Countdown Board</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&display=swap');
+
+        :root {
+            --ink: #1a1630;
+            --line: rgba(26, 22, 48, 0.14);
+            --violet: #6d28d9;
+            --cyan: #0891b2;
+            --rose: #db2777;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Lexend", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 18% 16%, rgba(109, 40, 217, 0.3), transparent 34%),
+                radial-gradient(circle at 82% 84%, rgba(8, 145, 178, 0.26), transparent 32%),
+                linear-gradient(145deg, #e4ddf9, #f5f1ff 46%, #d9e7f8);
+        }
+
+        .shell {
+            width: min(980px, 100%);
+            border-radius: 26px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.82);
+            box-shadow: 0 24px 42px rgba(26, 22, 48, 0.18);
+            backdrop-filter: blur(8px);
+            padding: clamp(16px, 2.8vw, 30px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 2.9vw, 2.2rem);
+            letter-spacing: -0.02em;
+        }
+
+        .lead {
+            margin: 10px 0 18px;
+            max-width: 58ch;
+            color: rgba(26, 22, 48, 0.76);
+            line-height: 1.52;
+        }
+
+        .top {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 12px;
+        }
+
+        .timer,
+        .milestones {
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            padding: 14px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(239, 234, 255, 0.82));
+        }
+
+        .timer h2,
+        .milestones h2 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+        }
+
+        .clock {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .unit {
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            color: #f7f4ff;
+            background: linear-gradient(145deg, rgba(26, 22, 48, 0.9), rgba(58, 43, 100, 0.92));
+        }
+
+        .unit strong {
+            display: block;
+            font-size: 1.35rem;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .unit span {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.82;
+        }
+
+        .status {
+            margin-top: 10px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #5b4b93;
+        }
+
+        .list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .list button {
+            border: 1px solid rgba(26, 22, 48, 0.14);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: left;
+            font: inherit;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.74);
+            color: #42356d;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .list button small {
+            display: block;
+            margin-top: 3px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .list button.active {
+            border-color: rgba(109, 40, 217, 0.45);
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.14), rgba(8, 145, 178, 0.14));
+            color: #2f2258;
+        }
+
+        .list button:hover {
+            transform: translateY(-1px);
+        }
+
+        .notes {
+            margin-top: 12px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(233, 246, 251, 0.8));
+            padding: 12px;
+        }
+
+        .notes h3 {
+            margin: 0 0 8px;
+            font-size: 0.92rem;
+        }
+
+        .notes ul {
+            margin: 0;
+            padding-left: 18px;
+            color: rgba(26, 22, 48, 0.78);
+            line-height: 1.48;
+        }
+
+        @media (max-width: 860px) {
+            .top {
+                grid-template-columns: 1fr;
+            }
+
+            .clock {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="shell">
+        <h1>Quartz Release Countdown Board</h1>
+        <p class="lead">
+            A launch prep widget with live countdown and selectable milestones.
+            Switch milestones to update target date, status summary, and rollout notes.
+        </p>
+
+        <div class="top">
+            <article class="timer">
+                <h2>Time Remaining</h2>
+                <div class="clock">
+                    <div class="unit"><strong id="days">00</strong><span>Days</span></div>
+                    <div class="unit"><strong id="hours">00</strong><span>Hours</span></div>
+                    <div class="unit"><strong id="mins">00</strong><span>Minutes</span></div>
+                    <div class="unit"><strong id="secs">00</strong><span>Seconds</span></div>
+                </div>
+                <p class="status" id="status">Next target: Beta Launch</p>
+            </article>
+
+            <aside class="milestones">
+                <h2>Milestones</h2>
+                <div class="list" id="milestones"></div>
+            </aside>
+        </div>
+
+        <article class="notes">
+            <h3>Release Notes</h3>
+            <ul id="notes"></ul>
+        </article>
+    </section>
+
+    <script>
+        const now = Date.now();
+        const data = [
+            {
+                key: "beta",
+                name: "Beta Launch",
+                when: new Date(now + 2 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000),
+                desc: "Feature freeze and final compatibility pass.",
+                notes: ["Run smoke tests on all supported browsers.", "Lock migration scripts and backup snapshots.", "Publish beta release notes draft."]
+            },
+            {
+                key: "rc",
+                name: "Release Candidate",
+                when: new Date(now + 5 * 24 * 60 * 60 * 1000 + 10 * 60 * 60 * 1000),
+                desc: "Candidate validation and operational readiness checks.",
+                notes: ["Enable canary rollout for 10% cohort.", "Review telemetry threshold alarms.", "Validate rollback command path."]
+            },
+            {
+                key: "ga",
+                name: "General Availability",
+                when: new Date(now + 9 * 24 * 60 * 60 * 1000 + 14 * 60 * 60 * 1000),
+                desc: "Public launch and support handover for week one.",
+                notes: ["Coordinate status page updates.", "Share comms pack with customer-facing teams.", "Start post-launch monitoring checklist."]
+            }
+        ];
+
+        let active = data[0];
+        const days = document.getElementById("days");
+        const hours = document.getElementById("hours");
+        const mins = document.getElementById("mins");
+        const secs = document.getElementById("secs");
+        const status = document.getElementById("status");
+        const notes = document.getElementById("notes");
+        const milestones = document.getElementById("milestones");
+
+        function pad(value) {
+            return String(value).padStart(2, "0");
+        }
+
+        function renderMilestones() {
+            milestones.innerHTML = data.map((item) => `
+                <button type="button" data-key="${item.key}" class="${item.key === active.key ? "active" : ""}">
+                    ${item.name}
+                    <small>${item.desc}</small>
+                </button>
+            `).join("");
+
+            [...milestones.querySelectorAll("button")].forEach((button) => {
+                button.addEventListener("click", () => {
+                    active = data.find((item) => item.key === button.dataset.key);
+                    renderMilestones();
+                    renderNotes();
+                });
+            });
+        }
+
+        function renderNotes() {
+            status.textContent = `Next target: ${active.name}`;
+            notes.innerHTML = active.notes.map((entry) => `<li>${entry}</li>`).join("");
+        }
+
+        function tick() {
+            const diff = Math.max(0, active.when - Date.now());
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+
+            days.textContent = pad(d);
+            hours.textContent = pad(h);
+            mins.textContent = pad(m);
+            secs.textContent = pad(s);
+        }
+
+        renderMilestones();
+        renderNotes();
+        tick();
+        setInterval(tick, 1000);
+    </script>
+</body>
+
+</html>
