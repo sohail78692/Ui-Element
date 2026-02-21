@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Availability Scheduler</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap");
+
+        :root {
+            --ink: #1a2240;
+            --bg: #eef3ff;
+            --a1: #2b6cb0;
+            --a2: #00a3a3;
+            --a3: #9f7aea;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Outfit", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 14% 14%, #2b6cb02d, transparent 32%),
+                radial-gradient(circle at 83% 86%, #9f7aea2f, transparent 36%),
+                linear-gradient(145deg, #edf2ff, #dfe9f8 44%, #f6f5ff);
+        }
+
+        .wrap {
+            width: min(900px, 100%);
+            border-radius: 22px;
+            border: 1px solid #1a224025;
+            background: #ffffffdf;
+            box-shadow: 0 22px 44px #1a224020;
+            padding: clamp(16px, 2.6vw, 28px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.4rem, 2.8vw, 2rem);
+        }
+
+        p {
+            margin: 8px 0 18px;
+            opacity: 0.78;
+            max-width: 60ch;
+        }
+
+        .summary {
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(120deg, #f0f4ff, #f8f3ff);
+            border: 1px solid #1a224017;
+            margin-bottom: 12px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .day {
+            border: 1px solid #1a22401c;
+            border-radius: 14px;
+            padding: 10px;
+            background: #fff;
+        }
+
+        .day h2 {
+            margin: 0 0 8px;
+            font-size: 0.95rem;
+            color: #34406a;
+        }
+
+        .slots {
+            display: grid;
+            gap: 7px;
+        }
+
+        .slot {
+            border: 1px solid #1a224022;
+            border-radius: 10px;
+            padding: 8px;
+            font-size: 0.84rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8faff;
+        }
+
+        .slot:hover {
+            transform: translateY(-1px);
+            border-color: #2b6cb055;
+        }
+
+        .slot.active {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(125deg, var(--a1), var(--a2), var(--a3));
+            box-shadow: 0 10px 18px #2b6cb03a;
+        }
+
+        @media (max-width: 930px) {
+            .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 620px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <section class="wrap">
+        <h1>Pulse Availability Scheduler</h1>
+        <p>Select matching time windows for quick team handoff planning and handover calls.</p>
+        <div class="summary">
+            <strong id="count">0 slots selected</strong>
+            <span id="hours">Estimated: 0.0h</span>
+        </div>
+        <div class="grid" id="grid"></div>
+    </section>
+
+    <script>
+        const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+        const times = ["09:00", "11:00", "13:00", "15:00", "17:00"];
+        const grid = document.getElementById("grid");
+        const count = document.getElementById("count");
+        const hours = document.getElementById("hours");
+
+        grid.innerHTML = days.map((day) => `
+            <article class="day">
+                <h2>${day}</h2>
+                <div class="slots">
+                    ${times.map((time) => `<button class="slot" data-key="${day}-${time}">${time}</button>`).join("")}
+                </div>
+            </article>
+        `).join("");
+
+        const selected = new Set();
+
+        grid.addEventListener("click", (event) => {
+            const slot = event.target.closest(".slot");
+            if (!slot) return;
+            const key = slot.dataset.key;
+            if (selected.has(key)) {
+                selected.delete(key);
+                slot.classList.remove("active");
+            } else {
+                selected.add(key);
+                slot.classList.add("active");
+            }
+            count.textContent = `${selected.size} slots selected`;
+            hours.textContent = `Estimated: ${(selected.size * 1.5).toFixed(1)}h`;
+        });
+    </script>
+</body>
+</html>
