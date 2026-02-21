@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo Wave Audio Equalizer Card</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap");
+
+        :root {
+            --bg-1: #0d1022;
+            --bg-2: #111a37;
+            --mint: #2be7d0;
+            --cyan: #4dc4ff;
+            --rose: #ff5cab;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 22px;
+            font-family: "Space Grotesk", sans-serif;
+            color: #e9f0ff;
+            background:
+                radial-gradient(circle at 18% 20%, #2be7d02e, transparent 38%),
+                radial-gradient(circle at 84% 86%, #4dc4ff2f, transparent 36%),
+                linear-gradient(140deg, var(--bg-1), var(--bg-2));
+        }
+
+        .card {
+            width: min(760px, 100%);
+            border-radius: 22px;
+            border: 1px solid #e9f0ff2d;
+            background: linear-gradient(150deg, #111a37db, #0f1530cc);
+            box-shadow: 0 18px 40px #0508147a;
+            padding: clamp(16px, 2.8vw, 28px);
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.3rem, 2.7vw, 1.9rem);
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #07131f;
+            background: linear-gradient(120deg, var(--mint), var(--cyan));
+            font-weight: 700;
+        }
+
+        .player {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .toggle {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font: inherit;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #061321;
+            background: linear-gradient(120deg, var(--mint), var(--cyan));
+            box-shadow: 0 10px 20px #2be7d052;
+        }
+
+        .meta h2 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .meta p {
+            margin: 5px 0 0;
+            opacity: 0.75;
+            font-size: 0.92rem;
+        }
+
+        .bars {
+            margin-top: 20px;
+            height: 120px;
+            border-radius: 14px;
+            border: 1px solid #e9f0ff21;
+            background: linear-gradient(180deg, #17244b85, #0e173487);
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+        }
+
+        .bar {
+            width: 18px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, var(--mint), var(--cyan) 60%, var(--rose));
+            height: 18%;
+            transform-origin: bottom;
+            animation: bounce 1s ease-in-out infinite;
+            animation-play-state: paused;
+        }
+
+        .bar:nth-child(2n) { animation-duration: 1.12s; }
+        .bar:nth-child(3n) { animation-duration: 0.84s; }
+        .bar:nth-child(4n) { animation-duration: 1.3s; }
+
+        .bars.playing .bar { animation-play-state: running; }
+
+        .controls {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .controls label { font-size: 0.82rem; opacity: 0.8; }
+        .controls strong { font-size: 0.9rem; }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #2be7d0;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scaleY(0.24); }
+            50% { transform: scaleY(1); }
+        }
+
+        @media (max-width: 600px) {
+            .player { grid-template-columns: 1fr; }
+            .toggle { width: 56px; height: 56px; }
+            .controls { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <section class="card">
+        <div class="top">
+            <h1>Echo Wave Equalizer</h1>
+            <span class="pill">Live Session</span>
+        </div>
+
+        <div class="player">
+            <button class="toggle" id="toggle">Play</button>
+            <div class="meta">
+                <h2>Night Sprint Mix</h2>
+                <p>Adaptive visualizer card for player dashboards and music widgets.</p>
+            </div>
+        </div>
+
+        <div class="bars" id="bars">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        </div>
+
+        <div class="controls">
+            <div>
+                <label for="energy">Wave intensity</label>
+                <input id="energy" type="range" min="40" max="140" value="100">
+            </div>
+            <strong id="readout">100%</strong>
+        </div>
+    </section>
+
+    <script>
+        const toggle = document.getElementById("toggle");
+        const bars = document.getElementById("bars");
+        const energy = document.getElementById("energy");
+        const readout = document.getElementById("readout");
+        let playing = false;
+
+        toggle.addEventListener("click", () => {
+            playing = !playing;
+            bars.classList.toggle("playing", playing);
+            toggle.textContent = playing ? "Pause" : "Play";
+        });
+
+        energy.addEventListener("input", (event) => {
+            const value = Number(event.target.value);
+            bars.style.gap = `${Math.max(4, Math.round((140 - value) / 14))}px`;
+            bars.querySelectorAll(".bar").forEach((bar) => {
+                bar.style.animationDuration = `${(160 - value) / 100 + Math.random() * 0.7}s`;
+            });
+            readout.textContent = `${value}%`;
+        });
+    </script>
+</body>
+</html>
