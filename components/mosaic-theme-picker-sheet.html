@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosaic Theme Picker Sheet</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap");
+
+        :root {
+            --bg: #f2f6f3;
+            --ink: #1d2b25;
+            --accent-1: #2f855a;
+            --accent-2: #2b6cb0;
+            --accent-3: #d97706;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 18%, #2f855a2b, transparent 32%),
+                radial-gradient(circle at 85% 85%, #2b6cb028, transparent 33%),
+                linear-gradient(150deg, #ecf4ef, #dce9f6 48%, #f8f3ea);
+        }
+
+        .sheet {
+            width: min(940px, 100%);
+            border-radius: 24px;
+            border: 1px solid #1d2b2524;
+            background: #ffffffe0;
+            box-shadow: 0 24px 48px #1d2b2522;
+            padding: clamp(16px, 2.8vw, 30px);
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 16px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.35rem, 2.5vw, 1.95rem);
+        }
+
+        .sub {
+            margin: 8px 0 16px;
+            font-size: 0.92rem;
+            opacity: 0.78;
+            line-height: 1.45;
+        }
+
+        .swatches {
+            display: grid;
+            gap: 10px;
+        }
+
+        .swatch {
+            border: 1px solid #1d2b2524;
+            border-radius: 14px;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 10px;
+            align-items: center;
+            background: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .swatch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 18px #1d2b2520;
+        }
+
+        .swatch.active {
+            outline: 2px solid #2b6cb0;
+        }
+
+        .dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            border: 1px solid #00000021;
+        }
+
+        .preview {
+            border-radius: 18px;
+            border: 1px solid #1d2b2520;
+            background: var(--bg);
+            padding: clamp(14px, 2vw, 22px);
+            display: grid;
+            gap: 12px;
+        }
+
+        .hero {
+            border-radius: 14px;
+            padding: 18px;
+            color: #fff;
+            background: linear-gradient(120deg, var(--accent-1), var(--accent-2));
+        }
+
+        .hero h2 { margin: 0; font-size: 1.15rem; }
+        .hero p { margin: 8px 0 0; opacity: 0.9; max-width: 56ch; font-size: 0.9rem; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .card {
+            border-radius: 12px;
+            padding: 12px;
+            color: #fff;
+            background: linear-gradient(130deg, var(--accent-2), var(--accent-3));
+        }
+
+        .card small {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.68rem;
+            opacity: 0.85;
+        }
+
+        .card strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 840px) {
+            .sheet { grid-template-columns: 1fr; }
+            .cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <section class="sheet">
+        <div>
+            <h1>Mosaic Theme Picker</h1>
+            <p class="sub">A theme-selection sheet for dashboards and profile settings. Choose a palette and preview updates instantly.</p>
+            <div class="swatches" id="swatches"></div>
+        </div>
+
+        <div class="preview" id="preview">
+            <div class="hero">
+                <h2>Workspace Overview</h2>
+                <p>Keep visual style aligned across analytics, cards, and key call-to-action sections.</p>
+            </div>
+            <div class="cards">
+                <article class="card"><small>Conversion</small><strong>+18.4%</strong></article>
+                <article class="card"><small>Weekly Reach</small><strong>74.2K</strong></article>
+                <article class="card"><small>Drop Off</small><strong>-9.1%</strong></article>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const themes = [
+            { name: "Spruce", bg: "#f2f6f3", ink: "#1d2b25", a1: "#2f855a", a2: "#2b6cb0", a3: "#d97706" },
+            { name: "Coral Bay", bg: "#fff4f0", ink: "#3e2322", a1: "#dd6b20", a2: "#2c7a7b", a3: "#c53030" },
+            { name: "Night Orbit", bg: "#e9edf7", ink: "#1a2140", a1: "#3b5bdb", a2: "#7048e8", a3: "#0ca678" },
+            { name: "Solar Bloom", bg: "#fff9ea", ink: "#36230c", a1: "#d69e2e", a2: "#dd6b20", a3: "#2f855a" }
+        ];
+
+        const root = document.documentElement;
+        const swatches = document.getElementById("swatches");
+
+        function setTheme(theme) {
+            root.style.setProperty("--bg", theme.bg);
+            root.style.setProperty("--ink", theme.ink);
+            root.style.setProperty("--accent-1", theme.a1);
+            root.style.setProperty("--accent-2", theme.a2);
+            root.style.setProperty("--accent-3", theme.a3);
+        }
+
+        swatches.innerHTML = themes.map((theme, idx) => `
+            <button class="swatch ${idx === 0 ? "active" : ""}" data-name="${theme.name}">
+                <span class="dot" style="background:linear-gradient(135deg, ${theme.a1}, ${theme.a2}, ${theme.a3})"></span>
+                <span>${theme.name}</span>
+                <strong>${idx === 0 ? "Default" : "Apply"}</strong>
+            </button>
+        `).join("");
+
+        [...document.querySelectorAll(".swatch")].forEach((button) => {
+            button.addEventListener("click", () => {
+                const theme = themes.find((item) => item.name === button.dataset.name);
+                setTheme(theme);
+                document.querySelectorAll(".swatch").forEach((el) => el.classList.remove("active"));
+                button.classList.add("active");
+            });
+        });
+
+        setTheme(themes[0]);
+    </script>
+</body>
+</html>
