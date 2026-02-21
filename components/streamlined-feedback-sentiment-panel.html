@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamlined Feedback Sentiment Panel</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap");
+
+        :root {
+            --ink: #1c2338;
+            --soft: #edf1fb;
+            --good: #00a86b;
+            --neutral: #2b6cb0;
+            --bad: #d1495b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Urbanist", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 15% 15%, #00a86b2a, transparent 34%),
+                radial-gradient(circle at 84% 84%, #2b6cb02b, transparent 35%),
+                linear-gradient(140deg, #f3f7ff, #dee8f8 46%, #f7f3fb);
+        }
+
+        .panel {
+            width: min(900px, 100%);
+            border-radius: 24px;
+            border: 1px solid #1c233822;
+            background: #ffffffdf;
+            box-shadow: 0 24px 46px #1c23381e;
+            padding: clamp(16px, 2.8vw, 30px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.35rem, 2.7vw, 2rem);
+        }
+
+        .sub {
+            margin: 8px 0 16px;
+            opacity: 0.78;
+            max-width: 62ch;
+            line-height: 1.45;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            padding: 6px;
+            border-radius: 12px;
+            background: var(--soft);
+        }
+
+        .tabs button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            color: #364263;
+            background: transparent;
+        }
+
+        .tabs button.active {
+            color: #fff;
+            background: linear-gradient(120deg, #2b6cb0, #6b46c1);
+            box-shadow: 0 8px 20px #2b6cb033;
+        }
+
+        .view {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid #1c23381d;
+            background: #f9fbff;
+            padding: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .metric {
+            border-radius: 12px;
+            padding: 10px;
+            color: #fff;
+        }
+
+        .metric:nth-child(1) { background: linear-gradient(120deg, #00a86b, #4caf50); }
+        .metric:nth-child(2) { background: linear-gradient(120deg, #2b6cb0, #3b82f6); }
+        .metric:nth-child(3) { background: linear-gradient(120deg, #d1495b, #ef4444); }
+
+        .metric small {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.85;
+            font-size: 0.65rem;
+        }
+
+        .metric strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 1.15rem;
+        }
+
+        .list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .item {
+            border-radius: 11px;
+            border: 1px solid #1c23381a;
+            background: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            animation: rise 0.24s ease both;
+        }
+
+        .item span {
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 4px 8px;
+            color: #fff;
+        }
+
+        .item.good span { background: var(--good); }
+        .item.neutral span { background: var(--neutral); }
+        .item.bad span { background: var(--bad); }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 700px) {
+            .stats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <section class="panel">
+        <h1>Streamlined Feedback Sentiment Panel</h1>
+        <p class="sub">Quickly switch between response groups and inspect sentiment trends without jumping to another analytics screen.</p>
+
+        <div class="tabs" id="tabs">
+            <button class="active" data-key="promoters">Promoters</button>
+            <button data-key="neutral">Neutral</button>
+            <button data-key="detractors">Detractors</button>
+        </div>
+
+        <article class="view">
+            <div class="stats" id="stats"></div>
+            <div class="list" id="list"></div>
+        </article>
+    </section>
+
+    <script>
+        const data = {
+            promoters: {
+                stats: [["NPS impact", "+31"], ["Reply rate", "62%"], ["Resolution", "2.1h"]],
+                rows: [["Loving the onboarding update", "good"], ["Support was fast and clear", "good"], ["Pricing now makes sense", "good"]]
+            },
+            neutral: {
+                stats: [["NPS impact", "+4"], ["Reply rate", "37%"], ["Resolution", "4.8h"]],
+                rows: [["Need more export formats", "neutral"], ["Design is clean but dense", "neutral"], ["Mobile filters could improve", "neutral"]]
+            },
+            detractors: {
+                stats: [["NPS impact", "-18"], ["Reply rate", "29%"], ["Resolution", "9.6h"]],
+                rows: [["Checkout crashed twice", "bad"], ["Notifications feel noisy", "bad"], ["Data sync was delayed", "bad"]]
+            }
+        };
+
+        const tabs = [...document.querySelectorAll("#tabs button")];
+        const stats = document.getElementById("stats");
+        const list = document.getElementById("list");
+
+        function render(key) {
+            const view = data[key];
+            stats.innerHTML = view.stats.map(([label, value]) => `
+                <div class="metric">
+                    <small>${label}</small>
+                    <strong>${value}</strong>
+                </div>
+            `).join("");
+            list.innerHTML = view.rows.map(([text, mood], idx) => `
+                <div class="item ${mood}" style="animation-delay:${idx * 45}ms">
+                    <p>${text}</p>
+                    <span>${mood}</span>
+                </div>
+            `).join("");
+        }
+
+        tabs.forEach((button) => {
+            button.addEventListener("click", () => {
+                tabs.forEach((tab) => tab.classList.remove("active"));
+                button.classList.add("active");
+                render(button.dataset.key);
+            });
+        });
+
+        render("promoters");
+    </script>
+</body>
+</html>
