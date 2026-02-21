@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Focus Session Controller</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Cabin:wght@400;600;700&display=swap");
+
+        :root {
+            --ink: #1b2437;
+            --soft: #eaf0f9;
+            --ring-a: #00a3a3;
+            --ring-b: #2b6cb0;
+            --ring-c: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Cabin", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 16% 14%, #00a3a328, transparent 34%),
+                radial-gradient(circle at 85% 88%, #2b6cb02a, transparent 35%),
+                linear-gradient(145deg, #eff4fb, #dce7f8 46%, #f7f2ea);
+        }
+
+        .timer {
+            width: min(760px, 100%);
+            border-radius: 24px;
+            border: 1px solid #1b243723;
+            background: #ffffffdf;
+            box-shadow: 0 24px 46px #1b24371f;
+            padding: clamp(16px, 2.8vw, 30px);
+            display: grid;
+            gap: 14px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.35rem, 2.7vw, 2rem);
+        }
+
+        p {
+            margin: 8px 0 0;
+            opacity: 0.8;
+            max-width: 58ch;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .preset {
+            border: none;
+            border-radius: 999px;
+            padding: 9px 13px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            background: var(--soft);
+            color: #334165;
+            transition: all 0.2s ease;
+        }
+
+        .preset.active {
+            color: #fff;
+            background: linear-gradient(120deg, var(--ring-a), var(--ring-b));
+            box-shadow: 0 8px 20px #2b6cb034;
+        }
+
+        .orbit {
+            width: min(290px, 100%);
+            aspect-ratio: 1/1;
+            margin: 8px auto 0;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            position: relative;
+            background: conic-gradient(var(--ring-a) var(--deg), #d3def0 0deg);
+            transition: background 0.25s linear;
+        }
+
+        .orbit::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fff, #f2f6fc);
+            border: 1px solid #1b24371f;
+        }
+
+        .time {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .time strong {
+            display: block;
+            font-size: clamp(2rem, 8vw, 3.2rem);
+            line-height: 1;
+        }
+
+        .time span {
+            display: block;
+            margin-top: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.72rem;
+            color: #55648a;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .actions button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(120deg, var(--ring-b), #4f46e5);
+        }
+
+        .actions button.alt {
+            color: #223357;
+            background: #e5edf8;
+        }
+    </style>
+</head>
+<body>
+    <section class="timer">
+        <div>
+            <h1>Zen Focus Session Controller</h1>
+            <p>Simple focus-timer UI for productivity dashboards with quick preset switching and visual orbit progress.</p>
+        </div>
+
+        <div class="controls" id="presets">
+            <button class="preset active" data-min="25">Deep Focus</button>
+            <button class="preset" data-min="15">Quick Sprint</button>
+            <button class="preset" data-min="5">Micro Reset</button>
+        </div>
+
+        <div class="orbit" id="orbit" style="--deg:360deg">
+            <div class="time">
+                <strong id="clock">25:00</strong>
+                <span id="label">Deep Focus</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button id="start">Start</button>
+            <button class="alt" id="reset">Reset</button>
+        </div>
+    </section>
+
+    <script>
+        const presets = [...document.querySelectorAll(".preset")];
+        const clock = document.getElementById("clock");
+        const label = document.getElementById("label");
+        const orbit = document.getElementById("orbit");
+        const start = document.getElementById("start");
+        const reset = document.getElementById("reset");
+
+        let total = 25 * 60;
+        let left = total;
+        let timer = null;
+
+        function format(seconds) {
+            const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
+            const ss = String(seconds % 60).padStart(2, "0");
+            return `${mm}:${ss}`;
+        }
+
+        function paint() {
+            clock.textContent = format(left);
+            const pct = left / total;
+            orbit.style.setProperty("--deg", `${Math.max(0, Math.round(pct * 360))}deg`);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+            timer = null;
+            start.textContent = "Start";
+        }
+
+        presets.forEach((preset) => {
+            preset.addEventListener("click", () => {
+                presets.forEach((el) => el.classList.remove("active"));
+                preset.classList.add("active");
+                label.textContent = preset.textContent;
+                total = Number(preset.dataset.min) * 60;
+                left = total;
+                stopTimer();
+                paint();
+            });
+        });
+
+        start.addEventListener("click", () => {
+            if (timer) {
+                stopTimer();
+                return;
+            }
+            start.textContent = "Pause";
+            timer = setInterval(() => {
+                left -= 1;
+                if (left <= 0) {
+                    left = 0;
+                    stopTimer();
+                    start.textContent = "Done";
+                }
+                paint();
+            }, 1000);
+        });
+
+        reset.addEventListener("click", () => {
+            left = total;
+            stopTimer();
+            paint();
+        });
+
+        paint();
+    </script>
+</body>
+</html>
