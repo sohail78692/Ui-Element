@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constellation Task Priority Board</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap");
+
+        :root {
+            --ink: #1f2842;
+            --mist: #e8edf9;
+            --c1: #00a7b5;
+            --c2: #ff7a18;
+            --c3: #7b4dff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 22px;
+            font-family: "Sora", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 16% 10%, #00a7b536, transparent 34%),
+                radial-gradient(circle at 84% 88%, #7b4dff36, transparent 34%),
+                linear-gradient(140deg, #f3f6fc, #dce5f4 44%, #edf3fb);
+        }
+
+        .board {
+            width: min(940px, 100%);
+            border-radius: 24px;
+            border: 1px solid #1f284226;
+            background: #ffffffd9;
+            box-shadow: 0 24px 48px #1f284224;
+            padding: clamp(16px, 2.8vw, 30px);
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.45rem, 2.9vw, 2.1rem);
+        }
+
+        p {
+            margin: 8px 0 20px;
+            max-width: 64ch;
+            opacity: 0.78;
+            line-height: 1.45;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filters button {
+            border: none;
+            cursor: pointer;
+            border-radius: 999px;
+            padding: 10px 14px;
+            font: inherit;
+            font-weight: 700;
+            font-size: 0.82rem;
+            background: var(--mist);
+            color: #3e4f73;
+            transition: all 0.24s ease;
+        }
+
+        .filters button.active {
+            color: #fff;
+            background: linear-gradient(120deg, var(--c1), var(--c3));
+            box-shadow: 0 8px 20px #5642c333;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .task {
+            border-radius: 14px;
+            padding: 14px;
+            border: 1px solid #1f28421f;
+            background: linear-gradient(160deg, #ffffff, #f4f7fd);
+            animation: cardIn 0.35s ease both;
+        }
+
+        .task small {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.7rem;
+            color: #5d6d90;
+        }
+
+        .task h2 {
+            margin: 8px 0 10px;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status {
+            border-radius: 999px;
+            padding: 5px 9px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .critical { background: linear-gradient(120deg, #ff7a18, #ef4444); }
+        .planned { background: linear-gradient(120deg, #00a7b5, #00c2a7); }
+        .blocked { background: linear-gradient(120deg, #7b4dff, #b566ff); }
+
+        .empty {
+            border-radius: 14px;
+            border: 2px dashed #5d6d9050;
+            color: #4e5f81;
+            padding: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(8px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @media (max-width: 860px) {
+            .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 620px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <section class="board">
+        <h1>Constellation Task Priority Board</h1>
+        <p>Filter sprint work by urgency without opening another dashboard. This lightweight board keeps priorities, owners, and due windows in one view.</p>
+
+        <div class="filters" id="filters">
+            <button class="active" data-filter="all">All Tasks</button>
+            <button data-filter="critical">Critical</button>
+            <button data-filter="planned">Planned</button>
+            <button data-filter="blocked">Blocked</button>
+        </div>
+
+        <div class="grid" id="tasks"></div>
+    </section>
+
+    <script>
+        const items = [
+            { lane: "critical", title: "Checkout failure retries", owner: "Riya", due: "Due in 6h" },
+            { lane: "planned", title: "Onboarding tooltip polish", owner: "Mason", due: "Due tomorrow" },
+            { lane: "blocked", title: "CRM sync for enterprise", owner: "Jules", due: "Waiting API key" },
+            { lane: "critical", title: "Audit admin access logs", owner: "Nora", due: "Due today" },
+            { lane: "planned", title: "New user empty state copy", owner: "Eden", due: "Due in 2 days" },
+            { lane: "blocked", title: "Payout webhook mapping", owner: "Ari", due: "Needs legal review" }
+        ];
+
+        const taskRoot = document.getElementById("tasks");
+        const buttons = [...document.querySelectorAll("#filters button")];
+
+        function paint(filter) {
+            const filtered = filter === "all" ? items : items.filter((item) => item.lane === filter);
+            if (!filtered.length) {
+                taskRoot.innerHTML = '<div class="empty">No tasks in this lane.</div>';
+                return;
+            }
+
+            taskRoot.innerHTML = filtered.map((item, idx) => `
+                <article class="task" style="animation-delay:${idx * 55}ms">
+                    <small>${item.owner}</small>
+                    <h2>${item.title}</h2>
+                    <div class="meta">
+                        <span>${item.due}</span>
+                        <span class="status ${item.lane}">${item.lane}</span>
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                buttons.forEach((el) => el.classList.remove("active"));
+                button.classList.add("active");
+                paint(button.dataset.filter);
+            });
+        });
+
+        paint("all");
+    </script>
+</body>
+</html>
