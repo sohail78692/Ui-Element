@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Ops Command Tile</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap");
+
+        :root {
+            --bg-1: #09112b;
+            --bg-2: #1f3569;
+            --card: #0f1836dd;
+            --text: #f7f8ff;
+            --muted: #b7c4ee;
+            --gold: #f3a51b;
+            --blue: #57a7ff;
+            --ok: #58d4ab;
+            --ring: 68%;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            font-family: "Space Grotesk", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 15% 20%, #f3a51b35, transparent 35%),
+                radial-gradient(circle at 84% 80%, #57a7ff45, transparent 38%),
+                linear-gradient(150deg, var(--bg-1), var(--bg-2));
+        }
+
+        .tile {
+            width: min(720px, 100%);
+            border-radius: 26px;
+            padding: clamp(16px, 3vw, 30px);
+            background: linear-gradient(165deg, #0f1836e8, #0b1126f2);
+            border: 1px solid #d0ddff2e;
+            box-shadow: 0 22px 42px #03050f99;
+            display: grid;
+            gap: 18px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.2rem, 2.6vw, 2rem);
+            letter-spacing: 0.02em;
+        }
+
+        .chip {
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #052317;
+            background: linear-gradient(120deg, var(--ok), #9af1ce);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .stat {
+            border-radius: 14px;
+            padding: 12px;
+            background: #ffffff10;
+            border: 1px solid #ffffff18;
+        }
+
+        .stat span {
+            display: block;
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+        }
+
+        .stat strong {
+            margin-top: 6px;
+            display: block;
+            font-size: 1.4rem;
+        }
+
+        .dial-wrap {
+            display: grid;
+            place-items: center;
+            padding: 8px 0;
+        }
+
+        .dial {
+            width: min(240px, 70vw);
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(var(--gold) 0 30%, var(--blue) 30% var(--ring), #ffffff21 var(--ring));
+            transition: background 260ms ease;
+            position: relative;
+        }
+
+        .dial::before {
+            content: "";
+            position: absolute;
+            inset: 14px;
+            border-radius: inherit;
+            background: linear-gradient(150deg, #131e43, #080d1f);
+            border: 1px solid #ffffff1f;
+        }
+
+        .dial-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .dial-content b {
+            font-size: clamp(1.8rem, 8vw, 2.7rem);
+            display: block;
+        }
+
+        .dial-content small {
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .toggles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            padding: 9px 14px;
+            border-radius: 11px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 700;
+            color: #dce8ff;
+            background: #ffffff15;
+            border: 1px solid #ffffff26;
+            transition: transform 180ms ease, background 180ms ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: #ffffff23;
+        }
+
+        .active {
+            color: #071738;
+            background: linear-gradient(120deg, #90d6ff, #f3d88d);
+            border-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <section class="tile">
+        <div class="row">
+            <h1>Solar Ops Command Tile</h1>
+            <span class="chip">Array Stable</span>
+        </div>
+
+        <div class="status-grid">
+            <article class="stat"><span>Output</span><strong id="output">4.8 MW</strong></article>
+            <article class="stat"><span>Storage</span><strong id="storage">68%</strong></article>
+            <article class="stat"><span>Cloud Index</span><strong id="cloud">21%</strong></article>
+            <article class="stat"><span>Dispatch</span><strong id="dispatch">Balanced</strong></article>
+        </div>
+
+        <div class="dial-wrap">
+            <div class="dial" id="dial">
+                <div class="dial-content">
+                    <b id="percent">68%</b>
+                    <small>Battery Reserve</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="toggles">
+            <button class="active" data-mode="balanced" data-pct="68" data-output="4.8 MW" data-cloud="21%" data-dispatch="Balanced">Balanced</button>
+            <button data-mode="aggressive" data-pct="52" data-output="6.1 MW" data-cloud="27%" data-dispatch="Peak Sell">Aggressive</button>
+            <button data-mode="conserve" data-pct="81" data-output="3.4 MW" data-cloud="18%" data-dispatch="Reserve">Conserve</button>
+        </div>
+    </section>
+
+    <script>
+        const buttons = document.querySelectorAll("button[data-mode]");
+        const dial = document.getElementById("dial");
+        const output = document.getElementById("output");
+        const storage = document.getElementById("storage");
+        const cloud = document.getElementById("cloud");
+        const dispatch = document.getElementById("dispatch");
+        const percent = document.getElementById("percent");
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                buttons.forEach((entry) => entry.classList.remove("active"));
+                button.classList.add("active");
+
+                const pct = Number(button.dataset.pct);
+                dial.style.setProperty("--ring", `${pct}%`);
+                output.textContent = button.dataset.output;
+                storage.textContent = `${pct}%`;
+                cloud.textContent = button.dataset.cloud;
+                dispatch.textContent = button.dataset.dispatch;
+                percent.textContent = `${pct}%`;
+            });
+        });
+    </script>
+</body>
+</html>
