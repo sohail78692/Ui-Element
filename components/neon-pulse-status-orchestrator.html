@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Pulse Status Orchestrator</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap");
+
+        :root {
+            --bg: #030312;
+            --panel: #0b0f2be0;
+            --line: #32448777;
+            --text: #e6f0ff;
+            --muted: #95a7d6;
+            --cyan: #20e3ff;
+            --pink: #ff4ed0;
+            --lime: #7dffa4;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 22px;
+            color: var(--text);
+            font-family: "Chakra Petch", sans-serif;
+            background:
+                radial-gradient(circle at 14% 18%, #20e3ff2e, transparent 34%),
+                radial-gradient(circle at 84% 74%, #ff4ed033, transparent 36%),
+                linear-gradient(150deg, #02020d, #0c1031 45%, #09081e);
+        }
+
+        .console {
+            width: min(820px, 100%);
+            border-radius: 22px;
+            border: 1px solid var(--line);
+            background: linear-gradient(140deg, #0d1130ee, #090a20f4);
+            box-shadow: 0 24px 38px #00000080;
+            padding: clamp(16px, 2.8vw, 30px);
+            display: grid;
+            gap: 16px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.2rem, 2.8vw, 2rem);
+            letter-spacing: 0.04em;
+        }
+
+        .live {
+            padding: 7px 11px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #012017;
+            background: linear-gradient(120deg, var(--lime), #bbffd3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .cell {
+            border-radius: 14px;
+            padding: 12px;
+            border: 1px solid #9db4ff2f;
+            background: #ffffff08;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cell::after {
+            content: "";
+            position: absolute;
+            inset: auto -20% -75% -20%;
+            height: 90px;
+            background: radial-gradient(circle, #20e3ff66, transparent 70%);
+            opacity: 0.75;
+        }
+
+        .cell span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.77rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .cell strong {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin-top: 6px;
+            font-size: 1.45rem;
+        }
+
+        .meter-wrap {
+            display: grid;
+            gap: 8px;
+        }
+
+        .meter-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--cyan);
+        }
+
+        .bar {
+            height: 10px;
+            border-radius: 999px;
+            background: #ffffff12;
+            overflow: hidden;
+            border: 1px solid #ffffff22;
+        }
+
+        .bar-fill {
+            width: var(--fill);
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(120deg, var(--cyan), var(--pink));
+            transition: width 220ms ease;
+        }
+    </style>
+</head>
+<body>
+    <section class="console">
+        <div class="header">
+            <h1>Neon Pulse Status Orchestrator</h1>
+            <span class="live">Live Stream</span>
+        </div>
+
+        <div class="grid">
+            <article class="cell"><span>Node Latency</span><strong id="latency">24 ms</strong></article>
+            <article class="cell"><span>Signal Health</span><strong id="health">91%</strong></article>
+            <article class="cell"><span>Alert Window</span><strong id="alerts">2 Open</strong></article>
+            <article class="cell"><span>Orchestrator Mode</span><strong id="mode">Adaptive</strong></article>
+        </div>
+
+        <div class="meter-wrap">
+            <div class="meter-label">
+                <span>Traffic Pressure</span>
+                <span id="pressureText">54%</span>
+            </div>
+            <input id="pressure" type="range" min="10" max="100" value="54">
+            <div class="bar" style="--fill:54%">
+                <div class="bar-fill" id="fill"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const pressure = document.getElementById("pressure");
+        const pressureText = document.getElementById("pressureText");
+        const fill = document.getElementById("fill");
+        const latency = document.getElementById("latency");
+        const health = document.getElementById("health");
+        const alerts = document.getElementById("alerts");
+        const mode = document.getElementById("mode");
+
+        function sync(value) {
+            const val = Number(value);
+            pressureText.textContent = `${val}%`;
+            fill.parentElement.style.setProperty("--fill", `${val}%`);
+            latency.textContent = `${Math.round(16 + val * 0.45)} ms`;
+            health.textContent = `${Math.max(56, 100 - Math.round(val * 0.33))}%`;
+            alerts.textContent = val > 75 ? "5 Open" : val > 45 ? "2 Open" : "0 Open";
+            mode.textContent = val > 75 ? "Containment" : val > 45 ? "Adaptive" : "Cruise";
+        }
+
+        pressure.addEventListener("input", (event) => sync(event.target.value));
+        sync(pressure.value);
+    </script>
+</body>
+</html>
