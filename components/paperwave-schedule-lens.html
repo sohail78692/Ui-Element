@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paperwave Schedule Lens</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@500;700&display=swap");
+
+        :root {
+            --ink: #152640;
+            --paper: #fffdf7;
+            --muted: #6c7a90;
+            --line: #d2d9e8;
+            --accent: #ef7d4c;
+            --accent-soft: #ffc7aa;
+            --sky: #8fc6ff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            color: var(--ink);
+            font-family: "Manrope", sans-serif;
+            background:
+                radial-gradient(circle at 90% 10%, #8fc6ff45, transparent 42%),
+                radial-gradient(circle at 9% 80%, #ef7d4c2f, transparent 35%),
+                linear-gradient(140deg, #f6f7fb, #e8eef8);
+        }
+
+        .planner {
+            width: min(780px, 100%);
+            background: var(--paper);
+            border-radius: 24px;
+            border: 1px solid #d4d9e4;
+            box-shadow: 0 18px 32px #2b324510;
+            padding: clamp(16px, 2.8vw, 26px);
+            display: grid;
+            gap: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .planner::before {
+            content: "";
+            position: absolute;
+            right: -80px;
+            top: -90px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: linear-gradient(120deg, var(--accent-soft), #fff4e8);
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+            z-index: 1;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: "DM Serif Display", serif;
+            font-size: clamp(1.4rem, 2.7vw, 2rem);
+            letter-spacing: 0.01em;
+        }
+
+        .top p {
+            margin: 2px 0 0;
+            color: var(--muted);
+        }
+
+        .date {
+            padding: 8px 13px;
+            border-radius: 999px;
+            background: #edf3ff;
+            color: #35517b;
+            font-weight: 700;
+            font-size: 0.84rem;
+            z-index: 1;
+        }
+
+        .days {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 3px;
+            z-index: 1;
+        }
+
+        .day {
+            border: 1px solid var(--line);
+            background: #fff;
+            color: #3b4f72;
+            border-radius: 12px;
+            padding: 10px 12px;
+            min-width: 72px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 180ms ease;
+        }
+
+        .day.active {
+            background: linear-gradient(145deg, var(--accent), #f29f53);
+            border-color: transparent;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .timeline {
+            display: grid;
+            gap: 8px;
+            z-index: 1;
+        }
+
+        .slot {
+            border-radius: 12px;
+            padding: 12px 13px;
+            border: 1px solid var(--line);
+            background: #fffeff;
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .slot time {
+            font-weight: 700;
+            color: #344d70;
+        }
+
+        .slot h2 {
+            margin: 0;
+            font-size: 0.96rem;
+        }
+
+        .slot p {
+            margin: 4px 0 0;
+            font-size: 0.83rem;
+            color: var(--muted);
+        }
+
+        .slot[data-kind="review"] { border-left: 4px solid var(--accent); }
+        .slot[data-kind="sync"] { border-left: 4px solid var(--sky); }
+        .slot[data-kind="focus"] { border-left: 4px solid #8bcfa0; }
+    </style>
+</head>
+<body>
+    <section class="planner">
+        <header class="top">
+            <div>
+                <h1>Paperwave Schedule Lens</h1>
+                <p>Editorial-style daily planner for product and design teams.</p>
+            </div>
+            <span class="date" id="activeDate">Mon 24</span>
+        </header>
+
+        <div class="days" id="days">
+            <button class="day active" data-day="Mon 24">Mon<br>24</button>
+            <button class="day" data-day="Tue 25">Tue<br>25</button>
+            <button class="day" data-day="Wed 26">Wed<br>26</button>
+            <button class="day" data-day="Thu 27">Thu<br>27</button>
+            <button class="day" data-day="Fri 28">Fri<br>28</button>
+        </div>
+
+        <div class="timeline" id="timeline"></div>
+    </section>
+
+    <script>
+        const agenda = {
+            "Mon 24": [
+                { time: "09:00", title: "Sprint Planning", note: "Lock priorities for API rollout.", kind: "sync" },
+                { time: "11:30", title: "QA Review", note: "Validate accessibility fixes.", kind: "review" },
+                { time: "15:00", title: "Deep Work Block", note: "Prototype navigation refresh.", kind: "focus" }
+            ],
+            "Tue 25": [
+                { time: "10:00", title: "Design Critique", note: "Compare three card layouts.", kind: "review" },
+                { time: "13:30", title: "Partner Sync", note: "Confirm launch dependencies.", kind: "sync" }
+            ],
+            "Wed 26": [
+                { time: "09:30", title: "Data Standup", note: "Review activation funnel.", kind: "sync" },
+                { time: "14:00", title: "Roadmap Notes", note: "Draft next-quarter milestones.", kind: "focus" }
+            ],
+            "Thu 27": [
+                { time: "10:30", title: "Release Rehearsal", note: "Dry-run migration checklist.", kind: "review" },
+                { time: "16:00", title: "Client Debrief", note: "Share performance updates.", kind: "sync" }
+            ],
+            "Fri 28": [
+                { time: "09:15", title: "Research Digest", note: "Summarize interview patterns.", kind: "focus" },
+                { time: "12:45", title: "Weekly Retro", note: "Action items and owner updates.", kind: "review" }
+            ]
+        };
+
+        const days = document.querySelectorAll(".day");
+        const timeline = document.getElementById("timeline");
+        const activeDate = document.getElementById("activeDate");
+
+        function render(day) {
+            activeDate.textContent = day;
+            timeline.innerHTML = agenda[day].map((item) => `
+                <article class="slot" data-kind="${item.kind}">
+                    <time>${item.time}</time>
+                    <div>
+                        <h2>${item.title}</h2>
+                        <p>${item.note}</p>
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        days.forEach((dayButton) => {
+            dayButton.addEventListener("click", () => {
+                days.forEach((btn) => btn.classList.remove("active"));
+                dayButton.classList.add("active");
+                render(dayButton.dataset.day);
+            });
+        });
+
+        render("Mon 24");
+    </script>
+</body>
+</html>
