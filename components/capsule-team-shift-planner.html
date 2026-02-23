@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capsule Team Shift Planner</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap");
+
+        :root {
+            --ink: #1f2742;
+            --panel: #ffffffef;
+            --line: #cfd7ef;
+            --muted: #677598;
+            --violet: #6271ea;
+            --teal: #2cb9a5;
+            --orange: #ef9d45;
+            --rose: #df5f7e;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 20%, #6271ea33, transparent 38%),
+                radial-gradient(circle at 88% 84%, #2cb9a536, transparent 38%),
+                linear-gradient(145deg, #ecf2ff, #e6f1f6 45%, #f6f0ea);
+        }
+
+        .planner {
+            width: min(860px, 100%);
+            border-radius: 24px;
+            border: 1px solid #d2daf0;
+            background: var(--panel);
+            box-shadow: 0 22px 40px #1e28591a;
+            padding: clamp(16px, 3vw, 30px);
+            display: grid;
+            gap: 16px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.2rem, 2.7vw, 1.95rem);
+        }
+
+        .legend {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #edf2ff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #3d4e72;
+        }
+
+        .dot::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--c);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .day {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fbfdff;
+            padding: 11px;
+            display: grid;
+            gap: 7px;
+        }
+
+        .day h2 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #31486d;
+        }
+
+        .shift {
+            border-radius: 10px;
+            padding: 8px 9px;
+            font-size: 0.79rem;
+            color: #fff;
+            background: var(--c);
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 9px 14px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 700;
+            color: #34486e;
+            background: #e7eefc;
+        }
+
+        button.primary {
+            color: #fff;
+            background: linear-gradient(120deg, #6271ea, #2cb9a5);
+        }
+    </style>
+</head>
+<body>
+    <section class="planner">
+        <header class="header">
+            <h1>Capsule Team Shift Planner</h1>
+            <div class="legend">
+                <span class="dot" style="--c:var(--violet)">Design</span>
+                <span class="dot" style="--c:var(--teal)">Engineering</span>
+                <span class="dot" style="--c:var(--orange)">Support</span>
+                <span class="dot" style="--c:var(--rose)">Ops</span>
+            </div>
+        </header>
+
+        <div class="grid" id="grid"></div>
+
+        <div class="actions">
+            <button id="shuffle">Shuffle Week</button>
+            <button class="primary" id="night">Switch To Night Rotation</button>
+        </div>
+    </section>
+
+    <script>
+        const palettes = {
+            Design: "var(--violet)",
+            Engineering: "var(--teal)",
+            Support: "var(--orange)",
+            Ops: "var(--rose)"
+        };
+
+        const week = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        let plan = {
+            Mon: [["Design", "Asha"], ["Engineering", "Mika"], ["Support", "Owen"]],
+            Tue: [["Ops", "Rey"], ["Engineering", "Kai"], ["Support", "Nora"]],
+            Wed: [["Design", "Liam"], ["Ops", "Rey"], ["Engineering", "Mika"]],
+            Thu: [["Support", "Owen"], ["Engineering", "Kai"], ["Ops", "Jin"]],
+            Fri: [["Design", "Asha"], ["Engineering", "Mika"], ["Support", "Nora"]],
+            Sat: [["Ops", "Jin"], ["Support", "Owen"], ["Engineering", "Kai"]]
+        };
+
+        const nightPlan = {
+            Mon: [["Ops", "Rey"], ["Support", "Nora"], ["Engineering", "Kai"]],
+            Tue: [["Ops", "Jin"], ["Design", "Liam"], ["Support", "Owen"]],
+            Wed: [["Support", "Nora"], ["Engineering", "Mika"], ["Design", "Asha"]],
+            Thu: [["Engineering", "Kai"], ["Ops", "Jin"], ["Support", "Owen"]],
+            Fri: [["Ops", "Rey"], ["Design", "Asha"], ["Engineering", "Mika"]],
+            Sat: [["Support", "Nora"], ["Ops", "Jin"], ["Engineering", "Kai"]]
+        };
+
+        const grid = document.getElementById("grid");
+        const shuffle = document.getElementById("shuffle");
+        const night = document.getElementById("night");
+
+        function render() {
+            grid.innerHTML = week.map((day) => `
+                <article class="day">
+                    <h2>${day}</h2>
+                    ${plan[day].map(([team, person]) => `
+                        <div class="shift" style="--c:${palettes[team]}">
+                            <span>${team}</span><span>${person}</span>
+                        </div>
+                    `).join("")}
+                </article>
+            `).join("");
+        }
+
+        shuffle.addEventListener("click", () => {
+            plan = Object.fromEntries(week.map((day, idx) => {
+                const source = week[(idx + 1) % week.length];
+                return [day, plan[source]];
+            }));
+            render();
+        });
+
+        night.addEventListener("click", () => {
+            plan = { ...nightPlan };
+            render();
+        });
+
+        render();
+    </script>
+</body>
+</html>
