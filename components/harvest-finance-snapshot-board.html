@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harvest Finance Snapshot Board</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap");
+
+        :root {
+            --ink: #1d2a24;
+            --paper: #f9f7ef;
+            --panel: #fffffbe6;
+            --line: #d9d7ca;
+            --mint: #87d19a;
+            --forest: #2f8f4f;
+            --amber: #e7ad4b;
+            --tomato: #da5f4e;
+            --blue: #5f89d8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            font-family: "Nunito", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 8% 14%, #87d19a3f, transparent 35%),
+                radial-gradient(circle at 92% 82%, #5f89d83b, transparent 35%),
+                linear-gradient(150deg, #f4f4ea, #e8eddc 45%, #f4efe4);
+        }
+
+        .board {
+            width: min(840px, 100%);
+            border-radius: 24px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            box-shadow: 0 20px 34px #1e2b1f19;
+            padding: clamp(16px, 2.7vw, 30px);
+            display: grid;
+            gap: 15px;
+        }
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.2rem, 2.8vw, 2rem);
+        }
+
+        .switch {
+            display: flex;
+            gap: 6px;
+            background: #e8eddc;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .switch button {
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font: inherit;
+            font-weight: 800;
+            background: transparent;
+            color: #4d634f;
+            cursor: pointer;
+        }
+
+        .switch button.active {
+            background: #fff;
+            color: #1f3f2a;
+            box-shadow: 0 4px 8px #40553a22;
+        }
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 10px;
+        }
+
+        .kpi {
+            border-radius: 14px;
+            padding: 12px;
+            border: 1px solid var(--line);
+            background: #fffef8;
+        }
+
+        .kpi span {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6b7a69;
+        }
+
+        .kpi strong {
+            display: block;
+            margin-top: 6px;
+            font-size: 1.5rem;
+        }
+
+        .kpi small {
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .up { color: var(--forest); }
+        .warn { color: var(--amber); }
+        .down { color: var(--tomato); }
+
+        .chart {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fffef9;
+            padding: 14px;
+        }
+
+        .bars {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(34px, 1fr));
+            gap: 9px;
+            align-items: end;
+            min-height: 150px;
+        }
+
+        .bar-col {
+            text-align: center;
+            font-size: 0.74rem;
+            color: #5f7162;
+        }
+
+        .bar {
+            width: 100%;
+            border-radius: 9px 9px 6px 6px;
+            background: linear-gradient(180deg, var(--blue), #79a3f0);
+            height: var(--h);
+            margin-bottom: 6px;
+            transition: height 220ms ease;
+        }
+    </style>
+</head>
+<body>
+    <section class="board">
+        <header class="head">
+            <h1>Harvest Finance Snapshot Board</h1>
+            <div class="switch" id="switch">
+                <button class="active" data-mode="month">Month</button>
+                <button data-mode="quarter">Quarter</button>
+            </div>
+        </header>
+
+        <div class="kpis">
+            <article class="kpi"><span>Net Revenue</span><strong id="revenue">$148K</strong><small class="up" id="revDelta">+12.4%</small></article>
+            <article class="kpi"><span>Operating Cost</span><strong id="cost">$73K</strong><small class="warn" id="costDelta">+3.2%</small></article>
+            <article class="kpi"><span>Retention</span><strong id="retention">94%</strong><small class="up" id="retentionDelta">+1.1%</small></article>
+            <article class="kpi"><span>Churn Risk</span><strong id="risk">2.9%</strong><small class="down" id="riskDelta">-0.4%</small></article>
+        </div>
+
+        <div class="chart">
+            <div class="bars" id="bars"></div>
+        </div>
+    </section>
+
+    <script>
+        const data = {
+            month: {
+                kpis: ["$148K", "+12.4%", "$73K", "+3.2%", "94%", "+1.1%", "2.9%", "-0.4%"],
+                bars: [68, 76, 62, 91, 83, 95],
+                labels: ["W1", "W2", "W3", "W4", "W5", "W6"]
+            },
+            quarter: {
+                kpis: ["$422K", "+18.2%", "$211K", "+6.5%", "95%", "+2.4%", "2.2%", "-1.0%"],
+                bars: [74, 88, 81, 99, 92, 97],
+                labels: ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"]
+            }
+        };
+
+        const buttons = document.querySelectorAll("#switch button");
+        const bars = document.getElementById("bars");
+        const revenue = document.getElementById("revenue");
+        const revDelta = document.getElementById("revDelta");
+        const cost = document.getElementById("cost");
+        const costDelta = document.getElementById("costDelta");
+        const retention = document.getElementById("retention");
+        const retentionDelta = document.getElementById("retentionDelta");
+        const risk = document.getElementById("risk");
+        const riskDelta = document.getElementById("riskDelta");
+
+        function draw(mode) {
+            const snapshot = data[mode];
+            [revenue.textContent, revDelta.textContent, cost.textContent, costDelta.textContent, retention.textContent, retentionDelta.textContent, risk.textContent, riskDelta.textContent] = snapshot.kpis;
+            bars.innerHTML = snapshot.bars
+                .map((v, i) => `
+                    <div class="bar-col">
+                        <div class="bar" style="--h:${v}%"></div>
+                        ${snapshot.labels[i]}
+                    </div>
+                `).join("");
+        }
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                buttons.forEach((btn) => btn.classList.remove("active"));
+                button.classList.add("active");
+                draw(button.dataset.mode);
+            });
+        });
+
+        draw("month");
+    </script>
+</body>
+</html>
