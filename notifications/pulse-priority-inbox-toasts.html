@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Priority Inbox Toasts</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 22px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #dbeafe;
+            background:
+                radial-gradient(circle at 18% 16%, #22c55e3a, transparent 32%),
+                radial-gradient(circle at 84% 86%, #3b82f63a, transparent 32%),
+                linear-gradient(160deg, #020617, #0f172a 45%, #1e293b);
+        }
+        .board {
+            width: min(900px, 100%);
+            border: 1px solid #ffffff24;
+            border-radius: 22px;
+            background: #0b1220d4;
+            box-shadow: 0 24px 52px #00081488;
+            overflow: hidden;
+        }
+        .header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #ffffff1f;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+            letter-spacing: 0.02em;
+        }
+        .switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+        .switch input {
+            appearance: none;
+            width: 44px;
+            height: 24px;
+            border-radius: 999px;
+            border: 1px solid #ffffff33;
+            background: #334155;
+            position: relative;
+            cursor: pointer;
+            transition: background 200ms ease;
+        }
+        .switch input::before {
+            content: "";
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 220ms ease;
+        }
+        .switch input:checked {
+            background: linear-gradient(120deg, #22c55e, #0ea5e9);
+        }
+        .switch input:checked::before {
+            transform: translateX(20px);
+        }
+        .wrap {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 0;
+        }
+        .list {
+            padding: 18px;
+            border-right: 1px solid #ffffff1f;
+            display: grid;
+            gap: 10px;
+        }
+        .item {
+            border: 1px solid #ffffff24;
+            border-radius: 14px;
+            padding: 12px;
+            background: #0f1b31;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 10px;
+            align-items: start;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            margin-top: 6px;
+            background: #22c55e;
+            box-shadow: 0 0 0 5px #22c55e2b;
+        }
+        .item.warning .dot {
+            background: #f59e0b;
+            box-shadow: 0 0 0 5px #f59e0b2b;
+        }
+        .item.critical .dot {
+            background: #f43f5e;
+            box-shadow: 0 0 0 5px #f43f5e2b;
+        }
+        .item strong { display: block; }
+        .item p {
+            margin: 4px 0 0;
+            color: #93c5fd;
+            font-size: 0.92rem;
+            line-height: 1.35;
+        }
+        .badge {
+            border-radius: 999px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: 1px solid #ffffff2e;
+            padding: 6px 8px;
+            color: #dbeafe;
+            white-space: nowrap;
+        }
+        .stack {
+            padding: 18px;
+            display: grid;
+            gap: 10px;
+            align-content: start;
+        }
+        .toast {
+            border-radius: 12px;
+            border: 1px solid #ffffff2e;
+            background: linear-gradient(135deg, #0f1b31, #17263f);
+            padding: 11px;
+            display: grid;
+            gap: 5px;
+            animation: slideIn 360ms ease both;
+        }
+        .toast small { color: #9fb7d8; }
+        .toast.hidden { display: none; }
+        .toast strong {
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 830px) {
+            .wrap { grid-template-columns: 1fr; }
+            .list { border-right: none; border-bottom: 1px solid #ffffff1f; }
+        }
+    </style>
+</head>
+<body>
+    <section class="board">
+        <header class="header">
+            <h1>Pulse Priority Inbox Toasts</h1>
+            <label class="switch">
+                <input id="quietToggle" type="checkbox" aria-label="Quiet mode">
+                Quiet mode
+            </label>
+        </header>
+
+        <div class="wrap">
+            <div class="list">
+                <article class="item">
+                    <span class="dot" aria-hidden="true"></span>
+                    <div>
+                        <strong>Build Passed in Production</strong>
+                        <p>Release 4.8.2 completed health checks and rolled out to all regions.</p>
+                    </div>
+                    <span class="badge">Info</span>
+                </article>
+
+                <article class="item warning">
+                    <span class="dot" aria-hidden="true"></span>
+                    <div>
+                        <strong>Queue Delay Increased</strong>
+                        <p>Billing worker queue moved above 90-second threshold for 5 minutes.</p>
+                    </div>
+                    <span class="badge">Warning</span>
+                </article>
+
+                <article class="item critical">
+                    <span class="dot" aria-hidden="true"></span>
+                    <div>
+                        <strong>Token Refresh Failures</strong>
+                        <p>Auth gateway reported 2.1% token refresh errors in US East.</p>
+                    </div>
+                    <span class="badge">Critical</span>
+                </article>
+            </div>
+
+            <aside class="stack" id="toastStack" aria-live="polite">
+                <div class="toast">
+                    <strong>Deployment Complete</strong>
+                    <small>2 minutes ago</small>
+                </div>
+                <div class="toast">
+                    <strong>Queue Delay Detected</strong>
+                    <small>7 minutes ago</small>
+                </div>
+                <div class="toast">
+                    <strong>Auth Error Spike</strong>
+                    <small>13 minutes ago</small>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <script>
+        const toggle = document.getElementById('quietToggle');
+        const toasts = document.querySelectorAll('.toast');
+
+        toggle.addEventListener('change', () => {
+            toasts.forEach((toast) => {
+                toast.classList.toggle('hidden', toggle.checked);
+            });
+        });
+    </script>
+</body>
+</html>
