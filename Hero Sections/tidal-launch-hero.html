@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidal Launch Hero</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;600;700&family=Inter+Tight:wght@400;500;600&display=swap');
+
+        :root {
+            color-scheme: dark;
+            --bg: #060812;
+            --text: #ecf3ff;
+            --muted: #9fb0ca;
+            --accent: #22d3ee;
+            --accent-2: #38bdf8;
+            --accent-3: #0ea5e9;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Inter Tight", sans-serif;
+            background:
+                radial-gradient(circle at 15% 20%, #22d3ee2b, transparent 40%),
+                radial-gradient(circle at 85% 75%, #0ea5e92b, transparent 46%),
+                linear-gradient(140deg, #04060d, #0a1122 55%, #060a16);
+            color: var(--text);
+        }
+
+        .hero {
+            width: min(980px, 100%);
+            padding: 40px;
+            border-radius: 28px;
+            background: linear-gradient(150deg, #0b1328, #101b33 65%);
+            border: 1px solid #1f2a44;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px #020617b0;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #22d3ee55, transparent 70%);
+            filter: blur(10px);
+        }
+
+        .hero::before {
+            top: -140px;
+            left: -80px;
+        }
+
+        .hero::after {
+            bottom: -160px;
+            right: -120px;
+            background: radial-gradient(circle, #0ea5e955, transparent 70%);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            font-family: "Clash Display", sans-serif;
+            font-size: clamp(2.2rem, 4vw, 3.6rem);
+            line-height: 1.05;
+        }
+
+        p {
+            margin: 0 0 24px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .primary {
+            border: none;
+            background: linear-gradient(120deg, #22d3ee, #0ea5e9);
+            color: #031018;
+            padding: 12px 20px;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 18px 40px #22d3ee44;
+        }
+
+        .ghost {
+            border: 1px solid #2b3a5a;
+            background: transparent;
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+
+        .stats {
+            display: grid;
+            gap: 14px;
+        }
+
+        .stat {
+            border-radius: 18px;
+            border: 1px solid #23304d;
+            padding: 16px;
+            background: #0f192f;
+        }
+
+        .stat h3 {
+            margin: 0 0 6px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+        }
+
+        .stat strong {
+            font-size: 1.4rem;
+        }
+
+        .timeline {
+            margin-top: 22px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .timeline span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .timeline span::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 10px #22d3ee80;
+        }
+
+        @media (max-width: 780px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="grid">
+            <div>
+                <h1>Tidal Launch Hero</h1>
+                <p>Coordinate a full release in one surface. Align teams, monitor readiness, and press go with a unified command view.</p>
+                <div class="actions">
+                    <button class="primary" type="button">Start launch</button>
+                    <button class="ghost" type="button">View runbook</button>
+                </div>
+            </div>
+
+            <div>
+                <div class="stats">
+                    <div class="stat">
+                        <h3>Launch Window</h3>
+                        <strong>02:00 - 04:30 UTC</strong>
+                    </div>
+                    <div class="stat">
+                        <h3>Readiness</h3>
+                        <strong>92% green checks</strong>
+                    </div>
+                    <div class="stat">
+                        <h3>Active Crew</h3>
+                        <strong>18 engineers online</strong>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <span>Complete security sweep</span>
+                    <span>Sync observability dashboards</span>
+                    <span>Notify regional leads</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
