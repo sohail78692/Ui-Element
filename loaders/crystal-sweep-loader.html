@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystal Sweep Loader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+        :root {
+            color-scheme: dark;
+            --bg: #070a14;
+            --panel: #0f172a;
+            --text: #e5e7eb;
+            --muted: #98a3b8;
+            --accent: #22d3ee;
+            --accent-2: #60a5fa;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "IBM Plex Sans", sans-serif;
+            background:
+                radial-gradient(circle at 15% 20%, #22d3ee29, transparent 40%),
+                radial-gradient(circle at 85% 80%, #60a5fa26, transparent 45%),
+                linear-gradient(145deg, #050712, #0a1122 55%, #080d1d);
+            color: var(--text);
+        }
+
+        .panel {
+            width: min(640px, 100%);
+            padding: 28px;
+            border-radius: 22px;
+            background: var(--panel);
+            border: 1px solid #1f2a44;
+            text-align: center;
+            box-shadow: 0 30px 60px #020617b0;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-family: "Barlow Condensed", sans-serif;
+            font-size: clamp(1.6rem, 2.8vw, 2.5rem);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        p {
+            margin: 0 0 24px;
+            color: var(--muted);
+        }
+
+        .loader {
+            width: 220px;
+            height: 24px;
+            border-radius: 999px;
+            border: 1px solid #1f2a44;
+            background: #0b1224;
+            margin: 0 auto 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, #22d3ee, #60a5fa, transparent);
+            transform: translateX(-100%);
+            animation: sweep 1.8s ease-in-out infinite;
+        }
+
+        .shards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .shard {
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #17223b, #0f172a 60%);
+            border: 1px solid #1f2a44;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shard::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, #22d3ee40, transparent);
+            transform: translateX(-100%);
+            animation: shimmer 2.6s ease-in-out infinite;
+        }
+
+        .shard:nth-child(2)::after { animation-delay: 0.2s; }
+        .shard:nth-child(3)::after { animation-delay: 0.4s; }
+        .shard:nth-child(4)::after { animation-delay: 0.6s; }
+        .shard:nth-child(5)::after { animation-delay: 0.8s; }
+
+        .status {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--muted);
+        }
+
+        @keyframes sweep {
+            0% { transform: translateX(-100%); }
+            60% { transform: translateX(100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body>
+    <section class="panel">
+        <h1>Crystal Sweep Loader</h1>
+        <p>Layered loading indicator with sweeping light and shard pulses for data-heavy transitions.</p>
+
+        <div class="loader" aria-hidden="true"></div>
+        <div class="shards" aria-hidden="true">
+            <div class="shard"></div>
+            <div class="shard"></div>
+            <div class="shard"></div>
+            <div class="shard"></div>
+            <div class="shard"></div>
+        </div>
+        <div class="status">Syncing telemetry</div>
+    </section>
+</body>
+</html>
