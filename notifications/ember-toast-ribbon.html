@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ember Toast Ribbon</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+        :root {
+            color-scheme: dark;
+            --bg: #070912;
+            --panel: #0f1628;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --edge: #1e2a44;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Sora", sans-serif;
+            background:
+                radial-gradient(circle at 15% 15%, #f9731630, transparent 40%),
+                radial-gradient(circle at 90% 80%, #22d3ee26, transparent 45%),
+                linear-gradient(135deg, #05070f, #0b1222 50%, #090f1c);
+            color: var(--text);
+        }
+
+        .stage {
+            width: min(880px, 100%);
+            padding: 28px;
+            border-radius: 24px;
+            border: 1px solid var(--edge);
+            background: #0b1222f5;
+            box-shadow: 0 30px 60px #020617b0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(1.4rem, 2.2vw, 2rem);
+        }
+
+        p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .spawn-btn {
+            border: 1px solid #1f2a44;
+            background: #0f172a;
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease;
+        }
+
+        .spawn-btn:hover {
+            border-color: #38bdf8;
+            transform: translateY(-1px);
+        }
+
+        .stack {
+            display: grid;
+            gap: 14px;
+        }
+
+        .toast {
+            position: relative;
+            border-radius: 18px;
+            padding: 16px 18px 18px;
+            background: var(--panel);
+            border: 1px solid var(--edge);
+            border-left: 4px solid var(--tone);
+            display: grid;
+            gap: 10px;
+            box-shadow: 0 18px 30px #02061766;
+            animation: slideIn 260ms ease;
+        }
+
+        .toast.is-hiding {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 220ms ease, transform 220ms ease;
+        }
+
+        .toast header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .title {
+            font-weight: 600;
+        }
+
+        .time {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .message {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .ghost {
+            border: 1px solid #1f2a44;
+            background: transparent;
+            color: var(--text);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .solid {
+            border: none;
+            background: var(--tone);
+            color: #0b1222;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .progress {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 3px;
+            width: 100%;
+            border-radius: 0 0 18px 18px;
+            background: linear-gradient(90deg, var(--tone), transparent);
+            transform-origin: left;
+            animation: shrink var(--duration) linear forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shrink {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="stage">
+        <header>
+            <div>
+                <h1>Ember Toast Ribbon</h1>
+                <p>Priority alerts with burn-down timers and quick actions for triage workflows.</p>
+            </div>
+            <button class="spawn-btn" type="button" id="spawnToast">New alert</button>
+        </header>
+
+        <div class="stack" id="toastStack">
+            <article class="toast" data-timeout="7200" style="--tone: #fb7185;">
+                <header>
+                    <span class="title">Pipeline overheated</span>
+                    <span class="time">just now</span>
+                </header>
+                <p class="message">Thermal throttle engaged on cluster A3. Review cooling presets.</p>
+                <div class="actions">
+                    <button class="ghost dismiss" type="button">Dismiss</button>
+                    <button class="solid" type="button">Open console</button>
+                </div>
+                <span class="progress"></span>
+            </article>
+
+            <article class="toast" data-timeout="9000" style="--tone: #38bdf8;">
+                <header>
+                    <span class="title">Deploy queued</span>
+                    <span class="time">2 min ago</span>
+                </header>
+                <p class="message">Release 4.12.3 staged for 18 regions. Awaiting approval.</p>
+                <div class="actions">
+                    <button class="ghost dismiss" type="button">Dismiss</button>
+                    <button class="solid" type="button">Approve</button>
+                </div>
+                <span class="progress"></span>
+            </article>
+
+            <article class="toast" data-timeout="6400" style="--tone: #facc15;">
+                <header>
+                    <span class="title">Insights ready</span>
+                    <span class="time">6 min ago</span>
+                </header>
+                <p class="message">Your weekly performance digest is ready to review.</p>
+                <div class="actions">
+                    <button class="ghost dismiss" type="button">Dismiss</button>
+                    <button class="solid" type="button">View report</button>
+                </div>
+                <span class="progress"></span>
+            </article>
+        </div>
+    </section>
+
+    <template id="toastTemplate">
+        <article class="toast" data-timeout="7600">
+            <header>
+                <span class="title">Alert title</span>
+                <span class="time">just now</span>
+            </header>
+            <p class="message">Alert description appears here.</p>
+            <div class="actions">
+                <button class="ghost dismiss" type="button">Dismiss</button>
+                <button class="solid" type="button">Review</button>
+            </div>
+            <span class="progress"></span>
+        </article>
+    </template>
+
+    <script>
+        const stack = document.getElementById('toastStack');
+        const template = document.getElementById('toastTemplate');
+        const spawnButton = document.getElementById('spawnToast');
+
+        const tones = ['#fb7185', '#38bdf8', '#facc15', '#a78bfa'];
+        const messages = [
+            {
+                title: 'Sync recovered',
+                body: 'Realtime stream stabilized after 12 seconds of drift.'
+            },
+            {
+                title: 'Access granted',
+                body: 'Ops lead approved emergency changes for sector C.'
+            },
+            {
+                title: 'Usage spike',
+                body: 'Concurrent sessions increased by 18% in the last hour.'
+            }
+        ];
+
+        const attachToastBehavior = (toast) => {
+            const timeout = Number(toast.dataset.timeout || 7000);
+            toast.style.setProperty('--duration', `${timeout}ms`);
+            const dismissButton = toast.querySelector('.dismiss');
+            const removeToast = () => {
+                toast.classList.add('is-hiding');
+                setTimeout(() => toast.remove(), 240);
+            };
+            if (dismissButton) {
+                dismissButton.addEventListener('click', removeToast);
+            }
+            setTimeout(removeToast, timeout);
+        };
+
+        document.querySelectorAll('.toast').forEach(attachToastBehavior);
+
+        spawnButton.addEventListener('click', () => {
+            const clone = template.content.firstElementChild.cloneNode(true);
+            const pick = messages[Math.floor(Math.random() * messages.length)];
+            const tone = tones[Math.floor(Math.random() * tones.length)];
+            clone.style.setProperty('--tone', tone);
+            clone.querySelector('.title').textContent = pick.title;
+            clone.querySelector('.message').textContent = pick.body;
+            stack.prepend(clone);
+            attachToastBehavior(clone);
+        });
+    </script>
+</body>
+</html>
