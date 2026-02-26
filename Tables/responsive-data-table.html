@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Data Table</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .row-anim { animation: slideIn 0.3s ease-out forwards; opacity: 0; }
+  </style>
+</head>
+<body class="bg-gray-950 min-h-screen p-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-white text-2xl font-bold">Product Inventory</h2>
+      <div class="flex gap-3">
+        <input type="search" placeholder="Search..." class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500" />
+        <button class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl transition">Export</button>
+      </div>
+    </div>
+
+    <div class="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="bg-gray-800/50">
+            <th class="px-6 py-4 text-left text-gray-400 font-medium">Product</th>
+            <th class="px-6 py-4 text-left text-gray-400 font-medium">Category</th>
+            <th class="px-6 py-4 text-left text-gray-400 font-medium">Stock</th>
+            <th class="px-6 py-4 text-left text-gray-400 font-medium">Price</th>
+            <th class="px-6 py-4 text-left text-gray-400 font-medium">Status</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { name: "Wireless Earbuds Pro", category: "Electronics", stock: 145, price: 79.99, status: "In Stock" },
+      { name: "Ergonomic Chair", category: "Furniture", stock: 23, price: 299.00, status: "Low Stock" },
+      { name: "Smart Watch Series X", category: "Electronics", stock: 0, price: 199.99, status: "Out of Stock" },
+      { name: "Mechanical Keyboard", category: "Electronics", stock: 89, price: 149.00, status: "In Stock" },
+      { name: "Standing Desk", category: "Furniture", stock: 12, price: 449.00, status: "Low Stock" },
+      { name: "USB-C Hub", category: "Accessories", stock: 234, price: 45.00, status: "In Stock" }
+    ];
+
+    const tbody = document.getElementById("tableBody");
+    products.forEach((p, i) => {
+      const statusColor = p.status === "In Stock" ? "bg-green-500/20 text-green-400" : 
+                          p.status === "Low Stock" ? "bg-yellow-500/20 text-yellow-400" : 
+                          "bg-red-500/20 text-red-400";
+      
+      const row = document.createElement("tr");
+      row.className = "row-anim border-t border-gray-800 hover:bg-gray-800/30 transition";
+      row.style.animationDelay = (i * 0.1) + "s";
+      row.innerHTML = `
+        <td class="px-6 py-4 text-white font-medium">${p.name}</td>
+        <td class="px-6 py-4 text-gray-400">${p.category}</td>
+        <td class="px-6 py-4 text-gray-300">${p.stock}</td>
+        <td class="px-6 py-4 text-white">$${p.price.toFixed(2)}</td>
+        <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-medium ${statusColor}">${p.status}</span></td>
+      `;
+      tbody.appendChild(row);
+    });
+  </script>
+</body>
+</html>
