@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glass Morph Testimonial</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .floating-card {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .quote-mark {
+      background: linear-gradient(135deg, #f472b6, #a855f7, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .stars {
+      background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shimmer 2s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 min-h-screen flex items-center justify-center p-6">
+  <div class="floating-card bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 p-8 max-w-md w-full relative overflow-hidden">
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-pink-500/30 to-purple-500/30 rounded-full blur-2xl"></div>
+    <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-gradient-to-br from-blue-500/30 to-cyan-500/30 rounded-full blur-2xl"></div>
+
+    <div class="relative z-10">
+      <div class="flex justify-between items-start mb-6">
+        <span class="quote-mark text-6xl font-serif leading-none">"</span>
+        <div class="stars text-2xl">★★★★★</div>
+      </div>
+
+      <p class="text-gray-200 text-lg leading-relaxed mb-8">
+        This platform completely transformed how our team collaborates. The intuitive design and powerful features helped us increase productivity by 40% in just two months. Absolutely game-changing!
+      </p>
+
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl">
+          SK
+        </div>
+        <div>
+          <p class="text-white font-semibold">Sarah Kennedy</p>
+          <p class="text-gray-400 text-sm">Product Director, TechFlow</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
