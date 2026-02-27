@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pulse Wave Button UI Component">
+<title>Pulse Wave Button</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap');
+
+body {
+    background: #0a0a0f;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+}
+
+.button-container {
+    position: relative;
+    padding: 8px;
+}
+
+.pulse-wave-btn {
+    position: relative;
+    padding: 18px 48px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.pulse-wave-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transition: left 0.4s ease;
+    z-index: -1;
+}
+
+.pulse-wave-btn:hover::before {
+    left: 0;
+}
+
+.pulse-wave-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.pulse-wave-btn:active {
+    transform: translateY(0);
+}
+
+.wave {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: wave-animate 1.5s ease-out infinite;
+    pointer-events: none;
+}
+
+.wave:nth-child(1) {
+    width: 20px;
+    height: 20px;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.wave:nth-child(2) {
+    width: 20px;
+    height: 20px;
+    left: 50%;
+    animation-delay: 0.3s;
+}
+
+.wave:nth-child(3) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-delay: 0.6s;
+}
+
+@keyframes wave-animate {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="button-container">
+    <button class="pulse-wave-btn">
+        <span class="wave"></span>
+        <span class="wave"></span>
+        <span class="wave"></span>
+        Pulse Wave
+    </button>
+</div>
+
+</body>
+</html>
