@@ -17,15 +17,22 @@ body { background:#111; padding:40px; }
     transition: 0.5s;
     border: none;
     cursor: pointer;
+    font-family: inherit;
 }
+
 .slide-btn:hover {
     background-position: right;
+}
+
+.slide-btn:focus {
+    outline: 2px solid #ff4d4d;
+    outline-offset: 3px;
 }
 </style>
 </head>
 <body>
 
-<button class="slide-btn">Slide Button</button>
+<button type="button" class="slide-btn">Slide Button</button>
 
 </body>
 </html>
