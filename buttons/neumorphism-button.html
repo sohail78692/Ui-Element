@@ -9,7 +9,7 @@
 <body>
 
 <div class="container">
-  <button class="neo-btn">Press Me</button>
+  <button type="button" class="neo-btn">Press Me</button>
 </div>
 
 <style>
@@ -47,6 +47,11 @@ body {
 
 .neo-btn:active {
   transform: scale(0.97);
+}
+
+.neo-btn:focus {
+  outline: 2px solid #a0a5ab;
+  outline-offset: 4px;
 }
 </style>
 
