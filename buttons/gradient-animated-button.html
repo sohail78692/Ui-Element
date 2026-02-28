@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<button class="gradient-btn">Get Started</button>
+<button type="button" class="gradient-btn">Get Started</button>
 
 <style>
 body {
@@ -41,6 +41,11 @@ body {
 
 .gradient-btn:active {
   transform: translateY(1px);
+}
+
+.gradient-btn:focus {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
 }
 
 @keyframes gradientAnimation {
