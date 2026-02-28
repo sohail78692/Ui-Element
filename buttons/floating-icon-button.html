@@ -24,16 +24,24 @@ body {
     box-shadow: 0 10px 20px rgba(0,0,0,0.4);
     transition: 0.3s;
     cursor: pointer;
+    border: none;
+    color: inherit;
 }
+
 .icon-btn:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 30px rgba(0,0,0,0.5);
+}
+
+.icon-btn:focus {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
 }
 </style>
 </head>
 <body>
 
-<div class="icon-btn">⚡</div>
+<button type="button" class="icon-btn" aria-label="Lightning">⚡</button>
 
 </body>
 </html>

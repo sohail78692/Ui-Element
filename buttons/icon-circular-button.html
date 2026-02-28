@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<button class="icon-btn">
+<button type="button" class="icon-btn" aria-label="Arrow">
   <i class="fa-solid fa-arrow-right"></i>
 </button>
 
@@ -46,6 +46,11 @@ body {
 
 .icon-btn:active {
   transform: scale(0.95);
+}
+
+.icon-btn:focus {
+  outline: 2px solid #00b4d8;
+  outline-offset: 3px;
 }
 </style>
 
