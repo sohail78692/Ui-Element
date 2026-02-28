@@ -18,7 +18,7 @@
 
   <div class="price-row">
     <span class="price">$149.99</span>
-    <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+    <button type="button" class="cart-btn" aria-label="Add to cart"><i class="fa-solid fa-cart-shopping"></i></button>
   </div>
 </div>
 
@@ -104,6 +104,11 @@ body {
 
 .cart-btn:hover {
   transform: scale(1.1);
+}
+
+.cart-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 3px;
 }
 </style>
 
