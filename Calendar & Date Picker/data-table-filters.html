@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Data Table with Filters - Ui Element</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0b0b10;
+      --card-bg: #131318;
+      --accent: #f43f5e;
+      --accent-glow: rgba(244, 63, 94, 0.4);
+      --accent-secondary: #fb7185;
+      --text: #fafafa;
+      --muted: #71717a;
+      --surface: #1a1a22;
+      --border: rgba(255, 255, 255, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: 
+        radial-gradient(circle at 0% 20%, rgba(244, 63, 94, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 100% 80%, rgba(251, 113, 133, 0.05) 0%, transparent 40%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .card {
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      box-shadow: 
+        0 30px 70px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .title-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(251, 113, 133, 0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
+
+    .title-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .title {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      min-width: 260px;
+    }
+
+    .search-box svg {
+      color: var(--muted);
+      width: 18px;
+      height: 18px;
+    }
+
+    .search-box input {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      width: 100%;
+      outline: none;
+    }
+
+    .search-box input::placeholder {
+      color: var(--muted);
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    thead {
+      background: var(--surface);
+    }
+
+    th {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s ease;
+    }
+
+    th.sortable:hover {
+      color: var(--accent);
+    }
+
+    th.sortable svg {
+      width: 12px;
+      height: 12px;
+      margin-left: 4px;
+      opacity: 0.5;
+    }
+
+    th.sorted svg {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    td {
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr {
+      transition: background 0.2s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(244, 63, 94, 0.05);
+    }
+
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: 600;
+    }
+
+    .user-email {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-badge.active {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+    }
+
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+    }
+
+    .status-badge.inactive {
+      background: rgba(113, 113, 122, 0.15);
+      color: var(--muted);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .role-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .role-badge.admin {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--accent);
+    }
+
+    .role-badge.editor {
+      background: rgba(139, 92, 246, 0.15);
+      color: #8b5cf6;
+    }
+
+    .role-badge.viewer {
+      background: rgba(59, 130, 246, 0.15);
+      color: #3b82f6;
+    }
+
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .page-info {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .page-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+    }
+
+    .page-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .page-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="header">
+        <div class="title-section">
+          <div class="title-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h1 class="title">Team Members</h1>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input type="text" placeholder="Search members..." id="searchInput" oninput="filterTable()">
+        </div>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" onclick="setFilter('active', this)">Active</button>
+        <button class="filter-btn" onclick="setFilter('pending', this)">Pending</button>
+        <button class="filter-btn" onclick="setFilter('inactive', this)">Inactive</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th class="sortable" onclick="sortTable('name')">
+                Member
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m7 15 5 5 5-5"></path>
+                  <path d="m7 9 5-5 5 5"></path>
+                </svg>
+              </th>
+              <th class="sortable" onclick="sortTable('role')">
+                Role
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m7 15 5 5 5-5"></path>
+                  <path d="m7 9 5-5 5 5"></path>
+                </svg>
+              </th>
+              <th class="sortable" onclick="sortTable('status')">
+                Status
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m7 15 5 5 5-5"></path>
+                  <path d="m7 9 5-5 5 5"></path>
+                </svg>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <div class="page-info">Showing <span id="showingStart">1</span>-<span id="showingEnd">5</span> of <span id="totalItems">20</span></div>
+        <div class="page-buttons">
+          <button class="page-btn" onclick="changePage(-1)" id="prevBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn" onclick="changePage(1)" id="nextBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const colors = ['#f43f5e', '#8b5cf6', '#06b6d4', '#22c55e', '#f59e0b'];
+
+    let members = [
+      { name: 'Sarah Chen', email: 'sarah@company.com', role: 'admin', status: 'active', color: 0 },
+      { name: 'Mike Johnson', email: 'mike@company.com', role: 'editor', status: 'active', color: 1 },
+      { name: 'Emma Wilson', email: 'emma@company.com', role: 'viewer', status: 'pending', color: 2 },
+      { name: 'James Brown', email: 'james@company.com', role: 'editor', status: 'active', color: 3 },
+      { name: 'Lisa Garcia', email: 'lisa@company.com', role: 'viewer', status: 'inactive', color: 4 },
+      { name: 'David Kim', email: 'david@company.com', role: 'admin', status: 'active', color: 0 },
+      { name: 'Amy Taylor', email: 'amy@company.com', role: 'editor', status: 'pending', color: 1 },
+      { name: 'Chris Lee', email: 'chris@company.com', role: 'viewer', status: 'active', color: 2 }
+    ];
+
+    let currentFilter = 'all';
+    let filteredMembers = [...members];
+
+    function renderTable() {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+
+      filteredMembers.forEach(member => {
+        const initials = member.name.split(' ').map(n => n[0]).join('');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>
+            <div class="user-cell">
+              <div class="avatar" style="background: ${colors[member.color]}">${initials}</div>
+              <div class="user-info">
+                <span class="user-name">${member.name}</span>
+                <span class="user-email">${member.email}</span>
+              </div>
+            </div>
+          </td>
+          <td><span class="role-badge ${member.role}">${member.role}</span></td>
+          <td><span class="status-badge ${member.status}"><span class="status-dot"></span>${member.status}</span></td>
+          <td>
+            <button class="action-btn" onclick="editMember('${member.name}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById('totalItems').textContent = filteredMembers.length;
+      document.getElementById('showingEnd').textContent = Math.min(5, filteredMembers.length);
+    }
+
+    function filterTable() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      filteredMembers = members.filter(m => 
+        (currentFilter === 'all' || m.status === currentFilter) &&
+        (m.name.toLowerCase().includes(search) || m.email.toLowerCase().includes(search))
+      );
+      renderTable();
+    }
+
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterTable();
+    }
+
+    function sortTable(column) {
+      filteredMembers.sort((a, b) => {
+        if (a[column] < b[column]) return -1;
+        if (a[column] > b[column]) return 1;
+        return 0;
+      });
+      renderTable();
+    }
+
+    function editMember(name) {
+      alert(`Edit ${name}`);
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
