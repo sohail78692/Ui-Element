@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Timeline Schedule Picker - Ui Element</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0c0c14;
+      --card-bg: #16161f;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.4);
+      --accent-secondary: #34d399;
+      --border: rgba(255, 255, 255, 0.06);
+      --text: #f4f4f5;
+      --muted: #71717a;
+      --surface: #1e1e28;
+      --surface-hover: #282834;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(52, 211, 153, 0.06) 0%, transparent 40%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .card {
+      border-radius: 28px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      box-shadow: 
+        0 30px 70px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .date-display {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .day-number {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .date-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .month-year {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .weekday {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .control-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .control-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .time-range {
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: var(--surface);
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    .timeline-scroll {
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .timeline-track {
+      display: flex;
+      gap: 2px;
+      min-width: max-content;
+    }
+
+    .time-slot {
+      width: 60px;
+      flex-shrink: 0;
+      text-align: center;
+      padding: 10px 4px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .time-slot:hover {
+      background: var(--surface-hover);
+    }
+
+    .time-slot.selected {
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      border-color: var(--accent);
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .time-slot.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .time-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .time-slot.selected .time-label {
+      color: #000;
+    }
+
+    .time-period {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .time-slot.selected .time-period {
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .schedule-section {
+      margin-top: 24px;
+    }
+
+    .schedule-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .schedule-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .schedule-item:hover {
+      border-color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .schedule-item.active {
+      border-color: var(--accent);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .schedule-time {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 60px;
+    }
+
+    .schedule-content {
+      flex: 1;
+    }
+
+    .schedule-event {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .schedule-location {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .schedule-duration {
+      font-size: 0.7rem;
+      color: var(--muted);
+      background: var(--surface-hover);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .selected-summary {
+      margin-top: 24px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
+      border-radius: 16px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .summary-text {
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .summary-time {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .confirm-btn {
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      border: none;
+      border-radius: 12px;
+      color: #000;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .confirm-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px var(--accent-glow);
+    }
+
+    .timeline-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .timeline-scroll::-webkit-scrollbar-track {
+      background: var(--surface);
+      border-radius: 3px;
+    }
+
+    .timeline-scroll::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .day-number {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="header">
+        <div class="date-display">
+          <span class="day-number" id="dayNumber">15</span>
+          <div class="date-text">
+            <span class="month-year" id="monthYear">March 2026</span>
+            <span class="weekday" id="weekday">Sunday</span>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="control-btn" onclick="changeDate(-1)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button class="control-btn" onclick="changeDate(1)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="timeline-header">
+        <span class="timeline-title">Select Time Slot</span>
+        <span class="time-range">Available: 8 AM - 8 PM</span>
+      </div>
+
+      <div class="timeline-scroll">
+        <div class="timeline-track" id="timeSlots"></div>
+      </div>
+
+      <div class="schedule-section">
+        <div class="schedule-title">Today's Schedule</div>
+        <div class="schedule-list" id="scheduleList"></div>
+      </div>
+
+      <div class="selected-summary">
+        <div>
+          <div class="summary-text">Selected Time</div>
+          <div class="summary-time" id="selectedTime">-- : --</div>
+        </div>
+        <button class="confirm-btn" onclick="confirmSelection()">Confirm Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    let currentDate = new Date(2026, 2, 15);
+    let selectedTime = null;
+
+    const schedule = [
+      { time: '09:00', event: 'Team Standup', location: 'Conference Room A', duration: '30 min' },
+      { time: '10:30', event: 'Product Review', location: 'Zoom', duration: '1 hour' },
+      { time: '14:00', event: 'Client Call', location: 'Meeting Room B', duration: '45 min' },
+      { time: '16:30', event: 'Design Sync', location: 'Studio', duration: '1 hour' }
+    ];
+
+    const disabledSlots = ['12:00', '12:30', '13:00', '13:30'];
+
+    function renderDate() {
+      document.getElementById('dayNumber').textContent = currentDate.getDate();
+      document.getElementById('monthYear').textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+      document.getElementById('weekday').textContent = weekdays[currentDate.getDay()];
+    }
+
+    function renderTimeSlots() {
+      const container = document.getElementById('timeSlots');
+      container.innerHTML = '';
+      
+      for (let hour = 8; hour < 20; hour++) {
+        for (let min = 0; min < 60; min += 30) {
+          const timeStr = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+          const isDisabled = disabledSlots.includes(timeStr);
+          const period = hour < 12 ? 'AM' : 'PM';
+          const displayHour = hour > 12 ? hour - 12 : hour;
+          
+          const slot = document.createElement('div');
+          slot.className = `time-slot ${isDisabled ? 'disabled' : ''}`;
+          slot.innerHTML = `
+            <div class="time-label">${displayHour}:${String(min).padStart(2, '0')}</div>
+            <div class="time-period">${period}</div>
+          `;
+          
+          if (!isDisabled) {
+            slot.onclick = () => selectTime(timeStr, slot);
+          }
+          
+          container.appendChild(slot);
+        }
+      }
+    }
+
+    function renderSchedule() {
+      const container = document.getElementById('scheduleList');
+      container.innerHTML = '';
+      
+      schedule.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'schedule-item';
+        div.innerHTML = `
+          <div class="schedule-time">${item.time}</div>
+          <div class="schedule-content">
+            <div class="schedule-event">${item.event}</div>
+            <div class="schedule-location">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              ${item.location}
+            </div>
+          </div>
+          <div class="schedule-duration">${item.duration}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function selectTime(time, element) {
+      document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedTime = time;
+      document.getElementById('selectedTime').textContent = time;
+    }
+
+    function changeDate(delta) {
+      currentDate.setDate(currentDate.getDate() + delta);
+      renderDate();
+      renderTimeSlots();
+    }
+
+    function confirmSelection() {
+      if (selectedTime) {
+        alert(`Booking confirmed for ${monthNames[currentDate.getMonth()]} ${currentDate.getDate()} at ${selectedTime}`);
+      }
+    }
+
+    renderDate();
+    renderTimeSlots();
+    renderSchedule();
+  </script>
+</body>
+</html>
