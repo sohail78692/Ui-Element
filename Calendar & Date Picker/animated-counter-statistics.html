@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Animated Counter Statistics - Ui Element</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0b0b10;
+      --card-bg: #131318;
+      --accent: #f97316;
+      --accent-glow: rgba(249, 115, 22, 0.4);
+      --accent-secondary: #fb923c;
+      --text: #fafafa;
+      --muted: #71717a;
+      --surface: #1a1a22;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: 
+        radial-gradient(circle at 30% 20%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(251, 146, 60, 0.06) 0%, transparent 50%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .card {
+      border-radius: 24px;
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: var(--card-bg);
+      box-shadow: 
+        0 30px 70px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(249, 115, 22, 0.3);
+    }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 14px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .stat-icon.orange {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(251, 146, 60, 0.1));
+      color: var(--accent);
+    }
+
+    .stat-icon.blue {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.1));
+      color: #3b82f6;
+    }
+
+    .stat-icon.green {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(52, 211, 153, 0.1));
+      color: #22c55e;
+    }
+
+    .stat-icon.purple {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(167, 139, 250, 0.1));
+      color: #8b5cf6;
+    }
+
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-value.orange { color: var(--accent); }
+    .stat-value.blue { color: #3b82f6; }
+    .stat-value.green { color: #22c55e; }
+    .stat-value.purple { color: #8b5cf6; }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .stat-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 10px;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .stat-trend.up {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+    }
+
+    .stat-trend.down {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    .stat-trend svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .chart-preview {
+      margin-top: 20px;
+      padding: 18px;
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .chart-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 80px;
+      gap: 8px;
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(180deg, var(--accent), rgba(249, 115, 22, 0.3));
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .chart-bar:hover {
+      background: linear-gradient(180deg, var(--accent), var(--accent-secondary));
+    }
+
+    .chart-bar::after {
+      content: attr(data-value);
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .chart-bar:hover::after {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="header">
+        <h1 class="title">Analytics Overview</h1>
+        <p class="subtitle">Real-time statistics and trends</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="stat-value orange" data-target="2489">0</div>
+          <div class="stat-label">Total Users</div>
+          <div class="stat-trend up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            </svg>
+            +12.5%
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+          </div>
+          <div class="stat-value blue" data-target="847">0</div>
+          <div class="stat-label">Active Sessions</div>
+          <div class="stat-trend up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            </svg>
+            +8.2%
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div class="stat-value green" data-target="12640">0</div>
+          <div class="stat-label">Revenue</div>
+          <div class="stat-trend up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            </svg>
+            +23.1%
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <div class="stat-value purple" data-target="384">0</div>
+          <div class="stat-label">Projects</div>
+          <div class="stat-trend down">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+            </svg>
+            -2.4%
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-preview">
+        <div class="chart-title">Weekly Activity</div>
+        <div class="chart-bars">
+          <div class="chart-bar" style="height: 45%;" data-value="45%"></div>
+          <div class="chart-bar" style="height: 72%;" data-value="72%"></div>
+          <div class="chart-bar" style="height: 58%;" data-value="58%"></div>
+          <div class="chart-bar" style="height: 90%;" data-value="90%"></div>
+          <div class="chart-bar" style="height: 65%;" data-value="65%"></div>
+          <div class="chart-bar" style="height: 85%;" data-value="85%"></div>
+          <div class="chart-bar" style="height: 55%;" data-value="55%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function animateCounters() {
+      const counters = document.querySelectorAll('.stat-value[data-target]');
+      
+      counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
+        
+        const updateCounter = () => {
+          current += step;
+          if (current < target) {
+            counter.textContent = formatNumber(Math.floor(current));
+            requestAnimationFrame(updateCounter);
+          } else {
+            counter.textContent = formatNumber(target);
+          }
+        };
+        
+        updateCounter();
+      });
+    }
+
+    function formatNumber(num) {
+      if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+      }
+      return num.toString();
+    }
+
+    function animateBars() {
+      const bars = document.querySelectorAll('.chart-bar');
+      bars.forEach((bar, index) => {
+        const height = bar.style.height;
+        bar.style.height = '0%';
+        setTimeout(() => {
+          bar.style.height = height;
+        }, index * 100);
+      });
+    }
+
+    setTimeout(() => {
+      animateCounters();
+      animateBars();
+    }, 300);
+  </script>
+</body>
+</html>
