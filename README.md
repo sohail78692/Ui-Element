@@ -12,6 +12,7 @@ A modern and reusable collection of stunning UI components built with **HTML**, 
 * Ready-to-use & easily customizable
 * Fully responsive and lightweight
 * Open-source and free for everyone
+* Accessible & SEO-friendly
 
 ---
 
