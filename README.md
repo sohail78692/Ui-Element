@@ -75,6 +75,7 @@ Open any component `.html` file and copy the structure or integrate directly int
 * Save development time by providing reusable UI elements
 * Offer a free and open-source UI library for everyone
 * Grow a community-driven design resource
+* Support modern web standards
 
 ---
 
