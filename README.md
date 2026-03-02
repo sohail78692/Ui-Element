@@ -66,6 +66,7 @@ Open any component `.html` file and copy the structure or integrate directly int
 * **HTML5**
 * **CSS3 / TailwindCSS** (for selected components)
 * **JavaScript (Vanilla)**
+* **Sass/SCSS**
 
 ---
 
