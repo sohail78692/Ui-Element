@@ -41,6 +41,7 @@ Ui-Element/
 * **Loaders & Spinners**
 * **Forms & Inputs**
 * **Animations & Special Effects**
+* **Tables & Data Display**
 
 > ✨ New UI components will be added regularly.
 
