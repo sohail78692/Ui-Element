@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ember Toggle Switch UI Component">
+<title>Ember Toggle Switch</title>
+<style>
+body {
+    background: #0f0f12;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.ember-toggle {
+    position: relative;
+    width: 64px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.ember-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ember-toggle .track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #2a2a35;
+    border-radius: 32px;
+    transition: background 0.3s ease;
+}
+
+.ember-toggle .thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 26px;
+    height: 26px;
+    background: #555;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ember-toggle input:checked + .track {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.ember-toggle input:checked + .track .thumb {
+    left: 35px;
+    background: #fff;
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.6);
+}
+</style>
+</head>
+<body>
+
+<label class="ember-toggle">
+    <input type="checkbox">
+    <span class="track">
+        <span class="thumb"></span>
+    </span>
+</label>
+
+</body>
+</html>
