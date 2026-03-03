@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Orbit Loader UI Component">
+<title>Orbit Loader</title>
+<style>
+body {
+    background: #0a0a0f;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.orbit-loader {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.orbit-loader .core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    background: #8b5cf6;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px #8b5cf6;
+}
+
+.orbit-loader .orbit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    border-top-color: #8b5cf6;
+    border-radius: 50%;
+    animation: orbit-spin 1.2s linear infinite;
+}
+
+.orbit-loader .orbit:nth-child(2) {
+    width: 60px;
+    height: 60px;
+    top: 10px;
+    left: 10px;
+    border-top-color: #06b6d4;
+    animation-duration: 1s;
+    animation-direction: reverse;
+}
+
+.orbit-loader .orbit:nth-child(3) {
+    width: 40px;
+    height: 40px;
+    top: 20px;
+    left: 20px;
+    border-top-color: #f472b6;
+    animation-duration: 0.8s;
+}
+
+@keyframes orbit-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="orbit-loader">
+    <div class="orbit"></div>
+    <div class="orbit"></div>
+    <div class="orbit"></div>
+    <div class="core"></div>
+</div>
+
+</body>
+</html>
