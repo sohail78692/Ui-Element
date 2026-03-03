@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Particle Trail Card UI Component">
+<title>Particle Trail Card</title>
+<style>
+body {
+    background: #0a0a0e;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.particle-card {
+    position: relative;
+    width: 320px;
+    padding: 32px;
+    background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.particle-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #22c55e, #06b6d4, transparent);
+    animation: particle-flow 2s linear infinite;
+}
+
+.particle-card .particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.particle-card .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #22c55e;
+    border-radius: 50%;
+    opacity: 0;
+    animation: particle-float 3s ease-in-out infinite;
+}
+
+.particle-card .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+.particle-card .particle:nth-child(2) { left: 30%; animation-delay: 0.5s; background: #06b6d4; }
+.particle-card .particle:nth-child(3) { left: 50%; animation-delay: 1s; }
+.particle-card .particle:nth-child(4) { left: 70%; animation-delay: 1.5s; background: #06b6d4; }
+.particle-card .particle:nth-child(5) { left: 90%; animation-delay: 2s; }
+
+.particle-card h3 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 20px;
+}
+
+.particle-card p {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.particle-card .icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.particle-card .icon::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #22c55e;
+}
+
+@keyframes particle-flow {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes particle-float {
+    0% { transform: translateY(100px); opacity: 0; }
+    20% { opacity: 0.8; }
+    80% { opacity: 0.8; }
+    100% { transform: translateY(-100px); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="particle-card">
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    <div class="icon"></div>
+    <h3>Live Activity</h3>
+    <p>Real-time particle effects that flow through the card, creating an engaging visual indicator.</p>
+</div>
+
+</body>
+</html>
