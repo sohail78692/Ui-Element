@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Wave Progress Bar UI Component">
+<title>Wave Progress Bar</title>
+<style>
+body {
+    background: #0a0a0c;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.wave-progress {
+    width: 300px;
+    height: 12px;
+    background: #1e1e28;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.wave-progress .fill {
+    height: 100%;
+    width: 65%;
+    background: linear-gradient(90deg, #06b6d4, #3b82f6);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.wave-progress .fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: wave-shine 1.5s infinite;
+}
+
+@keyframes wave-shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+</style>
+</head>
+<body>
+
+<div class="wave-progress">
+    <div class="fill"></div>
+</div>
+
+</body>
+</html>
