@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Crystal Glass Card UI Component">
+<title>Crystal Glass Card</title>
+<style>
+body {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.crystal-card {
+    width: 320px;
+    padding: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.crystal-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+.crystal-card h2 {
+    margin: 0 0 12px;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.crystal-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.crystal-card .icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+</style>
+</head>
+<body>
+
+<div class="crystal-card">
+    <div class="icon">💎</div>
+    <h2>Crystal Card</h2>
+    <p>A stunning glassmorphic card with blur effects and smooth hover animations.</p>
+</div>
+
+</body>
+</html>
