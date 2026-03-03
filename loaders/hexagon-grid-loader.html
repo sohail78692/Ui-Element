@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hexagon Grid Loader UI Component">
+<title>Hexagon Grid Loader</title>
+<style>
+body {
+    background: #0a0a0e;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.hex-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 30px);
+    gap: 6px;
+}
+
+.hex {
+    width: 30px;
+    height: 34px;
+    background: #1e1e2e;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    animation: hex-pulse 1.5s ease-in-out infinite;
+}
+
+.hex:nth-child(1) { animation-delay: 0s; background: #f472b6; }
+.hex:nth-child(2) { animation-delay: 0.1s; background: #8b5cf6; }
+.hex:nth-child(3) { animation-delay: 0.2s; background: #06b6d4; }
+.hex:nth-child(4) { animation-delay: 0.3s; background: #06b6d4; }
+.hex:nth-child(5) { animation-delay: 0.4s; background: #8b5cf6; }
+.hex:nth-child(6) { animation-delay: 0.5s; background: #f472b6; }
+.hex:nth-child(7) { animation-delay: 0.6s; background: #f472b6; }
+.hex:nth-child(8) { animation-delay: 0.7s; background: #8b5cf6; }
+.hex:nth-child(9) { animation-delay: 0.8s; background: #06b6d4; }
+
+@keyframes hex-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1); }
+}
+</style>
+</head>
+<body>
+
+<div class="hex-grid">
+    <div class="hex"></div>
+    <div class="hex"></div>
+    <div class="hex"></div>
+    <div class="hex"></div>
+    <div class="hex"></div>
+    <div class="hex"></div>
+    <div class="hex"></div>
+    <div class="hex"></div>
+    <div class="hex"></div>
+</div>
+
+</body>
+</html>
