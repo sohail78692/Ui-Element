@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Frosted Glass Card UI Component">
+<title>Frosted Glass Card</title>
+<style>
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.frosted-card {
+    width: 320px;
+    padding: 36px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.frosted-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-4px);
+}
+
+.frosted-card h2 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.frosted-card .subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.frosted-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 15px;
+    line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="frosted-card">
+    <h2>Analytics</h2>
+    <p class="subtitle">Real-time dashboard</p>
+    <p>Beautiful frosted glass effect with subtle transparency and blur.</p>
+</div>
+
+</body>
+</html>
