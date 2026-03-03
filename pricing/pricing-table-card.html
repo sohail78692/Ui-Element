@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pricing Table Card UI Component">
+<title>Pricing Table Card</title>
+<style>
+body {
+    background: #0a0a0e;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.pricing-card {
+    width: 280px;
+    padding: 32px;
+    background: #14141c;
+    border-radius: 20px;
+    border: 1px solid #2a2a3a;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.pricing-card:hover {
+    border-color: #8b5cf6;
+    transform: translateY(-4px);
+}
+
+.pricing-card .plan {
+    color: #888;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.pricing-card .price {
+    color: #fff;
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.pricing-card .price span {
+    font-size: 16px;
+    color: #666;
+    font-weight: 400;
+}
+
+.pricing-card .features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    text-align: left;
+}
+
+.pricing-card .features li {
+    color: #888;
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid #222;
+}
+
+.pricing-card .features li::before {
+    content: '✓';
+    color: #22c55e;
+    margin-right: 8px;
+}
+
+.pricing-card .btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.pricing-card .btn:hover {
+    opacity: 0.9;
+}
+</style>
+</head>
+<body>
+
+<div class="pricing-card">
+    <p class="plan">Pro Plan</p>
+    <p class="price">$29<span>/mo</span></p>
+    <ul class="features">
+        <li>Unlimited projects</li>
+        <li>Priority support</li>
+        <li>Advanced analytics</li>
+    </ul>
+    <button class="btn">Get Started</button>
+</div>
+
+</body>
+</html>
