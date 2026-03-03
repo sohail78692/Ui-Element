@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Liquid Morph Input UI Component">
+<title>Liquid Morph Input</title>
+<style>
+body {
+    background: #0d0d0d;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.liquid-input-wrapper {
+    position: relative;
+    width: 320px;
+}
+
+.liquid-input {
+    width: 100%;
+    padding: 18px 24px;
+    background: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.liquid-input::placeholder {
+    color: #666;
+}
+
+.liquid-input:focus {
+    outline: none;
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+.liquid-input-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    border-radius: 2px;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.liquid-input-wrapper:focus-within::after {
+    width: 100%;
+    left: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="liquid-input-wrapper">
+    <input type="text" class="liquid-input" placeholder="Enter your email...">
+</div>
+
+</body>
+</html>
