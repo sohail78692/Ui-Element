@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pulse Ring Button UI Component">
+<title>Pulse Ring Button</title>
+<style>
+body {
+    background: #0c0c10;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.pulse-ring-btn {
+    position: relative;
+    padding: 14px 36px;
+    background: #1a1a28;
+    border: 2px solid #6366f1;
+    color: #818cf8;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: visible;
+    transition: all 0.3s ease;
+}
+
+.pulse-ring-btn:hover {
+    background: #6366f1;
+    color: #fff;
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+}
+
+.pulse-ring-btn .ring {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid #6366f1;
+    border-radius: 10px;
+    animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    opacity: 0;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.15); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<button type="button" class="pulse-ring-btn">
+    <span class="ring"></span>
+    Connect
+</button>
+
+</body>
+</html>
