@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Liquid Morph Card UI Component">
+<title>Liquid Morph Card</title>
+<style>
+body {
+    background: #0a0a0e;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.liquid-morph-card {
+    position: relative;
+    width: 300px;
+    padding: 32px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.liquid-morph-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
+    animation: liquid-rotate 8s linear infinite;
+}
+
+.liquid-morph-card .content {
+    position: relative;
+    z-index: 1;
+}
+
+.liquid-morph-card h3 {
+    margin: 0 0 12px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.liquid-morph-card p {
+    margin: 0;
+    color: #888;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.liquid-morph-card .badge {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 6px 12px;
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 20px;
+    color: #a78bfa;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+@keyframes liquid-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="liquid-morph-card">
+    <div class="content">
+        <span class="badge">Premium</span>
+        <h3>Liquid Morph</h3>
+        <p>A mesmerizing card with flowing liquid animations that create an otherworldly visual experience.</p>
+    </div>
+</div>
+
+</body>
+</html>
