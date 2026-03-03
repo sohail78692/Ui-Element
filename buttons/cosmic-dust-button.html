@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cosmic Dust Button UI Component">
+<title>Cosmic Dust Button</title>
+<style>
+body {
+    background: #0b0b15;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.cosmic-btn {
+    position: relative;
+    padding: 16px 44px;
+    background: linear-gradient(45deg, #1e1e2f, #252540);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0ff;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.cosmic-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 60%);
+    transform: scale(0);
+    transition: transform 0.6s ease;
+}
+
+.cosmic-btn:hover::before {
+    transform: scale(1);
+}
+
+.cosmic-btn:hover {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+    transform: translateY(-2px);
+}
+
+.cosmic-btn span {
+    position: relative;
+    z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<button type="button" class="cosmic-btn">
+    <span>Launch</span>
+</button>
+
+</body>
+</html>
