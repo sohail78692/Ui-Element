@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Stacked Toast Notification UI Component">
+<title>Stacked Toast</title>
+<style>
+body {
+    background: #0f0f14;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #1a1a24;
+    border-radius: 12px;
+    border-left: 4px solid;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    animation: toast-slide 0.3s ease;
+}
+
+@keyframes toast-slide {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.toast.success { border-color: #22c55e; }
+.toast.error { border-color: #ef4444; }
+.toast.warning { border-color: #f59e0b; }
+.toast.info { border-color: #3b82f6; }
+
+.toast .icon {
+    font-size: 18px;
+}
+
+.toast .message {
+    color: #e2e8f0;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="toast success">
+    <span class="icon">✓</span>
+    <span class="message">Settings saved successfully</span>
+</div>
+
+</body>
+</html>
