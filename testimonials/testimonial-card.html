@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Testimonial Card UI Component">
+<title>Testimonial Card</title>
+<style>
+body {
+    background: #0a0a0e;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.testimonial-card {
+    width: 320px;
+    padding: 28px;
+    background: #14141c;
+    border-radius: 16px;
+    border: 1px solid #2a2a3a;
+}
+
+.testimonial-card .quote {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.testimonial-card .author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.testimonial-card .author .avatar {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #f472b6, #fb923c);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.testimonial-card .author .info .name {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.testimonial-card .author .info .role {
+    color: #666;
+    font-size: 12px;
+}
+</style>
+</head>
+<body>
+
+<div class="testimonial-card">
+    <p class="quote">"This product has completely transformed how we work. Absolutely game-changing!"</p>
+    <div class="author">
+        <div class="avatar">SJ</div>
+        <div class="info">
+            <p class="name">Sarah Johnson</p>
+            <p class="role">CEO at TechCorp</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
