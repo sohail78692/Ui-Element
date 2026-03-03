@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Profile Stats Card UI Component">
+<title>Profile Stats Card</title>
+<style>
+body {
+    background: linear-gradient(135deg, #0f0f18, #1a1a28);
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.profile-stats-card {
+    width: 260px;
+    padding: 28px;
+    background: #14141e;
+    border-radius: 20px;
+    border: 1px solid #2a2a3a;
+    text-align: center;
+}
+
+.profile-stats-card .avatar {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #8b5cf6, #f472b6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #fff;
+}
+
+.profile-stats-card h3 {
+    margin: 0 0 4px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.profile-stats-card .role {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.profile-stats-card .stats {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 16px;
+    border-top: 1px solid #2a2a3a;
+}
+
+.profile-stats-card .stat-item {
+    text-align: center;
+}
+
+.profile-stats-card .stat-item .value {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.profile-stats-card .stat-item .label {
+    color: #666;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<div class="profile-stats-card">
+    <div class="avatar">JD</div>
+    <h3>John Doe</h3>
+    <p class="role">Software Engineer</p>
+    <div class="stats">
+        <div class="stat-item">
+            <div class="value">128</div>
+            <div class="label">Posts</div>
+        </div>
+        <div class="stat-item">
+            <div class="value">4.2k</div>
+            <div class="label">Followers</div>
+        </div>
+        <div class="stat-item">
+            <div class="value">892</div>
+            <div class="label">Following</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
