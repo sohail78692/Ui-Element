@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Breadcrumb Navigation UI Component">
+<title>Breadcrumb Navigation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
+
+body {
+    background: #0c0c0f;
+    padding: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.breadcrumb a,
+.breadcrumb span {
+    color: #52525b;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.breadcrumb a:hover {
+    color: #a1a1aa;
+}
+
+.breadcrumb a:hover::before {
+    color: #71717a;
+}
+
+.breadcrumb span.current {
+    color: #e4e4e7;
+    cursor: default;
+}
+
+.breadcrumb .separator {
+    color: #3f3f46;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb .icon {
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <a href="#" class="icon">🏠</a>
+    <span class="separator">›</span>
+    <a href="#">Products</a>
+    <span class="separator">›</span>
+    <a href="#">Electronics</a>
+    <span class="separator">›</span>
+    <a href="#">Smartphones</a>
+    <span class="separator">›</span>
+    <span class="current">iPhone 15 Pro</span>
+</nav>
+
+</body>
+</html>
