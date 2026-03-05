@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hover Reveal Card UI Component">
+<title>Hover Reveal Card</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+
+body {
+    background: #0c0c10;
+    padding: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Sora', sans-serif;
+}
+
+.hover-reveal-card {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    border-radius: 24px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.hover-reveal-card .front {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1e1e2e 0%, #0f0f18 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-reveal-card .front .icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.hover-reveal-card .front h3 {
+    color: #fff;
+    font-size: 22px;
+    margin: 0;
+}
+
+.hover-reveal-card .front p {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 8px 0 0;
+}
+
+.hover-reveal-card .back {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px;
+    transform: translateY(100%);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-reveal-card .back h3 {
+    color: #fff;
+    font-size: 24px;
+    margin: 0 0 16px;
+}
+
+.hover-reveal-card .back p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.hover-reveal-card .back .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #fff;
+    color: #ef4444;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    width: fit-content;
+    transition: transform 0.3s ease;
+}
+
+.hover-reveal-card .back .btn:hover {
+    transform: scale(1.05);
+}
+
+.hover-reveal-card:hover .front {
+    transform: translateY(-30%);
+    opacity: 0;
+}
+
+.hover-reveal-card:hover .back {
+    transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="hover-reveal-card">
+    <div class="front">
+        <div class="icon">🔥</div>
+        <h3>Hot Deal</h3>
+        <p>Hover to reveal</p>
+    </div>
+    <div class="back">
+        <h3>Limited Offer</h3>
+        <p>Get 50% off on premium plans. Offer valid for the next 24 hours only.</p>
+        <a href="#" class="btn">Claim Now →</a>
+    </div>
+</div>
+
+</body>
+</html>
