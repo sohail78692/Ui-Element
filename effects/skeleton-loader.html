@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Skeleton Loader UI Component">
+<title>Skeleton Loader</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+body {
+    background: #09090b;
+    padding: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.skeleton-card {
+    width: 320px;
+    background: #18181b;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #27272a 25%, #3f3f46 50%, #27272a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+.skeleton.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    float: left;
+}
+
+.skeleton.header {
+    height: 20px;
+    width: 60%;
+    margin-left: 64px;
+    margin-bottom: 12px;
+}
+
+.skeleton.sub {
+    height: 14px;
+    width: 40%;
+    margin-left: 64px;
+    margin-bottom: 20px;
+}
+
+.skeleton.image {
+    width: 100%;
+    height: 160px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+}
+
+.skeleton.text {
+    height: 12px;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.skeleton.text-short {
+    height: 12px;
+    width: 70%;
+    margin-bottom: 16px;
+}
+
+.skeleton.button {
+    height: 40px;
+    width: 120px;
+    float: right;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="skeleton-card">
+    <div class="skeleton image"></div>
+    <div class="skeleton avatar"></div>
+    <div class="skeleton header"></div>
+    <div class="skeleton sub"></div>
+    <div class="skeleton text"></div>
+    <div class="skeleton text"></div>
+    <div class="skeleton text-short"></div>
+    <div class="skeleton button"></div>
+</div>
+
+</body>
+</html>
