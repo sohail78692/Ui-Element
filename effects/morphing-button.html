@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Morphing Button UI Component">
+<title>Morphing Button</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap');
+
+body {
+    background: #0f0f12;
+    padding: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+}
+
+.morphing-btn {
+    position: relative;
+    padding: 16px 48px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+}
+
+.morphing-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.morphing-btn:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 15px 50px rgba(102, 126, 234, 0.6);
+    border-radius: 20px;
+}
+
+.morphing-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.morphing-btn .icon {
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.morphing-btn:hover .icon {
+    transform: translateX(5px);
+}
+
+.morphing-btn span {
+    position: relative;
+    z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<button class="morphing-btn">
+    <span>Explore Now <span class="icon">→</span></span>
+</button>
+
+</body>
+</html>
