@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Animated Toggle Switch UI Component">
+<title>Animated Toggle Switch</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@500;600&display=swap');
+
+body {
+    background: #0c0c0f;
+    padding: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    gap: 32px;
+    font-family: 'Figtree', sans-serif;
+    flex-direction: column;
+}
+
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.toggle-wrapper span {
+    color: #a1a1aa;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.toggle-wrapper.active span {
+    color: #fff;
+}
+
+.toggle {
+    position: relative;
+    width: 56px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle .slider {
+    position: absolute;
+    inset: 0;
+    background: #27272a;
+    border-radius: 30px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid #3f3f46;
+}
+
+.toggle .slider::before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: #71717a;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle input:checked + .slider {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    border-color: #8b5cf6;
+}
+
+.toggle input:checked + .slider::before {
+    transform: translateX(26px);
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+}
+
+.toggle-wrapper.active .toggle .slider {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+</style>
+</head>
+<body>
+
+<div class="toggle-wrapper">
+    <span>Dark Mode</span>
+    <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+    </label>
+</div>
+
+<div class="toggle-wrapper">
+    <span>Notifications</span>
+    <label class="toggle">
+        <input type="checkbox">
+        <span class="slider"></span>
+    </label>
+</div>
+
+<div class="toggle-wrapper active">
+    <span>Active</span>
+    <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+    </label>
+</div>
+
+</body>
+</html>
