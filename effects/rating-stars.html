@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive Rating Stars UI Component">
+<title>Interactive Rating Stars</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&display=swap');
+
+body {
+    background: #0a0a0c;
+    padding: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.rating-container {
+    text-align: center;
+}
+
+.rating-container h2 {
+    color: #f4f4f5;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.rating-container p {
+    color: #71717a;
+    font-size: 14px;
+    margin-bottom: 32px;
+}
+
+.stars {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.star {
+    font-size: 40px;
+    cursor: pointer;
+    color: #3f3f46;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.star:hover {
+    transform: scale(1.15);
+}
+
+.star.active,
+.star.hover {
+    color: #fbbf24;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+}
+
+.rating-value {
+    color: #fbbf24;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.rating-count {
+    color: #52525b;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="rating-container">
+    <h2>Rate Your Experience</h2>
+    <p>Click a star to rate</p>
+    
+    <div class="stars">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+    </div>
+    
+    <div class="rating-value">4.2</div>
+    <div class="rating-count">Based on 128 reviews</div>
+</div>
+
+<script>
+const stars = document.querySelectorAll('.star');
+let currentRating = 4;
+
+function updateStars(rating, isHover = false) {
+    stars.forEach((star, index) => {
+        star.classList.remove('active', 'hover');
+        if (index < rating) {
+            star.classList.add(isHover ? 'hover' : 'active');
+        }
+    });
+}
+
+stars.forEach(star => {
+    star.addEventListener('mouseover', () => {
+        updateStars(parseInt(star.dataset.value), true);
+    });
+    
+    star.addEventListener('mouseout', () => {
+        updateStars(currentRating, false);
+    });
+    
+    star.addEventListener('click', () => {
+        currentRating = parseInt(star.dataset.value);
+        updateStars(currentRating, false);
+        document.querySelector('.rating-value').textContent = currentRating + '.0';
+    });
+});
+
+updateStars(currentRating, false);
+</script>
+
+</body>
+</html>
