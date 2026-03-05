@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Scroll Progress Bar UI Component">
+<title>Scroll Progress Bar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0d0d10;
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 200vh;
+    padding: 60px;
+}
+
+.scroll-progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #1a1a22;
+    z-index: 1000;
+}
+
+.scroll-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #f43f5e 0%, #f97316 50%, #eab308 100%);
+    transition: width 0.1s ease;
+    box-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
+}
+
+.content {
+    padding-top: 40px;
+}
+
+.content h1 {
+    color: #f4f4f5;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.content p {
+    color: #71717a;
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 600px;
+}
+
+.scroll-indicator {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.scroll-indicator span {
+    color: #52525b;
+    font-size: 11px;
+    font-weight: 500;
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress-container">
+    <div class="scroll-progress-bar" id="progressBar"></div>
+</div>
+
+<div class="content">
+    <h1>Scroll Progress Bar</h1>
+    <p>Scroll down to see the progress bar fill up. The bar stays fixed at the top of the viewport and indicates how far you've scrolled through the page. It features a vibrant gradient with a subtle glow effect.</p>
+    <p style="margin-top: 20px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+    <p style="margin-top: 20px;">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+    <p style="margin-top: 20px;">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+    <p style="margin-top: 20px;">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+    <p style="margin-top: 20px;">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt.</p>
+    <p style="margin-top: 20px;">Ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</p>
+    <p style="margin-top: 20px;">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores.</p>
+    <p style="margin-top: 20px;">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit.</p>
+    <p style="margin-top: 20px;">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
+    <p style="margin-top: 20px;">Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>
+</div>
+
+<div class="scroll-indicator">
+    <span id="scrollPercent">0%</span>
+</div>
+
+<script>
+const progressBar = document.getElementById('progressBar');
+const scrollPercent = document.getElementById('scrollPercent');
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    
+    progressBar.style.width = scrollPercent + '%';
+    document.getElementById('scrollPercent').textContent = Math.round(scrollPercent) + '%';
+});
+</script>
+
+</body>
+</html>
