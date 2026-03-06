@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Orbit Loader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a12;
+        }
+
+        .orbit-loader {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .orbit-loader .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8), 0 0 60px rgba(118, 75, 162, 0.4);
+            z-index: 10;
+        }
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate linear infinite;
+        }
+
+        .orbit:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            animation-duration: 3s;
+        }
+
+        .orbit:nth-child(2) {
+            width: 100px;
+            height: 100px;
+            animation-duration: 5s;
+            animation-direction: reverse;
+        }
+
+        .orbit:nth-child(3) {
+            width: 140px;
+            height: 140px;
+            animation-duration: 7s;
+        }
+
+        .orbit:nth-child(4) {
+            width: 180px;
+            height: 180px;
+            animation-duration: 9s;
+            animation-direction: reverse;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .orbit .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .orbit:nth-child(1) .particle {
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #667eea;
+        }
+
+        .orbit:nth-child(2) .particle {
+            top: 50%;
+            right: -4px;
+            transform: translateY(-50%);
+            background: #764ba2;
+        }
+
+        .orbit:nth-child(3) .particle {
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00ccff;
+        }
+
+        .orbit:nth-child(4) .particle {
+            top: 50%;
+            left: -4px;
+            transform: translateY(-50%);
+            background: #ff00cc;
+        }
+
+        .orbit:nth-child(1) {
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+
+        .orbit:nth-child(2) {
+            border-color: rgba(118, 75, 162, 0.4);
+        }
+
+        .orbit:nth-child(3) {
+            border-color: rgba(0, 204, 255, 0.4);
+        }
+
+        .orbit:nth-child(4) {
+            border-color: rgba(255, 0, 204, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="orbit-loader">
+        <div class="center"></div>
+        <div class="orbit"><div class="particle"></div></div>
+        <div class="orbit"><div class="particle"></div></div>
+        <div class="orbit"><div class="particle"></div></div>
+        <div class="orbit"><div class="particle"></div></div>
+    </div>
+</body>
+</html>
