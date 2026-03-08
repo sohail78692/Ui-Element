@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="File Folder Tree UI Component">
+<title>File Folder Tree</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0d1117;
+    padding: 40px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.tree {
+    width: 320px;
+}
+
+.folder, .file {
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.folder {
+    color: #e6edf3;
+}
+
+.file {
+    color: #8b949e;
+    padding-left: 40px;
+}
+
+.folder:hover, .file:hover {
+    background: rgba(110, 118, 129, 0.15);
+}
+
+.icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.folder-icon { color: #54aeff; }
+.folder-icon.open { color: #f0883e; }
+.file-icon { color: #8b949e; }
+.file-icon.js { color: #f7df1e; }
+.file-icon.css { color: #264de4; }
+.file-icon.html { color: #e34c26; }
+.file-icon.json { color: #cbcb41; }
+
+.nested {
+    display: none;
+    margin-left: 20px;
+}
+
+.nested.show {
+    display: block;
+}
+
+.arrow {
+    transition: transform 0.2s ease;
+    font-size: 10px;
+}
+
+.folder.active .arrow {
+    transform: rotate(90deg);
+}
+
+.folder.active > .nested {
+    display: block;
+}
+
+.count {
+    margin-left: auto;
+    font-size: 11px;
+    color: #6e7681;
+    background: rgba(110, 118, 129, 0.2);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="tree">
+    <div class="folder active" onclick="this.classList.toggle('active')">
+        <span class="icon arrow">▶</span>
+        <span class="icon folder-icon">📁</span>
+        <span>src</span>
+        <span class="count">3</span>
+        <div class="nested">
+            <div class="folder" onclick="event.stopPropagation(); this.classList.toggle('active')">
+                <span class="icon arrow">▶</span>
+                <span class="icon folder-icon">📁</span>
+                <span>components</span>
+                <div class="nested">
+                    <div class="file">
+                        <span class="icon file-icon js">JS</span>
+                        <span>Button.jsx</span>
+                    </div>
+                    <div class="file">
+                        <span class="icon file-icon js">JS</span>
+                        <span>Modal.jsx</span>
+                    </div>
+                </div>
+            </div>
+            <div class="file">
+                <span class="icon file-icon js">JS</span>
+                <span>index.js</span>
+            </div>
+            <div class="file">
+                <span class="icon file-icon css">CSS</span>
+                <span>styles.css</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="folder" onclick="this.classList.toggle('active')">
+        <span class="icon arrow">▶</span>
+        <span class="icon folder-icon">📁</span>
+        <span>public</span>
+        <div class="nested">
+            <div class="file">
+                <span class="icon file-icon html">HTML</span>
+                <span>index.html</span>
+            </div>
+            <div class="file">
+                <span class="icon file-icon">📄</span>
+                <span>favicon.ico</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="file">
+        <span class="icon file-icon json">JSON</span>
+        <span>package.json</span>
+    </div>
+    
+    <div class="file">
+        <span class="icon file-icon md">📄</span>
+        <span>README.md</span>
+    </div>
+</div>
+
+</body>
+</html>
