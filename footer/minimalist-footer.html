@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Minimalist Footer UI Component">
+<title>Minimalist Footer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #fafafa;
+    font-family: 'Inter', sans-serif;
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    padding: 40px 60px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.brand-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+}
+
+.links {
+    display: flex;
+    gap: 32px;
+}
+
+.links a {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.links a:hover {
+    color: #111;
+}
+
+.social {
+    display: flex;
+    gap: 16px;
+}
+
+.social a {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.social a:hover {
+    background: #6366f1;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.bottom {
+    border-top: 1px solid #e5e7eb;
+    margin-top: 32px;
+    padding-top: 24px;
+    text-align: center;
+}
+
+.copyright {
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.copyright a {
+    color: #6366f1;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    footer {
+        padding: 32px 24px;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 24px;
+    }
+    
+    .links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="content"></div>
+
+<footer>
+    <div class="footer-content">
+        <div class="brand">
+            <div class="logo">U</div>
+            <span class="brand-name">UI Elements</span>
+        </div>
+        
+        <nav class="links">
+            <a href="#">About</a>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">Contact</a>
+        </nav>
+        
+        <div class="social">
+            <a href="#" aria-label="Twitter">𝕏</a>
+            <a href="#" aria-label="GitHub">⬡</a>
+            <a href="#" aria-label="LinkedIn">in</a>
+        </div>
+    </div>
+    
+    <div class="bottom">
+        <p class="copyright">© 2026 <a href="#">UI Elements</a>. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
