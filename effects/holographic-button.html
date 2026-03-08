@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Holographic Button UI Component">
+<title>Holographic Button</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap');
+
+body {
+    background: #08080c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.holo-btn {
+    position: relative;
+    padding: 18px 48px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.holo-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255,255,255,0.3), 
+        transparent);
+    transition: left 0.5s ease;
+}
+
+.holo-btn:hover::before {
+    left: 100%;
+}
+
+.holo-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    padding: 2px;
+    background: linear-gradient(135deg, 
+        rgba(236, 72, 153, 0.8), 
+        rgba(168, 85, 247, 0.8), 
+        rgba(99, 102, 241, 0.8));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.holo-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 40px rgba(168, 85, 247, 0.3);
+}
+
+.holo-btn:hover::after {
+    opacity: 1;
+}
+
+.holo-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.icon-arrow {
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.holo-btn:hover .icon-arrow {
+    transform: translateX(4px);
+}
+</style>
+</head>
+<body>
+
+<button class="holo-btn">
+    <span>Explore Now <span class="icon-arrow">→</span></span>
+</button>
+
+</body>
+</html>
