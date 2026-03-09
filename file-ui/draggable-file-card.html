@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Draggable File Card UI Component">
+<title>Draggable File Card</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #0f0f14;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.drag-file {
+    width: 240px;
+    padding: 20px;
+    background: #1a1a24;
+    border-radius: 16px;
+    cursor: grab;
+    transition: all 0.3s ease;
+    border: 1px solid #2a2a3a;
+    position: relative;
+}
+
+.drag-file:hover {
+    border-color: #6366f1;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.2);
+}
+
+.drag-file:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+}
+
+.drag-file .icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 14px;
+}
+
+.drag-file .name {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.drag-file .meta {
+    color: #666;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.drag-file .size {
+    color: #6366f1;
+    font-weight: 500;
+}
+
+.drag-file .drag-hint {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: #444;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.drag-file:hover .drag-hint {
+    opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="drag-file">
+    <div class="drag-hint">⋮⋮</div>
+    <div class="icon">📄</div>
+    <div class="name">project-specs.pdf</div>
+    <div class="meta">
+        <span class="size">2.4 MB</span>
+        <span>•</span>
+        <span>2 days ago</span>
+    </div>
+</div>
+
+</body>
+</html>
