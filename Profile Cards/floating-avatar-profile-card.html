@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Floating Avatar Profile Card">
+<title>Floating Avatar Profile Card</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #121218;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.float-profile {
+    width: 280px;
+    padding: 32px 24px;
+    background: linear-gradient(145deg, #1a1a24, #14141c);
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.float-profile .avatar-wrap {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 20px;
+    position: relative;
+}
+
+.float-profile .avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f472b6, #c084fc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: #fff;
+    animation: float 3s ease-in-out infinite;
+    box-shadow: 0 8px 25px rgba(244, 114, 182, 0.4);
+}
+
+.float-profile .avatar::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(244, 114, 182, 0.5);
+    animation: pulse-ring 2s ease-out infinite;
+}
+
+.float-profile h3 {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.float-profile .title {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.float-profile .stats {
+    display: flex;
+    justify-content: center;
+    gap: 24-profile .stat {
+px;
+}
+
+.float    text-align: center;
+}
+
+.float-profile .stat-value {
+    color: #f472b6;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.float-profile .stat-label {
+    color: #666;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.3); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="float-profile">
+    <div class="avatar-wrap">
+        <div class="avatar">👤</div>
+    </div>
+    <h3>Alex Morgan</h3>
+    <p class="title">Product Designer</p>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">2.4k</div>
+            <div class="stat-label">Followers</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">892</div>
+            <div class="stat-label">Following</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">156</div>
+            <div class="stat-label">Posts</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
