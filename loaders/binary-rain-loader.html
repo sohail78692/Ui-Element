@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Rain Loader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            font-family: 'Share Tech Mono', monospace;
+            overflow: hidden;
+        }
+
+        .binary-container {
+            position: relative;
+            width: 150px;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .binary-column {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            line-height: 1.2;
+            animation: fall linear infinite;
+        }
+
+        .binary-column:nth-child(1) {
+            left: 0;
+            animation-duration: 2s;
+            animation-delay: 0s;
+        }
+
+        .binary-column:nth-child(2) {
+            left: 30px;
+            animation-duration: 2.5s;
+            animation-delay: 0.3s;
+        }
+
+        .binary-column:nth-child(3) {
+            left: 60px;
+            animation-duration: 1.8s;
+            animation-delay: 0.6s;
+        }
+
+        .binary-column:nth-child(4) {
+            left: 90px;
+            animation-duration: 2.2s;
+            animation-delay: 0.9s;
+        }
+
+        .binary-column:nth-child(5) {
+            left: 120px;
+            animation-duration: 2s;
+            animation-delay: 1.2s;
+        }
+
+        .binary-column:nth-child(1) span { color: #0f0; text-shadow: 0 0 10px #0f0; }
+        .binary-column:nth-child(2) span { color: #0f0; text-shadow: 0 0 10px #0f0; }
+        .binary-column:nth-child(3) span { color: #0f0; text-shadow: 0 0 10px #0f0; }
+        .binary-column:nth-child(4) span { color: #0f0; text-shadow: 0 0 10px #0f0; }
+        .binary-column:nth-child(5) span { color: #0f0; text-shadow: 0 0 10px #0f0; }
+
+        .binary-column:nth-child(even) span:nth-child(odd) {
+            color: #00ff00;
+        }
+
+        .binary-column:nth-child(odd) span:nth-child(even) {
+            color: #00aa00;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(300px);
+                opacity: 0;
+            }
+        }
+
+        .glitch-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 2px,
+                    rgba(0, 255, 0, 0.03) 4px
+                );
+            pointer-events: none;
+            animation: scanline 0.1s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+
+        .matrix-frame {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #0f0;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3), inset 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .matrix-frame::before,
+        .matrix-frame::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 2px solid #0f0;
+        }
+
+        .matrix-frame::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .matrix-frame::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .loading-text {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #0f0;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #0f0;
+            white-space: nowrap;
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: #0f0;
+            animation: blink 0.8s step-end infinite;
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .signal-bar {
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .signal-bar span {
+            width: 20px;
+            height: 4px;
+            background: #0f0;
+            box-shadow: 0 0 5px #0f0;
+            animation: signalPulse 0.5s ease-in-out infinite;
+        }
+
+        .signal-bar span:nth-child(1) { width: 8px; animation-delay: 0s; }
+        .signal-bar span:nth-child(2) { width: 12px; animation-delay: 0.1s; }
+        .signal-bar span:nth-child(3) { width: 16px; animation-delay: 0.2s; }
+        .signal-bar span:nth-child(4) { width: 20px; animation-delay: 0.3s; }
+
+        @keyframes signalPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="binary-container">
+        <div class="matrix-frame"></div>
+        <div class="glitch-overlay"></div>
+        
+        <div class="binary-column">
+            <span>1</span><span>0</span><span>1</span><span>1</span><span>0</span><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span>
+        </div>
+        <div class="binary-column">
+            <span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span><span>0</span><span>0</span>
+        </div>
+        <div class="binary-column">
+            <span>1</span><span>1</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span><span>1</span><span>1</span>
+        </div>
+        <div class="binary-column">
+            <span>0</span><span>0</span><span>1</span><span>0</span><span>1</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span>
+        </div>
+        <div class="binary-column">
+            <span>1</span><span>0</span><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span>
+        </div>
+        
+        <div class="signal-bar">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <div class="loading-text">
+            DECODING<span class="cursor-blink"></span>
+        </div>
+    </div>
+</body>
+
+</html>
