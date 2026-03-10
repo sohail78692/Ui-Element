@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Wave Loader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0f0f0f;
+            font-family: 'Chakra Petch', sans-serif;
+            overflow: hidden;
+        }
+
+        .grid-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            perspective: 800px;
+        }
+
+        .grid {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 4px;
+            transform: rotateX(60deg);
+            animation: gridWave 2s ease-in-out infinite;
+        }
+
+        .cell {
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .cell.active {
+            background: #e94560;
+            box-shadow: 0 0 15px #e94560;
+        }
+
+        .grid .cell:nth-child(1) { animation: cellPulse 1.2s ease-in-out infinite; }
+        .grid .cell:nth-child(2) { animation: cellPulse 1.2s ease-in-out 0.1s infinite; }
+        .grid .cell:nth-child(3) { animation: cellPulse 1.2s ease-in-out 0.2s infinite; }
+        .grid .cell:nth-child(4) { animation: cellPulse 1.2s ease-in-out 0.3s infinite; }
+        .grid .cell:nth-child(5) { animation: cellPulse 1.2s ease-in-out 0.4s infinite; }
+        .grid .cell:nth-child(6) { animation: cellPulse 1.2s ease-in-out 0.15s infinite; }
+        .grid .cell:nth-child(7) { animation: cellPulse 1.2s ease-in-out 0.25s infinite; }
+        .grid .cell:nth-child(8) { animation: cellPulse 1.2s ease-in-out 0.35s infinite; }
+        .grid .cell:nth-child(9) { animation: cellPulse 1.2s ease-in-out 0.45s infinite; }
+        .grid .cell:nth-child(10) { animation: cellPulse 1.2s ease-in-out 0.55s infinite; }
+        .grid .cell:nth-child(11) { animation: cellPulse 1.2s ease-in-out 0.2s infinite; }
+        .grid .cell:nth-child(12) { animation: cellPulse 1.2s ease-in-out 0.3s infinite; }
+        .grid .cell:nth-child(13) { animation: cellPulse 1.2s ease-in-out 0.4s infinite; }
+        .grid .cell:nth-child(14) { animation: cellPulse 1.2s ease-in-out 0.5s infinite; }
+        .grid .cell:nth-child(15) { animation: cellPulse 1.2s ease-in-out 0.6s infinite; }
+        .grid .cell:nth-child(16) { animation: cellPulse 1.2s ease-in-out 0.25s infinite; }
+        .grid .cell:nth-child(17) { animation: cellPulse 1.2s ease-in-out 0.35s infinite; }
+        .grid .cell:nth-child(18) { animation: cellPulse 1.2s ease-in-out 0.45s infinite; }
+        .grid .cell:nth-child(19) { animation: cellPulse 1.2s ease-in-out 0.55s infinite; }
+        .grid .cell:nth-child(20) { animation: cellPulse 1.2s ease-in-out 0.65s infinite; }
+        .grid .cell:nth-child(21) { animation: cellPulse 1.2s ease-in-out 0.3s infinite; }
+        .grid .cell:nth-child(22) { animation: cellPulse 1.2s ease-in-out 0.4s infinite; }
+        .grid .cell:nth-child(23) { animation: cellPulse 1.2s ease-in-out 0.5s infinite; }
+        .grid .cell:nth-child(24) { animation: cellPulse 1.2s ease-in-out 0.6s infinite; }
+        .grid .cell:nth-child(25) { animation: cellPulse 1.2s ease-in-out 0.7s infinite; }
+
+        @keyframes cellPulse {
+            0%, 100% {
+                background: #1a1a2e;
+                box-shadow: none;
+            }
+            50% {
+                background: #e94560;
+                box-shadow: 0 0 15px #e94560;
+            }
+        }
+
+        @keyframes gridWave {
+            0%, 100% {
+                transform: rotateX(60deg) rotateZ(0deg);
+            }
+            50% {
+                transform: rotateX(60deg) rotateZ(180deg);
+            }
+        }
+
+        .floating-ring {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border: 2px solid transparent;
+            border-top-color: #0f3460;
+            border-right-color: #e94560;
+            border-radius: 50%;
+            animation: ringSpin 3s linear infinite;
+        }
+
+        .floating-ring::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid transparent;
+            border-top-color: #16213e;
+            border-bottom-color: #e94560;
+            border-radius: 50%;
+            animation: ringSpin 2s linear infinite reverse;
+        }
+
+        @keyframes ringSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+            animation: scanMove 2s linear infinite;
+        }
+
+        @keyframes scanMove {
+            0% { top: -100%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .loading-text {
+            position: absolute;
+            bottom: -50px;
+            color: #e94560;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: textFlicker 0.5s ease-in-out infinite;
+        }
+
+        @keyframes textFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="floating-ring"></div>
+        <div class="scan-line"></div>
+        <div class="grid">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+        <div class="loading-text">Processing Data</div>
+    </div>
+</body>
+
+</html>
