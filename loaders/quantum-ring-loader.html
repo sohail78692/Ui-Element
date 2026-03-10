@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Ring Loader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0f;
+            font-family: 'Exo 2', sans-serif;
+            overflow: hidden;
+        }
+
+        .quantum-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .quantum-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #fff 0%, #00d4ff 50%, transparent 70%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 20px #00d4ff,
+                0 0 40px #00d4ff,
+                0 0 60px #0099ff;
+            animation: coreGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes coreGlow {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 
+                    0 0 20px #00d4ff,
+                    0 0 40px #00d4ff,
+                    0 0 60px #0099ff;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.3);
+                box-shadow: 
+                    0 0 30px #00d4ff,
+                    0 0 60px #00d4ff,
+                    0 0 90px #0099ff,
+                    0 0 120px #0066ff;
+            }
+        }
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px solid;
+            border-radius: 50%;
+            animation: orbitSpin linear infinite;
+        }
+
+        .orbit-1 {
+            width: 60px;
+            height: 60px;
+            transform: translate(-50%, -50%);
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px #00d4ff;
+            animation-duration: 2s;
+        }
+
+        .orbit-2 {
+            width: 100px;
+            height: 100px;
+            transform: translate(-50%, -50%) rotateX(60deg);
+            border-color: #ff00ff;
+            box-shadow: 0 0 10px #ff00ff;
+            animation-duration: 3s;
+            animation-direction: reverse;
+        }
+
+        .orbit-3 {
+            width: 140px;
+            height: 140px;
+            transform: translate(-50%, -50%) rotateY(60deg);
+            border-color: #ffff00;
+            box-shadow: 0 0 10px #ffff00;
+            animation-duration: 4s;
+        }
+
+        .electron {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        .orbit-1 .electron {
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00d4ff;
+            box-shadow: 0 0 15px #00d4ff;
+        }
+
+        .orbit-2 .electron {
+            top: 50%;
+            right: -4px;
+            transform: translateY(-50%);
+            background: #ff00ff;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+
+        .orbit-3 .electron {
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffff00;
+            box-shadow: 0 0 15px #ffff00;
+        }
+
+        @keyframes orbitSpin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #00d4ff;
+            border-radius: 50%;
+            animation: particleOrbit 4s linear infinite;
+        }
+
+        .particle:nth-child(7) {
+            animation-delay: 0s;
+            top: 10%;
+            left: 50%;
+        }
+
+        .particle:nth-child(8) {
+            animation-delay: -1s;
+            background: #ff00ff;
+        }
+
+        .particle:nth-child(9) {
+            animation-delay: -2s;
+            background: #ffff00;
+        }
+
+        .particle:nth-child(10) {
+            animation-delay: -3s;
+        }
+
+        @keyframes particleOrbit {
+            0% {
+                transform: rotate(0deg) translateX(70px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) translateX(70px) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+
+        .quantum-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 160px;
+            height: 160px;
+            border: 2px dashed rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            animation: ringPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes ringPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
+        }
+
+        .status-text {
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00d4ff;
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-text span {
+            display: inline-block;
+            animation: textWave 1.5s ease-in-out infinite;
+        }
+
+        .status-text span:nth-child(1) { animation-delay: 0s; }
+        .status-text span:nth-child(2) { animation-delay: 0.15s; }
+        .status-text span:nth-child(3) { animation-delay: 0.3s; }
+        .status-text span:nth-child(4) { animation-delay: 0.45s; }
+        .status-text span:nth-child(5) { animation-delay: 0.6s; }
+        .status-text span:nth-child(6) { animation-delay: 0.75s; }
+        .status-text span:nth-child(7) { animation-delay: 0.9s; }
+
+        @keyframes textWave {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translateY(-5px);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quantum-container">
+        <div class="quantum-ring"></div>
+        <div class="orbit orbit-1">
+            <div class="electron"></div>
+        </div>
+        <div class="orbit orbit-2">
+            <div class="electron"></div>
+        </div>
+        <div class="orbit orbit-3">
+            <div class="electron"></div>
+        </div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="quantum-core"></div>
+        
+        <div class="status-text">
+            <span>Q</span><span>U</span><span>A</span><span>N</span><span>T</span><span>U</span><span>M</span>
+        </div>
+    </div>
+</body>
+
+</html>
