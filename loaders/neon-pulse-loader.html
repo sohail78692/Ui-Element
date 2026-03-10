@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Pulse Loader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d1a;
+            font-family: 'Rajdhani', sans-serif;
+            overflow: hidden;
+        }
+
+        .pulse-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .core-ring {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00fff2, #ff00ff);
+            animation: corePulse 1.5s ease-in-out infinite;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid #00fff2;
+            animation: pulseExpand 2s ease-out infinite;
+        }
+
+        .pulse-ring:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+        }
+
+        .pulse-ring:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            border-color: #ff00ff;
+            animation-delay: 0.5s;
+        }
+
+        .pulse-ring:nth-child(4) {
+            width: 60px;
+            height: 60px;
+            border-color: #ffff00;
+            animation-delay: 1s;
+        }
+
+        .pulse-ring:nth-child(5) {
+            width: 60px;
+            height: 60px;
+            border-color: #00ff00;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes corePulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px #00fff2, 0 0 40px #ff00ff;
+            }
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 0 40px #00fff2, 0 0 80px #ff00ff;
+            }
+        }
+
+        @keyframes pulseExpand {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(4);
+                opacity: 0;
+            }
+        }
+
+        .neon-bar {
+            position: absolute;
+            bottom: -60px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 6px;
+            height: 30px;
+            background: linear-gradient(to top, #00fff2, #ff00ff);
+            border-radius: 3px;
+            animation: barPulse 1s ease-in-out infinite;
+        }
+
+        .bar:nth-child(1) { animation-delay: 0s; }
+        .bar:nth-child(2) { animation-delay: 0.1s; }
+        .bar:nth-child(3) { animation-delay: 0.2s; }
+        .bar:nth-child(4) { animation-delay: 0.3s; }
+        .bar:nth-child(5) { animation-delay: 0.4s; }
+        .bar:nth-child(6) { animation-delay: 0.5s; }
+        .bar:nth-child(7) { animation-delay: 0.6s; }
+
+        @keyframes barPulse {
+            0%, 100% {
+                transform: scaleY(0.4);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        .loading-text {
+            position: absolute;
+            top: -40px;
+            color: #00fff2;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #00fff2;
+            animation: textGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 10px #00fff2;
+            }
+            100% {
+                text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            }
+        }
+
+        .corner-accent {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #00fff2;
+        }
+
+        .corner-accent:nth-child(7) {
+            top: -40px;
+            left: -40px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-accent:nth-child(8) {
+            top: -40px;
+            right: -40px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-accent:nth-child(9) {
+            bottom: -40px;
+            left: -40px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-accent:nth-child(10) {
+            bottom: -40px;
+            right: -40px;
+            border-left: none;
+            border-top: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pulse-container">
+        <div class="corner-accent"></div>
+        <div class="corner-accent"></div>
+        <div class="corner-accent"></div>
+        <div class="corner-accent"></div>
+        <div class="loading-text">Syncing</div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="core-ring"></div>
+        <div class="neon-bar">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+</body>
+
+</html>
