@@ -1,0 +1,4 @@
+# Project Notes
+
+- Keep main code clean
+- Add non-functional commits as needed
