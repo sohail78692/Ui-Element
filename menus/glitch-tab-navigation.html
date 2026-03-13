@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Glitch Tab Navigation UI Component">
+<title>Glitch Tab Navigation</title>
+<style>
+body {
+    background: #0a0a0f;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.glitch-nav {
+    display: flex;
+    gap: 4px;
+    background: #111;
+    padding: 6px;
+    border-radius: 12px;
+}
+
+.glitch-tab {
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.glitch-tab:hover {
+    color: #fff;
+}
+
+.glitch-tab.active {
+    background: #1a1a2e;
+    color: #fff;
+    text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+}
+
+.glitch-tab.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    animation: glitch-line 2s linear infinite;
+}
+
+@keyframes glitch-line {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+</style>
+</head>
+<body>
+
+<nav class="glitch-nav">
+    <button type="button" class="glitch-tab active">Dashboard</button>
+    <button type="button" class="glitch-tab">Analytics</button>
+    <button type="button" class="glitch-tab">Settings</button>
+    <button type="button" class="glitch-tab">Profile</button>
+</nav>
+
+</body>
+</html>
