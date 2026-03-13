@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Holographic Card UI Component">
+<title>Holographic Card</title>
+<style>
+body {
+    background: #1a1a2e;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.holo-card {
+    position: relative;
+    width: 320px;
+    height: 200px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.holo-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 0, 128, 0.3) 40%,
+        rgba(0, 255, 255, 0.3) 60%,
+        transparent 70%
+    );
+    animation: holo-shimmer 3s linear infinite;
+    transform: rotate(0deg);
+}
+
+@keyframes holo-shimmer {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.holo-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3);
+}
+
+.holo-content {
+    position: relative;
+    z-index: 1;
+    padding: 30px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-sizing: border-box;
+}
+
+.holo-content h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 24px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.holo-content p {
+    margin: 8px 0 0;
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="holo-card">
+    <div class="holo-content">
+        <h3>Holographic</h3>
+        <p>Shimmering 3D effect</p>
+    </div>
+</div>
+
+</body>
+</html>
