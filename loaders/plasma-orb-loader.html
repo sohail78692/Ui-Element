@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Plasma Orb Loader UI Component">
+<title>Plasma Orb Loader</title>
+<style>
+body {
+    background: #0a0a0f;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.plasma-orb {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ff00ff, #00ffff, #ff00ff);
+    animation: plasma-pulse 1.5s ease-in-out infinite;
+    filter: blur(2px);
+    box-shadow: 
+        0 0 30px #ff00ff,
+        0 0 60px #00ffff,
+        0 0 90px #ff00ff;
+}
+
+@keyframes plasma-pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: blur(2px);
+    }
+    50% {
+        transform: scale(1.2);
+        filter: blur(4px);
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="plasma-orb"></div>
+
+</body>
+</html>
