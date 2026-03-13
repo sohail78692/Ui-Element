@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cyber Toast Notification UI Component">
+<title>Cyber Toast Notification</title>
+<style>
+body {
+    background: #0d0d14;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.cyber-toast {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-left: 4px solid #00ff88;
+    border-radius: 8px;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.2),
+        inset 0 0 30px rgba(0, 255, 136, 0.05);
+    animation: cyber-slide 0.5s ease-out;
+    max-width: 350px;
+}
+
+@keyframes cyber-slide {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.cyber-icon {
+    width: 24px;
+    height: 24px;
+    fill: #00ff88;
+    flex-shrink: 0;
+}
+
+.cyber-content {
+    flex: 1;
+}
+
+.cyber-title {
+    margin: 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cyber-message {
+    margin: 4px 0 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+.cyber-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.cyber-close:hover {
+    color: #fff;
+}
+</style>
+</head>
+<body>
+
+<div class="cyber-toast">
+    <svg class="cyber-icon" viewBox="0 0 24 24">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+    </svg>
+    <div class="cyber-content">
+        <h4 class="cyber-title">System Updated</h4>
+        <p class="cyber-message">All components have been synced successfully.</p>
+    </div>
+    <button class="cyber-close">&times;</button>
+</div>
+
+</body>
+</html>
