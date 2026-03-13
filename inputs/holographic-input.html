@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Holographic Input Field UI Component">
+<title>Holographic Input</title>
+<style>
+body {
+    background: #0f0f1a;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.holo-input-wrapper {
+    position: relative;
+    width: 300px;
+}
+
+.holo-input {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.holo-input::placeholder {
+    color: rgba(0, 255, 255, 0.5);
+}
+
+.holo-input:focus {
+    border-color: #0ff;
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.3),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.holo-label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0, 255, 255, 0.6);
+    font-size: 16px;
+    pointer-events: none;
+    transition: all 0.3s;
+}
+
+.holo-input:focus ~ .holo-label,
+.holo-input:not(:placeholder-shown) ~ .holo-label {
+    top: -10px;
+    left: 15px;
+    font-size: 12px;
+    background: #0f0f1a;
+    padding: 0 5px;
+    color: #0ff;
+}
+</style>
+</head>
+<body>
+
+<div class="holo-input-wrapper">
+    <input type="text" class="holo-input" placeholder=" " id="holo">
+    <label class="holo-label" for="holo">Enter text...</label>
+</div>
+
+</body>
+</html>
