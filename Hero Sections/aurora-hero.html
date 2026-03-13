@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Aurora Hero Section UI Component">
+<title>Aurora Hero Section</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.aurora-hero {
+    min-height: 100vh;
+    background: #0a0a12;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.aurora-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, 
+        rgba(0, 255, 128, 0.15) 0%, 
+        rgba(0, 191, 255, 0.1) 30%, 
+        transparent 70%);
+    animation: aurora-move 15s ease-in-out infinite;
+}
+
+@keyframes aurora-move {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(5%, 5%) rotate(10deg); }
+    66% { transform: translate(-5%, 3%) rotate(-5deg); }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+}
+
+.aurora-hero h1 {
+    font-size: 64px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 24px;
+    background: linear-gradient(135deg, #00ff88, #00bfff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.aurora-hero p {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 40px;
+    line-height: 1.6;
+}
+
+.aurora-cta {
+    display: inline-block;
+    padding: 16px 48px;
+    background: linear-gradient(135deg, #00ff88, #00bfff);
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 50px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.aurora-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+}
+</style>
+</head>
+<body>
+
+<section class="aurora-hero">
+    <div class="hero-content">
+        <h1>Build Something Amazing</h1>
+        <p>Create stunning digital experiences with our modern UI components. Fast, flexible, and beautiful.</p>
+        <a href="#" class="aurora-cta">Get Started</a>
+    </div>
+</section>
+
+</body>
+</html>
