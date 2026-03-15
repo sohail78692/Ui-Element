@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sliding Panel FAQ Accordion">
+  <title>Sliding Panel FAQ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .faq-item {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .faq-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .faq-item.active .faq-panel {
+      max-height: 200px;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .number-badge {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gray-900 p-6">
+
+  <div class="w-full max-w-2xl">
+    <h1 class="text-3xl font-bold text-white text-center mb-8">Frequently Asked Questions</h1>
+
+    <div class="space-y-4">
+      <div class="faq-item bg-gray-800/50 backdrop-blur rounded-2xl overflow-hidden border border-gray-700/50">
+        <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="number-badge w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold">01</span>
+            <span class="text-lg font-medium text-white">What is this product about?</span>
+          </div>
+          <svg class="faq-icon w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-panel">
+          <div class="px-6 pb-6 pl-16 text-gray-400 leading-relaxed">
+            This product is a comprehensive solution designed to help you manage your digital assets efficiently. It provides a seamless experience with modern features and intuitive controls.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item bg-gray-800/50 backdrop-blur rounded-2xl overflow-hidden border border-gray-700/50">
+        <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="number-badge w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold">02</span>
+            <span class="text-lg font-medium text-white">How do I get started?</span>
+          </div>
+          <svg class="faq-icon w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-panel">
+          <div class="px-6 pb-6 pl-16 text-gray-400 leading-relaxed">
+            Simply sign up for an account, and follow our guided onboarding process. You'll be up and running in just a few minutes with access to all features.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item bg-gray-800/50 backdrop-blur rounded-2xl overflow-hidden border border-gray-700/50">
+        <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="number-badge w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold">03</span>
+            <span class="text-lg font-medium text-white">Is there a free trial?</span>
+          </div>
+          <svg class="faq-icon w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-panel">
+          <div class="px-6 pb-6 pl-16 text-gray-400 leading-relaxed">
+            Yes! We offer a 14-day free trial with full access to all features. No credit card required. You can cancel anytime during the trial period.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item bg-gray-800/50 backdrop-blur rounded-2xl overflow-hidden border border-gray-700/50">
+        <button class="faq-trigger w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="number-badge w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold">04</span>
+            <span class="text-lg font-medium text-white">What payment methods do you accept?</span>
+          </div>
+          <svg class="faq-icon w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-panel">
+          <div class="px-6 pb-6 pl-16 text-gray-400 leading-relaxed">
+            We accept all major credit cards, PayPal, and bank transfers. For enterprise customers, we also offer invoice-based billing with NET-30 terms.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.faq-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const item = trigger.parentElement;
+        const isActive = item.classList.contains('active');
+
+        document.querySelectorAll('.faq-item').forEach(faq => {
+          faq.classList.remove('active');
+        });
+
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>
