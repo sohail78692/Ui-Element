@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Magnetic Button that follows cursor">
+  <title>Magnetic Button</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .magnetic-btn {
+      position: relative;
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+    }
+
+    .magnetic-btn::before {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b);
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.3s ease;
+      filter: blur(10px);
+    }
+
+    .magnetic-btn:hover::before {
+      opacity: 0.6;
+      animation: pulse-gradient 1.5s ease infinite;
+    }
+
+    .magnetic-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes pulse-gradient {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .magnetic-btn .icon {
+      transition: transform 0.3s ease;
+    }
+
+    .magnetic-btn:hover .icon {
+      transform: translateX(5px);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gray-950 p-6">
+
+  <button class="magnetic-btn magnetic-element flex items-center gap-3 px-10 py-5 bg-gray-900/80 backdrop-blur-xl rounded-full text-white text-lg font-medium border border-gray-700/50 shadow-2xl">
+    <span>Hover Me</span>
+    <svg class="icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+    </svg>
+  </button>
+
+  <script>
+    const magneticElement = document.querySelector('.magnetic-element');
+    const { innerHeight, innerWidth } = window;
+
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+
+      const centerX = innerWidth / 2;
+      const centerY = innerHeight / 2;
+
+      const deltaX = (x - centerX) / centerX;
+      const deltaY = (y - centerY) / centerY;
+
+      magneticElement.style.transform = `translate(${deltaX * 15}px, ${deltaY * 15}px)`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+      magneticElement.style.transform = 'translate(0, 0)';
+    });
+  </script>
+
+</body>
+
+</html>
