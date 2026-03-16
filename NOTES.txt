@@ -2,3 +2,4 @@
 
 - Keep main code clean
 - Add non-functional commits as needed
+- Version 1.0
