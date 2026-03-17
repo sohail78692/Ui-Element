@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Laser Border Input UI Component">
+    <title>Laser Border Input</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0f;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 40px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 320px;
+        }
+
+        .laser-input {
+            width: 100%;
+            padding: 18px 22px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.4s ease;
+        }
+
+        .laser-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .laser-input:focus {
+            border-color: #00ffc8;
+            background: rgba(0, 255, 200, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 200, 0.2),
+                        inset 0 0 20px rgba(0, 255, 200, 0.05);
+        }
+
+        .laser-border {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 16px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .laser-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffc8, transparent);
+            animation: laser-scan 2s linear infinite;
+        }
+
+        @keyframes laser-scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .laser-input:focus ~ .laser-border {
+            opacity: 1;
+        }
+
+        .input-label {
+            position: absolute;
+            top: 50%;
+            left: 22px;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .laser-input:focus ~ .input-label,
+        .laser-input:not(:placeholder-shown) ~ .input-label {
+            top: -10px;
+            left: 15px;
+            font-size: 12px;
+            color: #00ffc8;
+            background: #0a0a0f;
+            padding: 0 8px;
+        }
+
+        .input-wrapper.secondary .laser-input:focus {
+            border-color: #b464ff;
+            background: rgba(180, 100, 255, 0.05);
+            box-shadow: 0 0 20px rgba(180, 100, 255, 0.2),
+                        inset 0 0 20px rgba(180, 100, 255, 0.05);
+        }
+
+        .input-wrapper.secondary .laser-input:focus ~ .input-label,
+        .input-wrapper.secondary .laser-input:not(:placeholder-shown) ~ .input-label {
+            color: #b464ff;
+        }
+
+        .input-wrapper.secondary .laser-border::before {
+            background: linear-gradient(90deg, transparent, #b464ff, transparent);
+        }
+
+        .input-wrapper.tertiary .laser-input:focus {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.05);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.2),
+                        inset 0 0 20px rgba(255, 107, 107, 0.05);
+        }
+
+        .input-wrapper.tertiary .laser-input:focus ~ .input-label,
+        .input-wrapper.tertiary .laser-input:not(:placeholder-shown) ~ .input-label {
+            color: #ff6b6b;
+        }
+
+        .input-wrapper.tertiary .laser-border::before {
+            background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
+        }
+    </style>
+</head>
+<body>
+    <div class="input-wrapper">
+        <input type="text" class="laser-input" placeholder=" " id="input1">
+        <label for="input1" class="input-label">Username</label>
+        <div class="laser-border"></div>
+    </div>
+
+    <div class="input-wrapper secondary">
+        <input type="email" class="laser-input" placeholder=" " id="input2">
+        <label for="input2" class="input-label">Email Address</label>
+        <div class="laser-border"></div>
+    </div>
+
+    <div class="input-wrapper tertiary">
+        <input type="password" class="laser-input" placeholder=" " id="input3">
+        <label for="input3" class="input-label">Password</label>
+        <div class="laser-border"></div>
+    </div>
+</body>
+</html>
