@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stellar Dust Loader UI Component">
+    <title>Stellar Dust Loader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #050510;
+        }
+
+        .stellar-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .stellar-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #fff 0%, #ffd700 40%, #ff6b35 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 40px #ffd700,
+                        0 0 80px #ff6b35,
+                        0 0 120px rgba(255, 107, 53, 0.5);
+            animation: core-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes core-pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 40px #ffd700, 0 0 80px #ff6b35, 0 0 120px rgba(255, 107, 53, 0.5);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                box-shadow: 0 0 60px #ffd700, 0 0 100px #ff6b35, 0 0 150px rgba(255, 107, 53, 0.7);
+            }
+        }
+
+        .dust {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .dust:nth-child(1) {
+            animation: dust-orbit 3s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        .dust:nth-child(2) {
+            animation: dust-orbit 3s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+
+        .dust:nth-child(3) {
+            animation: dust-orbit 3s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        .dust:nth-child(4) {
+            animation: dust-orbit 3s ease-in-out infinite;
+            animation-delay: 1.5s;
+        }
+
+        .dust:nth-child(5) {
+            animation: dust-orbit 3s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        .dust:nth-child(6) {
+            animation: dust-orbit 3s ease-in-out infinite;
+            animation-delay: 2.5s;
+        }
+
+        @keyframes dust-orbit {
+            0% {
+                transform: rotate(0deg) translateX(80px) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) translateX(80px) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+
+        .ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            animation: ring-expand 4s ease-out infinite;
+        }
+
+        .ring:nth-child(7) {
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+        }
+
+        .ring:nth-child(8) {
+            width: 100px;
+            height: 100px;
+            animation-delay: 1s;
+        }
+
+        .ring:nth-child(9) {
+            width: 140px;
+            height: 140px;
+            animation-delay: 2s;
+        }
+
+        @keyframes ring-expand {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stellar-container">
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="stellar-core"></div>
+    </div>
+</body>
+</html>
