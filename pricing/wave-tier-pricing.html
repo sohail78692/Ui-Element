@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wave Tier Pricing UI Component">
+    <title>Wave Tier Pricing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #080912;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 40px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .pricing-tier {
+            position: relative;
+            width: 280px;
+            background: linear-gradient(180deg, #12121f 0%, #0d0d18 100%);
+            border-radius: 24px;
+            padding: 40px 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-tier:hover {
+            transform: translateY(-10px);
+        }
+
+        .wave-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(180deg, var(--wave-color) 0%, transparent 100%);
+            opacity: 0.15;
+        }
+
+        .pricing-tier.cyan { --wave-color: #00d4ff; }
+        .pricing-tier.purple { --wave-color: #a855f7; }
+        .pricing-tier.gold { --wave-color: #fbbf24; }
+
+        .tier-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 6px 14px;
+            background: var(--wave-color);
+            color: #000;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 20px;
+        }
+
+        .tier-name {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 15px;
+        }
+
+        .tier-price {
+            font-size: 52px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .tier-price span {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .tier-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 30px;
+        }
+
+        .tier-features {
+            list-style: none;
+            margin-bottom: 35px;
+        }
+
+        .tier-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tier-features li svg {
+            width: 18px;
+            height: 18px;
+            color: var(--wave-color);
+            flex-shrink: 0;
+        }
+
+        .tier-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            border: 2px solid var(--wave-color);
+            color: var(--wave-color);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tier-btn:hover {
+            background: var(--wave-color);
+            color: #000;
+            box-shadow: 0 0 30px var(--wave-color);
+        }
+
+        .pricing-tier.featured {
+            border: 2px solid var(--wave-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="pricing-tier cyan">
+        <div class="wave-bg"></div>
+        <span class="tier-badge">Basic</span>
+        <div class="tier-name">Starter</div>
+        <div class="tier-price">$19<span>/mo</span></div>
+        <div class="tier-desc">Perfect for individuals</div>
+        <ul class="tier-features">
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                5 Projects
+            </li>
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Basic Support
+            </li>
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                1GB Storage
+            </li>
+        </ul>
+        <button class="tier-btn">Get Started</button>
+    </div>
+
+    <div class="pricing-tier purple featured">
+        <div class="wave-bg"></div>
+        <span class="tier-badge">Popular</span>
+        <div class="tier-name">Pro</div>
+        <div class="tier-price">$49<span>/mo</span></div>
+        <div class="tier-desc">Best for growing teams</div>
+        <ul class="tier-features">
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Unlimited Projects
+            </li>
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Priority Support
+            </li>
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                10GB Storage
+            </li>
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                API Access
+            </li>
+        </ul>
+        <button class="tier-btn">Get Started</button>
+    </div>
+
+    <div class="pricing-tier gold">
+        <div class="wave-bg"></div>
+        <span class="tier-badge">Premium</span>
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-price">$99<span>/mo</span></div>
+        <div class="tier-desc">For large organizations</div>
+        <ul class="tier-features">
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Everything in Pro
+            </li>
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Dedicated Manager
+            </li>
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                100GB Storage
+            </li>
+            <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Custom Integrations
+            </li>
+        </ul>
+        <button class="tier-btn">Contact Sales</button>
+    </div>
+</body>
+</html>
