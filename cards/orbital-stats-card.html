@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Orbital Stats Card UI Component">
+    <title>Orbital Stats Card</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a12;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 40px;
+        }
+
+        .orbital-card {
+            position: relative;
+            width: 300px;
+            padding: 30px;
+            background: linear-gradient(145deg, #12121c 0%, #1a1a28 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .orbital-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 200, 0.1), transparent 30%);
+            animation: orbital-rotate 4s linear infinite;
+        }
+
+        @keyframes orbital-rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .orbital-card .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .orbital-card .title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .orbital-card .value {
+            font-size: 42px;
+            font-weight: 700;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin-bottom: 8px;
+        }
+
+        .orbital-card .change {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: #00ffc8;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .orbital-card .change.negative {
+            color: #ff6b6b;
+        }
+
+        .orbital-card .orbit-ring {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 80px;
+            border: 2px dashed rgba(0, 255, 200, 0.2);
+            border-radius: 50%;
+            animation: orbit-spin 10s linear infinite;
+        }
+
+        @keyframes orbit-spin {
+            100% { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        .orbital-card .orbit-dot {
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: #00ffc8;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ffc8;
+        }
+
+        .orbital-card.secondary .orbit-ring {
+            border-color: rgba(180, 100, 255, 0.2);
+        }
+
+        .orbital-card.secondary .orbit-dot {
+            background: #b464ff;
+            box-shadow: 0 0 10px #b464ff;
+        }
+
+        .orbital-card.secondary .change {
+            color: #b464ff;
+        }
+
+        .orbital-card.tertiary .orbit-ring {
+            border-color: rgba(255, 150, 50, 0.2);
+        }
+
+        .orbital-card.tertiary .orbit-dot {
+            background: #ff9632;
+            box-shadow: 0 0 10px #ff9632;
+        }
+
+        .orbital-card.tertiary .change {
+            color: #ff9632;
+        }
+    </style>
+</head>
+<body>
+    <div class="orbital-card">
+        <div class="orbit-ring">
+            <div class="orbit-dot"></div>
+        </div>
+        <div class="content">
+            <div class="title">Total Revenue</div>
+            <div class="value">$48.2K</div>
+            <div class="change">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 15l-6-6-6 6"/>
+                </svg>
+                +12.5%
+            </div>
+        </div>
+    </div>
+
+    <div class="orbital-card secondary">
+        <div class="orbit-ring">
+            <div class="orbit-dot"></div>
+        </div>
+        <div class="content">
+            <div class="title">Active Users</div>
+            <div class="value">2,847</div>
+            <div class="change">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 15l-6-6-6 6"/>
+                </svg>
+                +8.3%
+            </div>
+        </div>
+    </div>
+
+    <div class="orbital-card tertiary">
+        <div class="orbit-ring">
+            <div class="orbit-dot"></div>
+        </div>
+        <div class="content">
+            <div class="title">Bounce Rate</div>
+            <div class="value">24.8%</div>
+            <div class="change negative">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+                -3.2%
+            </div>
+        </div>
+    </div>
+</body>
+</html>
