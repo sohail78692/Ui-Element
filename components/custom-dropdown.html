@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Dropdown</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    padding: 40px;
+  }
+
+  .dropdown {
+    position: relative;
+    width: 280px;
+  }
+
+  .dropdown-trigger {
+    width: 100%;
+    padding: 16px 20px;
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  .dropdown-trigger:hover {
+    border-color: #667eea;
+  }
+
+  .dropdown-trigger.active {
+    border-color: #667eea;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .dropdown-trigger .arrow {
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-trigger.active .arrow {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .dropdown-menu.open {
+    max-height: 250px;
+    opacity: 1;
+  }
+
+  .dropdown-item {
+    padding: 14px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dropdown-item:hover {
+    background: #334155;
+    color: white;
+  }
+
+  .dropdown-item.selected {
+    background: #667eea;
+    color: white;
+  }
+
+  .dropdown-item .icon {
+    font-size: 18px;
+  }
+
+  .dark .dropdown-trigger {
+    background: #0f0f0f;
+    border-color: #1a1a1a;
+  }
+
+  .dark .dropdown-menu {
+    background: #0f0f0f;
+    border-color: #1a1a1a;
+  }
+
+  .dark .dropdown-item:hover {
+    background: #1a1a1a;
+  }
+</style>
+</head>
+<body>
+
+<div class="dropdown">
+  <div class="dropdown-trigger" onclick="toggleDropdown(this)">
+    <span class="selected-text">Select an option</span>
+    <span class="arrow">▼</span>
+  </div>
+  <div class="dropdown-menu">
+    <div class="dropdown-item" onclick="selectOption(this, 'Dashboard', event)">
+      <span class="icon">📊</span> Dashboard
+    </div>
+    <div class="dropdown-item" onclick="selectOption(this, 'Analytics', event)">
+      <span class="icon">📈</span> Analytics
+    </div>
+    <div class="dropdown-item" onclick="selectOption(this, 'Settings', event)">
+      <span class="icon">⚙️</span> Settings
+    </div>
+    <div class="dropdown-item" onclick="selectOption(this, 'Profile', event)">
+      <span class="icon">👤</span> Profile
+    </div>
+  </div>
+</div>
+
+<div class="dropdown dark">
+  <div class="dropdown-trigger" onclick="toggleDropdown(this)">
+    <span class="selected-text">Choose category</span>
+    <span class="arrow">▼</span>
+  </div>
+  <div class="dropdown-menu">
+    <div class="dropdown-item" onclick="selectOption(this, 'Technology', event)">
+      <span class="icon">💻</span> Technology
+    </div>
+    <div class="dropdown-item" onclick="selectOption(this, 'Design', event)">
+      <span class="icon">🎨</span> Design
+    </div>
+    <div class="dropdown-item" onclick="selectOption(this, 'Marketing', event)">
+      <span class="icon">📢</span> Marketing
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleDropdown(trigger) {
+    const menu = trigger.nextElementSibling;
+    const isOpen = menu.classList.contains('open');
+    
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+    document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('active'));
+    
+    if (!isOpen) {
+      menu.classList.add('open');
+      trigger.classList.add('active');
+    }
+  }
+
+  function selectOption(item, text, event) {
+    event.stopPropagation();
+    const dropdown = item.closest('.dropdown');
+    const trigger = dropdown.querySelector('.dropdown-trigger');
+    const selectedText = trigger.querySelector('.selected-text');
+    
+    dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+    item.classList.add('selected');
+    
+    selectedText.textContent = text;
+    
+    trigger.classList.remove('active');
+    item.closest('.dropdown-menu').classList.remove('open');
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+      document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+      document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('active'));
+    }
+  });
+</script>
+
+</body>
+</html>
