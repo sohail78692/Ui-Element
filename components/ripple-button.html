@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ripple Button</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .ripple-btn {
+    position: relative;
+    padding: 15px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .ripple-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+  }
+
+  .ripple-btn:active {
+    transform: translateY(0);
+  }
+
+  .ripple-btn .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: ripple-anim 0.6s linear;
+    pointer-events: none;
+  }
+
+  @keyframes ripple-anim {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  .ripple-btn.secondary {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+  }
+
+  .ripple-btn.secondary:hover {
+    box-shadow: 0 8px 25px rgba(245, 87, 108, 0.6);
+  }
+
+  .ripple-btn.success {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+  }
+
+  .ripple-btn.success:hover {
+    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
+  }
+
+  .ripple-btn.outline {
+    background: transparent;
+    border: 2px solid #667eea;
+    box-shadow: none;
+  }
+
+  .ripple-btn.outline:hover {
+    background: #667eea;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+  }
+</style>
+</head>
+<body>
+
+<button class="ripple-btn" onclick="createRipple(event)">Primary</button>
+<button class="ripple-btn secondary" onclick="createRipple(event)">Secondary</button>
+<button class="ripple-btn success" onclick="createRipple(event)">Success</button>
+<button class="ripple-btn outline" onclick="createRipple(event)">Outline</button>
+
+<script>
+  function createRipple(event) {
+    const button = event.currentTarget;
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple');
+    
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+    
+    button.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 600);
+  }
+</script>
+
+</body>
+</html>
