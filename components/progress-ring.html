@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress Ring</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    padding: 40px;
+  }
+
+  .progress-ring-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .progress-ring {
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+
+  .progress-ring svg {
+    transform: rotate(-90deg);
+    width: 150px;
+    height: 150px;
+  }
+
+  .progress-ring circle {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+  }
+
+  .progress-ring .bg {
+    stroke: rgba(255, 255, 255, 0.1);
+  }
+
+  .progress-ring .progress {
+    stroke: url(#gradient1);
+    stroke-dasharray: 408;
+    stroke-dashoffset: 408;
+    transition: stroke-dashoffset 1.5s ease-out;
+  }
+
+  .progress-ring .progress-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .progress-ring .label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .progress-ring.purple .progress {
+    stroke: url(#gradient2);
+  }
+
+  .progress-ring.green .progress {
+    stroke: url(#gradient3);
+  }
+
+  .progress-ring.orange .progress {
+    stroke: url(#gradient4);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .progress-ring-container {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .progress-ring-container:nth-child(2) { animation-delay: 0.1s; }
+  .progress-ring-container:nth-child(3) { animation-delay: 0.2s; }
+  .progress-ring-container:nth-child(4) { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<defs>
+  <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#667eea"/>
+    <stop offset="100%" stop-color="#764ba2"/>
+  </linearGradient>
+  <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#f093fb"/>
+    <stop offset="100%" stop-color="#f5576c"/>
+  </linearGradient>
+  <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#4facfe"/>
+    <stop offset="100%" stop-color="#00f2fe"/>
+  </linearGradient>
+  <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#fa709a"/>
+    <stop offset="100%" stop-color="#fee140"/>
+  </linearGradient>
+</defs>
+
+<div class="progress-ring-container">
+  <div class="progress-ring">
+    <svg>
+      <circle class="bg" cx="75" cy="75" r="65"/>
+      <circle class="progress" cx="75" cy="75" r="65" data-progress="75"/>
+    </svg>
+    <span class="progress-value">75%</span>
+  </div>
+  <span class="label">Storage</span>
+</div>
+
+<div class="progress-ring-container">
+  <div class="progress-ring purple">
+    <svg>
+      <circle class="bg" cx="75" cy="75" r="65"/>
+      <circle class="progress" cx="75" cy="75" r="65" data-progress="60"/>
+    </svg>
+    <span class="progress-value">60%</span>
+  </div>
+  <span class="label">Bandwidth</span>
+</div>
+
+<div class="progress-ring-container">
+  <div class="progress-ring green">
+    <svg>
+      <circle class="bg" cx="75" cy="75" r="65"/>
+      <circle class="progress" cx="75" cy="75" r="65" data-progress="90"/>
+    </svg>
+    <span class="progress-value">90%</span>
+  </div>
+  <span class="label">Uptime</span>
+</div>
+
+<div class="progress-ring-container">
+  <div class="progress-ring orange">
+    <svg>
+      <circle class="bg" cx="75" cy="75" r="65"/>
+      <circle class="progress" cx="75" cy="75" r="65" data-progress="45"/>
+    </svg>
+    <span class="progress-value">45%</span>
+  </div>
+  <span class="label">Memory</span>
+</div>
+
+<script>
+  const circumference = 2 * Math.PI * 65;
+  
+  document.querySelectorAll('.progress').forEach(circle => {
+    const progress = circle.getAttribute('data-progress');
+    const offset = circumference - (progress / 100) * circumference;
+    setTimeout(() => {
+      circle.style.strokeDashoffset = offset;
+    }, 100);
+  });
+</script>
+
+</body>
+</html>
