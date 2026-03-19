@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Particle Button UI Component">
+<title>Particle Button</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap');
+
+body {
+    background: #0d0d12;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    font-family: 'Outfit', sans-serif;
+    padding: 40px;
+}
+
+.btn-particle {
+    position: relative;
+    padding: 16px 36px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-particle:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.4);
+}
+
+.btn-particle .particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particle-burst 0.8s ease-out forwards;
+}
+
+@keyframes particle-burst {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+.btn-particle.secondary {
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+}
+
+.btn-particle.secondary:hover {
+    box-shadow: 0 12px 40px rgba(239, 68, 68, 0.4);
+}
+
+.btn-particle.tertiary {
+    background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+}
+
+.btn-particle.tertiary:hover {
+    box-shadow: 0 12px 40px rgba(6, 182, 212, 0.4);
+}
+</style>
+</head>
+<body>
+
+<button class="btn-particle">Click Me</button>
+<button class="btn-particle secondary">Delete</button>
+<button class="btn-particle tertiary">Success</button>
+
+<script>
+document.querySelectorAll('.btn-particle').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        for (let i = 0; i < 12; i++) {
+            const particle = document.createElement('span');
+            particle.className = 'particle';
+            
+            const angle = (Math.PI * 2 / 12) * i;
+            const velocity = 60 + Math.random() * 40;
+            const tx = Math.cos(angle) * velocity;
+            const ty = Math.sin(angle) * velocity;
+            
+            particle.style.cssText = `
+                left: ${x}px;
+                top: ${y}px;
+                --tx: ${tx}px;
+                --ty: ${ty}px;
+                background: ${getComputedStyle(this).background};
+            `;
+            
+            this.appendChild(particle);
+            setTimeout(() => particle.remove(), 800);
+        }
+    });
+});
+</script>
+
+</body>
+</html>
