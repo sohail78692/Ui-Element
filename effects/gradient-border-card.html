@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Gradient Border Card UI Component">
+<title>Gradient Border Card</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+
+body {
+    background: #0c0c10;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    padding: 40px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.gradient-card {
+    position: relative;
+    width: 340px;
+    padding: 3px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #f472b6, #c084fc, #6366f1, #06b6d4);
+    background-size: 300% 300%;
+    animation: gradient-shift 4s ease infinite;
+}
+
+.gradient-card-inner {
+    background: #18181b;
+    border-radius: 17px;
+    padding: 32px;
+    height: 100%;
+}
+
+.gradient-card h3 {
+    color: #f4f4f5;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 12px;
+}
+
+.gradient-card p {
+    color: #a1a1aa;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 20px;
+}
+
+.gradient-card .tag {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #c084fc;
+    background: rgba(192, 132, 252, 0.12);
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.gradient-card .stats {
+    display: flex;
+    gap: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #27272a;
+}
+
+.gradient-card .stat {
+    text-align: center;
+}
+
+.gradient-card .stat-value {
+    color: #f4f4f5;
+    font-size: 22px;
+    font-weight: 700;
+    display: block;
+}
+
+.gradient-card .stat-label {
+    color: #71717a;
+    font-size: 12px;
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.gradient-card.secondary {
+    background: linear-gradient(135deg, #10b981, #06b6d4, #3b82f6);
+}
+
+.gradient-card.tertiary {
+    background: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899);
+}
+</style>
+</head>
+<body>
+
+<div class="gradient-card">
+    <div class="gradient-card-inner">
+        <span class="tag">Featured</span>
+        <h3>Analytics Pro</h3>
+        <p>Advanced analytics dashboard with real-time data visualization and custom reports.</p>
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-value">2.4k</span>
+                <span class="stat-label">Users</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">98%</span>
+                <span class="stat-label">Uptime</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">24/7</span>
+                <span class="stat-label">Support</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gradient-card secondary">
+    <div class="gradient-card-inner">
+        <span class="tag">New</span>
+        <h3>Cloud Storage</h3>
+        <p>Secure cloud storage with automatic backup and file synchronization.</p>
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-value">50GB</span>
+                <span class="stat-label">Free</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">256-bit</span>
+                <span class="stat-label">Encryption</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">99.9%</span>
+                <span class="stat-label">Reliability</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
