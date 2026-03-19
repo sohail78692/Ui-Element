@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Toggle Switch UI Component">
+<title>Toggle Switch</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+body {
+    background: #0f0f14;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+}
+
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.toggle-label {
+    color: #e4e4e7;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.toggle {
+    position: relative;
+    width: 56px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #27272a;
+    border-radius: 30px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 4px;
+    bottom: 4px;
+    background: #71717a;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #8b5cf6 0%, #c084fc 100%);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+.toggle input:checked + .toggle-slider::before {
+    transform: translateX(26px);
+    background: #fff;
+}
+
+.toggle.large {
+    width: 66px;
+    height: 36px;
+}
+
+.toggle.large .toggle-slider::before {
+    width: 26px;
+    height: 26px;
+    left: 5px;
+    bottom: 5px;
+}
+
+.toggle.large input:checked + .toggle-slider::before {
+    transform: translateX(30px);
+}
+
+.toggle.success input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+}
+
+.toggle.danger input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="toggle-wrapper">
+    <span class="toggle-label">Enable Notifications</span>
+    <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="toggle-slider"></span>
+    </label>
+</div>
+
+<div class="toggle-wrapper">
+    <span class="toggle-label">Dark Mode</span>
+    <label class="toggle large">
+        <input type="checkbox">
+        <span class="toggle-slider"></span>
+    </label>
+</div>
+
+<div class="toggle-wrapper">
+    <span class="toggle-label">Auto Save</span>
+    <label class="toggle success">
+        <input type="checkbox" checked>
+        <span class="toggle-slider"></span>
+    </label>
+</div>
+
+<div class="toggle-wrapper">
+    <span class="toggle-label">Delete Account</span>
+    <label class="toggle danger">
+        <input type="checkbox">
+        <span class="toggle-slider"></span>
+    </label>
+</div>
+
+</body>
+</html>
