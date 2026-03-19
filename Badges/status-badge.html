@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Status Badge UI Component">
+<title>Status Badge</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap');
+
+body {
+    background: #0f0f12;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+}
+
+.badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+.badge.success {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.12);
+}
+
+.badge.success .dot {
+    background: #10b981;
+}
+
+.badge.warning {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.12);
+}
+
+.badge.warning .dot {
+    background: #f59e0b;
+}
+
+.badge.error {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.badge.error .dot {
+    background: #ef4444;
+}
+
+.badge.info {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.12);
+}
+
+.badge.info .dot {
+    background: #3b82f6;
+}
+
+.badge.neutral {
+    color: #71717a;
+    background: rgba(113, 113, 122, 0.12);
+}
+
+.badge.neutral .dot {
+    background: #71717a;
+}
+
+.badge.small {
+    padding: 4px 10px;
+    font-size: 11px;
+}
+
+.badge.small .dot {
+    width: 6px;
+    height: 6px;
+}
+
+.badge.large {
+    padding: 12px 22px;
+    font-size: 15px;
+}
+
+.badge.large .dot {
+    width: 10px;
+    height: 10px;
+}
+</style>
+</head>
+<body>
+
+<span class="badge success">
+    <span class="dot"></span>
+    Online
+</span>
+
+<span class="badge warning">
+    <span class="dot"></span>
+    Away
+</span>
+
+<span class="badge error">
+    <span class="dot"></span>
+    Offline
+</span>
+
+<span class="badge info">
+    <span class="dot"></span>
+    Busy
+</span>
+
+<span class="badge neutral">
+    <span class="dot"></span>
+    Unknown
+</span>
+
+<br><br>
+
+<span class="badge success small">
+    <span class="dot"></span>
+    Active
+</span>
+
+<span class="badge warning large">
+    <span class="dot"></span>
+    Pending Review
+</span>
+
+</body>
+</html>
