@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathing Loader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d12;
+            font-family: 'Space Grotesk', sans-serif;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .loader-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .breathing-orb {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 300% 300%;
+            animation: breathe 4s ease-in-out infinite, gradient-shift 8s ease infinite;
+            box-shadow: 
+                0 0 60px rgba(255, 107, 107, 0.6),
+                0 0 100px rgba(254, 202, 87, 0.4),
+                0 0 140px rgba(72, 219, 251, 0.3);
+        }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.8);
+                opacity: 1;
+            }
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .outer-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: ring-pulse 4s ease-in-out infinite;
+        }
+
+        .outer-ring::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: rgba(255, 107, 107, 0.5);
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes ring-pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 1;
+            }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: orbit-particle 3s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { background: #ff6b6b; animation-delay: 0s; }
+        .particle:nth-child(2) { background: #feca57; animation-delay: 0.5s; }
+        .particle:nth-child(3) { background: #48dbfb; animation-delay: 1s; }
+        .particle:nth-child(4) { background: #ff9ff3; animation-delay: 1.5s; }
+
+        @keyframes orbit-particle {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            50% { 
+                transform: translate(100px, 0) scale(0.5);
+                opacity: 0.5;
+            }
+        }
+
+        .loader-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: label-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes label-pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .dot {
+            display: inline-block;
+            animation: dot-bounce 1.4s infinite ease-in-out both;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes dot-bounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-container">
+        <div class="outer-ring"></div>
+        <div class="breathing-orb"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    <div class="loader-label">
+        Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+    </div>
+</body>
+</html>
