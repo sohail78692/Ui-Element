@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pulse Quote Testimonial UI Component">
+<title>Pulse Quote Testimonial</title>
+<style>
+body {
+    background: #0f0f14;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.pulse-quote {
+    width: 340px;
+    padding: 36px;
+    background: linear-gradient(145deg, #1a1a24, #14141c);
+    border-radius: 20px;
+    border-left: 4px solid #22d3ee;
+    position: relative;
+}
+
+.pulse-quote::before {
+    content: '"';
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    font-size: 72px;
+    font-weight: 700;
+    color: #22d3ee;
+    opacity: 0.15;
+    line-height: 1;
+}
+
+.pulse-quote .text {
+    color: #d4d4d8;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.pulse-quote .author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.pulse-quote .author .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22d3ee, #06b6d4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #fff;
+    font-size: 18px;
+}
+
+.pulse-quote .author .info .name {
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.pulse-quote .author .info .role {
+    color: #71717a;
+    font-size: 13px;
+}
+
+.pulse-quote .pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #22d3ee;
+    border-radius: 50%;
+    position: absolute;
+    top: 36px;
+    right: 36px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+}
+</style>
+</head>
+<body>
+
+<div class="pulse-quote">
+    <div class="pulse-dot"></div>
+    <p class="text">The platform transformed how we work. Incredible performance and stunning UI that keeps users engaged.</p>
+    <div class="author">
+        <div class="avatar">JS</div>
+        <div class="info">
+            <div class="name">Jane Smith</div>
+            <div class="role">Product Lead</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
