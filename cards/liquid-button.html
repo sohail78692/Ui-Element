@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Liquid Button UI Component">
+<title>Liquid Button</title>
+<style>
+body {
+    background: #0c0c10;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.liquid-btn {
+    position: relative;
+    padding: 16px 40px;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.liquid-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border-radius: 12px;
+}
+
+.liquid-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    border-radius: 12px;
+    filter: blur(20px);
+    opacity: 0.5;
+    animation: liquid-rotate 4s linear infinite;
+}
+
+.liquid-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.liquid-btn .blob {
+    position: absolute;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    animation: blob-float 3s ease-in-out infinite;
+}
+
+.liquid-btn .blob:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    top: -20px;
+    left: -20px;
+    animation-delay: 0s;
+}
+
+.liquid-btn .blob:nth-child(2) {
+    width: 60px;
+    height: 60px;
+    bottom: -15px;
+    right: -15px;
+    animation-delay: 1.5s;
+}
+
+@keyframes liquid-rotate {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes blob-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(10px, -10px) scale(1.1); }
+}
+</style>
+</head>
+<body>
+
+<button class="liquid-btn">
+    <span>Launch Now</span>
+    <div class="blob"></div>
+    <div class="blob"></div>
+</button>
+
+</body>
+</html>
