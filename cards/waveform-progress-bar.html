@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Waveform Progress UI Component">
+<title>Waveform Progress Bar</title>
+<style>
+body {
+    background: #111;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.waveform-progress {
+    width: 320px;
+    padding: 28px;
+    background: #1a1a1a;
+    border-radius: 20px;
+}
+
+.waveform-progress .label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.waveform-progress .percentage {
+    color: #22d3ee;
+}
+
+.waveform-progress .bar-container {
+    height: 40px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    padding: 4px;
+}
+
+.waveform-progress .bar-container .bar {
+    flex: 1;
+    background: linear-gradient(to top, #06b6d4, #22d3ee);
+    border-radius: 3px;
+    animation: waveform 1.2s ease-in-out infinite;
+}
+
+.waveform-progress .bar-container .bar:nth-child(1) { height: 30%; animation-delay: 0s; }
+.waveform-progress .bar-container .bar:nth-child(2) { height: 60%; animation-delay: 0.1s; }
+.waveform-progress .bar-container .bar:nth-child(3) { height: 45%; animation-delay: 0.2s; }
+.waveform-progress .bar-container .bar:nth-child(4) { height: 80%; animation-delay: 0.3s; }
+.waveform-progress .bar-container .bar:nth-child(5) { height: 55%; animation-delay: 0.4s; }
+.waveform-progress .bar-container .bar:nth-child(6) { height: 70%; animation-delay: 0.5s; }
+.waveform-progress .bar-container .bar:nth-child(7) { height: 40%; animation-delay: 0.6s; }
+.waveform-progress .bar-container .bar:nth-child(8) { height: 90%; animation-delay: 0.7s; }
+.waveform-progress .bar-container .bar:nth-child(9) { height: 65%; animation-delay: 0.8s; }
+.waveform-progress .bar-container .bar:nth-child(10) { height: 50%; animation-delay: 0.9s; }
+
+@keyframes waveform {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.5); }
+}
+</style>
+</head>
+<body>
+
+<div class="waveform-progress">
+    <div class="label">
+        <span>Audio Processing</span>
+        <span class="percentage">78%</span>
+    </div>
+    <div class="bar-container">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+</div>
+
+</body>
+</html>
