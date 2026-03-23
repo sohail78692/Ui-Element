@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Orbit Loading Spinner UI Component">
+<title>Orbit Loading Spinner</title>
+<style>
+body {
+    background: #0a0a0e;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.orbit-spinner {
+    width: 80px;
+    height: 80px;
+    position: relative;
+}
+
+.orbit-spinner .orbit {
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    animation: orbit-spin 3s linear infinite;
+}
+
+.orbit-spinner .orbit:nth-child(1) {
+    border-top-color: #f472b6;
+    animation-duration: 2s;
+}
+
+.orbit-spinner .orbit:nth-child(2) {
+    border-right-color: #22d3ee;
+    animation-duration: 2.5s;
+    inset: 12px;
+}
+
+.orbit-spinner .orbit:nth-child(3) {
+    border-bottom-color: #a78bfa;
+    animation-duration: 3s;
+    inset: 24px;
+}
+
+.orbit-spinner .core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+
+@keyframes orbit-spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="orbit-spinner">
+    <div class="orbit"></div>
+    <div class="orbit"></div>
+    <div class="orbit"></div>
+    <div class="core"></div>
+</div>
+
+</body>
+</html>
