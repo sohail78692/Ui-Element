@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Glass Input Field UI Component">
+<title>Glass Input Field</title>
+<style>
+body {
+    background: linear-gradient(135deg, #1e1e2e 0%, #0f0f1a 100%);
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.glass-input {
+    width: 320px;
+    position: relative;
+}
+
+.glass-input label {
+    display: block;
+    color: #a1a1aa;
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.glass-input input {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.glass-input input::placeholder {
+    color: #52525b;
+}
+
+.glass-input input:focus {
+    background: rgba(255,255,255,0.06);
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 4px rgba(139,92,246,0.15);
+}
+
+.glass-input .glow-line {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #8b5cf6, #a855f7);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.glass-input input:focus + .glow-line {
+    width: 100%;
+}
+</style>
+</head>
+<body>
+
+<div class="glass-input">
+    <label>Email Address</label>
+    <input type="email" placeholder="you@example.com">
+    <div class="glow-line"></div>
+</div>
+
+</body>
+</html>
