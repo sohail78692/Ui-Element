@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Stack Toggle Switch UI Component">
+<title>Stack Toggle Switch</title>
+<style>
+body {
+    background: #0f0f14;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.toggle-stack {
+    display: flex;
+    background: #1c1c24;
+    border-radius: 14px;
+    padding: 6px;
+    gap: 6px;
+}
+
+.toggle-stack .toggle {
+    padding: 10px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #71717a;
+    background: transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-stack .toggle.active {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+}
+
+.toggle-stack .toggle:hover:not(.active) {
+    background: rgba(255,255,255,0.04);
+}
+</style>
+</head>
+<body>
+
+<div class="toggle-stack">
+    <div class="toggle active">On</div>
+    <div class="toggle">Off</div>
+    <div class="toggle">Auto</div>
+</div>
+
+</body>
+</html>
