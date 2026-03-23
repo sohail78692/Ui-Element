@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Aurora Gradient Card UI Component">
+<title>Aurora Gradient Card</title>
+<style>
+body {
+    background: #0a0a0f;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.aurora-card {
+    width: 300px;
+    padding: 32px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+}
+
+.aurora-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, #06b6d4, #8b5cf6, #06b6d4, transparent);
+    animation: aurora-spin 8s linear infinite;
+    opacity: 0.3;
+}
+
+.aurora-card::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+    border-radius: 23px;
+    z-index: 1;
+}
+
+.aurora-card .content {
+    position: relative;
+    z-index: 2;
+}
+
+.aurora-card .icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.aurora-card .icon svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+}
+
+.aurora-card h3 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.aurora-card p {
+    margin: 0;
+    color: #888;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+@keyframes aurora-spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-card">
+    <div class="content">
+        <div class="icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Data Sync</h3>
+        <p>Aurora gradient with smooth animation</p>
+    </div>
+</div>
+
+</body>
+</html>
