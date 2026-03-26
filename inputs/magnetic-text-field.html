@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Text Field</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0f0f14;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .magnetic-field {
+            position: relative;
+            width: 400px;
+        }
+
+        .field-label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+        }
+
+        .magnetic-input {
+            width: 100%;
+            padding: 24px 20px 12px;
+            font-size: 16px;
+            color: #fff;
+            background: linear-gradient(145deg, #1a1a24, #141418);
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        .magnetic-input::placeholder {
+            color: transparent;
+        }
+
+        .magnetic-input:focus,
+        .magnetic-input:not(:placeholder-shown) {
+            border-color: rgba(139, 92, 246, 0.6);
+            box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.15), 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .magnetic-input:focus + .field-label,
+        .magnetic-input:not(:placeholder-shown) + .field-label {
+            top: 12px;
+            font-size: 11px;
+            color: #8b5cf6;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .magnetic-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .magnetic-input:focus ~ .magnetic-glow {
+            opacity: 1;
+            background: radial-gradient(800px circle at var(--x, 50%) var(--y, 50%), rgba(139, 92, 246, 0.15), transparent 40%);
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .field-hint {
+            margin-top: 12px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            padding-left: 4px;
+        }
+
+        .field-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            color: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .magnetic-input:focus ~ .field-icon {
+            color: #8b5cf6;
+        }
+
+        .magnetic-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        .m-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .magnetic-input:focus ~ .magnetic-particles .m-particle {
+            animation: particle-float 1.5s ease-out infinite;
+        }
+
+        @keyframes particle-float {
+            0% { opacity: 1; transform: translate(0, 0); }
+            100% { opacity: 0; transform: translate(var(--mx), var(--my)); }
+        }
+
+        .m-particle:nth-child(1) { --mx: -30px; --my: -20px; left: 30%; top: 40%; }
+        .m-particle:nth-child(2) { --mx: 40px; --my: -30px; left: 50%; top: 30%; }
+        .m-particle:nth-child(3) { --mx: -20px; --my: 30px; left: 60%; top: 60%; }
+    </style>
+</head>
+<body>
+    <div class="magnetic-field">
+        <input type="text" class="magnetic-input" id="input" placeholder=" ">
+        <label class="field-label" for="input">Enter your search</label>
+        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="M21 21l-4.35-4.35"></path>
+        </svg>
+        <div class="magnetic-glow"></div>
+        <div class="magnetic-particles">
+            <div class="m-particle"></div>
+            <div class="m-particle"></div>
+            <div class="m-particle"></div>
+        </div>
+    </div>
+    <script>
+        const input = document.getElementById('input');
+        const glow = document.querySelector('.magnetic-glow');
+
+        input.addEventListener('mousemove', (e) => {
+            const rect = input.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            glow.style.setProperty('--x', x + '%');
+            glow.style.setProperty('--y', y + '%');
+        });
+    </script>
+</body>
+</html>
