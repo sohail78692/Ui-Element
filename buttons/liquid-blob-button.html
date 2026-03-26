@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Blob Button</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d12;
+            font-family: 'Outfit', sans-serif;
+        }
+        .blob-btn {
+            position: relative;
+            padding: 18px 36px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            overflow: visible;
+            font-family: inherit;
+        }
+        .blob-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            border-radius: 50px;
+            filter: blur(0px);
+            transition: all 0.4s;
+        }
+        .blob-btn::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            border-radius: 50px;
+            filter: blur(20px);
+            opacity: 0.6;
+            animation: blob-pulse 2s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes blob-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .blob-btn:hover::before {
+            border-radius: 20px;
+            transform: scale(1.05);
+        }
+        .blob-text {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <button class="blob-btn">
+        <span class="blob-text">Explore Now</span>
+    </button>
+</body>
+</html>
