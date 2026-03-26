@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Pulse Badge</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d12;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .neon-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 50px;
+            font-family: system-ui, sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: #a78bfa;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .neon-badge.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #34d399;
+        }
+        .neon-badge.warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: rgba(251, 191, 36, 0.4);
+            color: #fbbf24;
+        }
+        .neon-badge.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #f87171;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: blink 1s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); }
+        }
+        .neon-badge.success { @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); } 50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); } } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    </style>
+</head>
+<body>
+    <div class="neon-badge"><span class="dot"></span>Online</div>
+    <div class="neon-badge success"><span class="dot"></span>Active</div>
+    <div class="neon-badge warning"><span class="dot"></span>Pending</div>
+    <div class="neon-badge danger"><span class="dot"></span>Offline</div>
+</body>
+</html>
