@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step Progress Indicator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d12;
+        }
+        .step-progress {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+        }
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .step.active .step-circle {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+        .step.completed .step-circle {
+            background: #10b981;
+            border-color: transparent;
+            color: #fff;
+        }
+        .step-line {
+            width: 60px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        .step.completed + .step .step-line,
+        .step.active .step-line { background: #10b981; }
+    </style>
+</head>
+<body>
+    <div class="step-progress">
+        <div class="step completed">
+            <div class="step-circle">✓</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step active">
+            <div class="step-circle">2</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+            <div class="step-circle">3</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+            <div class="step-circle">4</div>
+        </div>
+    </div>
+</body>
+</html>
