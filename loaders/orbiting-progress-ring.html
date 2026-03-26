@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbiting Progress Ring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #08080c;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .orbit-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid transparent;
+        }
+
+        .orbit-ring-1 {
+            width: 280px;
+            height: 280px;
+            border-top-color: rgba(139, 92, 246, 0.8);
+            border-right-color: rgba(139, 92, 246, 0.4);
+            animation: orbit-rotate 3s linear infinite;
+        }
+
+        .orbit-ring-2 {
+            width: 220px;
+            height: 220px;
+            border-bottom-color: rgba(59, 130, 246, 0.8);
+            border-left-color: rgba(59, 130, 246, 0.4);
+            animation: orbit-rotate 4s linear infinite reverse;
+        }
+
+        .orbit-ring-3 {
+            width: 160px;
+            height: 160px;
+            border-top-color: rgba(236, 72, 153, 0.6);
+            border-right-color: rgba(236, 72, 153, 0.3);
+            animation: orbit-rotate 5s linear infinite;
+        }
+
+        @keyframes orbit-rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .orbit-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(145deg, #1a1a28, #12121a);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .orbit-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .orbit-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        .orbit-satellite {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #8b5cf6, 0 0 40px rgba(139, 92, 246, 0.5);
+        }
+
+        .satellite-1 {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: orbit-satellite 3s linear infinite;
+        }
+
+        .satellite-2 {
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background: #3b82f6;
+            box-shadow: 0 0 20px #3b82f6, 0 0 40px rgba(59, 130, 246, 0.5);
+            animation: orbit-satellite-2 4s linear infinite reverse;
+        }
+
+        @keyframes orbit-satellite {
+            0% { top: 0; left: 50%; transform: translateX(-50%); }
+            25% { top: 50%; right: 0; transform: translateY(-50%); }
+            50% { bottom: 0; left: 50%; transform: translateX(-50%); }
+            75% { top: 50%; left: 0; transform: translateY(-50%); }
+            100% { top: 0; left: 50%; transform: translateX(-50%); }
+        }
+
+        @keyframes orbit-satellite-2 {
+            0% { top: 50%; right: 0; transform: translateY(-50%); }
+            25% { bottom: 0; left: 50%; transform: translateX(-50%); }
+            50% { top: 50%; left: 0; transform: translateY(-50%); }
+            75% { top: 0; left: 50%; transform: translateX(-50%); }
+            100% { top: 50%; right: 0; transform: translateY(-50%); }
+        }
+
+        .orbit-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+            animation: glow-pulse 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="orbit-container">
+        <div class="orbit-glow"></div>
+        <div class="orbit-ring orbit-ring-1"></div>
+        <div class="orbit-ring orbit-ring-2"></div>
+        <div class="orbit-ring orbit-ring-3"></div>
+        <div class="orbit-satellite satellite-1"></div>
+        <div class="orbit-satellite satellite-2"></div>
+        <div class="orbit-center">
+            <div class="orbit-value">75%</div>
+            <div class="orbit-label">Complete</div>
+        </div>
+    </div>
+</body>
+</html>
