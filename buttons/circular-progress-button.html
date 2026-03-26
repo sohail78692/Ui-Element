@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Progress Button</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d12;
+            gap: 30px;
+        }
+        .circular-btn {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1a1a24, #12121a);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .circular-btn:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            transform: scale(1.05);
+        }
+        .circular-btn svg {
+            width: 32px;
+            height: 32px;
+            color: #8b5cf6;
+        }
+        .progress-ring {
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            transform: rotate(-90deg);
+        }
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 3;
+        }
+        .progress-ring .bg { stroke: rgba(255, 255, 255, 0.1); }
+        .progress-ring .progress {
+            stroke: #8b5cf6;
+            stroke-linecap: round;
+            stroke-dasharray: 220;
+            stroke-dashoffset: 220;
+            transition: stroke-dashoffset 0.5s;
+        }
+        .circular-btn.loading .progress { animation: progress-fill 2s linear infinite; }
+        @keyframes progress-fill {
+            0% { stroke-dashoffset: 220; }
+            100% { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<body>
+    <button class="circular-btn">
+        <svg class="progress-ring" width="88" height="88">
+            <circle class="bg" cx="44" cy="44" r="35"></circle>
+            <circle class="progress" cx="44" cy="44" r="35"></circle>
+        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/>
+        </svg>
+    </button>
+    <button class="circular-btn loading">
+        <svg class="progress-ring" width="88" height="88">
+            <circle class="bg" cx="44" cy="44" r="35"></circle>
+            <circle class="progress" cx="44" cy="44" r="35"></circle>
+        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32">
+                <animate attributeName="stroke-dashoffset" values="32;0" dur="1s" repeatCount="indefinite"/>
+            </circle>
+        </svg>
+    </button>
+</body>
+</html>
