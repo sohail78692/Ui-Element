@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Glow Testimonial</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap');
+
+        :root {
+            --neon-cyan: #00fff5;
+            --neon-pink: #ff00ff;
+            --neon-purple: #bf00ff;
+            --bg: #0a0a0f;
+            --card-bg: #12121a;
+            --text: #ffffff;
+            --text-muted: #8888aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+
+        .neon-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 245, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 245, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 48px;
+            width: 520px;
+            max-width: 90vw;
+            position: relative;
+            border: 1px solid rgba(0, 255, 245, 0.2);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 245, 0.1),
+                inset 0 0 30px rgba(0, 255, 245, 0.02);
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 30px rgba(0, 255, 245, 0.1),
+                    inset 0 0 30px rgba(0, 255, 245, 0.02);
+            }
+            50% {
+                box-shadow: 
+                    0 0 50px rgba(191, 0, 255, 0.2),
+                    0 0 80px rgba(0, 255, 245, 0.15),
+                    inset 0 0 40px rgba(191, 0, 255, 0.03);
+            }
+        }
+
+        .neon-border {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 22px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink), var(--neon-cyan));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: border-flow 6s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes border-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .quote-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 24px;
+            filter: drop-shadow(0 0 10px var(--neon-cyan));
+        }
+
+        .text {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 32px;
+            font-weight: 400;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .details h4 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--text);
+            font-weight: 600;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .details p {
+            margin: 4px 0 0;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: float-up 4s linear infinite;
+            opacity: 0;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 30%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 50%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 70%; animation-delay: 0.5s; }
+        .particle:nth-child(5) { left: 90%; animation-delay: 1.5s; }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100%) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .decorative-line {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-cyan), transparent);
+            animation: line-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes line-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="neon-grid"></div>
+
+    <div class="testimonial-card">
+        <div class="neon-border"></div>
+        <div class="floating-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <svg class="quote-icon" fill="url(#neon-gradient)" viewBox="0 0 24 24">
+            <defs>
+                <linearGradient id="neon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#00fff5"/>
+                    <stop offset="100%" style="stop-color:#ff00ff"/>
+                </linearGradient>
+            </defs>
+            <path d="M14.017 21L14.017 18C14.017 16.8954 14.9125 16 16.0171 16H19.0171C20.1217 16 21.0171 15.1046 21.0171 14V9C21.0171 7.89543 20.1217 7 19.0171 7H15.0171C13.9125 7 13.0171 7.89543 13.0171 9V15L13.0171 16V21H14.017Z"/>
+            <path d="M1.01709 21L1.01709 18C1.01709 16.8954 1.91253 16 3.01709 16H6.01709C7.12166 16 8.01709 15.1046 8.01709 14V9C8.01709 7.89543 7.12166 7 6.01709 7H2.01709C0.912521 7 0.0170898 7.89543 0.0170898 9V15L0.0170898 16V21H1.01709Z"/>
+        </svg>
+
+        <p class="text">"The level of detail and responsiveness in this UI kit is incredible. It has completely transformed our development workflow and saved hundreds of hours."</p>
+        
+        <div class="user-info">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=NeonUser" alt="User" class="avatar">
+            <div class="details">
+                <h4>Sarah Jenkins</h4>
+                <p>Lead Developer, TechFlow</p>
+            </div>
+        </div>
+
+        <div class="decorative-line"></div>
+    </div>
+
+</body>
+
+</html>
