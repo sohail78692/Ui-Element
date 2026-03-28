@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Nebula Pulse Button UI Component">
+<title>Nebula Pulse Button</title>
+<style>
+body {
+    background: #0a0a12;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.nebula-btn {
+    position: relative;
+    padding: 18px 48px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    border: none;
+    color: #00fff5;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.nebula-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 245, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.nebula-btn:hover::before {
+    left: 100%;
+}
+
+.nebula-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    padding: 2px;
+    background: linear-gradient(135deg, #00fff5, #ff00aa, #00fff5);
+    background-size: 200% 200%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: nebulaBorder 3s linear infinite;
+}
+
+@keyframes nebulaBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.nebula-btn:hover {
+    box-shadow: 0 0 40px rgba(0, 255, 245, 0.4), 0 0 80px rgba(255, 0, 170, 0.2);
+    transform: scale(1.02);
+}
+
+.nebula-btn span {
+    position: relative;
+    z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<button type="button" class="nebula-btn">
+    <span>Initialize</span>
+</button>
+
+</body>
+</html>
