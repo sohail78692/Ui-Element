@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Holographic Toast Notification UI Component">
+<title>Holographic Toast Notification</title>
+<style>
+body {
+    background: #080810;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: system-ui, sans-serif;
+    margin: 0;
+}
+
+.holo-toast {
+    position: relative;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 340px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+}
+
+.holo-toast::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.holo-toast:hover::before {
+    opacity: 1;
+}
+
+.holo-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at top left, rgba(120, 0, 255, 0.15), transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(0, 200, 255, 0.1), transparent 50%);
+    pointer-events: none;
+}
+
+.holo-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(120, 0, 255, 0.3), rgba(0, 200, 255, 0.2));
+    border: 1px solid rgba(255,255,255,0.2);
+    position: relative;
+}
+
+.holo-icon::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(120, 0, 255, 0.5), rgba(0, 200, 255, 0.3));
+    z-index: -1;
+    filter: blur(8px);
+    opacity: 0.5;
+}
+
+.holo-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: #fff;
+    stroke-width: 2;
+    fill: none;
+}
+
+.holo-content {
+    flex: 1;
+}
+
+.holo-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+    background: linear-gradient(90deg, #fff, rgba(255,255,255,0.8));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.holo-message {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+}
+
+.holo-close {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.holo-close:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: shimmerMove 3s infinite;
+}
+
+@keyframes shimmerMove {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="holo-toast">
+    <div class="holo-glow"></div>
+    <div class="shimmer"></div>
+    <div class="holo-icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+        </svg>
+    </div>
+    <div class="holo-content">
+        <div class="holo-title">System Updated</div>
+        <div class="holo-message">New features are now available. Check the changelog for details.</div>
+    </div>
+    <button class="holo-close">&times;</button>
+</div>
+
+</body>
+</html>
