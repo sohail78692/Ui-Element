@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cyber Scan Input UI Component">
+<title>Cyber Scan Input</title>
+<style>
+body {
+    background: #050508;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.cyber-input-wrapper {
+    position: relative;
+    width: 360px;
+}
+
+.cyber-input {
+    width: 100%;
+    padding: 16px 20px;
+    padding-right: 50px;
+    background: rgba(0, 255, 170, 0.02);
+    border: 1px solid rgba(0, 255, 170, 0.2);
+    color: #00ffaa;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    letter-spacing: 1px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.cyber-input::placeholder {
+    color: rgba(0, 255, 170, 0.3);
+}
+
+.cyber-input:focus {
+    border-color: #00ffaa;
+    box-shadow: 0 0 20px rgba(0, 255, 170, 0.15),
+                inset 0 0 20px rgba(0, 255, 170, 0.03);
+}
+
+.scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ffaa, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cyber-input:focus ~ .scan-line {
+    opacity: 1;
+    animation: scanMove 2s linear infinite;
+}
+
+@keyframes scanMove {
+    0% { top: 0; }
+    100% { top: 100%; }
+}
+
+.corner {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 1px solid rgba(0, 255, 170, 0.3);
+    pointer-events: none;
+}
+
+.corner-tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.corner-tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+.corner-bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+.corner-br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+.cyber-input:focus ~ .corner {
+    border-color: #00ffaa;
+}
+
+.scan-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.scan-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: #00ffaa;
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.cyber-input:focus ~ .scan-icon {
+    opacity: 1;
+    animation: pulseIcon 1s ease infinite;
+}
+
+@keyframes pulseIcon {
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.1); }
+}
+</style>
+</head>
+<body>
+
+<div class="cyber-input-wrapper">
+    <input type="text" class="cyber-input" placeholder="ENTER_COMMAND_">
+    <div class="scan-line"></div>
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    <div class="scan-icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 4h16v16H4z"/>
+            <path d="M9 9h6v6H9z"/>
+        </svg>
+    </div>
+</div>
+
+</body>
+</html>
