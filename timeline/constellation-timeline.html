@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Constellation Timeline UI Component">
+<title>Constellation Timeline</title>
+<style>
+body {
+    background: #050510;
+    padding: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.timeline-container {
+    position: relative;
+    width: 700px;
+    padding: 40px 0;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, transparent 0%, #3b82f6 10%, #8b5cf6 50%, #ec4899 90%, transparent 100%);
+    transform: translateX(-50%);
+    filter: blur(0.5px);
+}
+
+.star-field {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.timeline-item:nth-child(odd) {
+    flex-direction: row-reverse;
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+    text-align: right;
+    padding-right: 60px;
+    padding-left: 0;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+    padding-left: 60px;
+}
+
+.timeline-node {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: #0a0a15;
+    border: 3px solid #3b82f6;
+    border-radius: 50%;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.timeline-item:hover .timeline-node {
+    background: #3b82f6;
+    box-shadow: 0 0 20px #3b82f6, 0 0 40px rgba(59, 130, 246, 0.4);
+    transform: translateX(-50%) scale(1.2);
+}
+
+.timeline-connector {
+    position: absolute;
+    left: 50%;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, transparent);
+    transform: translateX(-50%);
+}
+
+.timeline-item:nth-child(odd) .timeline-connector {
+    background: linear-gradient(90deg, transparent, #8b5cf6);
+}
+
+.timeline-content {
+    width: 45%;
+}
+
+.timeline-date {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #3b82f6;
+    margin-bottom: 8px;
+}
+
+.timeline-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.timeline-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.5); }
+}
+
+constellation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.constellation-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+    transform-origin: left center;
+    animation: line-glow 4s ease-in-out infinite;
+}
+
+@keyframes line-glow {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.6; }
+}
+</style>
+</head>
+<body>
+
+<div class="star-field" id="starField"></div>
+
+<div class="timeline-container">
+    <div class="timeline-line"></div>
+    
+    <div class="timeline-item">
+        <div class="timeline-connector"></div>
+        <div class="timeline-node"><div class="timeline-dot"></div></div>
+        <div class="timeline-content">
+            <div class="timeline-date">Jan 2024</div>
+            <h3 class="timeline-title">Project Kickoff</h3>
+            <p class="timeline-desc">Initial planning and strategy phase with stakeholders</p>
+        </div>
+    </div>
+    
+    <div class="timeline-item">
+        <div class="timeline-connector"></div>
+        <div class="timeline-node"><div class="timeline-dot"></div></div>
+        <div class="timeline-content">
+            <div class="timeline-date">Mar 2024</div>
+            <h3 class="timeline-title">Design Phase</h3>
+            <p class="timeline-desc">UI/UX designs completed with user testing</p>
+        </div>
+    </div>
+    
+    <div class="timeline-item">
+        <div class="timeline-connector"></div>
+        <div class="timeline-node"><div class="timeline-dot"></div></div>
+        <div class="timeline-content">
+            <div class="timeline-date">Jun 2024</div>
+            <h3 class="timeline-title">Development</h3>
+            <p class="timeline-desc">Full implementation and integration completed</p>
+        </div>
+    </div>
+    
+    <div class="timeline-item">
+        <div class="timeline-connector"></div>
+        <div class="timeline-node"><div class="timeline-dot"></div></div>
+        <div class="timeline-content">
+            <div class="timeline-date">Sep 2024</div>
+            <h3 class="timeline-title">Launch</h3>
+            <p class="timeline-desc">Product launch with marketing campaign</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const starField = document.getElementById('starField');
+
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    star.style.opacity = Math.random() * 0.5 + 0.2;
+    starField.appendChild(star);
+}
+</script>
+
+</body>
+</html>
