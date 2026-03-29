@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Horizon Scroll Table UI Component">
+<title>Horizon Scroll Table</title>
+<style>
+body {
+    background: linear-gradient(180deg, #1e3a5f 0%, #0d1b2a 100%);
+    padding: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.table-wrapper {
+    width: 100%;
+    max-width: 800px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+}
+
+.horizon-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.horizon-table thead {
+    background: linear-gradient(90deg, rgba(56, 189, 248, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.horizon-table th {
+    padding: 18px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #38bdf8;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.horizon-table td {
+    padding: 16px 20px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.3s ease;
+}
+
+.horizon-table tbody tr {
+    position: relative;
+}
+
+.horizon-table tbody tr::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: linear-gradient(180deg, #38bdf8, #8b5cf6);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom;
+}
+
+.horizon-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.horizon-table tbody tr:hover::after {
+    transform: scaleY(1);
+}
+
+.horizon-table tbody tr:hover td {
+    color: #fff;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.status.pending {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+}
+
+.status.inactive {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.horizon-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(56, 189, 248, 0.08) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.scroll-hint {
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<div class="table-wrapper">
+    <div class="horizon-glow"></div>
+    <table class="horizon-table">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Client</th>
+                <th>Status</th>
+                <th>Progress</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>E-Commerce Redesign</td>
+                <td>TechVentures Inc</td>
+                <td><span class="status active"><span class="status-dot"></span>Active</span></td>
+                <td>75%</td>
+                <td>$12,500</td>
+            </tr>
+            <tr>
+                <td>Mobile App UI</td>
+                <td>StartupCo</td>
+                <td><span class="status active"><span class="status-dot"></span>Active</span></td>
+                <td>45%</td>
+                <td>$8,200</td>
+            </tr>
+            <tr>
+                <td>Brand Identity</td>
+                <td>Artisan Studios</td>
+                <td><span class="status pending"><span class="status-dot"></span>Pending</span></td>
+                <td>20%</td>
+                <td>$4,500</td>
+            </tr>
+            <tr>
+                <td>Dashboard Analytics</td>
+                <td>DataFlow Systems</td>
+                <td><span class="status active"><span class="status-dot"></span>Active</span></td>
+                <td>90%</td>
+                <td>$18,000</td>
+            </tr>
+            <tr>
+                <td>Landing Page</td>
+                <td>Local Cafe</td>
+                <td><span class="status inactive"><span class="status-dot"></span>Inactive</span></td>
+                <td>100%</td>
+                <td>$2,500</td>
+            </tr>
+            <tr>
+                <td>Web Platform</td>
+                <td>RetailMax</td>
+                <td><span class="status pending"><span class="status-dot"></span>Pending</span></td>
+                <td>10%</td>
+                <td>$25,000</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="scroll-hint">← SCROLL HORIZONTALLY →</div>
+</div>
+
+</body>
+</html>
