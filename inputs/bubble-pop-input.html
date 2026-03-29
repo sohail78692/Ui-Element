@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Bubble Pop Input UI Component">
+<title>Bubble Pop Input</title>
+<style>
+body {
+    background: #0d1117;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.bubble-input-wrapper {
+    position: relative;
+    width: 300px;
+}
+
+.bubble-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.bubble {
+    position: absolute;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 182, 193, 0.9), rgba(255, 105, 180, 0.6));
+    border-radius: 50%;
+    animation: pop 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.bubble-input {
+    width: 100%;
+    padding: 18px 22px;
+    background: linear-gradient(145deg, #1a1f2e, #151a28);
+    border: 2px solid #2d3548;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.bubble-input::placeholder {
+    color: #5a6a85;
+}
+
+.bubble-input:focus {
+    border-color: #ff69b4;
+    box-shadow: 0 0 25px rgba(255, 105, 180, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+</style>
+</head>
+<body>
+
+<div class="bubble-input-wrapper">
+    <div class="bubble-container" id="bubbleContainer"></div>
+    <input type="text" class="bubble-input" placeholder="Type something..." id="bubbleInput">
+</div>
+
+<script>
+const input = document.getElementById('bubbleInput');
+const container = document.getElementById('bubbleContainer');
+
+input.addEventListener('input', (e) => {
+    const text = e.target.value;
+    if (text.length > 0) {
+        createBubble();
+    }
+});
+
+function createBubble() {
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    
+    const size = Math.random() * 20 + 10;
+    const x = Math.random() * 260 + 20;
+    const y = Math.random() * 40 + 10;
+    
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
+    bubble.style.left = x + 'px';
+    bubble.style.top = y + 'px';
+    
+    const colors = [
+        'radial-gradient(circle at 30% 30%, rgba(255, 182, 193, 0.9), rgba(255, 105, 180, 0.6))',
+        'radial-gradient(circle at 30% 30%, rgba(173, 216, 230, 0.9), rgba(135, 206, 235, 0.6))',
+        'radial-gradient(circle at 30% 30%, rgba(144, 238, 144, 0.9), rgba(60, 179, 113, 0.6))',
+        'radial-gradient(circle at 30% 30%, rgba(255, 218, 185, 0.9), rgba(255, 160, 122, 0.6))',
+        'radial-gradient(circle at 30% 30%, rgba(221, 160, 221, 0.9), rgba(186, 85, 211, 0.6))'
+    ];
+    
+    bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+    
+    container.appendChild(bubble);
+    
+    setTimeout(() => {
+        bubble.remove();
+    }, 600);
+}
+</script>
+
+</body>
+</html>
