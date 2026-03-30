@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Particle Wave Element UI Component">
+    <title>Particle Wave Element</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0f;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+        
+        .particle-wave {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: particle-float 4s ease-in-out infinite;
+        }
+        
+        @keyframes particle-float {
+            0%, 100% { 
+                transform: translateY(0) scale(1); 
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-30px) scale(1.2); 
+                opacity: 0.4;
+            }
+        }
+        
+        .particle-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #6366f1, #8b5cf6, #ec4899);
+            border-radius: 50%;
+            animation: core-pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(139, 92, 246, 0.6);
+        }
+        
+        @keyframes core-pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 60px rgba(139, 92, 246, 0.6);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.15);
+                box-shadow: 0 0 80px rgba(139, 92, 246, 0.9);
+            }
+        }
+        
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            animation: orbit-rotate 8s linear infinite;
+        }
+        
+        .orbit-ring:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            animation-duration: 6s;
+            animation-direction: reverse;
+        }
+        
+        .orbit-ring:nth-child(3) {
+            width: 220px;
+            height: 220px;
+            animation-duration: 10s;
+        }
+        
+        .orbit-ring:nth-child(4) {
+            width: 280px;
+            height: 280px;
+            animation-duration: 14s;
+            animation-direction: reverse;
+        }
+        
+        @keyframes orbit-rotate {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .orbit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #8b5cf6;
+        }
+        
+        .orbit-ring:nth-child(2) .orbit-dot { top: 0; left: 50%; }
+        .orbit-ring:nth-child(3) .orbit-dot { top: 50%; right: 0; }
+        .orbit-ring:nth-child(4) .orbit-dot { bottom: 0; left: 50%; }
+    </style>
+</head>
+<body>
+    <div class="particle-wave">
+        <div class="orbit-ring">
+            <div class="orbit-dot"></div>
+        </div>
+        <div class="orbit-ring">
+            <div class="orbit-dot"></div>
+        </div>
+        <div class="orbit-ring">
+            <div class="orbit-dot"></div>
+        </div>
+        <div class="particle-center"></div>
+    </div>
+</body>
+</html>
