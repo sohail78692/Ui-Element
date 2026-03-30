@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Holographic Gradient Badge UI Component">
+    <title>Holographic Gradient Badge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: #0a0a0f;
+            font-family: 'Outfit', sans-serif;
+            padding: 40px;
+        }
+        
+        .holo-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .holo-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.3), transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        
+        .holo-badge:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .holo-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+        
+        .holo-shine {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4, #10b981);
+            opacity: 0.8;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .holo-badge:hover .holo-shine {
+            opacity: 1;
+        }
+        
+        .holo-badge .badge-text {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .holo-badge.premium .holo-shine {
+            background: linear-gradient(135deg, #f59e0b, #ef4444, #f59e0b);
+        }
+        
+        .holo-badge.success .holo-shine {
+            background: linear-gradient(135deg, #10b981, #06b6d4, #10b981);
+        }
+        
+        .holo-badge.info .holo-shine {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #3b82f6);
+        }
+        
+        .badge-icon {
+            width: 18px;
+            height: 18px;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <span class="holo-badge">
+        <div class="holo-shine"></div>
+        <span class="badge-text">Trending</span>
+    </span>
+    
+    <span class="holo-badge premium">
+        <div class="holo-shine"></div>
+        <span class="badge-text">Premium</span>
+    </span>
+    
+    <span class="holo-badge success">
+        <div class="holo-shine"></div>
+        <span class="badge-text">Verified</span>
+    </span>
+    
+    <span class="holo-badge info">
+        <div class="holo-shine"></div>
+        <span class="badge-text">New</span>
+    </span>
+</body>
+</html>
