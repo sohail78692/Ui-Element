@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Magnetic Pulse Loader UI Component">
+    <title>Magnetic Pulse Loader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        .magnetic-loader {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+        
+        .magnetic-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+        }
+        
+        .magnetic-ring:nth-child(1) {
+            border-top-color: #00f5d4;
+            animation: spin 1.2s linear infinite;
+        }
+        
+        .magnetic-ring:nth-child(2) {
+            inset: 15px;
+            border-right-color: #7b2cbf;
+            animation: spin 1.5s linear infinite reverse;
+        }
+        
+        .magnetic-ring:nth-child(3) {
+            inset: 30px;
+            border-bottom-color: #ff6b6b;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        .magnetic-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #00f5d4, #7b2cbf);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .magnetic-glow {
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,245,212,0.3), transparent 70%);
+            animation: rotate 3s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
+        }
+        
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="magnetic-loader">
+        <div class="magnetic-glow"></div>
+        <div class="magnetic-ring"></div>
+        <div class="magnetic-ring"></div>
+        <div class="magnetic-ring"></div>
+        <div class="magnetic-core"></div>
+    </div>
+</body>
+</html>
