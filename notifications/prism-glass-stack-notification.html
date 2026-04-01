@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prism Glass Stack Notification UI Component">
+    <title>Prism Glass Stack Notification</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #0d0d12;
+            font-family: 'DM Sans', sans-serif;
+            padding: 20px;
+        }
+        .notification-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 370px;
+        }
+        .toast {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.025);
+            border-radius: 18px;
+            animation: prism-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+        }
+        .toast:nth-child(1) { animation-delay: 0s; }
+        .toast:nth-child(2) { animation-delay: 0.12s; }
+        .toast:nth-child(3) { animation-delay: 0.24s; }
+        
+        @keyframes prism-enter {
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .toast::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .toast::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            border-radius: 18px 18px 0 0;
+        }
+        .toast:hover {
+            background: rgba(255,255,255,0.04);
+            transform: translateY(-3px) scale(1.02);
+        }
+        .toast:hover::before {
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+        }
+        .toast-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .toast:hover .toast-glow {
+            opacity: 1;
+        }
+        .success .toast-glow { background: radial-gradient(ellipse at top left, rgba(16,185,129,0.15), transparent 50%); }
+        .error .toast-glow { background: radial-gradient(ellipse at top left, rgba(244,63,94,0.15), transparent 50%); }
+        .info .toast-glow { background: radial-gradient(ellipse at top left, rgba(59,130,246,0.15), transparent 50%); }
+        .toast-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            position: relative;
+            z-index: 1;
+        }
+        .success .toast-icon {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+        }
+        .error .toast-icon {
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+            box-shadow: 0 4px 16px rgba(244,63,94,0.3);
+        }
+        .info .toast-icon {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 4px 16px rgba(59,130,246,0.3);
+        }
+        .toast-content {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+        .toast-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+        .toast-message {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+        .toast-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .success .toast-badge { background: rgba(16,185,129,0.15); color: #10b981; }
+        .error .toast-badge { background: rgba(244,63,94,0.15); color: #f43f5e; }
+        .info .toast-badge { background: rgba(59,130,246,0.15); color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="notification-stack">
+        <div class="toast success">
+            <div class="toast-glow"></div>
+            <div class="toast-icon">✓</div>
+            <div class="toast-content">
+                <div class="toast-title">Payment Received</div>
+                <div class="toast-message">$249.00 has been deposited</div>
+            </div>
+            <span class="toast-badge">Complete</span>
+        </div>
+        <div class="toast error">
+            <div class="toast-glow"></div>
+            <div class="toast-icon">✕</div>
+            <div class="toast-content">
+                <div class="toast-title">Payment Failed</div>
+                <div class="toast-message">Card was declined</div>
+            </div>
+            <span class="toast-badge">Failed</span>
+        </div>
+        <div class="toast info">
+            <div class="toast-glow"></div>
+            <div class="toast-icon">i</div>
+            <div class="toast-content">
+                <div class="toast-title">New Feature</div>
+                <div class="toast-message">Dark mode is now available</div>
+            </div>
+            <span class="toast-badge">New</span>
+        </div>
+    </div>
+</body>
+</html>
