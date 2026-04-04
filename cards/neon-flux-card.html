@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Flux Card</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0a;
+            font-family: 'DM Sans', sans-serif;
+            gap: 40px;
+            flex-wrap: wrap;
+            padding: 40px;
+        }
+
+        .card-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-label {
+            color: #6b7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .flux-card {
+            position: relative;
+            width: 320px;
+            padding: 28px;
+            background: linear-gradient(145deg, #12121a 0%, #1a1a2e 100%);
+            border-radius: 20px;
+            border: 1px solid #2a2a3e;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .flux-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(139, 92, 246, 0.1) 60deg,
+                transparent 120deg,
+                rgba(6, 182, 212, 0.1) 180deg,
+                transparent 240deg,
+                rgba(236, 72, 153, 0.1) 300deg,
+                transparent 360deg
+            );
+            animation: fluxRotate 8s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .flux-card:hover::before {
+            opacity: 1;
+        }
+
+        .flux-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(139, 92, 246, 0.05) 0%,
+                transparent 50%,
+                rgba(6, 182, 212, 0.05) 100%
+            );
+            pointer-events: none;
+        }
+
+        .flux-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 
+                0 20px 40px rgba(139, 92, 246, 0.2),
+                0 0 30px rgba(6, 182, 212, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .card-glow {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            top: -30px;
+            right: -30px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
+            filter: blur(30px);
+            transition: all 0.4s;
+        }
+
+        .flux-card:hover .card-glow {
+            width: 150px;
+            height: 150px;
+            top: -50px;
+            right: -50px;
+        }
+
+        .card-header {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .card-title {
+            position: relative;
+            z-index: 1;
+            color: #f1f5f9;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .card-subtitle {
+            position: relative;
+            z-index: 1;
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .card-body {
+            position: relative;
+            z-index: 1;
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .card-footer {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid #2a2a3e;
+        }
+
+        .card-price {
+            font-family: 'Space Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            color: #06b6d4;
+        }
+
+        .card-price span {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .card-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .card-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        @keyframes fluxRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .wide-card {
+            width: 400px;
+        }
+
+        .small-card {
+            width: 260px;
+            padding: 20px;
+        }
+
+        .small-card .card-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+        }
+
+        .small-card .card-title {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-wrapper">
+        <span class="card-label">Default</span>
+        <div class="flux-card">
+            <div class="card-glow"></div>
+            <div class="card-header">
+                <div class="card-icon">⚡</div>
+                <div>
+                    <div class="card-title">Lightning Pro</div>
+                    <div class="card-subtitle">Performance Plan</div>
+                </div>
+            </div>
+            <div class="card-body">
+                Unlock lightning-fast processing speeds with our premium performance tier. Includes priority support and advanced analytics.
+            </div>
+            <div class="card-footer">
+                <div class="card-price">$49<span>/mo</span></div>
+                <button class="card-btn">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-wrapper">
+        <span class="card-label">Wide</span>
+        <div class="flux-card wide-card">
+            <div class="card-glow"></div>
+            <div class="card-header">
+                <div class="card-icon">🔮</div>
+                <div>
+                    <div class="card-title">Quantum Bundle</div>
+                    <div class="card-subtitle">Enterprise Suite</div>
+                </div>
+            </div>
+            <div class="card-body">
+                Complete enterprise solution with unlimited projects, team collaboration, and advanced security features. Perfect for scaling organizations.
+            </div>
+            <div class="card-footer">
+                <div class="card-price">$199<span>/mo</span></div>
+                <button class="card-btn">Contact Sales</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-wrapper">
+        <span class="card-label">Small</span>
+        <div class="flux-card small-card">
+            <div class="card-glow"></div>
+            <div class="card-header">
+                <div class="card-icon">🎯</div>
+                <div>
+                    <div class="card-title">Starter</div>
+                    <div class="card-subtitle">Basic</div>
+                </div>
+            </div>
+            <div class="card-body">
+                Great for getting started. Essential features for small projects.
+            </div>
+            <div class="card-footer">
+                <div class="card-price">$9<span>/mo</span></div>
+                <button class="card-btn">Join</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
