@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starlight Trail Button</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0f;
+            font-family: 'Space Grotesk', sans-serif;
+            gap: 40px;
+            flex-wrap: wrap;
+            padding: 40px;
+        }
+
+        .btn-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-label {
+            color: #6b7280;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .star-btn {
+            position: relative;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .star-btn:hover {
+            transform: translateY(-3px);
+            border-color: #6366f1;
+            box-shadow: 
+                0 10px 30px rgba(99, 102, 241, 0.3),
+                0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .star-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                transparent 0%, 
+                rgba(99, 102, 241, 0.1) 50%, 
+                transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .star-btn:hover::before {
+            opacity: 1;
+        }
+
+        .star-btn .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .star-btn .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: starTrail 1.5s ease-out forwards;
+        }
+
+        @keyframes starTrail {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        .star-btn:hover .star:nth-child(1) { --tx: 20px; --ty: -30px; animation-delay: 0s; }
+        .star-btn:hover .star:nth-child(2) { --tx: -15px; --ty: -20px; animation-delay: 0.1s; }
+        .star-btn:hover .star:nth-child(3) { --tx: 30px; --ty: 10px; animation-delay: 0.05s; }
+        .star-btn:hover .star:nth-child(4) { --tx: -25px; --ty: 25px; animation-delay: 0.15s; }
+        .star-btn:hover .star:nth-child(5) { --tx: 10px; --ty: 35px; animation-delay: 0.08s; }
+        .star-btn:hover .star:nth-child(6) { --tx: -30px; --ty: -10px; animation-delay: 0.12s; }
+        .star-btn:hover .star:nth-child(7) { --tx: 5px; --ty: -40px; animation-delay: 0.2s; }
+        .star-btn:hover .star:nth-child(8) { --tx: -10px; --ty: 15px; animation-delay: 0.03s; }
+
+        .btn-icon {
+            display: inline-block;
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+
+        .star-btn:hover .btn-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-color: #7c3aed;
+        }
+
+        .primary-btn:hover {
+            border-color: #a78bfa;
+            box-shadow: 
+                0 10px 30px rgba(99, 102, 241, 0.4),
+                0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .danger-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #f43f5e 100%);
+            border-color: #e11d48;
+        }
+
+        .danger-btn:hover {
+            border-color: #fb7185;
+            box-shadow: 
+                0 10px 30px rgba(220, 38, 38, 0.4),
+                0 0 20px rgba(244, 63, 94, 0.3);
+        }
+
+        .success-btn {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border-color: #059669;
+        }
+
+        .success-btn:hover {
+            border-color: #34d399;
+            box-shadow: 
+                0 10px 30px rgba(5, 150, 105, 0.4),
+                0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .small-btn {
+            padding: 10px 24px;
+            font-size: 13px;
+        }
+
+        .large-btn {
+            padding: 20px 48px;
+            font-size: 17px;
+        }
+    </style>
+</head>
+<body>
+    <div class="btn-wrapper">
+        <span class="btn-label">Default</span>
+        <button class="star-btn">
+            <span class="stars">
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+            </span>
+            <span class="btn-icon">✦</span>Explore
+        </button>
+    </div>
+
+    <div class="btn-wrapper">
+        <span class="btn-label">Primary</span>
+        <button class="star-btn primary-btn">
+            <span class="stars">
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+            </span>
+            <span class="btn-icon">★</span>Get Started
+        </button>
+    </div>
+
+    <div class="btn-wrapper">
+        <span class="btn-label">Small</span>
+        <button class="star-btn small-btn">
+            <span class="stars">
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+            </span>
+            Learn More
+        </button>
+    </div>
+
+    <div class="btn-wrapper">
+        <span class="btn-label">Large</span>
+        <button class="star-btn large-btn">
+            <span class="stars">
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+            </span>
+            <span class="btn-icon">✦</span>Get Started
+        </button>
+    </div>
+
+    <div class="btn-wrapper">
+        <span class="btn-label">Danger</span>
+        <button class="star-btn danger-btn">
+            <span class="stars">
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+            </span>
+            <span class="btn-icon">⚠</span>Delete
+        </button>
+    </div>
+
+    <div class="btn-wrapper">
+        <span class="btn-label">Success</span>
+        <button class="star-btn success-btn">
+            <span class="stars">
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+            </span>
+            <span class="btn-icon">✓</span>Confirm
+        </button>
+    </div>
+</body>
+</html>
