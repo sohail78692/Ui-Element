@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Focus Input</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%);
+            font-family: 'Outfit', sans-serif;
+            gap: 50px;
+            flex-wrap: wrap;
+            padding: 40px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-label {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-left: 4px;
+        }
+
+        .magnetic-input {
+            position: relative;
+            width: 320px;
+        }
+
+        .magnetic-input input {
+            width: 100%;
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid #2d2d44;
+            border-radius: 16px;
+            color: #f1f5f9;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .magnetic-input input::placeholder {
+            color: #4a4a6a;
+        }
+
+        .magnetic-input input:focus {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.05);
+            box-shadow: 
+                0 0 0 4px rgba(139, 92, 246, 0.1),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .magnetic-field {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .magnetic-input input:focus ~ .magnetic-field {
+            opacity: 1;
+        }
+
+        .field-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            animation: fieldPulse 1.5s ease-in-out infinite;
+        }
+
+        .field-dot:nth-child(1) { animation-delay: 0s; }
+        .field-dot:nth-child(2) { animation-delay: 0.2s; }
+        .field-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes fieldPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 0.6; 
+            }
+            50% { 
+                transform: scale(1.5); 
+                opacity: 1; 
+            }
+        }
+
+        .input-glow {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .magnetic-input input:focus ~ .input-glow {
+            opacity: 1;
+        }
+
+        .small-input {
+            width: 240px;
+        }
+
+        .small-input input {
+            padding: 14px 18px;
+            font-size: 14px;
+            border-radius: 12px;
+        }
+
+        .large-input {
+            width: 400px;
+        }
+
+        .large-input input {
+            padding: 22px 28px;
+            font-size: 16px;
+            border-radius: 18px;
+        }
+
+        .search-input {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 18px;
+            transform: translateY(-50%);
+            color: #4a4a6a;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .search-input input {
+            padding-left: 48px;
+        }
+
+        .search-input input:focus ~ .search-icon {
+            color: #8b5cf6;
+        }
+
+        .password-input {
+            position: relative;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 50%;
+            right: 16px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #4a4a6a;
+            cursor: pointer;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .password-input input:focus ~ .toggle-btn {
+            color: #8b5cf6;
+        }
+
+        .error-input input {
+            border-color: #ef4444;
+        }
+
+        .error-input input:focus {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+            box-shadow: 
+                0 0 0 4px rgba(239, 68, 68, 0.1),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-input .field-dot {
+            background: #ef4444;
+        }
+
+        .error-input .input-glow {
+            background: radial-gradient(ellipse at center, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
+        }
+    </style>
+</head>
+<body>
+    <div class="input-wrapper">
+        <label class="input-label">Username</label>
+        <div class="magnetic-input">
+            <input type="text" placeholder="Enter your username">
+            <div class="magnetic-field">
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+            </div>
+            <div class="input-glow"></div>
+        </div>
+    </div>
+
+    <div class="input-wrapper">
+        <label class="input-label">Email</label>
+        <div class="magnetic-input">
+            <input type="email" placeholder="name@example.com">
+            <div class="magnetic-field">
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+            </div>
+            <div class="input-glow"></div>
+        </div>
+    </div>
+
+    <div class="input-wrapper">
+        <label class="input-label">Search</label>
+        <div class="magnetic-input search-input">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search anything...">
+            <div class="magnetic-field">
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+            </div>
+            <div class="input-glow"></div>
+        </div>
+    </div>
+
+    <div class="input-wrapper">
+        <label class="input-label">Password</label>
+        <div class="magnetic-input password-input">
+            <input type="password" placeholder="Enter password">
+            <button class="toggle-btn">👁</button>
+            <div class="magnetic-field">
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+            </div>
+            <div class="input-glow"></div>
+        </div>
+    </div>
+
+    <div class="input-wrapper">
+        <label class="input-label">Error State</label>
+        <div class="magnetic-input error-input">
+            <input type="text" placeholder="Invalid input">
+            <div class="magnetic-field">
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+            </div>
+            <div class="input-glow"></div>
+        </div>
+    </div>
+
+    <div class="input-wrapper">
+        <label class="input-label">Small</label>
+        <div class="magnetic-input small-input">
+            <input type="text" placeholder="Small input">
+            <div class="magnetic-field">
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+            </div>
+            <div class="input-glow"></div>
+        </div>
+    </div>
+
+    <div class="input-wrapper">
+        <label class="input-label">Large</label>
+        <div class="magnetic-input large-input">
+            <input type="text" placeholder="Large input field">
+            <div class="magnetic-field">
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+                <span class="field-dot"></span>
+            </div>
+            <div class="input-glow"></div>
+        </div>
+    </div>
+</body>
+</html>
