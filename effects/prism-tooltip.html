@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Tooltip</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a10;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .tooltip-trigger {
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-family: system-ui, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .tooltip-trigger:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        .prism-tooltip {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            padding: 12px 18px;
+            background: linear-gradient(135deg, #1a1a24, #14141c);
+            border-radius: 10px;
+            font-family: system-ui, sans-serif;
+            font-size: 13px;
+            color: #fff;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        .tooltip-trigger:hover .prism-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+        .prism-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: #14141c;
+        }
+        .prism-tooltip .prism-line {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .prism-line span {
+            width: 20px;
+            height: 4px;
+            border-radius: 2px;
+        }
+        .prism-line span:nth-child(1) { background: linear-gradient(90deg, #ff6b6b, #feca57); }
+        .prism-line span:nth-child(2) { background: linear-gradient(90deg, #48dbfb, #5f27cd); }
+        .prism-line span:nth-child(3) { background: linear-gradient(90deg, #1dd1a1, #10ac84); }
+    </style>
+</head>
+<body>
+    <div class="tooltip-trigger">
+        Hover Me
+        <div class="prism-tooltip">
+            Quick Action
+            <div class="prism-line">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <div class="tooltip-trigger">
+        Info
+        <div class="prism-tooltip">
+            System Ready
+            <div class="prism-line">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <div class="tooltip-trigger">
+        Help
+        <div class="prism-tooltip">
+            Click for Docs
+            <div class="prism-line">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
