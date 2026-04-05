@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plasma Modal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0f;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .trigger-btn {
+            padding: 16px 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #00ffff;
+            background: transparent;
+            border: 2px solid #00ffff;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .trigger-btn:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+        .trigger-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(0,255,255,0.3) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        .trigger-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-plasma {
+            position: relative;
+            width: 90%;
+            max-width: 480px;
+            padding: 40px;
+            background: linear-gradient(180deg, rgba(20,20,30,0.95) 0%, rgba(10,10,15,0.98) 100%);
+            border-radius: 8px;
+            transform: scale(0.8) rotateX(10deg);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.1),
+                inset 0 0 60px rgba(0, 255, 255, 0.05);
+        }
+        .modal-overlay.active .modal-plasma {
+            transform: scale(1) rotateX(0);
+            opacity: 1;
+        }
+        .plasma-orb {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,255,255,0.4) 0%, transparent 70%);
+            filter: blur(20px);
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: orb-pulse 2s ease-in-out infinite;
+        }
+        .plasma-ring {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: ring-spin 4s linear infinite;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .modal-close:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0,255,255,0.3);
+        }
+        .modal-close::before,
+        .modal-close::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 2px;
+            background: rgba(255,255,255,0.7);
+        }
+        .modal-close::before { transform: rotate(45deg); }
+        .modal-close::after { transform: rotate(-45deg); }
+        .modal-title {
+            color: #00ffff;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0,255,255,0.5);
+        }
+        .modal-content {
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            line-height: 1.8;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .modal-btn {
+            padding: 14px 32px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #00ffff, #00cccc);
+            color: #000;
+            border: none;
+        }
+        .modal-btn.primary:hover {
+            box-shadow: 0 0 30px rgba(0,255,255,0.5);
+            transform: translateY(-2px);
+        }
+        .modal-btn.secondary {
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .modal-btn.secondary:hover {
+            border-color: rgba(0,255,255,0.5);
+            color: #00ffff;
+        }
+        @keyframes orb-pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
+            50% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
+        }
+        @keyframes ring-spin {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <button class="trigger-btn" id="openModal">OPEN TERMINAL</button>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-plasma">
+            <div class="plasma-orb"></div>
+            <div class="plasma-ring"></div>
+            <button class="modal-close" id="closeModal"></button>
+            <h2 class="modal-title">SYSTEM ACCESS</h2>
+            <p class="modal-content">Initialize neural interface connection? This action will establish a quantum link with the central network.</p>
+            <div class="modal-actions">
+                <button class="modal-btn primary" id="confirmBtn">CONNECT</button>
+                <button class="modal-btn secondary" id="cancelBtn">ABORT</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const openBtn = document.getElementById('openModal');
+        const closeBtn = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const overlay = document.getElementById('modalOverlay');
+        openBtn.addEventListener('click', () => {
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        function closeModal() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        confirmBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
