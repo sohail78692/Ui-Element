@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Toggle Switch</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a10;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toggle-label {
+            font-family: system-ui, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
+        }
+        .toggle-label.active {
+            color: #fff;
+        }
+        .aurora-toggle {
+            position: relative;
+            width: 56px;
+            height: 28px;
+            background: #1a1a24;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .aurora-toggle.active {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        .toggle-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .aurora-toggle.active .toggle-thumb {
+            left: 31px;
+        }
+        .aurora-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            filter: blur(10px);
+        }
+        .aurora-toggle.active .aurora-glow {
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="toggle-wrapper">
+        <span class="toggle-label">Dark Mode</span>
+        <div class="aurora-toggle active" id="toggle1">
+            <div class="aurora-glow"></div>
+            <div class="toggle-thumb"></div>
+        </div>
+    </div>
+    <div class="toggle-wrapper">
+        <span class="toggle-label">Notifications</span>
+        <div class="aurora-toggle" id="toggle2">
+            <div class="aurora-glow"></div>
+            <div class="toggle-thumb"></div>
+        </div>
+    </div>
+    <div class="toggle-wrapper">
+        <span class="toggle-label">Wi-Fi</span>
+        <div class="aurora-toggle active" id="toggle3">
+            <div class="aurora-glow"></div>
+            <div class="toggle-thumb"></div>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.aurora-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+                const label = toggle.previousElementSibling;
+                if (label) {
+                    label.classList.toggle('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
