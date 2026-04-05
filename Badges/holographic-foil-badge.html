@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Foil Badge</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+        .foil-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: default;
+            transform-style: preserve-3d;
+        }
+        .foil-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 8px;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.4) 0%, 
+                rgba(255,255,255,0.1) 25%,
+                rgba(255,255,255,0) 50%,
+                rgba(255,255,255,0.1) 75%,
+                rgba(255,255,255,0.4) 100%);
+            -webkit-mask: linear-gradient(135deg, #fff 0%, #fff 0%) content-box, linear-gradient(135deg, #fff 0%, #fff 0%);
+            mask: linear-gradient(135deg, #fff 0%, #fff 0%) content-box, linear-gradient(135deg, #fff 0%, #fff 0%);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 2px;
+            animation: foil-shine 3s ease-in-out infinite;
+        }
+        .foil-badge::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, 
+                #ff6b6b, #feca57, #48dbfb, #ff6b6b, #feca57, #48dbfb);
+            background-size: 400% 400%;
+            filter: blur(8px);
+            opacity: 0.6;
+            z-index: -1;
+            animation: foil-glow 4s ease infinite;
+        }
+        .foil-badge span {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 50%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3);
+        }
+        .foil-badge.gold span {
+            background: linear-gradient(135deg, #ffd700 0%, #ffec8b 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .foil-badge.silver span {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 50%, #c0c0c0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .foil-badge.rose span {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa3c4 50%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        @keyframes foil-shine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes foil-glow {
+            0%, 100% { background-position: 0% 50%; filter: blur(8px) opacity(0.6); }
+            50% { background-position: 100% 50%; filter: blur(12px) opacity(0.8); }
+        }
+    </style>
+</head>
+<body>
+    <div class="foil-badge gold">
+        <span>★ Premium</span>
+    </div>
+    <div class="foil-badge silver">
+        <span>Elite</span>
+    </div>
+    <div class="foil-badge rose">
+        <span>Vip</span>
+    </div>
+    <div class="foil-badge">
+        <span>Exclusive</span>
+    </div>
+</body>
+</html>
