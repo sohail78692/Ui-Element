@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Orbital Element</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #080810;
+        }
+        .orbital-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+        .orbital-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #00ffff 0%, #0099ff 100%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                0 0 60px rgba(0, 153, 255, 0.3);
+            animation: center-pulse 2s ease-in-out infinite;
+        }
+        .orbital-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .ring-1 {
+            width: 100px;
+            height: 100px;
+            animation: ring-rotate 4s linear infinite;
+        }
+        .ring-2 {
+            width: 160px;
+            height: 160px;
+            animation: ring-rotate 6s linear infinite reverse;
+        }
+        .ring-3 {
+            width: 220px;
+            height: 220px;
+            animation: ring-rotate 8s linear infinite;
+        }
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #00ffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+        .ring-1 .particle:nth-child(1) {
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .ring-2 .particle:nth-child(1) {
+            top: 50%;
+            right: -3px;
+            transform: translateY(-50%);
+            background: #ff00ff;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+        }
+        .ring-3 .particle:nth-child(1) {
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffff00;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+        }
+        .particle-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: dot-float 3s ease-in-out infinite;
+        }
+        .dot-1 { top: 20%; left: 30%; animation-delay: 0s; }
+        .dot-2 { top: 70%; left: 60%; animation-delay: 0.5s; }
+        .dot-3 { top: 40%; left: 80%; animation-delay: 1s; }
+        .dot-4 { top: 80%; left: 20%; animation-delay: 1.5s; }
+        @keyframes center-pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+        @keyframes ring-rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes dot-float {
+            0%, 100% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(-10px); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="orbital-container">
+        <div class="orbital-center"></div>
+        
+        <div class="orbital-ring ring-1">
+            <div class="particle"></div>
+        </div>
+        
+        <div class="orbital-ring ring-2">
+            <div class="particle"></div>
+        </div>
+        
+        <div class="orbital-ring ring-3">
+            <div class="particle"></div>
+        </div>
+        
+        <div class="particle-dot dot-1"></div>
+        <div class="particle-dot dot-2"></div>
+        <div class="particle-dot dot-3"></div>
+        <div class="particle-dot dot-4"></div>
+    </div>
+</body>
+</html>
