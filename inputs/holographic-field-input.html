@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holographic Field Input</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@400;500;600&display=swap');
+
+        :root {
+            --holo-cyan: #00f0ff;
+            --holo-magenta: #ff00ff;
+            --holo-gold: #ffd700;
+            --bg-deep: #050810;
+            --bg-panel: #0a0f18;
+            --text-primary: #e0f4ff;
+            --text-muted: #5a7a9a;
+            --border-dim: #1a2a3a;
+            --glow-cyan: rgba(0, 240, 255, 0.4);
+            --glow-magenta: rgba(255, 0, 255, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: var(--bg-deep);
+            font-family: 'Rajdhani', sans-serif;
+            background-image: 
+                radial-gradient(ellipse at 20% 30%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 0, 255, 0.06) 0%, transparent 50%),
+                linear-gradient(180deg, #020408 0%, #080d15 100%);
+        }
+
+        .holo-panel {
+            width: min(480px, 100%);
+            position: relative;
+            padding: 32px;
+            background: linear-gradient(145deg, rgba(10, 15, 25, 0.95), rgba(8, 12, 20, 0.98));
+            border-radius: 16px;
+            border: 1px solid var(--border-dim);
+            overflow: hidden;
+        }
+
+        .holo-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--holo-cyan), transparent);
+            opacity: 0.6;
+        }
+
+        .holo-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.03), transparent 40%, rgba(255, 0, 255, 0.02));
+            pointer-events: none;
+        }
+
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--holo-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--holo-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--holo-cyan), 0 0 20px var(--glow-cyan);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+
+        .panel-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        .field-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .holo-input {
+            width: 100%;
+            padding: 16px 20px;
+            padding-left: 48px;
+            background: rgba(0, 20, 35, 0.6);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .holo-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .holo-input:focus {
+            border-color: var(--holo-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(0, 240, 255, 0.03);
+        }
+
+        .holo-input:focus + .input-icon {
+            color: var(--holo-cyan);
+            text-shadow: 0 0 12px var(--holo-cyan);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-border {
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .input-border::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, var(--holo-cyan) 0%, transparent 70%);
+            opacity: 0;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .holo-input:focus ~ .input-border::before {
+            width: 200%;
+            height: 200%;
+            opacity: 0.08;
+        }
+
+        .holo-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--holo-cyan), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .scan-line.bottom {
+            bottom: 8px;
+        }
+
+        .holo-input:focus ~ .scan-line.bottom {
+            opacity: 0.4;
+            animation: scan 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0%, 100% { transform: scaleX(0); transform-origin: left; }
+            50% { transform: scaleX(1); transform-origin: left; }
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 12px 16px;
+            background: rgba(0, 20, 35, 0.5);
+            border-radius: 8px;
+            border: 1px solid var(--border-dim);
+        }
+
+        .status-item {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--holo-cyan);
+            box-shadow: 0 0 8px var(--holo-cyan);
+        }
+
+        .status-value {
+            color: var(--holo-gold);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="holo-panel">
+        <div class="panel-title">Holographic Field Input</div>
+        <div class="panel-subtitle">Secure data transmission interface</div>
+
+        <div class="field-group">
+            <label class="holo-label">Authentication Code</label>
+            <div class="input-wrapper">
+                <input class="holo-input" type="text" placeholder="Enter authorization token" maxlength="32" autocomplete="off" />
+                <span class="input-icon">⬡</span>
+                <div class="input-border"></div>
+                <div class="scan-line bottom"></div>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label class="holo-label">Secure Identifier</label>
+            <div class="input-wrapper">
+                <input class="holo-input" type="text" placeholder="Input unique signature" maxlength="24" autocomplete="off" />
+                <span class="input-icon">◆</span>
+                <div class="input-border"></div>
+                <div class="scan-line bottom"></div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot"></span>
+                <span>System Status</span>
+            </div>
+            <div class="status-item">
+                <span>Encryption</span>
+                <span class="status-value">AES-256</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
