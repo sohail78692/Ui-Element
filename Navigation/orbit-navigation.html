@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit Navigation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --on-bg: #08080c;
+            --on-surface: #12121a;
+            --on-border: #1f1f2e;
+            --on-accent: #a855f7;
+            --on-text: #e4e4e7;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: var(--on-bg);
+            background-image: 
+                radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(56, 189, 248, 0.06) 0%, transparent 40%);
+        }
+
+        .on-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: var(--on-surface);
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid var(--on-border);
+            width: 220px;
+        }
+
+        .on-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: transparent;
+            border: none;
+            border-radius: 14px;
+            color: var(--on-text);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .on-item:hover {
+            background: rgba(168, 85, 247, 0.08);
+        }
+
+        .on-item.active {
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--on-accent);
+        }
+
+        .on-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: var(--on-accent);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .on-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .on-glow {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 30px;
+            background: radial-gradient(ellipse, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .on-item.active .on-glow {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="on-nav">
+        <button class="on-item active">
+            <span class="on-icon">⌂</span>
+            <span>Dashboard</span>
+            <div class="on-glow"></div>
+        </button>
+        <button class="on-item">
+            <span class="on-icon">◈</span>
+            <span>Projects</span>
+            <div class="on-glow"></div>
+        </button>
+        <button class="on-item">
+            <span class="on-icon">⚙</span>
+            <span>Settings</span>
+            <div class="on-glow"></div>
+        </button>
+        <button class="on-item">
+            <span class="on-icon">◉</span>
+            <span>Messages</span>
+            <div class="on-glow"></div>
+        </button>
+    </nav>
+
+    <script>
+        document.querySelectorAll('.on-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.on-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
