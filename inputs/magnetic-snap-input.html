@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Snap Input</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ms-bg: #0f0f14;
+            --ms-field: #18181f;
+            --ms-border: #2a2a3a;
+            --ms-accent: #f472b6;
+            --ms-text: #f4f4f5;
+            --ms-muted: #71717a;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: var(--ms-bg);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(244, 114, 182, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 50%, rgba(167, 139, 250, 0.08) 0%, transparent 40%);
+            font-family: system-ui, sans-serif;
+        }
+
+        .ms-field {
+            width: min(380px, 100%);
+            position: relative;
+        }
+
+        .ms-input {
+            width: 100%;
+            padding: 20px 24px;
+            padding-right: 56px;
+            background: var(--ms-field);
+            border: 2px solid var(--ms-border);
+            border-radius: 16px;
+            color: var(--ms-text);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .ms-input::placeholder {
+            color: var(--ms-muted);
+        }
+
+        .ms-input:focus {
+            border-color: var(--ms-accent);
+            box-shadow: 0 8px 32px rgba(244, 114, 182, 0.2);
+        }
+
+        .ms-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--ms-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ms-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--ms-muted);
+            transition: all 0.3s ease;
+        }
+
+        .ms-input:focus ~ .ms-icon {
+            background: var(--ms-accent);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .ms-input:focus ~ .ms-icon svg {
+            fill: #fff;
+        }
+
+        .ms-label {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ms-muted);
+            font-size: 1rem;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            background: var(--ms-field);
+            padding: 0 4px;
+        }
+
+        .ms-input:focus ~ .ms-label,
+        .ms-input:not(:placeholder-shown) ~ .ms-label {
+            top: 0;
+            font-size: 0.75rem;
+            color: var(--ms-accent);
+        }
+
+        .ms-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 20px;
+            border: 2px solid var(--ms-accent);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .ms-input:focus ~ .ms-ring {
+            opacity: 0.3;
+            transform: scale(1);
+            animation: ring-pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes ring-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ms-field">
+        <input class="ms-input" type="text" placeholder=" " autocomplete="off" />
+        <label class="ms-label">Search anything</label>
+        <div class="ms-icon">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </div>
+        <div class="ms-ring"></div>
+    </div>
+</body>
+</html>
