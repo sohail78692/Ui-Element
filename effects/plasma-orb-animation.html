@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plasma Orb Animation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #06060a;
+            background-image: 
+                radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+        }
+
+        .plasma-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .plasma-orb {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            height: 120px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #a78bfa, #7c3aed, #4c1d95);
+            box-shadow: 
+                0 0 60px rgba(167, 139, 250, 0.5),
+                0 0 100px rgba(167, 139, 250, 0.3),
+                0 0 140px rgba(167, 139, 250, 0.1);
+            animation: plasma-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes plasma-pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 
+                    0 0 60px rgba(167, 139, 250, 0.5),
+                    0 0 100px rgba(167, 139, 250, 0.3);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                box-shadow: 
+                    0 0 80px rgba(236, 72, 153, 0.6),
+                    0 0 120px rgba(236, 72, 153, 0.4),
+                    0 0 160px rgba(139, 92, 246, 0.2);
+            }
+        }
+
+        .plasma-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid transparent;
+        }
+
+        .plasma-ring:nth-child(2) {
+            width: 140px;
+            height: 140px;
+            border-color: rgba(167, 139, 250, 0.3);
+            animation: ring-expand 3s ease-in-out infinite;
+        }
+
+        .plasma-ring:nth-child(3) {
+            width: 180px;
+            height: 180px;
+            border-color: rgba(236, 72, 153, 0.2);
+            animation: ring-expand 3s ease-in-out infinite 0.5s;
+        }
+
+        .plasma-ring:nth-child(4) {
+            width: 220px;
+            height: 220px;
+            border-color: rgba(139, 92, 246, 0.15);
+            animation: ring-expand 3s ease-in-out infinite 1s;
+        }
+
+        @keyframes ring-expand {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.15);
+                opacity: 0.2;
+            }
+        }
+
+        .plasma-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #fff;
+            animation: particle-orbit 4s linear infinite;
+        }
+
+        .plasma-particle:nth-child(5) { animation-delay: 0s; }
+        .plasma-particle:nth-child(6) { animation-delay: -1s; }
+        .plasma-particle:nth-child(7) { animation-delay: -2s; }
+        .plasma-particle:nth-child(8) { animation-delay: -3s; }
+
+        @keyframes particle-orbit {
+            from { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+        }
+
+        .plasma-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff 0%, #c4b5fd 50%, transparent 70%);
+            animation: inner-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes inner-glow {
+            0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <div class="plasma-container">
+        <div class="plasma-ring"></div>
+        <div class="plasma-ring"></div>
+        <div class="plasma-ring"></div>
+        <div class="plasma-particle"></div>
+        <div class="plasma-particle"></div>
+        <div class="plasma-particle"></div>
+        <div class="plasma-particle"></div>
+        <div class="plasma-orb">
+            <div class="plasma-inner"></div>
+        </div>
+    </div>
+</body>
+</html>
