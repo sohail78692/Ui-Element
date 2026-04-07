@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reactive Toggle Switch</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --rs-bg: #0c0c10;
+            --rs-surface: #16161e;
+            --rs-border: #262630;
+            --rs-accent: #f43f5e;
+            --rs-inactive: #3f3f46;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            padding: 24px;
+            background: var(--rs-bg);
+            font-family: system-ui, sans-serif;
+        }
+
+        .rs-toggle {
+            position: relative;
+            width: 64px;
+            height: 32px;
+            background: var(--rs-inactive);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rs-toggle.active {
+            background: var(--rs-accent);
+            box-shadow: 0 0 24px rgba(244, 63, 94, 0.5);
+        }
+
+        .rs-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 26px;
+            height: 26px;
+            background: #fff;
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .rs-toggle.active .rs-thumb {
+            transform: translateX(32px);
+        }
+
+        .rs-ring {
+            position: absolute;
+            inset: -6px;
+            border-radius: 22px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .rs-toggle.active .rs-ring {
+            border-color: var(--rs-accent);
+            opacity: 0.3;
+        }
+
+        .rs-toggle-blue { --rs-accent: #3b82f6; }
+        .rs-toggle-green { --rs-accent: #22c55e; }
+        .rs-toggle-purple { --rs-accent: #a855f7; }
+
+        .rs-label {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <label class="rs-label">
+        <span>Notifications</span>
+        <div class="rs-toggle active">
+            <div class="rs-thumb"></div>
+            <div class="rs-ring"></div>
+        </div>
+    </label>
+    <label class="rs-label">
+        <span>Dark Mode</span>
+        <div class="rs-toggle rs-toggle-blue">
+            <div class="rs-thumb"></div>
+            <div class="rs-ring"></div>
+        </div>
+    </label>
+    <label class="rs-label">
+        <span>Auto Sync</span>
+        <div class="rs-toggle rs-toggle-green">
+            <div class="rs-thumb"></div>
+            <div class="rs-ring"></div>
+        </div>
+    </label>
+    <label class="rs-label">
+        <span>Premium</span>
+        <div class="rs-toggle rs-toggle-purple">
+            <div class="rs-thumb"></div>
+            <div class="rs-ring"></div>
+        </div>
+    </label>
+
+    <script>
+        document.querySelectorAll('.rs-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => toggle.classList.toggle('active'));
+        });
+    </script>
+</body>
+</html>
