@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nano Chip Badge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap');
+
+        :root {
+            --nc-teal: #00fff2;
+            --nc-purple: #b388ff;
+            --nc-bg: #0a0a0f;
+            --nc-panel: #12121a;
+            --nc-border: #1f1f2e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            padding: 24px;
+            background: var(--nc-bg);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 242, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(179, 136, 255, 0.05) 0%, transparent 40%);
+        }
+
+        .nano-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            background: var(--nc-panel);
+            border: 1px solid var(--nc-border);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #e0e0e0;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nano-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--nc-teal);
+            opacity: 0.7;
+        }
+
+        .nano-badge::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background: linear-gradient(135deg, transparent 45%, rgba(0, 255, 242, 0.05) 50%, transparent 55%);
+            background-size: 200% 200%;
+            animation: chip-glint 3s ease-in-out infinite;
+        }
+
+        @keyframes chip-glint {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+
+        .nano-badge:hover {
+            border-color: var(--nc-teal);
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.15);
+        }
+
+        .nano-chip {
+            width: 16px;
+            height: 16px;
+            background: 
+                linear-gradient(135deg, var(--nc-border) 25%, transparent 25%),
+                linear-gradient(225deg, var(--nc-border) 25%, transparent 25%),
+                linear-gradient(45deg, var(--nc-border) 25%, transparent 25%),
+                linear-gradient(315deg, var(--nc-border) 25%, transparent 25%);
+            background-size: 8px 8px;
+            border: 1px solid var(--nc-teal);
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .nano-chip::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            background: var(--nc-teal);
+            border-radius: 1px;
+            box-shadow: 0 0 6px var(--nc-teal);
+        }
+
+        .nano-badge.success { --nc-teal: #39ff14; }
+        .nano-badge.warning { --nc-teal: #ffbe0b; }
+        .nano-badge.error { --nc-teal: #ff006e; }
+        .nano-badge.info { --nc-teal: #00fff2; }
+        .nano-badge.purple { --nc-teal: #b388ff; }
+
+        .nano-badge.success::before { background: #39ff14; }
+        .nano-badge.warning::before { background: #ffbe0b; }
+        .nano-badge.error::before { background: #ff006e; }
+        .nano-badge.purple::before { background: #b388ff; }
+        .nano-badge.purple .nano-chip { border-color: #b388ff; }
+        .nano-badge.purple .nano-chip::after { background: #b388ff; box-shadow: 0 0 6px #b388ff; }
+
+        .nano-count {
+            background: rgba(0, 255, 242, 0.15);
+            color: var(--nc-teal);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .nano-badge.success .nano-count { background: rgba(57, 255, 20, 0.15); color: #39ff14; }
+        .nano-badge.warning .nano-count { background: rgba(255, 190, 11, 0.15); color: #ffbe0b; }
+        .nano-badge.error .nano-count { background: rgba(255, 0, 110, 0.15); color: #ff006e; }
+    </style>
+</head>
+<body>
+    <div class="nano-badge info">
+        <div class="nano-chip"></div>
+        <span>System Online</span>
+    </div>
+    <div class="nano-badge success">
+        <div class="nano-chip"></div>
+        <span>Deployed</span>
+        <span class="nano-count">12</span>
+    </div>
+    <div class="nano-badge warning">
+        <div class="nano-chip"></div>
+        <span>Pending</span>
+        <span class="nano-count">3</span>
+    </div>
+    <div class="nano-badge error">
+        <div class="nano-chip"></div>
+        <span>Failed</span>
+    </div>
+    <div class="nano-badge purple">
+        <div class="nano-chip"></div>
+        <span>Processing</span>
+        <span class="nano-count">7</span>
+    </div>
+</body>
+</html>
