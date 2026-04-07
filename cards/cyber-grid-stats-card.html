@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Grid Stats Card</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
+
+        :root {
+            --cg-cyan: #00f3ff;
+            --cg-orange: #ff6b35;
+            --cg-green: #39ff14;
+            --cg-bg: #0a0c14;
+            --cg-panel: #0e121d;
+            --cg-border: #1a2035;
+            --cg-grid: rgba(0, 243, 255, 0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: var(--cg-bg);
+            font-family: 'Rajdhani', sans-serif;
+            background-image: 
+                linear-gradient(var(--cg-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--cg-grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .cg-card {
+            width: 320px;
+            background: var(--cg-panel);
+            border: 1px solid var(--cg-border);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cg-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cg-cyan), var(--cg-orange));
+        }
+
+        .cg-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 60px;
+            background: 
+                linear-gradient(135deg, transparent 50%, var(--cg-cyan) 50%),
+                linear-gradient(225deg, transparent 50%, var(--cg-cyan) 50%);
+            opacity: 0.1;
+        }
+
+        .cg-header {
+            padding: 20px 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .cg-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--cg-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .cg-subtitle {
+            font-size: 0.75rem;
+            color: #5a6a8a;
+            margin-top: 4px;
+        }
+
+        .cg-indicator {
+            width: 10px;
+            height: 10px;
+            background: var(--cg-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--cg-green);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .cg-stats {
+            padding: 24px 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .cg-stat {
+            position: relative;
+        }
+
+        .cg-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .cg-stat-value.highlight {
+            color: var(--cg-cyan);
+        }
+
+        .cg-stat-value.warning {
+            color: var(--cg-orange);
+        }
+
+        .cg-stat-label {
+            font-size: 0.7rem;
+            color: #5a6a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 6px;
+        }
+
+        .cg-bar {
+            margin: 0 20px 20px;
+            height: 4px;
+            background: var(--cg-border);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cg-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cg-cyan), var(--cg-green));
+            border-radius: 2px;
+            width: 75%;
+            animation: bar-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes bar-pulse {
+            0%, 100% { width: 75%; }
+            50% { width: 85%; }
+        }
+
+        .cg-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--cg-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cg-footer-item {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: #5a6a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cg-footer-item span {
+            color: var(--cg-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="cg-card">
+        <div class="cg-header">
+            <div>
+                <div class="cg-title">System Metrics</div>
+                <div class="cg-subtitle">Primary Node Dashboard</div>
+            </div>
+            <div class="cg-indicator"></div>
+        </div>
+
+        <div class="cg-stats">
+            <div class="cg-stat">
+                <div class="cg-stat-value highlight">98.5<span style="font-size:0.5em">%</span></div>
+                <div class="cg-stat-label">Uptime</div>
+            </div>
+            <div class="cg-stat">
+                <div class="cg-stat-value">2.4<span style="font-size:0.5em">ms</span></div>
+                <div class="cg-stat-label">Latency</div>
+            </div>
+            <div class="cg-stat">
+                <div class="cg-stat-value warning">847</div>
+                <div class="cg-stat-label">Requests</div>
+            </div>
+            <div class="cg-stat">
+                <div class="cg-stat-value highlight">12</div>
+                <div class="cg-stat-label">Active Nodes</div>
+            </div>
+        </div>
+
+        <div class="cg-bar">
+            <div class="cg-bar-fill"></div>
+        </div>
+
+        <div class="cg-footer">
+            <div class="cg-footer-item">Mode: <span>Cluster</span></div>
+            <div class="cg-footer-item">Region: <span>US-EAST</span></div>
+        </div>
+    </div>
+</body>
+</html>
