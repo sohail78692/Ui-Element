@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Signal Loader</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ns-bg: #08080c;
+            --ns-cyan: #06b6d4;
+            --ns-pink: #ec4899;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            padding: 24px;
+            background: var(--ns-bg);
+        }
+
+        .ns-loader {
+            display: flex;
+            gap: 6px;
+            align-items: flex-end;
+            height: 48px;
+        }
+
+        .ns-bar {
+            width: 8px;
+            background: var(--ns-cyan);
+            border-radius: 4px;
+            animation: ns-bounce 1.2s ease-in-out infinite;
+            box-shadow: 0 0 12px var(--ns-cyan);
+        }
+
+        .ns-bar:nth-child(1) { height: 20%; animation-delay: 0s; }
+        .ns-bar:nth-child(2) { height: 40%; animation-delay: 0.1s; }
+        .ns-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+        .ns-bar:nth-child(4) { height: 80%; animation-delay: 0.3s; }
+        .ns-bar:nth-child(5) { height: 100%; animation-delay: 0.4s; }
+        .ns-bar:nth-child(6) { height: 80%; animation-delay: 0.5s; }
+        .ns-bar:nth-child(7) { height: 60%; animation-delay: 0.6s; }
+        .ns-bar:nth-child(8) { height: 40%; animation-delay: 0.7s; }
+        .ns-bar:nth-child(9) { height: 20%; animation-delay: 0.8s; }
+
+        @keyframes ns-bounce {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.4); }
+        }
+
+        .ns-loader.pink .ns-bar {
+            background: var(--ns-pink);
+            box-shadow: 0 0 12px var(--ns-pink);
+        }
+
+        .ns-loader.mixed .ns-bar:nth-child(odd) { background: var(--ns-cyan); box-shadow: 0 0 12px var(--ns-cyan); }
+        .ns-loader.mixed .ns-bar:nth-child(even) { background: var(--ns-pink); box-shadow: 0 0 12px var(--ns-pink); }
+    </style>
+</head>
+<body>
+    <div class="ns-loader">
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+    </div>
+    <div class="ns-loader pink">
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+    </div>
+    <div class="ns-loader mixed">
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+        <div class="ns-bar"></div>
+    </div>
+</body>
+</html>
