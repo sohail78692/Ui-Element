@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elastic Tab Button</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --et-bg: #0f0f12;
+            --et-surface: #1a1a24;
+            --et-border: #2d2d3a;
+            --et-accent: #22d3ee;
+            --et-text: #e4e4e7;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: var(--et-bg);
+            font-family: system-ui, sans-serif;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .et-tabs {
+            display: flex;
+            background: var(--et-surface);
+            border-radius: 16px;
+            padding: 6px;
+            gap: 4px;
+            position: relative;
+        }
+
+        .et-tab {
+            padding: 14px 28px;
+            background: transparent;
+            border: none;
+            color: var(--et-text);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .et-tab.active {
+            color: var(--et-bg);
+        }
+
+        .et-slider {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            height: calc(100% - 12px);
+            background: var(--et-accent);
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 20px rgba(34, 211, 238, 0.4);
+        }
+
+        .et-tab:nth-child(1).active ~ .et-slider { width: 102px; transform: translateX(0); }
+        .et-tab:nth-child(2).active ~ .et-slider { width: 102px; transform: translateX(106px); }
+        .et-tab:nth-child(3).active ~ .et-slider { width: 102px; transform: translateX(212px); }
+    </style>
+</head>
+<body>
+    <div class="et-tabs">
+        <button class="et-tab active">Overview</button>
+        <button class="et-tab">Analytics</button>
+        <button class="et-tab">Reports</button>
+        <div class="et-slider"></div>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.et-tab');
+        const slider = document.querySelector('.et-slider');
+
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
