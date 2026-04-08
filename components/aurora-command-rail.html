@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aurora Command Rail UI component with responsive actions, metrics, and quick toggles.">
+    <title>Aurora Command Rail</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap");
+
+        :root {
+            --bg: #08111f;
+            --panel: rgba(9, 20, 39, 0.78);
+            --line: rgba(149, 177, 255, 0.16);
+            --text: #f4f7ff;
+            --muted: #98a9d2;
+            --blue: #63a4ff;
+            --cyan: #4ee8d7;
+            --coral: #ff7b72;
+            --glow: 0 24px 60px rgba(33, 71, 146, 0.28);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            color: var(--text);
+            font-family: "Space Grotesk", sans-serif;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(78, 232, 215, 0.18), transparent 30%),
+                radial-gradient(circle at 85% 20%, rgba(99, 164, 255, 0.22), transparent 30%),
+                radial-gradient(circle at 80% 88%, rgba(255, 123, 114, 0.14), transparent 24%),
+                linear-gradient(160deg, #050b14, #09111d 42%, #071627);
+        }
+
+        .rail {
+            width: min(1120px, 100%);
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: clamp(18px, 3vw, 30px);
+            display: grid;
+            grid-template-columns: 290px minmax(0, 1fr);
+            gap: 18px;
+            background: linear-gradient(180deg, rgba(10, 21, 38, 0.92), rgba(7, 15, 28, 0.92));
+            box-shadow: var(--glow);
+            backdrop-filter: blur(18px);
+            overflow: hidden;
+        }
+
+        .sidebar,
+        .workspace,
+        .metric,
+        .shortcut,
+        .timeline {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            backdrop-filter: blur(16px);
+        }
+
+        .sidebar {
+            border-radius: 24px;
+            padding: 18px;
+            display: grid;
+            gap: 16px;
+            align-content: start;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            background: linear-gradient(135deg, rgba(99, 164, 255, 0.28), rgba(78, 232, 215, 0.24));
+            box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.08);
+        }
+
+        .brand h1,
+        .hero h2,
+        .metric strong,
+        .shortcut strong {
+            margin: 0;
+        }
+
+        .brand p,
+        .sidebar-note,
+        .hero p,
+        .metric span,
+        .timeline p,
+        .shortcut span {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .nav {
+            display: grid;
+            gap: 10px;
+        }
+
+        .nav button,
+        .switch button {
+            border: 0;
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .nav button {
+            padding: 14px 16px;
+            border-radius: 16px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .nav button:hover,
+        .nav button.active {
+            transform: translateX(4px);
+            border-color: rgba(99, 164, 255, 0.32);
+            background: linear-gradient(135deg, rgba(99, 164, 255, 0.16), rgba(78, 232, 215, 0.12));
+        }
+
+        .sidebar-note {
+            padding: 16px;
+            border-radius: 18px;
+            line-height: 1.55;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+        }
+
+        .workspace {
+            border-radius: 24px;
+            padding: clamp(18px, 2.5vw, 26px);
+            display: grid;
+            gap: 16px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) auto;
+            gap: 16px;
+            align-items: center;
+            padding: 18px;
+            border-radius: 22px;
+            background:
+                linear-gradient(120deg, rgba(99, 164, 255, 0.16), rgba(78, 232, 215, 0.12)),
+                rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(149, 177, 255, 0.12);
+        }
+
+        .hero h2 {
+            font-size: clamp(1.45rem, 2.5vw, 2.2rem);
+        }
+
+        .hero p {
+            margin-top: 10px;
+            max-width: 56ch;
+            line-height: 1.6;
+        }
+
+        .switch {
+            display: inline-grid;
+            grid-auto-flow: column;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 16px;
+            background: rgba(5, 13, 24, 0.62);
+            border: 1px solid rgba(149, 177, 255, 0.12);
+        }
+
+        .switch button {
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--muted);
+        }
+
+        .switch button.active {
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(99, 164, 255, 0.2), rgba(78, 232, 215, 0.16));
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .metric {
+            border-radius: 20px;
+            padding: 18px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .metric strong {
+            font-size: clamp(1.4rem, 2vw, 1.9rem);
+        }
+
+        .bar {
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            width: var(--fill, 60%);
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--blue), var(--cyan));
+            box-shadow: 0 0 18px rgba(78, 232, 215, 0.24);
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 14px;
+        }
+
+        .timeline,
+        .shortcut {
+            border-radius: 20px;
+            padding: 18px;
+        }
+
+        .timeline-list {
+            list-style: none;
+            margin: 18px 0 0;
+            padding: 0;
+            display: grid;
+            gap: 14px;
+        }
+
+        .timeline-list li {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .timeline-list i {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyan), var(--blue));
+            box-shadow: 0 0 16px rgba(78, 232, 215, 0.4);
+        }
+
+        .shortcut-grid {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .shortcut {
+            display: grid;
+            gap: 10px;
+            min-height: 132px;
+            align-content: start;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .shortcut:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 164, 255, 0.28);
+        }
+
+        .badge {
+            width: fit-content;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            background: rgba(99, 164, 255, 0.12);
+            color: #bfd8ff;
+        }
+
+        @media (max-width: 980px) {
+            .rail,
+            .bottom-grid,
+            .hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .metrics,
+            .shortcut-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-list li {
+                grid-template-columns: auto 1fr;
+            }
+
+            .timeline-list time {
+                grid-column: 2;
+                color: var(--muted);
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="rail">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-mark">AR</div>
+                <div>
+                    <h1>Aurora Rail</h1>
+                    <p>Ops command surface</p>
+                </div>
+            </div>
+
+            <nav class="nav" aria-label="Primary">
+                <button class="active"><span>Live Overview</span><strong>01</strong></button>
+                <button><span>Signal Routing</span><strong>04</strong></button>
+                <button><span>Shift Planning</span><strong>08</strong></button>
+                <button><span>Incident Watch</span><strong>02</strong></button>
+            </nav>
+
+            <p class="sidebar-note">
+                Built as a compact workspace rail for dashboards, admin tools, and support consoles where quick routing matters more than dense navigation.
+            </p>
+        </aside>
+
+        <div class="workspace">
+            <div class="hero">
+                <div>
+                    <h2>Coordinate launches, coverage, and incident timing from a single rail.</h2>
+                    <p>
+                        Use segmented modes to flip between live telemetry, staffing, and delivery focus without leaving the main workspace shell.
+                    </p>
+                </div>
+
+                <div class="switch" aria-label="View mode">
+                    <button class="active">Live</button>
+                    <button>Focus</button>
+                    <button>Archive</button>
+                </div>
+            </div>
+
+            <div class="metrics">
+                <article class="metric">
+                    <span>Response health</span>
+                    <strong>94%</strong>
+                    <div class="bar"><div class="fill" style="--fill:94%"></div></div>
+                </article>
+                <article class="metric">
+                    <span>Operators online</span>
+                    <strong>28</strong>
+                    <div class="bar"><div class="fill" style="--fill:71%"></div></div>
+                </article>
+                <article class="metric">
+                    <span>Launch readiness</span>
+                    <strong>86%</strong>
+                    <div class="bar"><div class="fill" style="--fill:86%"></div></div>
+                </article>
+            </div>
+
+            <div class="bottom-grid">
+                <article class="timeline">
+                    <h3>Priority timeline</h3>
+                    <p>Today’s handoff sequence across release, growth, and reliability teams.</p>
+                    <ul class="timeline-list">
+                        <li><i></i><div><strong>Sync design tokens with release branch</strong><p>Visual QA and fallback pass</p></div><time>09:30</time></li>
+                        <li><i></i><div><strong>Confirm support routing coverage</strong><p>APAC and EU overlap window</p></div><time>11:10</time></li>
+                        <li><i></i><div><strong>Start staged feature rollout</strong><p>20% audience activation</p></div><time>14:00</time></li>
+                    </ul>
+                </article>
+
+                <div class="shortcut-grid">
+                    <article class="shortcut">
+                        <span class="badge">Action</span>
+                        <strong>Open standby channel</strong>
+                        <span>Spin up a backup lane for launch-day escalations.</span>
+                    </article>
+                    <article class="shortcut">
+                        <span class="badge">Queue</span>
+                        <strong>Rebalance assignments</strong>
+                        <span>Shift two operators into payment and auth alerts.</span>
+                    </article>
+                    <article class="shortcut">
+                        <span class="badge">Review</span>
+                        <strong>Audit handoff log</strong>
+                        <span>Verify all unresolved incidents have an owner.</span>
+                    </article>
+                    <article class="shortcut">
+                        <span class="badge">Status</span>
+                        <strong>Broadcast greenlight</strong>
+                        <span>Send a workspace-wide launch readiness signal.</span>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const navButtons = document.querySelectorAll(".nav button");
+        const modeButtons = document.querySelectorAll(".switch button");
+
+        navButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                navButtons.forEach((item) => item.classList.remove("active"));
+                button.classList.add("active");
+            });
+        });
+
+        modeButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                modeButtons.forEach((item) => item.classList.remove("active"));
+                button.classList.add("active");
+            });
+        });
+    </script>
+</body>
+</html>
