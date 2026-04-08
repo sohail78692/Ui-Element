@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prism Segmented Action Button UI component with mode switching and animated action states.">
+    <title>Prism Segmented Action Button</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
+
+        :root {
+            --bg: #130c1f;
+            --panel: rgba(24, 16, 39, 0.76);
+            --line: rgba(255, 255, 255, 0.12);
+            --text: #f8f2ff;
+            --muted: #b9a9d4;
+            --pink: #ff6ec7;
+            --violet: #8b5cf6;
+            --sky: #38bdf8;
+            --green: #34d399;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Outfit", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 12% 14%, rgba(255, 110, 199, 0.2), transparent 28%),
+                radial-gradient(circle at 82% 18%, rgba(56, 189, 248, 0.18), transparent 30%),
+                radial-gradient(circle at 78% 86%, rgba(139, 92, 246, 0.2), transparent 24%),
+                linear-gradient(145deg, #0d0915, #130c1f 48%, #1a1028);
+        }
+
+        .demo-shell {
+            width: min(760px, 100%);
+            padding: clamp(18px, 3vw, 26px);
+            border-radius: 32px;
+            border: 1px solid var(--line);
+            background: linear-gradient(180deg, rgba(26, 17, 41, 0.9), rgba(14, 10, 24, 0.88));
+            box-shadow: 0 24px 80px rgba(10, 4, 20, 0.45);
+            backdrop-filter: blur(18px);
+            display: grid;
+            gap: 20px;
+        }
+
+        .intro {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: start;
+        }
+
+        h1,
+        p {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+            margin-bottom: 10px;
+        }
+
+        .intro p,
+        .meta,
+        .segment span {
+            color: var(--muted);
+        }
+
+        .meta {
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            white-space: nowrap;
+        }
+
+        .stack {
+            display: grid;
+            gap: 16px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .segments {
+            position: relative;
+            display: inline-grid;
+            grid-auto-flow: column;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .segment {
+            position: relative;
+            border: 0;
+            min-width: 120px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: transparent;
+            color: var(--text);
+            font: inherit;
+            cursor: pointer;
+            z-index: 1;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .segment strong {
+            display: block;
+            font-size: 0.98rem;
+        }
+
+        .segment:hover {
+            transform: translateY(-2px);
+        }
+
+        .segment.active span {
+            color: rgba(255, 255, 255, 0.84);
+        }
+
+        .segment-indicator {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            height: calc(100% - 16px);
+            width: 120px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(255, 110, 199, 0.26), rgba(56, 189, 248, 0.24));
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                0 12px 24px rgba(139, 92, 246, 0.24);
+            transition: transform 0.28s ease, width 0.28s ease;
+        }
+
+        .action-wrap {
+            display: grid;
+            gap: 14px;
+        }
+
+        .action-button {
+            position: relative;
+            overflow: hidden;
+            border: 0;
+            padding: 18px 24px;
+            border-radius: 22px;
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(255, 110, 199, 0.16), rgba(56, 189, 248, 0.14));
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                0 18px 30px rgba(10, 4, 20, 0.32);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                0 24px 36px rgba(10, 4, 20, 0.42);
+        }
+
+        .action-button::before {
+            content: "";
+            position: absolute;
+            inset: -120% 35%;
+            background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.24), transparent);
+            transform: rotate(18deg);
+            animation: shine 4s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                transform: translateY(240%) rotate(18deg);
+            }
+        }
+
+        .copy {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 5px;
+            text-align: left;
+        }
+
+        .copy strong {
+            font-size: 1.1rem;
+        }
+
+        .copy span,
+        .pulse-meta {
+            color: rgba(248, 242, 255, 0.75);
+        }
+
+        .chip {
+            position: relative;
+            z-index: 1;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-weight: 600;
+        }
+
+        .pulse-meta {
+            min-height: 24px;
+            font-size: 0.95rem;
+        }
+
+        .pulse-bar {
+            height: 14px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .pulse-fill {
+            width: 56%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--pink), var(--violet), var(--sky));
+            box-shadow: 0 0 24px rgba(139, 92, 246, 0.32);
+            transition: width 0.28s ease, background 0.28s ease;
+        }
+
+        .theme-launch .action-button {
+            background: linear-gradient(135deg, rgba(255, 110, 199, 0.18), rgba(139, 92, 246, 0.16));
+        }
+
+        .theme-review .action-button {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(139, 92, 246, 0.14));
+        }
+
+        .theme-confirm .action-button {
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(56, 189, 248, 0.14));
+        }
+
+        @media (max-width: 720px) {
+            .intro,
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .segments {
+                width: 100%;
+                grid-auto-flow: row;
+            }
+
+            .segment {
+                min-width: 0;
+                width: 100%;
+            }
+
+            .segment-indicator {
+                width: calc(100% - 16px);
+            }
+
+            .action-button {
+                flex-direction: column;
+                align-items: start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="demo-shell theme-launch" id="shell">
+        <div class="intro">
+            <div>
+                <h1>Prism Segmented Action Button</h1>
+                <p>A richer CTA pattern for dashboards, launch panels, and review flows where users need to switch intent before committing an action.</p>
+            </div>
+            <div class="meta">Adaptive action states</div>
+        </div>
+
+        <div class="stack">
+            <div class="toolbar">
+                <div class="segments" id="segments" aria-label="Action modes">
+                    <div class="segment-indicator" id="indicator"></div>
+                    <button class="segment active" data-theme="launch" data-width="56%" data-chip="Launch" data-copy="Queue release to 12% of users.">
+                        <strong>Launch</strong>
+                        <span>Release train</span>
+                    </button>
+                    <button class="segment" data-theme="review" data-width="74%" data-chip="Review" data-copy="Open approval sweep for final sign-off.">
+                        <strong>Review</strong>
+                        <span>Stakeholder pass</span>
+                    </button>
+                    <button class="segment" data-theme="confirm" data-width="92%" data-chip="Confirm" data-copy="Lock the rollout and notify all channels.">
+                        <strong>Confirm</strong>
+                        <span>Ready state</span>
+                    </button>
+                </div>
+
+                <div class="meta" id="mode-meta">Current mode: Launch</div>
+            </div>
+
+            <div class="action-wrap">
+                <button class="action-button" type="button">
+                    <div class="copy">
+                        <strong id="button-title">Deploy release package</strong>
+                        <span id="button-copy">Queue release to 12% of users.</span>
+                    </div>
+                    <span class="chip" id="button-chip">Launch</span>
+                </button>
+
+                <div class="pulse-meta" id="pulse-meta">Projected readiness progress updates when the selected action runs.</div>
+                <div class="pulse-bar">
+                    <div class="pulse-fill" id="pulse-fill"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const shell = document.getElementById("shell");
+        const segments = [...document.querySelectorAll(".segment")];
+        const indicator = document.getElementById("indicator");
+        const modeMeta = document.getElementById("mode-meta");
+        const buttonCopy = document.getElementById("button-copy");
+        const buttonChip = document.getElementById("button-chip");
+        const pulseFill = document.getElementById("pulse-fill");
+
+        function syncIndicator(button) {
+            if (window.innerWidth <= 720) {
+                indicator.style.transform = `translateY(${button.offsetTop - 8}px)`;
+                indicator.style.width = "calc(100% - 16px)";
+                indicator.style.height = `${button.offsetHeight}px`;
+                return;
+            }
+
+            indicator.style.height = "calc(100% - 16px)";
+            indicator.style.width = `${button.offsetWidth}px`;
+            indicator.style.transform = `translateX(${button.offsetLeft - 8}px)`;
+        }
+
+        function applyState(button) {
+            segments.forEach((item) => item.classList.remove("active"));
+            button.classList.add("active");
+            shell.className = `demo-shell theme-${button.dataset.theme}`;
+            modeMeta.textContent = `Current mode: ${button.querySelector("strong").textContent}`;
+            buttonCopy.textContent = button.dataset.copy;
+            buttonChip.textContent = button.dataset.chip;
+            pulseFill.style.width = button.dataset.width;
+            syncIndicator(button);
+        }
+
+        segments.forEach((button) => {
+            button.addEventListener("click", () => applyState(button));
+        });
+
+        window.addEventListener("resize", () => {
+            const active = document.querySelector(".segment.active");
+            if (active) {
+                syncIndicator(active);
+            }
+        });
+
+        applyState(document.querySelector(".segment.active"));
+    </script>
+</body>
+</html>
