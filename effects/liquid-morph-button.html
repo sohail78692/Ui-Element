@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Morph Button</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0f;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(120, 0, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 0, 120, 0.1) 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        .btn-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .liquid-btn {
+            position: relative;
+            padding: 20px 50px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            background: transparent;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .liquid-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ff006e, #8338ec, #3a86ff);
+            border-radius: 50px;
+            z-index: -1;
+        }
+
+        .liquid-btn::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: #0a0a0f;
+            border-radius: 48px;
+            z-index: -1;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .liquid-btn:hover::after {
+            background: linear-gradient(135deg, #ff006e, #8338ec, #3a86ff);
+        }
+
+        .liquid-btn span {
+            position: relative;
+            z-index: 1;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .liquid-btn .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0.8;
+            animation: morphBlob 3s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .liquid-btn .blob-1 {
+            width: 80px;
+            height: 80px;
+            background: #ff006e;
+            top: -30px;
+            left: -20px;
+            animation-delay: 0s;
+        }
+
+        .liquid-btn .blob-2 {
+            width: 100px;
+            height: 100px;
+            background: #8338ec;
+            bottom: -40px;
+            right: -30px;
+            animation-delay: 1s;
+        }
+
+        .liquid-btn .blob-3 {
+            width: 60px;
+            height: 60px;
+            background: #3a86ff;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 0.5s;
+        }
+
+        @keyframes morphBlob {
+            0%, 100% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, -20px) scale(1.2) rotate(90deg);
+            }
+            50% {
+                transform: translate(-10px, 10px) scale(0.8) rotate(180deg);
+            }
+            75% {
+                transform: translate(15px, 5px) scale(1.1) rotate(270deg);
+            }
+        }
+
+        .liquid-btn:hover .blob {
+            animation-duration: 1s;
+        }
+
+        .liquid-btn:active {
+            transform: scale(0.95);
+        }
+
+        .liquid-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: rippleAnim 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes rippleAnim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="btn-container">
+        <button class="liquid-btn" onclick="createRipple(event)">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+            <span>Explore</span>
+        </button>
+    </div>
+
+    <script>
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = event.clientX - rect.left - size / 2 + 'px';
+            ripple.style.top = event.clientY - rect.top - size / 2 + 'px';
+            
+            button.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        }
+    </script>
+</body>
+</html>
