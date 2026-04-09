@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Release Radar</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #07111f;
+            --panel: rgba(9, 21, 38, 0.88);
+            --line: rgba(150, 196, 255, 0.16);
+            --text: #e7f1ff;
+            --muted: #8ea5c4;
+            --cyan: #47d7ff;
+            --mint: #53f0b2;
+            --amber: #ffb84d;
+            --rose: #ff7ea8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 28px;
+            font-family: "Space Grotesk", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(71, 215, 255, 0.18), transparent 26%),
+                radial-gradient(circle at 80% 20%, rgba(83, 240, 178, 0.14), transparent 24%),
+                radial-gradient(circle at bottom right, rgba(255, 126, 168, 0.18), transparent 22%),
+                linear-gradient(145deg, #02060c, #07111f 42%, #0c1630);
+        }
+
+        .board {
+            width: min(1120px, 100%);
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            background: rgba(4, 12, 24, 0.7);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(18px);
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: auto -20% 72% 38%;
+            height: 160px;
+            background: radial-gradient(circle, rgba(71, 215, 255, 0.22), transparent 60%);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-size: 0.72rem;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 26px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan));
+        }
+
+        h1,
+        h2,
+        p {
+            margin: 0;
+        }
+
+        .hero {
+            display: grid;
+            gap: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 3vw, 3.4rem);
+            line-height: 1;
+            max-width: 10ch;
+        }
+
+        .hero p {
+            max-width: 58ch;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 10px 14px;
+            font: inherit;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .chip:hover,
+        .chip.active {
+            border-color: rgba(71, 215, 255, 0.5);
+            background: rgba(71, 215, 255, 0.14);
+            transform: translateY(-2px);
+        }
+
+        .radar-shell {
+            margin-top: 10px;
+            display: grid;
+            place-items: center;
+            min-height: 420px;
+            border-radius: 22px;
+            border: 1px solid var(--line);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 24%),
+                radial-gradient(circle, rgba(71, 215, 255, 0.08), transparent 58%);
+        }
+
+        .radar {
+            width: min(440px, 88vw);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            position: relative;
+            border: 1px solid rgba(71, 215, 255, 0.24);
+            background:
+                radial-gradient(circle, rgba(71, 215, 255, 0.12), transparent 35%),
+                repeating-radial-gradient(circle, rgba(71, 215, 255, 0.17), rgba(71, 215, 255, 0.17) 1px, transparent 1px, transparent 58px),
+                linear-gradient(transparent 49.6%, rgba(150, 196, 255, 0.12) 50%, transparent 50.4%),
+                linear-gradient(90deg, transparent 49.6%, rgba(150, 196, 255, 0.12) 50%, transparent 50.4%);
+            overflow: hidden;
+            box-shadow: inset 0 0 36px rgba(71, 215, 255, 0.08);
+        }
+
+        .sweep {
+            position: absolute;
+            inset: -12%;
+            border-radius: 50%;
+            background: conic-gradient(from 180deg, transparent 0deg, transparent 300deg, rgba(83, 240, 178, 0.25) 340deg, rgba(83, 240, 178, 0.7) 360deg);
+            mix-blend-mode: screen;
+            animation: spin 5.6s linear infinite;
+        }
+
+        .pulse {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--pulse-color, var(--cyan));
+            box-shadow: 0 0 0 0 color-mix(in srgb, var(--pulse-color, var(--cyan)) 48%, transparent);
+            animation: ping 2.3s ease-out infinite;
+        }
+
+        .pulse::after {
+            content: attr(data-label);
+            position: absolute;
+            top: -38px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: max-content;
+            padding: 8px 10px;
+            border-radius: 12px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            background: rgba(7, 17, 31, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text);
+        }
+
+        .center-core {
+            position: absolute;
+            inset: 50%;
+            width: 110px;
+            height: 110px;
+            transform: translate(-50%, -50%);
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(7, 17, 31, 0.9) 62%);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .metrics {
+            display: grid;
+            gap: 14px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .metric {
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--line);
+        }
+
+        .metric span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+        }
+
+        .metric strong {
+            font-size: clamp(1.3rem, 2vw, 2rem);
+        }
+
+        .feed {
+            display: grid;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .feed-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 14px;
+            align-items: start;
+            padding: 16px;
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .feed-badge {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-top: 4px;
+            background: var(--badge-color, var(--cyan));
+            box-shadow: 0 0 20px color-mix(in srgb, var(--badge-color, var(--cyan)) 75%, transparent);
+        }
+
+        .feed-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .feed-item p {
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .feed-time {
+            color: var(--muted);
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes ping {
+            0% {
+                box-shadow: 0 0 0 0 color-mix(in srgb, var(--pulse-color, var(--cyan)) 48%, transparent);
+            }
+
+            100% {
+                box-shadow: 0 0 0 24px transparent;
+            }
+        }
+
+        @media (max-width: 920px) {
+            .board {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+            }
+
+            .board,
+            .panel {
+                padding: 18px;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="board">
+        <section class="panel hero">
+            <span class="eyebrow">Launch Control</span>
+            <h1>Aurora Release Radar</h1>
+            <p>
+                A cinematic readiness board for product launches. Switch lanes to preview release health, rollout pace,
+                and issue pressure without leaving a single responsive card.
+            </p>
+
+            <div class="chip-row" aria-label="Release lanes">
+                <button class="chip active" data-lane="stable" type="button">Stable</button>
+                <button class="chip" data-lane="beta" type="button">Beta</button>
+                <button class="chip" data-lane="watch" type="button">Watchlist</button>
+            </div>
+
+            <div class="radar-shell">
+                <div class="radar" aria-label="Release readiness radar">
+                    <div class="sweep" aria-hidden="true"></div>
+                    <div class="center-core"><strong id="core-score">92%</strong><br>Ship Ready</div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="panel metrics">
+            <span class="eyebrow">Signal Summary</span>
+            <h2 id="lane-title">Stable lane is clear for launch</h2>
+
+            <div class="metric-grid">
+                <article class="metric">
+                    <span>Confidence</span>
+                    <strong id="metric-confidence">92%</strong>
+                </article>
+                <article class="metric">
+                    <span>Open blockers</span>
+                    <strong id="metric-blockers">2</strong>
+                </article>
+                <article class="metric">
+                    <span>Adoption</span>
+                    <strong id="metric-adoption">68k</strong>
+                </article>
+                <article class="metric">
+                    <span>Rollback risk</span>
+                    <strong id="metric-risk">Low</strong>
+                </article>
+            </div>
+
+            <div class="feed" id="feed"></div>
+        </aside>
+    </main>
+
+    <script>
+        const radar = document.querySelector(".radar");
+        const chips = [...document.querySelectorAll(".chip")];
+        const laneTitle = document.getElementById("lane-title");
+        const coreScore = document.getElementById("core-score");
+        const metricConfidence = document.getElementById("metric-confidence");
+        const metricBlockers = document.getElementById("metric-blockers");
+        const metricAdoption = document.getElementById("metric-adoption");
+        const metricRisk = document.getElementById("metric-risk");
+        const feed = document.getElementById("feed");
+
+        const lanes = {
+            stable: {
+                title: "Stable lane is clear for launch",
+                confidence: "92%",
+                blockers: "2",
+                adoption: "68k",
+                risk: "Low",
+                score: "92%",
+                pulses: [
+                    { x: 54, y: 28, label: "Auth", color: "#47d7ff" },
+                    { x: 70, y: 48, label: "API", color: "#53f0b2" },
+                    { x: 30, y: 62, label: "Mobile", color: "#ffb84d" }
+                ],
+                feed: [
+                    { title: "Build pipeline passed", text: "All release candidates validated in the last 18 minutes.", time: "Now", color: "#53f0b2" },
+                    { title: "Support queue steady", text: "No spike detected after staged rollout reached production region B.", time: "12m", color: "#47d7ff" },
+                    { title: "Minor docs gap", text: "Two help-center links still point to the previous feature flag copy.", time: "34m", color: "#ffb84d" }
+                ]
+            },
+            beta: {
+                title: "Beta lane is accelerating with moderate noise",
+                confidence: "74%",
+                blockers: "5",
+                adoption: "21k",
+                risk: "Medium",
+                score: "74%",
+                pulses: [
+                    { x: 58, y: 24, label: "Search", color: "#47d7ff" },
+                    { x: 76, y: 60, label: "Billing", color: "#ff7ea8" },
+                    { x: 32, y: 40, label: "Sync", color: "#53f0b2" },
+                    { x: 44, y: 72, label: "UX", color: "#ffb84d" }
+                ],
+                feed: [
+                    { title: "Search relevance tuning", text: "Session completion is up 11%, but zero-result queries still need threshold work.", time: "5m", color: "#47d7ff" },
+                    { title: "Payment retries observed", text: "Beta users in one region triggered duplicate retry banners on slow networks.", time: "18m", color: "#ff7ea8" },
+                    { title: "Growth momentum positive", text: "Invites from existing teams are beating the beta forecast by 9%.", time: "41m", color: "#53f0b2" }
+                ]
+            },
+            watch: {
+                title: "Watchlist lane needs intervention before promotion",
+                confidence: "46%",
+                blockers: "9",
+                adoption: "8k",
+                risk: "High",
+                score: "46%",
+                pulses: [
+                    { x: 52, y: 20, label: "Latency", color: "#ff7ea8" },
+                    { x: 24, y: 52, label: "Cache", color: "#ffb84d" },
+                    { x: 74, y: 36, label: "Queue", color: "#ff7ea8" },
+                    { x: 58, y: 74, label: "Exports", color: "#ffb84d" }
+                ],
+                feed: [
+                    { title: "Latency alert firing", text: "P95 render time crossed the guardrail in the last three intervals.", time: "Now", color: "#ff7ea8" },
+                    { title: "Queue backlog growing", text: "Background jobs are draining, but recovery will take roughly 40 minutes.", time: "7m", color: "#ffb84d" },
+                    { title: "Launch hold recommended", text: "Promoting this lane would add rollback risk without meaningful demand upside.", time: "16m", color: "#ff7ea8" }
+                ]
+            }
+        };
+
+        function renderLane(name) {
+            const lane = lanes[name];
+            radar.querySelectorAll(".pulse").forEach((item) => item.remove());
+
+            lane.pulses.forEach((pulse) => {
+                const dot = document.createElement("div");
+                dot.className = "pulse";
+                dot.dataset.label = pulse.label;
+                dot.style.left = `${pulse.x}%`;
+                dot.style.top = `${pulse.y}%`;
+                dot.style.setProperty("--pulse-color", pulse.color);
+                radar.appendChild(dot);
+            });
+
+            laneTitle.textContent = lane.title;
+            coreScore.textContent = lane.score;
+            metricConfidence.textContent = lane.confidence;
+            metricBlockers.textContent = lane.blockers;
+            metricAdoption.textContent = lane.adoption;
+            metricRisk.textContent = lane.risk;
+
+            feed.innerHTML = lane.feed.map((item) => `
+                <article class="feed-item">
+                    <span class="feed-badge" style="--badge-color:${item.color}"></span>
+                    <div>
+                        <strong>${item.title}</strong>
+                        <p>${item.text}</p>
+                    </div>
+                    <span class="feed-time">${item.time}</span>
+                </article>
+            `).join("");
+        }
+
+        chips.forEach((chip) => {
+            chip.addEventListener("click", () => {
+                chips.forEach((item) => item.classList.remove("active"));
+                chip.classList.add("active");
+                renderLane(chip.dataset.lane);
+            });
+        });
+
+        renderLane("stable");
+    </script>
+</body>
+
+</html>
