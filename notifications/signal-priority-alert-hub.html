@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Priority Alert Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap');
+
+        :root {
+            --bg: #f3ede3;
+            --paper: rgba(255, 250, 244, 0.76);
+            --panel: #fff8ef;
+            --ink: #2d2014;
+            --muted: #7d6756;
+            --line: rgba(68, 43, 18, 0.12);
+            --olive: #5c7c57;
+            --amber: #d98b3d;
+            --rose: #cb5b6f;
+            --sky: #5382b7;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 28px;
+            font-family: "Manrope", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(203, 91, 111, 0.18), transparent 24%),
+                radial-gradient(circle at 82% 18%, rgba(83, 130, 183, 0.14), transparent 22%),
+                linear-gradient(140deg, #f8f1e6, #efe6da 46%, #e7dece);
+        }
+
+        .hub {
+            width: min(1080px, 100%);
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 22px;
+        }
+
+        .panel {
+            border-radius: 28px;
+            background: var(--paper);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            box-shadow: 0 26px 50px rgba(72, 50, 28, 0.12);
+            backdrop-filter: blur(18px);
+            padding: 24px;
+        }
+
+        .header {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 24px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(45, 32, 20, 0.45));
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 2.8vw, 3rem);
+            line-height: 1;
+            max-width: 10ch;
+        }
+
+        .intro {
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 52ch;
+            margin-top: 14px;
+        }
+
+        .counter {
+            min-width: 118px;
+            padding: 14px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.66);
+            border: 1px solid var(--line);
+            text-align: right;
+        }
+
+        .counter span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .counter strong {
+            font-size: 2rem;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .filter {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.52);
+            color: var(--ink);
+            padding: 10px 14px;
+            border-radius: 999px;
+            font: inherit;
+            cursor: pointer;
+            transition: 0.22s ease;
+        }
+
+        .filter.active,
+        .filter:hover {
+            transform: translateY(-1px);
+            background: #fff;
+        }
+
+        .feed {
+            display: grid;
+            gap: 14px;
+        }
+
+        .alert {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 14px;
+            align-items: start;
+            padding: 18px;
+            border-radius: 22px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.54);
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .alert:hover,
+        .alert.active {
+            transform: translateY(-2px);
+            border-color: rgba(45, 32, 20, 0.18);
+            box-shadow: 0 16px 24px rgba(72, 50, 28, 0.08);
+        }
+
+        .alert-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-top: 4px;
+            background: var(--accent, var(--sky));
+            box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent, var(--sky)) 16%, transparent);
+        }
+
+        .alert p {
+            margin-top: 6px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .meta {
+            display: grid;
+            justify-items: end;
+            gap: 10px;
+            min-width: 88px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--line);
+        }
+
+        .time {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .detail {
+            display: grid;
+            gap: 18px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.62), rgba(255, 248, 239, 0.82));
+        }
+
+        .detail-card {
+            padding: 22px;
+            border-radius: 22px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .severity {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .severity::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--severity-color, var(--sky));
+        }
+
+        .detail-copy {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .stat {
+            padding: 16px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--line);
+        }
+
+        .stat span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.78rem;
+            margin-bottom: 10px;
+        }
+
+        .stat strong {
+            font-size: 1.15rem;
+        }
+
+        .steps {
+            display: grid;
+            gap: 12px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--line);
+        }
+
+        .step-index {
+            width: 32px;
+            height: 32px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            font-weight: 800;
+            background: rgba(45, 32, 20, 0.08);
+        }
+
+        @media (max-width: 920px) {
+            .hub {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            .header,
+            .detail-header,
+            .alert {
+                grid-template-columns: 1fr;
+                display: grid;
+            }
+
+            .meta {
+                justify-items: start;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="hub">
+        <section class="panel">
+            <div class="header">
+                <div>
+                    <span class="eyebrow">Incident Desk</span>
+                    <h1>Signal Priority Alert Hub</h1>
+                    <p class="intro">
+                        An editorial-style notification center for teams that need more than toasts. Filter the feed,
+                        inspect a selected incident, and keep mitigation steps visible in a single elegant layout.
+                    </p>
+                </div>
+                <div class="counter">
+                    <span>Open alerts</span>
+                    <strong id="counter">4</strong>
+                </div>
+            </div>
+
+            <div class="filters" aria-label="Alert filters">
+                <button class="filter active" data-filter="all" type="button">All</button>
+                <button class="filter" data-filter="critical" type="button">Critical</button>
+                <button class="filter" data-filter="warning" type="button">Warning</button>
+                <button class="filter" data-filter="info" type="button">Info</button>
+            </div>
+
+            <div class="feed" id="feed"></div>
+        </section>
+
+        <aside class="panel detail">
+            <div class="detail-card">
+                <div class="detail-header">
+                    <div>
+                        <span class="eyebrow">Selected Alert</span>
+                        <h2 id="detail-title">Payments retry surge detected</h2>
+                    </div>
+                    <div class="severity" id="detail-severity">Critical</div>
+                </div>
+
+                <p class="detail-copy" id="detail-copy">
+                    Retry loops are stacking for one payment provider after latency spikes. The system is still
+                    recovering transactions, but the current backoff is creating duplicate status messages.
+                </p>
+            </div>
+
+            <div class="stats">
+                <article class="stat">
+                    <span>Impacted users</span>
+                    <strong id="stat-users">1,842</strong>
+                </article>
+                <article class="stat">
+                    <span>ETA to recover</span>
+                    <strong id="stat-eta">28 min</strong>
+                </article>
+                <article class="stat">
+                    <span>Owner</span>
+                    <strong id="stat-owner">Payments</strong>
+                </article>
+            </div>
+
+            <div class="detail-card">
+                <span class="eyebrow">Response Flow</span>
+                <div class="steps" id="steps"></div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        const alerts = [
+            {
+                id: "payments",
+                level: "critical",
+                title: "Payments retry surge detected",
+                summary: "Provider failover is creating duplicate status banners across checkout flows.",
+                time: "2 min ago",
+                badge: "Critical",
+                accent: "#cb5b6f",
+                users: "1,842",
+                eta: "28 min",
+                owner: "Payments",
+                detail: "Retry loops are stacking for one payment provider after latency spikes. The system is still recovering transactions, but the current backoff is creating duplicate status messages.",
+                steps: [
+                    "Pause secondary retry banners in checkout.",
+                    "Force provider routing to the low-latency region.",
+                    "Post customer-facing update in status center."
+                ]
+            },
+            {
+                id: "search",
+                level: "warning",
+                title: "Search confidence is softening",
+                summary: "A synonym update improved recall but reduced ranking precision in power-user queries.",
+                time: "14 min ago",
+                badge: "Warning",
+                accent: "#d98b3d",
+                users: "612",
+                eta: "45 min",
+                owner: "Search",
+                detail: "Ranking precision slipped after an aggressive synonym rollout. Search still returns results, but advanced users are seeing noisier top hits and a longer path to intent.",
+                steps: [
+                    "Roll back the latest synonym pack for enterprise workspaces.",
+                    "Re-weight exact token matches over fuzzy expansion.",
+                    "Capture 20 degraded query sessions for review."
+                ]
+            },
+            {
+                id: "deploy",
+                level: "info",
+                title: "Deployment window moved forward",
+                summary: "The next rollout wave was rescheduled after the infrastructure queue cleared early.",
+                time: "31 min ago",
+                badge: "Info",
+                accent: "#5382b7",
+                users: "No user impact",
+                eta: "On schedule",
+                owner: "Platform",
+                detail: "Infrastructure capacity recovered faster than expected, allowing the staged deployment to move forward without increasing risk. Teams can prepare validation ahead of the prior window.",
+                steps: [
+                    "Notify release owners of the new validation window.",
+                    "Advance smoke test automation by 20 minutes.",
+                    "Keep rollback snapshot warm until the final wave completes."
+                ]
+            },
+            {
+                id: "sync",
+                level: "critical",
+                title: "Workspace sync queue is backlogged",
+                summary: "Large media attachments are delaying cross-device sync for shared boards.",
+                time: "43 min ago",
+                badge: "Critical",
+                accent: "#cb5b6f",
+                users: "3,109",
+                eta: "54 min",
+                owner: "Collab",
+                detail: "Media-heavy collaboration boards are saturating the sync queue and slowing downstream updates. Text edits still land quickly, but attachment previews are arriving out of order across devices.",
+                steps: [
+                    "Throttle large preview generation for shared boards.",
+                    "Drain the oldest sync batches before processing new previews.",
+                    "Communicate attachment delay expectations to support."
+                ]
+            }
+        ];
+
+        const feed = document.getElementById("feed");
+        const filters = [...document.querySelectorAll(".filter")];
+        const counter = document.getElementById("counter");
+        const detailTitle = document.getElementById("detail-title");
+        const detailSeverity = document.getElementById("detail-severity");
+        const detailCopy = document.getElementById("detail-copy");
+        const statUsers = document.getElementById("stat-users");
+        const statEta = document.getElementById("stat-eta");
+        const statOwner = document.getElementById("stat-owner");
+        const steps = document.getElementById("steps");
+
+        let activeFilter = "all";
+        let activeId = "payments";
+
+        function renderDetail(alert) {
+            detailTitle.textContent = alert.title;
+            detailSeverity.textContent = alert.badge;
+            detailSeverity.style.setProperty("--severity-color", alert.accent);
+            detailCopy.textContent = alert.detail;
+            statUsers.textContent = alert.users;
+            statEta.textContent = alert.eta;
+            statOwner.textContent = alert.owner;
+            steps.innerHTML = alert.steps.map((step, index) => `
+                <div class="step">
+                    <span class="step-index">${index + 1}</span>
+                    <span>${step}</span>
+                </div>
+            `).join("");
+        }
+
+        function renderFeed() {
+            const filtered = alerts.filter((alert) => activeFilter === "all" || alert.level === activeFilter);
+            counter.textContent = filtered.length;
+
+            if (!filtered.some((alert) => alert.id === activeId)) {
+                activeId = filtered[0]?.id || alerts[0].id;
+            }
+
+            feed.innerHTML = filtered.map((alert) => `
+                <article class="alert ${alert.id === activeId ? "active" : ""}" data-id="${alert.id}">
+                    <span class="alert-indicator" style="--accent:${alert.accent}"></span>
+                    <div>
+                        <h3>${alert.title}</h3>
+                        <p>${alert.summary}</p>
+                    </div>
+                    <div class="meta">
+                        <span class="tag">${alert.badge}</span>
+                        <span class="time">${alert.time}</span>
+                    </div>
+                </article>
+            `).join("");
+
+            const selected = alerts.find((alert) => alert.id === activeId) || alerts[0];
+            renderDetail(selected);
+
+            document.querySelectorAll(".alert").forEach((card) => {
+                card.addEventListener("click", () => {
+                    activeId = card.dataset.id;
+                    renderFeed();
+                });
+            });
+        }
+
+        filters.forEach((filter) => {
+            filter.addEventListener("click", () => {
+                activeFilter = filter.dataset.filter;
+                filters.forEach((item) => item.classList.remove("active"));
+                filter.classList.add("active");
+                renderFeed();
+            });
+        });
+
+        renderFeed();
+    </script>
+</body>
+
+</html>
