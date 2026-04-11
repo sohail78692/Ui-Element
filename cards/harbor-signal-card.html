@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harbor Signal Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #172038;
+            --muted: #5f6983;
+            --paper: #f7f3ea;
+            --card: rgba(255, 252, 246, 0.82);
+            --line: rgba(23, 32, 56, 0.12);
+            --sea: #1f7a8c;
+            --foam: #d8f1f5;
+            --sand: #f0bf78;
+            --coral: #ef7d57;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.5rem;
+            color: var(--ink);
+            font-family: "Manrope", sans-serif;
+            background:
+                radial-gradient(44rem 24rem at 0% 15%, rgba(31, 122, 140, 0.14), transparent 56%),
+                radial-gradient(40rem 22rem at 100% 100%, rgba(239, 125, 87, 0.12), transparent 58%),
+                linear-gradient(160deg, #f8f2e7, #f4f7fb 50%, #eef6f8);
+        }
+
+        .card {
+            width: min(100%, 24rem);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background: var(--card);
+            border: 1px solid var(--line);
+            box-shadow:
+                0 22px 40px rgba(24, 33, 53, 0.14),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(14px);
+        }
+
+        .hero {
+            position: relative;
+            padding: 1.2rem 1.2rem 1.1rem;
+            background:
+                linear-gradient(135deg, rgba(31, 122, 140, 0.16), rgba(216, 241, 245, 0.55)),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.4), transparent);
+            border-bottom: 1px solid rgba(23, 32, 56, 0.08);
+            overflow: hidden;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            pointer-events: none;
+        }
+
+        .hero::before {
+            width: 11rem;
+            height: 11rem;
+            top: -7rem;
+            right: -2rem;
+            background: radial-gradient(circle, rgba(240, 191, 120, 0.4), transparent 68%);
+        }
+
+        .hero::after {
+            width: 10rem;
+            height: 10rem;
+            bottom: -6.5rem;
+            left: -3rem;
+            background: radial-gradient(circle, rgba(31, 122, 140, 0.25), transparent 68%);
+        }
+
+        .eyebrow {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.4rem 0.62rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(23, 32, 56, 0.8);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(23, 32, 56, 0.08);
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 0.48rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: var(--sea);
+            box-shadow: 0 0 0 0.24rem rgba(31, 122, 140, 0.12);
+        }
+
+        .title {
+            position: relative;
+            z-index: 1;
+            margin-top: 0.9rem;
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(1.95rem, 5vw, 2.45rem);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+        }
+
+        .description {
+            position: relative;
+            z-index: 1;
+            margin-top: 0.65rem;
+            max-width: 28ch;
+            font-size: 0.93rem;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.7rem;
+            padding: 1rem 1.2rem 0.8rem;
+        }
+
+        .stat {
+            border-radius: 1rem;
+            padding: 0.78rem 0.72rem;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(23, 32, 56, 0.08);
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 0.64rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(23, 32, 56, 0.54);
+        }
+
+        .stat-value {
+            display: block;
+            margin-top: 0.36rem;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .panel {
+            margin: 0 1.2rem 1.2rem;
+            border-radius: 1.1rem;
+            padding: 0.95rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(247, 243, 234, 0.7));
+            border: 1px solid rgba(23, 32, 56, 0.08);
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            margin-bottom: 0.78rem;
+        }
+
+        .panel-head strong {
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            padding: 0.28rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--coral);
+            background: rgba(239, 125, 87, 0.12);
+        }
+
+        .bar {
+            height: 0.72rem;
+            border-radius: 999px;
+            background: rgba(23, 32, 56, 0.08);
+            overflow: hidden;
+        }
+
+        .bar > span {
+            display: block;
+            width: 68%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--sea), #4ea7b9, var(--sand));
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 0.72rem;
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        .footer strong {
+            color: var(--ink);
+        }
+
+        @media (max-width: 560px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                border-radius: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <article class="card">
+        <section class="hero">
+            <span class="eyebrow">Harbor signal</span>
+            <h1 class="title">Tideboard No. 07</h1>
+            <p class="description">A soft editorial analytics card for shipping status, harbor flow, and dockside readiness snapshots.</p>
+        </section>
+
+        <section class="grid" aria-label="Harbor metrics">
+            <div class="stat">
+                <span class="stat-label">Vessels</span>
+                <span class="stat-value">14 inbound</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Clearance</span>
+                <span class="stat-value">92 min</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Weather</span>
+                <span class="stat-value">Quiet swell</span>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-head">
+                <strong>Dock energy allocation</strong>
+                <span class="badge">Stable</span>
+            </div>
+            <div class="bar" aria-hidden="true">
+                <span></span>
+            </div>
+            <div class="footer">
+                <span>Evening loading window is pacing ahead of the forecast.</span>
+                <strong>68%</strong>
+            </div>
+        </section>
+    </article>
+</body>
+
+</html>
