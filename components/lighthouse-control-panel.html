@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lighthouse control panel UI component with responsive status tiles and mode switching.">
+    <title>Lighthouse Control Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07111d;
+            --panel: rgba(9, 19, 34, 0.82);
+            --line: rgba(141, 176, 255, 0.14);
+            --text: #eff5ff;
+            --muted: #8c9bbd;
+            --blue: #79a8ff;
+            --cyan: #4de3da;
+            --amber: #ffbe64;
+            --rose: #ff7a90;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.4rem;
+            color: var(--text);
+            font-family: "Manrope", sans-serif;
+            background:
+                radial-gradient(36rem 22rem at 10% 15%, rgba(77, 227, 218, 0.16), transparent 58%),
+                radial-gradient(38rem 24rem at 86% 16%, rgba(121, 168, 255, 0.18), transparent 60%),
+                radial-gradient(32rem 22rem at 50% 100%, rgba(255, 190, 100, 0.12), transparent 64%),
+                linear-gradient(160deg, #040a12, #08111f 52%, #071321);
+        }
+
+        .panel {
+            width: min(100%, 61rem);
+            border-radius: 1.8rem;
+            padding: clamp(1rem, 2.4vw, 1.5rem);
+            border: 1px solid var(--line);
+            background:
+                linear-gradient(180deg, rgba(12, 22, 38, 0.92), rgba(7, 15, 28, 0.94)),
+                var(--panel);
+            box-shadow:
+                0 28px 65px rgba(5, 9, 18, 0.46),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(18px);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .title-block {
+            display: grid;
+            gap: 0.32rem;
+        }
+
+        .eyebrow {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--cyan);
+            font-weight: 800;
+        }
+
+        h1 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(1.55rem, 3vw, 2.2rem);
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            max-width: 48ch;
+        }
+
+        .mode-switch {
+            display: inline-grid;
+            grid-auto-flow: column;
+            gap: 0.45rem;
+            padding: 0.4rem;
+            border-radius: 999px;
+            border: 1px solid rgba(141, 176, 255, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .mode-switch button {
+            border: 0;
+            cursor: pointer;
+            padding: 0.7rem 0.95rem;
+            border-radius: 999px;
+            color: var(--muted);
+            background: transparent;
+            font: 700 0.84rem/1 "Manrope", sans-serif;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+
+        .mode-switch button.active {
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(121, 168, 255, 0.24), rgba(77, 227, 218, 0.14));
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+        }
+
+        .mode-switch button:hover,
+        .mode-switch button:focus-visible {
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.95fr;
+            gap: 1rem;
+        }
+
+        .hero,
+        .stack,
+        .tile,
+        .log,
+        .footer-card {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(14px);
+        }
+
+        .hero {
+            border-radius: 1.45rem;
+            padding: 1.05rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .beam {
+            position: relative;
+            min-height: 16rem;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            background:
+                linear-gradient(180deg, rgba(8, 17, 30, 0.84), rgba(10, 19, 34, 0.96)),
+                #08111d;
+        }
+
+        .beam::before {
+            content: "";
+            position: absolute;
+            inset: auto 10% -18% auto;
+            width: 13rem;
+            height: 13rem;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 190, 100, 0.2), transparent 68%);
+        }
+
+        .beam::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -1rem;
+            width: 5.6rem;
+            height: 11rem;
+            transform: translateX(-50%);
+            border-radius: 2.8rem 2.8rem 1rem 1rem;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(121, 168, 255, 0.08));
+            border: 1px solid rgba(141, 176, 255, 0.14);
+            box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.04);
+        }
+
+        .scan {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            width: 18rem;
+            height: 18rem;
+            transform: translateX(-50%);
+            background: conic-gradient(from 215deg, rgba(77, 227, 218, 0), rgba(77, 227, 218, 0.4), rgba(121, 168, 255, 0.08), rgba(77, 227, 218, 0));
+            clip-path: polygon(50% 50%, 100% 0, 0 0);
+            opacity: 0.75;
+            transform-origin: center bottom;
+            animation: rotate 7s linear infinite;
+            filter: blur(1px);
+        }
+
+        .beacon-top {
+            position: absolute;
+            left: 50%;
+            bottom: 8.7rem;
+            width: 8rem;
+            height: 3rem;
+            transform: translateX(-50%);
+            border-radius: 1.5rem 1.5rem 1rem 1rem;
+            background: linear-gradient(180deg, rgba(121, 168, 255, 0.24), rgba(77, 227, 218, 0.12));
+            border: 1px solid rgba(141, 176, 255, 0.16);
+        }
+
+        .lamp {
+            position: absolute;
+            inset: 0.55rem 1.5rem auto;
+            height: 0.95rem;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(255, 190, 100, 0.25), rgba(255, 255, 255, 0.92), rgba(255, 122, 144, 0.3));
+            box-shadow: 0 0 24px rgba(255, 190, 100, 0.48);
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .hero-meta strong {
+            display: block;
+            font-size: 1.02rem;
+        }
+
+        .hero-meta span {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .pulse {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.4rem 0.66rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(239, 245, 255, 0.9);
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .pulse::before {
+            content: "";
+            width: 0.5rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 0 0 rgba(77, 227, 218, 0.55);
+            animation: ping 1.7s ease-out infinite;
+        }
+
+        .stack {
+            border-radius: 1.45rem;
+            padding: 1rem;
+            display: grid;
+            gap: 0.9rem;
+            align-content: start;
+        }
+
+        .tile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.8rem;
+        }
+
+        .tile {
+            border-radius: 1.1rem;
+            padding: 0.9rem;
+            display: grid;
+            gap: 0.42rem;
+        }
+
+        .tile-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+        }
+
+        .tile strong {
+            font-size: 1.1rem;
+        }
+
+        .delta {
+            font-size: 0.82rem;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .log {
+            border-radius: 1.1rem;
+            padding: 0.95rem;
+            display: grid;
+            gap: 0.72rem;
+        }
+
+        .log-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+
+        .log-head strong {
+            font-size: 0.96rem;
+        }
+
+        .entries {
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .entry {
+            display: flex;
+            align-items: start;
+            gap: 0.65rem;
+            padding: 0.72rem 0.76rem;
+            border-radius: 0.95rem;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .entry-dot {
+            width: 0.56rem;
+            margin-top: 0.32rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: var(--blue);
+        }
+
+        .entry:nth-child(2) .entry-dot {
+            background: var(--amber);
+        }
+
+        .entry:nth-child(3) .entry-dot {
+            background: var(--rose);
+        }
+
+        .entry strong {
+            display: block;
+            font-size: 0.88rem;
+        }
+
+        .entry span {
+            display: block;
+            margin-top: 0.18rem;
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.45;
+        }
+
+        .footer-card {
+            margin-top: 1rem;
+            border-radius: 1.3rem;
+            padding: 0.95rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .footer-card strong {
+            font-size: 0.95rem;
+        }
+
+        .footer-card p {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .footer-card button {
+            border: 0;
+            cursor: pointer;
+            padding: 0.82rem 1rem;
+            border-radius: 0.95rem;
+            color: #06101d;
+            background: linear-gradient(135deg, var(--cyan), #9cf0ff);
+            font: 800 0.84rem/1 "Manrope", sans-serif;
+            transition: transform 0.2s ease;
+        }
+
+        .footer-card button:hover,
+        .footer-card button:focus-visible {
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        @keyframes rotate {
+            to {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes ping {
+            0% {
+                box-shadow: 0 0 0 0 rgba(77, 227, 218, 0.5);
+            }
+
+            75% {
+                box-shadow: 0 0 0 14px rgba(77, 227, 218, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(77, 227, 218, 0);
+            }
+        }
+
+        @media (max-width: 860px) {
+            .topbar,
+            .footer-card {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .tile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mode-switch {
+                width: 100%;
+                grid-auto-flow: row;
+            }
+
+            .mode-switch button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="panel" data-mode="watch">
+        <div class="topbar">
+            <div class="title-block">
+                <span class="eyebrow">Coastal grid</span>
+                <h1>Lighthouse Control Panel</h1>
+                <p class="subtitle">A cinematic operations component for watch rotations, sweep status, and emergency routing readiness.</p>
+            </div>
+            <div class="mode-switch" aria-label="Panel mode switch">
+                <button class="active" type="button" data-mode="watch">Watch</button>
+                <button type="button" data-mode="storm">Storm</button>
+                <button type="button" data-mode="escort">Escort</button>
+            </div>
+        </div>
+
+        <div class="grid">
+            <article class="hero">
+                <div class="beam" aria-hidden="true">
+                    <div class="scan"></div>
+                    <div class="beacon-top">
+                        <div class="lamp"></div>
+                    </div>
+                </div>
+                <div class="hero-meta">
+                    <div>
+                        <strong id="modeTitle">Night watch sweep</strong>
+                        <span id="modeCopy">Relay 03 is tracking cargo lanes with low turbulence and stable visibility.</span>
+                    </div>
+                    <span class="pulse" id="modeBadge">Normal</span>
+                </div>
+            </article>
+
+            <aside class="stack">
+                <div class="tile-grid">
+                    <article class="tile">
+                        <span class="tile-label">Signal strength</span>
+                        <strong id="signalMetric">84%</strong>
+                        <span class="delta">+6 from dawn</span>
+                    </article>
+                    <article class="tile">
+                        <span class="tile-label">Route lock</span>
+                        <strong id="routeMetric">Green</strong>
+                        <span class="delta">4 safe entries</span>
+                    </article>
+                    <article class="tile">
+                        <span class="tile-label">Crew cadence</span>
+                        <strong id="crewMetric">12 on deck</strong>
+                        <span class="delta">Shift handoff in 18m</span>
+                    </article>
+                    <article class="tile">
+                        <span class="tile-label">Weather window</span>
+                        <strong id="weatherMetric">Quiet tide</strong>
+                        <span class="delta">Wind 11 knots</span>
+                    </article>
+                </div>
+
+                <section class="log">
+                    <div class="log-head">
+                        <strong>Recent signal log</strong>
+                        <span class="tile-label">Live feed</span>
+                    </div>
+                    <div class="entries" id="entries">
+                        <div class="entry">
+                            <span class="entry-dot"></span>
+                            <div>
+                                <strong>Beacon arc recalibrated</strong>
+                                <span>Sector 3 was nudged east by two degrees for cleaner overlap.</span>
+                            </div>
+                        </div>
+                        <div class="entry">
+                            <span class="entry-dot"></span>
+                            <div>
+                                <strong>Harbor convoy cleared</strong>
+                                <span>Inbound vessels accepted the current glide path with no delays.</span>
+                            </div>
+                        </div>
+                        <div class="entry">
+                            <span class="entry-dot"></span>
+                            <div>
+                                <strong>Backup horn primed</strong>
+                                <span>Emergency audio pulse remains armed for manual broadcast.</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        <div class="footer-card">
+            <div>
+                <strong>Manual escort channel</strong>
+                <p>Switching modes updates the panel narrative without changing the component layout.</p>
+            </div>
+            <button type="button">Open route manifest</button>
+        </div>
+    </section>
+
+    <script>
+        const panel = document.querySelector(".panel");
+        const buttons = document.querySelectorAll(".mode-switch button");
+        const modeTitle = document.getElementById("modeTitle");
+        const modeCopy = document.getElementById("modeCopy");
+        const modeBadge = document.getElementById("modeBadge");
+        const signalMetric = document.getElementById("signalMetric");
+        const routeMetric = document.getElementById("routeMetric");
+        const crewMetric = document.getElementById("crewMetric");
+        const weatherMetric = document.getElementById("weatherMetric");
+
+        const modes = {
+            watch: {
+                title: "Night watch sweep",
+                copy: "Relay 03 is tracking cargo lanes with low turbulence and stable visibility.",
+                badge: "Normal",
+                signal: "84%",
+                route: "Green",
+                crew: "12 on deck",
+                weather: "Quiet tide"
+            },
+            storm: {
+                title: "Storm corridor scan",
+                copy: "Outer beams are widened to cover rain drift while the dock path stays restricted.",
+                badge: "High alert",
+                signal: "63%",
+                route: "Amber",
+                crew: "18 on deck",
+                weather: "Crosswind"
+            },
+            escort: {
+                title: "Escort convoy lead",
+                copy: "The tower is prioritizing a narrow signal lane for guided vessel entry and turnaround.",
+                badge: "Guided",
+                signal: "91%",
+                route: "Priority",
+                crew: "9 on deck",
+                weather: "Clear channel"
+            }
+        };
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const mode = button.dataset.mode;
+                const data = modes[mode];
+
+                panel.dataset.mode = mode;
+                buttons.forEach((item) => item.classList.toggle("active", item === button));
+
+                modeTitle.textContent = data.title;
+                modeCopy.textContent = data.copy;
+                modeBadge.textContent = data.badge;
+                signalMetric.textContent = data.signal;
+                routeMetric.textContent = data.route;
+                crewMetric.textContent = data.crew;
+                weatherMetric.textContent = data.weather;
+            });
+        });
+    </script>
+</body>
+
+</html>
