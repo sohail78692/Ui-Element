@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Radar lock split button UI element with interactive action states, compact telemetry, and responsive glass styling.">
+    <title>Radar Lock Split Button</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #08111c;
+            --panel: rgba(8, 18, 31, 0.82);
+            --shell: rgba(255, 255, 255, 0.04);
+            --line: rgba(137, 181, 255, 0.16);
+            --text: #eef5ff;
+            --muted: #90a4c7;
+            --blue: #77a8ff;
+            --cyan: #59ead8;
+            --amber: #ffc673;
+            --rose: #ff7f97;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.5rem;
+            color: var(--text);
+            font-family: "Manrope", sans-serif;
+            background:
+                radial-gradient(34rem 20rem at 12% 18%, rgba(89, 234, 216, 0.16), transparent 58%),
+                radial-gradient(38rem 22rem at 86% 14%, rgba(119, 168, 255, 0.22), transparent 60%),
+                radial-gradient(28rem 18rem at 50% 100%, rgba(255, 198, 115, 0.14), transparent 62%),
+                linear-gradient(160deg, #040912, #08111d 48%, #071421);
+        }
+
+        .wrap {
+            width: min(100%, 24rem);
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .panel {
+            border-radius: 1.75rem;
+            padding: 1rem;
+            border: 1px solid var(--line);
+            background:
+                linear-gradient(180deg, rgba(10, 22, 39, 0.95), rgba(7, 15, 29, 0.94)),
+                var(--panel);
+            box-shadow:
+                0 28px 65px rgba(4, 10, 18, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+        }
+
+        .panel,
+        .mode-switch,
+        .action-row,
+        .meta {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .eyebrow,
+        .stat-label,
+        .hint {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--muted);
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-weight: 800;
+        }
+
+        .title {
+            display: grid;
+            gap: 0.34rem;
+        }
+
+        h1,
+        .main-action strong,
+        .meter strong {
+            font-family: "Space Grotesk", sans-serif;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        .subtitle,
+        .main-action p,
+        .meta p {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .subtitle {
+            font-size: 0.86rem;
+        }
+
+        .mode-switch {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            padding: 0.35rem;
+            border-radius: 1.15rem;
+            border: 1px solid rgba(137, 181, 255, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .mode-switch button,
+        .main-action,
+        .side-action {
+            border: 0;
+            cursor: pointer;
+            color: inherit;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .mode-switch button {
+            padding: 0.72rem 0.7rem;
+            border-radius: 0.95rem;
+            background: transparent;
+            color: var(--muted);
+            font: 700 0.8rem/1 "Manrope", sans-serif;
+        }
+
+        .mode-switch button.active {
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(119, 168, 255, 0.22), rgba(89, 234, 216, 0.14));
+        }
+
+        .action-row {
+            grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        .main-action,
+        .side-action,
+        .meta {
+            border: 1px solid var(--line);
+            background: var(--shell);
+            backdrop-filter: blur(14px);
+        }
+
+        .main-action {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.4rem;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .main-action::before,
+        .main-action::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .main-action::before {
+            width: 11rem;
+            height: 11rem;
+            top: -6rem;
+            right: -4rem;
+            background: radial-gradient(circle, rgba(89, 234, 216, 0.18), transparent 66%);
+        }
+
+        .main-action::after {
+            width: 9rem;
+            height: 9rem;
+            left: -3rem;
+            bottom: -5rem;
+            background: radial-gradient(circle, rgba(255, 198, 115, 0.18), transparent 68%);
+        }
+
+        .main-content {
+            position: relative;
+            display: grid;
+            gap: 0.8rem;
+            z-index: 1;
+        }
+
+        .main-action strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 0.26rem;
+        }
+
+        .main-action p {
+            font-size: 0.85rem;
+        }
+
+        .meter-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+
+        .meter {
+            display: grid;
+            gap: 0.32rem;
+            min-width: 6rem;
+        }
+
+        .meter strong {
+            font-size: 1.1rem;
+        }
+
+        .track {
+            flex: 1;
+            height: 0.8rem;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .fill {
+            height: 100%;
+            width: var(--fill, 70%);
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--cyan), var(--blue), var(--amber));
+            box-shadow: 0 0 20px rgba(89, 234, 216, 0.24);
+        }
+
+        .side-action {
+            width: 4rem;
+            border-radius: 1.4rem;
+            display: grid;
+            place-items: center;
+            background:
+                linear-gradient(180deg, rgba(119, 168, 255, 0.18), rgba(89, 234, 216, 0.08)),
+                var(--shell);
+        }
+
+        .radar {
+            width: 2.2rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            position: relative;
+            box-shadow:
+                inset 0 0 18px rgba(255, 255, 255, 0.05),
+                0 0 22px rgba(119, 168, 255, 0.16);
+        }
+
+        .radar::before,
+        .radar::after {
+            content: "";
+            position: absolute;
+            inset: 50% auto auto 50%;
+            transform-origin: top left;
+        }
+
+        .radar::before {
+            width: 1.4rem;
+            height: 1.4rem;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+        }
+
+        .radar::after {
+            width: 1rem;
+            height: 1px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+            transform: rotate(35deg);
+            animation: sweep 2.7s linear infinite;
+        }
+
+        .meta {
+            border-radius: 1.25rem;
+            padding: 0.95rem 1rem;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.8rem;
+        }
+
+        .stat strong {
+            display: block;
+            margin-top: 0.16rem;
+            font-size: 1rem;
+        }
+
+        .hint {
+            text-align: center;
+            letter-spacing: 0.08em;
+        }
+
+        .mode-switch button:hover,
+        .mode-switch button:focus-visible,
+        .main-action:hover,
+        .main-action:focus-visible,
+        .side-action:hover,
+        .side-action:focus-visible {
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        @keyframes sweep {
+            from {
+                transform: rotate(35deg);
+            }
+
+            to {
+                transform: rotate(395deg);
+            }
+        }
+
+        @media (max-width: 520px) {
+            .mode-switch,
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-row {
+                grid-template-columns: 1fr;
+            }
+
+            .side-action {
+                width: 100%;
+                min-height: 4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <section class="panel">
+            <div class="title">
+                <span class="eyebrow">Action relay</span>
+                <h1>Radar Lock Split Button</h1>
+                <p class="subtitle">A split-action button element for product dashboards, command surfaces, or launch workflows that need a primary CTA and a live auxiliary control.</p>
+            </div>
+
+            <div class="mode-switch" aria-label="Radar lock modes">
+                <button class="active" type="button" data-mode="track">Track</button>
+                <button type="button" data-mode="escort">Escort</button>
+                <button type="button" data-mode="shield">Shield</button>
+            </div>
+
+            <div class="action-row">
+                <button class="main-action" type="button" aria-label="Primary radar lock action">
+                    <span class="main-content">
+                        <span>
+                            <strong id="actionTitle">Acquire radar lock</strong>
+                            <p id="actionText">Pin the highest-confidence signal and prepare the outbound guidance lane.</p>
+                        </span>
+
+                        <span class="meter-row">
+                            <span class="meter">
+                                <span class="stat-label" id="meterLabel">Lock confidence</span>
+                                <strong id="meterValue">74%</strong>
+                            </span>
+                            <span class="track" aria-hidden="true">
+                                <span class="fill" id="meterFill" style="--fill:74%"></span>
+                            </span>
+                        </span>
+                    </span>
+                </button>
+
+                <button class="side-action" type="button" aria-label="Secondary radar action">
+                    <span class="radar" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div class="meta">
+                <div class="meta-grid">
+                    <div class="stat">
+                        <span class="stat-label">Current route</span>
+                        <strong id="routeValue">North arc corridor</strong>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Fallback window</span>
+                        <strong id="windowValue">11 seconds</strong>
+                    </div>
+                </div>
+                <p id="metaText">Switch modes to reuse the same button shell for guidance, support, or defensive action states.</p>
+            </div>
+        </section>
+
+        <p class="hint">Responsive split CTA with a lightweight state switch and animated radar detail.</p>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll(".mode-switch button");
+        const actionTitle = document.getElementById("actionTitle");
+        const actionText = document.getElementById("actionText");
+        const meterLabel = document.getElementById("meterLabel");
+        const meterValue = document.getElementById("meterValue");
+        const meterFill = document.getElementById("meterFill");
+        const routeValue = document.getElementById("routeValue");
+        const windowValue = document.getElementById("windowValue");
+        const metaText = document.getElementById("metaText");
+
+        const modes = {
+            track: {
+                title: "Acquire radar lock",
+                text: "Pin the highest-confidence signal and prepare the outbound guidance lane.",
+                meterLabel: "Lock confidence",
+                meterValue: "74%",
+                meterFill: "74%",
+                route: "North arc corridor",
+                window: "11 seconds",
+                meta: "Switch modes to reuse the same button shell for guidance, support, or defensive action states."
+            },
+            escort: {
+                title: "Launch escort lane",
+                text: "Open a guided corridor for convoy entry and keep the route visible to nearby operators.",
+                meterLabel: "Escort readiness",
+                meterValue: "88%",
+                meterFill: "88%",
+                route: "Blue harbor approach",
+                window: "18 seconds",
+                meta: "Escort mode turns the split CTA into a convoy-ready control while preserving the exact same footprint."
+            },
+            shield: {
+                title: "Raise shield vector",
+                text: "Redirect the lock into a defensive sweep and keep the protected radius centered on the active signal.",
+                meterLabel: "Shield integrity",
+                meterValue: "67%",
+                meterFill: "67%",
+                route: "Inner defense ring",
+                window: "06 seconds",
+                meta: "Shield mode reframes the component for defensive or protective actions in denser command interfaces."
+            }
+        };
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const data = modes[button.dataset.mode];
+
+                buttons.forEach((item) => item.classList.toggle("active", item === button));
+                actionTitle.textContent = data.title;
+                actionText.textContent = data.text;
+                meterLabel.textContent = data.meterLabel;
+                meterValue.textContent = data.meterValue;
+                meterFill.style.setProperty("--fill", data.meterFill);
+                routeValue.textContent = data.route;
+                windowValue.textContent = data.window;
+                metaText.textContent = data.meta;
+            });
+        });
+    </script>
+</body>
+
+</html>
