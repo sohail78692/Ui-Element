@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Helix telemetry card UI element with interactive signal views, layered metrics, and responsive dashboard styling.">
+    <title>Helix Telemetry Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07101a;
+            --card: rgba(7, 17, 30, 0.84);
+            --shell: rgba(255, 255, 255, 0.04);
+            --line: rgba(136, 179, 255, 0.16);
+            --text: #f1f6ff;
+            --muted: #93a7c9;
+            --blue: #78a8ff;
+            --cyan: #58ead3;
+            --amber: #ffc972;
+            --violet: #9c90ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.5rem;
+            color: var(--text);
+            font-family: "Sora", sans-serif;
+            background:
+                radial-gradient(34rem 20rem at 18% 18%, rgba(88, 234, 211, 0.16), transparent 58%),
+                radial-gradient(36rem 22rem at 82% 14%, rgba(120, 168, 255, 0.2), transparent 56%),
+                radial-gradient(26rem 18rem at 50% 100%, rgba(255, 201, 114, 0.14), transparent 62%),
+                linear-gradient(158deg, #040912, #08111d 48%, #071422);
+        }
+
+        .card {
+            position: relative;
+            width: min(100%, 25rem);
+            border-radius: 1.9rem;
+            padding: 1.15rem;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background:
+                linear-gradient(180deg, rgba(10, 21, 37, 0.96), rgba(7, 14, 27, 0.94)),
+                var(--card);
+            box-shadow:
+                0 28px 70px rgba(4, 10, 18, 0.52),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+        }
+
+        .card::before,
+        .card::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .card::before {
+            width: 15rem;
+            height: 15rem;
+            top: -8rem;
+            right: -5rem;
+            background: radial-gradient(circle, rgba(88, 234, 211, 0.18), transparent 66%);
+        }
+
+        .card::after {
+            width: 13rem;
+            height: 13rem;
+            bottom: -7rem;
+            left: -5rem;
+            background: radial-gradient(circle, rgba(156, 144, 255, 0.16), transparent 68%);
+        }
+
+        .stack {
+            position: relative;
+            display: grid;
+            gap: 0.95rem;
+            z-index: 1;
+        }
+
+        .topbar,
+        .hero,
+        .metric,
+        .footer {
+            border: 1px solid var(--line);
+            background: var(--shell);
+            backdrop-filter: blur(14px);
+        }
+
+        .topbar {
+            border-radius: 1.35rem;
+            padding: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 0.8rem;
+        }
+
+        .eyebrow,
+        .metric-label,
+        .footer span {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--muted);
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        h1,
+        .dial-value {
+            font-family: "Space Grotesk", sans-serif;
+        }
+
+        h1 {
+            margin-top: 0.2rem;
+            font-size: 1.45rem;
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        .topbar p,
+        .hero-copy,
+        .metric-copy,
+        .footer p {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .topbar p {
+            margin-top: 0.42rem;
+            font-size: 0.84rem;
+            max-width: 28ch;
+        }
+
+        .pill-switch {
+            display: inline-grid;
+            gap: 0.42rem;
+        }
+
+        .pill-switch button {
+            border: 0;
+            cursor: pointer;
+            padding: 0.62rem 0.8rem;
+            border-radius: 999px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.03);
+            font: 700 0.76rem/1 "Sora", sans-serif;
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .pill-switch button.active {
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(120, 168, 255, 0.22), rgba(88, 234, 211, 0.14));
+        }
+
+        .pill-switch button:hover,
+        .pill-switch button:focus-visible {
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .hero {
+            border-radius: 1.45rem;
+            padding: 1rem;
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .dial-shell {
+            display: grid;
+            place-items: center;
+            min-height: 13rem;
+            border-radius: 1.2rem;
+            background:
+                radial-gradient(circle at center, rgba(8, 18, 31, 0.96) 0 36%, transparent 37%),
+                radial-gradient(circle, rgba(120, 168, 255, 0.16), transparent 58%),
+                linear-gradient(160deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+        }
+
+        .dial {
+            --level: 78;
+            width: 11rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at center, rgba(8, 18, 31, 1) 0 54%, transparent 55%),
+                conic-gradient(var(--cyan) calc(var(--level) * 1%), rgba(255, 255, 255, 0.08) 0);
+            box-shadow:
+                0 0 40px rgba(88, 234, 211, 0.18),
+                inset 0 0 18px rgba(255, 255, 255, 0.06);
+        }
+
+        .dial-value {
+            display: grid;
+            gap: 0.16rem;
+            text-align: center;
+        }
+
+        .dial-value strong {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .dial-value span {
+            font-size: 0.74rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .hero-copy strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .hero-copy p {
+            font-size: 0.88rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.8rem;
+        }
+
+        .metric {
+            border-radius: 1.2rem;
+            padding: 0.95rem;
+            display: grid;
+            gap: 0.42rem;
+        }
+
+        .metric strong {
+            font-size: 1.2rem;
+            line-height: 1.1;
+        }
+
+        .metric-copy {
+            font-size: 0.8rem;
+        }
+
+        .footer {
+            border-radius: 1.2rem;
+            padding: 0.95rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .footer p {
+            font-size: 0.82rem;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 0.76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .tag::before {
+            content: "";
+            width: 0.48rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: var(--amber);
+            box-shadow: 0 0 0 0 rgba(255, 201, 114, 0.5);
+            animation: pulse 1.7s ease-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 201, 114, 0.5);
+            }
+
+            75% {
+                box-shadow: 0 0 0 12px rgba(255, 201, 114, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 201, 114, 0);
+            }
+        }
+
+        @media (max-width: 520px) {
+            .topbar,
+            .footer {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pill-switch {
+                width: 100%;
+                grid-auto-flow: row;
+            }
+
+            .pill-switch button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <article class="card">
+        <div class="stack">
+            <header class="topbar">
+                <div>
+                    <span class="eyebrow">Telemetry stack</span>
+                    <h1>Helix Telemetry Card</h1>
+                    <p>A compact monitoring element for release health, live queue momentum, and operator confidence at a glance.</p>
+                </div>
+                <div class="pill-switch" aria-label="Telemetry mode switch">
+                    <button class="active" type="button" data-mode="signal">Signal</button>
+                    <button type="button" data-mode="queue">Queue</button>
+                    <button type="button" data-mode="uptime">Uptime</button>
+                </div>
+            </header>
+
+            <section class="hero">
+                <div class="dial-shell">
+                    <div class="dial" id="dial" style="--level:78">
+                        <div class="dial-value">
+                            <strong id="dialValue">78%</strong>
+                            <span id="dialLabel">Signal health</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-copy">
+                    <strong id="heroTitle">Primary relay is delivering stable event throughput.</strong>
+                    <p id="heroText">The card shifts narrative and supporting stats when you switch views, making it useful for compact dashboards and admin side panels.</p>
+                </div>
+            </section>
+
+            <div class="grid">
+                <article class="metric">
+                    <span class="metric-label">Focus metric</span>
+                    <strong id="metricOne">342 events/min</strong>
+                    <p class="metric-copy" id="metricOneCopy">Burst capacity is comfortably above the warning floor.</p>
+                </article>
+                <article class="metric">
+                    <span class="metric-label">Secondary metric</span>
+                    <strong id="metricTwo">12 ms jitter</strong>
+                    <p class="metric-copy" id="metricTwoCopy">Variability remains tight across the current relay window.</p>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div>
+                    <span id="footerLabel">Ops note</span>
+                    <p id="footerText">Use this UI element wherever one expressive metric should anchor a denser analytics surface.</p>
+                </div>
+                <span class="tag" id="footerTag">Adaptive</span>
+            </footer>
+        </div>
+    </article>
+
+    <script>
+        const buttons = document.querySelectorAll(".pill-switch button");
+        const dial = document.getElementById("dial");
+        const dialValue = document.getElementById("dialValue");
+        const dialLabel = document.getElementById("dialLabel");
+        const heroTitle = document.getElementById("heroTitle");
+        const heroText = document.getElementById("heroText");
+        const metricOne = document.getElementById("metricOne");
+        const metricOneCopy = document.getElementById("metricOneCopy");
+        const metricTwo = document.getElementById("metricTwo");
+        const metricTwoCopy = document.getElementById("metricTwoCopy");
+        const footerLabel = document.getElementById("footerLabel");
+        const footerText = document.getElementById("footerText");
+        const footerTag = document.getElementById("footerTag");
+
+        const modes = {
+            signal: {
+                level: 78,
+                value: "78%",
+                label: "Signal health",
+                heroTitle: "Primary relay is delivering stable event throughput.",
+                heroText: "The card shifts narrative and supporting stats when you switch views, making it useful for compact dashboards and admin side panels.",
+                metricOne: "342 events/min",
+                metricOneCopy: "Burst capacity is comfortably above the warning floor.",
+                metricTwo: "12 ms jitter",
+                metricTwoCopy: "Variability remains tight across the current relay window.",
+                footerLabel: "Ops note",
+                footerText: "Use this UI element wherever one expressive metric should anchor a denser analytics surface.",
+                footerTag: "Adaptive"
+            },
+            queue: {
+                level: 64,
+                value: "64%",
+                label: "Queue flow",
+                heroTitle: "Backlog movement is steady but no longer front-running demand.",
+                heroText: "This mode highlights queue pressure, making the same card suitable for support operations, moderation feeds, or review pipelines.",
+                metricOne: "148 open items",
+                metricOneCopy: "Fresh intake is outpacing completion by a narrow margin.",
+                metricTwo: "26 min median wait",
+                metricTwoCopy: "Priority items are still landing under the intervention threshold.",
+                footerLabel: "Queue note",
+                footerText: "A compact card like this works well in bento dashboards where each tile has a single narrative job.",
+                footerTag: "Balanced"
+            },
+            uptime: {
+                level: 93,
+                value: "99.93%",
+                label: "Uptime",
+                heroTitle: "Availability remains strong across the active deployment ring.",
+                heroText: "Switching to uptime reframes the visuals for infrastructure summaries, SRE dashboards, and system-health callouts.",
+                metricOne: "02 degraded checks",
+                metricOneCopy: "Both checks are tied to non-critical observer endpoints.",
+                metricTwo: "4h 12m clean run",
+                metricTwoCopy: "No customer-facing incident has been recorded in the latest window.",
+                footerLabel: "Reliability note",
+                footerText: "The same shell can communicate a calmer, confidence-led story without changing its layout.",
+                footerTag: "Resilient"
+            }
+        };
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const data = modes[button.dataset.mode];
+
+                buttons.forEach((item) => item.classList.toggle("active", item === button));
+                dial.style.setProperty("--level", data.level);
+                dialValue.textContent = data.value;
+                dialLabel.textContent = data.label;
+                heroTitle.textContent = data.heroTitle;
+                heroText.textContent = data.heroText;
+                metricOne.textContent = data.metricOne;
+                metricOneCopy.textContent = data.metricOneCopy;
+                metricTwo.textContent = data.metricTwo;
+                metricTwoCopy.textContent = data.metricTwoCopy;
+                footerLabel.textContent = data.footerLabel;
+                footerText.textContent = data.footerText;
+                footerTag.textContent = data.footerTag;
+            });
+        });
+    </script>
+</body>
+
+</html>
