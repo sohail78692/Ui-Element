@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vault access session panel UI element with live trust states, responsive metrics, and interactive access modes.">
+    <title>Vault Access Session Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #06101b;
+            --shell: rgba(8, 18, 31, 0.84);
+            --panel: rgba(255, 255, 255, 0.04);
+            --line: rgba(130, 171, 255, 0.14);
+            --text: #eef4ff;
+            --muted: #91a3c3;
+            --blue: #76a8ff;
+            --cyan: #58ead7;
+            --amber: #ffcb78;
+            --rose: #ff7f96;
+            --violet: #9f8bff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.4rem;
+            color: var(--text);
+            font-family: "Manrope", sans-serif;
+            background:
+                radial-gradient(38rem 24rem at 15% 16%, rgba(88, 234, 215, 0.14), transparent 60%),
+                radial-gradient(34rem 22rem at 86% 12%, rgba(118, 168, 255, 0.2), transparent 58%),
+                radial-gradient(32rem 20rem at 52% 100%, rgba(255, 203, 120, 0.12), transparent 64%),
+                linear-gradient(155deg, #040a12, #081220 48%, #071523);
+        }
+
+        .panel {
+            width: min(100%, 68rem);
+            border-radius: 1.9rem;
+            padding: clamp(1rem, 2.5vw, 1.4rem);
+            border: 1px solid var(--line);
+            background:
+                linear-gradient(180deg, rgba(12, 22, 38, 0.94), rgba(6, 14, 27, 0.94)),
+                var(--shell);
+            box-shadow:
+                0 26px 70px rgba(4, 10, 18, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+        }
+
+        .topbar,
+        .hero,
+        .status-strip,
+        .entry,
+        .action-card,
+        .identity {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            backdrop-filter: blur(14px);
+        }
+
+        .topbar {
+            border-radius: 1.45rem;
+            padding: 1rem 1.05rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .title-block {
+            display: grid;
+            gap: 0.32rem;
+        }
+
+        .eyebrow,
+        .metric-label,
+        .entry time {
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        .eyebrow {
+            font-weight: 800;
+            color: var(--cyan);
+        }
+
+        h1,
+        h2 {
+            font-family: "Space Grotesk", sans-serif;
+            letter-spacing: -0.04em;
+        }
+
+        h1 {
+            font-size: clamp(1.55rem, 3vw, 2.2rem);
+            line-height: 1;
+        }
+
+        .subtitle {
+            max-width: 56ch;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            color: var(--muted);
+        }
+
+        .mode-switch {
+            display: inline-grid;
+            grid-auto-flow: column;
+            gap: 0.42rem;
+            padding: 0.38rem;
+            border-radius: 999px;
+            border: 1px solid rgba(130, 171, 255, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .mode-switch button,
+        .action-button {
+            border: 0;
+            cursor: pointer;
+            color: inherit;
+            font: 700 0.84rem/1 "Manrope", sans-serif;
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .mode-switch button {
+            padding: 0.75rem 0.95rem;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--muted);
+        }
+
+        .mode-switch button.active {
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(118, 168, 255, 0.24), rgba(88, 234, 215, 0.14));
+        }
+
+        .layout {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: 1.18fr 0.92fr;
+            gap: 1rem;
+        }
+
+        .hero {
+            border-radius: 1.5rem;
+            padding: 1rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .status-strip {
+            border-radius: 1.2rem;
+            padding: 0.95rem;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 0.9rem;
+            align-items: center;
+        }
+
+        .status-ring {
+            --ring: 84;
+            width: 5.6rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at center, rgba(7, 16, 30, 1) 0 56%, transparent 57%),
+                conic-gradient(var(--cyan) calc(var(--ring) * 1%), rgba(255, 255, 255, 0.08) 0);
+            box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.05);
+        }
+
+        .status-ring strong {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1rem;
+        }
+
+        .status-copy {
+            display: grid;
+            gap: 0.34rem;
+        }
+
+        .status-copy p {
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.44rem;
+            padding: 0.42rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        .badge::before {
+            content: "";
+            width: 0.5rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 0 0 rgba(88, 234, 215, 0.5);
+            animation: ping 1.8s ease-out infinite;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.8rem;
+        }
+
+        .identity {
+            border-radius: 1.25rem;
+            padding: 0.92rem;
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .identity strong {
+            font-size: 1rem;
+        }
+
+        .identity p {
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.5;
+        }
+
+        .metric {
+            display: grid;
+            gap: 0.4rem;
+        }
+
+        .metric strong {
+            font-size: 1.1rem;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-family: "Space Grotesk", sans-serif;
+            line-height: 1;
+        }
+
+        .metric-bar {
+            height: 0.7rem;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .metric-fill {
+            height: 100%;
+            width: var(--fill, 50%);
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--blue), var(--cyan));
+            box-shadow: 0 0 18px rgba(88, 234, 215, 0.22);
+        }
+
+        .side {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .log {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .entry {
+            border-radius: 1.15rem;
+            padding: 0.95rem;
+            display: grid;
+            gap: 0.35rem;
+        }
+
+        .entry strong {
+            font-size: 0.98rem;
+        }
+
+        .entry p {
+            color: var(--muted);
+            line-height: 1.5;
+            font-size: 0.84rem;
+        }
+
+        .actions {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .action-card {
+            border-radius: 1.2rem;
+            padding: 1rem;
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .action-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .action-head p {
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.5;
+            margin-top: 0.28rem;
+        }
+
+        .action-chip {
+            padding: 0.35rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            color: #dbe6ff;
+            background: rgba(159, 139, 255, 0.16);
+        }
+
+        .action-button {
+            padding: 0.88rem 1rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(130, 171, 255, 0.14);
+            background: linear-gradient(135deg, rgba(118, 168, 255, 0.2), rgba(88, 234, 215, 0.12));
+        }
+
+        .action-button:hover,
+        .action-button:focus-visible,
+        .mode-switch button:hover,
+        .mode-switch button:focus-visible {
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        @keyframes ping {
+            0% {
+                box-shadow: 0 0 0 0 rgba(88, 234, 215, 0.48);
+            }
+
+            70% {
+                box-shadow: 0 0 0 13px rgba(88, 234, 215, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(88, 234, 215, 0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .layout,
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-strip {
+                grid-template-columns: 1fr;
+                justify-items: start;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .topbar {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .mode-switch {
+                width: 100%;
+                grid-auto-flow: row;
+            }
+
+            .mode-switch button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="panel">
+        <div class="topbar">
+            <div class="title-block">
+                <span class="eyebrow">Secure transit</span>
+                <h1>Vault Access Session Panel</h1>
+                <p class="subtitle">A responsive UI element for trust scoring, operator verification, and temporary access routing inside high-sensitivity admin workflows.</p>
+            </div>
+            <div class="mode-switch" aria-label="Vault session mode switch">
+                <button class="active" type="button" data-mode="monitor">Monitor</button>
+                <button type="button" data-mode="handoff">Handoff</button>
+                <button type="button" data-mode="lockdown">Lockdown</button>
+            </div>
+        </div>
+
+        <div class="layout">
+            <article class="hero">
+                <div class="status-strip">
+                    <div class="status-ring" id="statusRing" style="--ring:84">
+                        <strong id="statusScore">84%</strong>
+                    </div>
+                    <div class="status-copy">
+                        <span class="eyebrow" id="statusLabel">Trust index</span>
+                        <h2 id="statusTitle">Session integrity is stable across the current operator chain.</h2>
+                        <p id="statusText">Behavioral checks and device posture are aligned, allowing limited vault controls without secondary friction.</p>
+                    </div>
+                    <span class="badge" id="statusBadge">Verified</span>
+                </div>
+
+                <div class="hero-grid">
+                    <article class="identity">
+                        <span class="metric-label">Active identity</span>
+                        <strong id="identityTitle">Ops lead / Delta node</strong>
+                        <p id="identityCopy">Primary keyset signed in from a managed device with biometric continuity intact.</p>
+                    </article>
+                    <article class="identity metric">
+                        <span class="metric-label">Privilege window</span>
+                        <span class="metric-value" id="windowValue">18m</span>
+                        <div class="metric-bar" aria-hidden="true">
+                            <div class="metric-fill" id="windowFill" style="--fill:72%"></div>
+                        </div>
+                    </article>
+                    <article class="identity metric">
+                        <span class="metric-label">Route certainty</span>
+                        <span class="metric-value" id="routeValue">91%</span>
+                        <div class="metric-bar" aria-hidden="true">
+                            <div class="metric-fill" id="routeFill" style="--fill:91%"></div>
+                        </div>
+                    </article>
+                </div>
+            </article>
+
+            <aside class="side">
+                <section class="log" id="logEntries">
+                    <article class="entry">
+                        <time>07:14 UTC</time>
+                        <strong>Device posture refreshed</strong>
+                        <p>Runtime policy matched the current vault profile with no drift flags.</p>
+                    </article>
+                    <article class="entry">
+                        <time>07:19 UTC</time>
+                        <strong>Temporary route elevated</strong>
+                        <p>Approval lane expanded to include recovery archives for fourteen minutes.</p>
+                    </article>
+                    <article class="entry">
+                        <time>07:26 UTC</time>
+                        <strong>Secondary witness notified</strong>
+                        <p>Backup approver is standing by in case the session crosses the risk threshold.</p>
+                    </article>
+                </section>
+
+                <section class="actions">
+                    <article class="action-card">
+                        <div class="action-head">
+                            <div>
+                                <strong>Session controls</strong>
+                                <p>Switching modes updates the panel narrative and readiness metrics without changing the component shell.</p>
+                            </div>
+                            <span class="action-chip" id="actionChip">Auto audit</span>
+                        </div>
+                        <button class="action-button" type="button" id="actionButton">Export trust report</button>
+                    </article>
+                </section>
+            </aside>
+        </div>
+    </section>
+
+    <script>
+        const modeButtons = document.querySelectorAll(".mode-switch button");
+        const statusRing = document.getElementById("statusRing");
+        const statusScore = document.getElementById("statusScore");
+        const statusLabel = document.getElementById("statusLabel");
+        const statusTitle = document.getElementById("statusTitle");
+        const statusText = document.getElementById("statusText");
+        const statusBadge = document.getElementById("statusBadge");
+        const identityTitle = document.getElementById("identityTitle");
+        const identityCopy = document.getElementById("identityCopy");
+        const windowValue = document.getElementById("windowValue");
+        const windowFill = document.getElementById("windowFill");
+        const routeValue = document.getElementById("routeValue");
+        const routeFill = document.getElementById("routeFill");
+        const logEntries = document.getElementById("logEntries");
+        const actionChip = document.getElementById("actionChip");
+        const actionButton = document.getElementById("actionButton");
+
+        const modes = {
+            monitor: {
+                score: "84%",
+                ring: 84,
+                label: "Trust index",
+                title: "Session integrity is stable across the current operator chain.",
+                text: "Behavioral checks and device posture are aligned, allowing limited vault controls without secondary friction.",
+                badge: "Verified",
+                identityTitle: "Ops lead / Delta node",
+                identityCopy: "Primary keyset signed in from a managed device with biometric continuity intact.",
+                windowValue: "18m",
+                windowFill: "72%",
+                routeValue: "91%",
+                routeFill: "91%",
+                actionChip: "Auto audit",
+                actionButton: "Export trust report",
+                logs: [
+                    ["07:14 UTC", "Device posture refreshed", "Runtime policy matched the current vault profile with no drift flags."],
+                    ["07:19 UTC", "Temporary route elevated", "Approval lane expanded to include recovery archives for fourteen minutes."],
+                    ["07:26 UTC", "Secondary witness notified", "Backup approver is standing by in case the session crosses the risk threshold."]
+                ]
+            },
+            handoff: {
+                score: "76%",
+                ring: 76,
+                label: "Handoff confidence",
+                title: "Privilege relay is active while custody shifts between authenticated operators.",
+                text: "The vault remains available through a shorter window while witness acknowledgement and key transfer timing are verified.",
+                badge: "Dual review",
+                identityTitle: "Shift relay / Echo desk",
+                identityCopy: "Outgoing admin signed the custody packet and the incoming approver is completing witness checks.",
+                windowValue: "09m",
+                windowFill: "46%",
+                routeValue: "82%",
+                routeFill: "82%",
+                actionChip: "Witness pair",
+                actionButton: "Open handoff checklist",
+                logs: [
+                    ["08:02 UTC", "Custody seal generated", "A one-time relay signature was issued for the overlap window."],
+                    ["08:07 UTC", "Witness channel confirmed", "Audit observer acknowledged the relay path and fallback contact tree."],
+                    ["08:11 UTC", "Archive scope narrowed", "Nonessential collections were removed until the handoff is complete."]
+                ]
+            },
+            lockdown: {
+                score: "42%",
+                ring: 42,
+                label: "Containment state",
+                title: "The session has been reduced to containment actions and forensic visibility only.",
+                text: "Privilege escalation is blocked, new routes are frozen, and all operator actions are mirrored into the incident ledger.",
+                badge: "Restricted",
+                identityTitle: "Forensic hold / Sentinel lane",
+                identityCopy: "The active identity is preserved for evidence continuity while controls remain read-only.",
+                windowValue: "03m",
+                windowFill: "20%",
+                routeValue: "38%",
+                routeFill: "38%",
+                actionChip: "Hard freeze",
+                actionButton: "Open incident ledger",
+                logs: [
+                    ["09:03 UTC", "Abnormal route variance detected", "The access path deviated from the expected sequence and triggered containment."],
+                    ["09:05 UTC", "Privilege floor enforced", "Sensitive controls were downgraded to review-only until manual release."],
+                    ["09:09 UTC", "Forensic mirror engaged", "All session inputs are being duplicated to the secure incident stream."]
+                ]
+            }
+        };
+
+        function renderLogs(items) {
+            logEntries.innerHTML = items.map(([time, title, copy]) => `
+                <article class="entry">
+                    <time>${time}</time>
+                    <strong>${title}</strong>
+                    <p>${copy}</p>
+                </article>
+            `).join("");
+        }
+
+        modeButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const data = modes[button.dataset.mode];
+
+                modeButtons.forEach((item) => item.classList.toggle("active", item === button));
+                statusRing.style.setProperty("--ring", data.ring);
+                statusScore.textContent = data.score;
+                statusLabel.textContent = data.label;
+                statusTitle.textContent = data.title;
+                statusText.textContent = data.text;
+                statusBadge.textContent = data.badge;
+                identityTitle.textContent = data.identityTitle;
+                identityCopy.textContent = data.identityCopy;
+                windowValue.textContent = data.windowValue;
+                windowFill.style.setProperty("--fill", data.windowFill);
+                routeValue.textContent = data.routeValue;
+                routeFill.style.setProperty("--fill", data.routeFill);
+                actionChip.textContent = data.actionChip;
+                actionButton.textContent = data.actionButton;
+                renderLogs(data.logs);
+            });
+        });
+    </script>
+</body>
+
+</html>
