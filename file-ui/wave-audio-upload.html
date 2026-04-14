@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes wave-pulse {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(1.5); }
+    }
+    @keyframes float-up {
+      0% { transform: translateY(20px) scale(0.8); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100px) scale(1); opacity: 0; }
+    }
+    @keyframes rotate-glow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes scan-line {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+    .wave-bar {
+      animation: wave-pulse 1s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+    .upload-area.active .wave-bar {
+      animation-play-state: paused;
+    }
+    .particle-burst {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .glow-ring {
+      animation: rotate-glow 4s linear infinite;
+      transform-origin: center;
+    }
+    .scan-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, rgba(6,182,212,0.6), transparent);
+      animation: scan-line 2s ease-in-out infinite;
+    }
+    .file-card {
+      backdrop-filter: blur(10px);
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .shimmer {
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-950 min-h-screen flex items-center justify-center p-8">
+
+  <div class="w-full max-w-xl">
+    <h2 class="text-3xl font-bold text-white mb-2 text-center">Wave Upload</h2>
+    <p class="text-gray-400 text-center mb-8">Audio-visual file upload experience</p>
+
+    <div class="upload-area relative bg-gray-900/80 border border-cyan-500/30 rounded-3xl p-12 cursor-pointer overflow-hidden transition-all duration-300 hover:border-cyan-500/60 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+      <div class="glow-ring absolute inset-0 border-2 border-transparent border-t-cyan-500/20 rounded-full opacity-30"></div>
+      <div class="scan-line"></div>
+      
+      <div class="relative z-10 flex flex-col items-center">
+        <div class="wave-container flex items-end justify-center gap-1 h-12 mb-6">
+          <div class="wave-bar w-2 bg-cyan-500 rounded-full"></div>
+          <div class="wave-bar w-2 bg-cyan-400 rounded-full"></div>
+          <div class="wave-bar w-2 bg-cyan-300 rounded-full"></div>
+          <div class="wave-bar w-2 bg-cyan-400 rounded-full"></div>
+          <div class="wave-bar w-2 bg-cyan-500 rounded-full"></div>
+        </div>
+
+        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-4">
+          <svg class="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+          </svg>
+        </div>
+
+        <h3 class="text-xl font-semibold text-white mb-2">Upload Your Files</h3>
+        <p class="text-gray-400 mb-4">Drag & drop or click to browse</p>
+        
+        <div class="flex items-center gap-2 text-xs text-gray-500">
+          <span class="px-2 py-1 bg-gray-800/50 rounded-md">MP3</span>
+          <span class="px-2 py-1 bg-gray-800/50 rounded-md">WAV</span>
+          <span class="px-2 py-1 bg-gray-800/50 rounded-md">FLAC</span>
+          <span class="px-2 py-1 bg-gray-800/50 rounded-md">+more</span>
+        </div>
+      </div>
+
+      <input type="file" id="fileInput" class="hidden" multiple>
+    </div>
+
+    <div id="fileList" class="mt-6 space-y-3"></div>
+
+    <button id="uploadBtn" class="hidden w-full mt-6 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-semibold transition-all transform hover:scale-[1.02]">
+      <span class="flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+        </svg>
+        Upload Files
+      </span>
+    </button>
+
+    <div class="mt-12 grid grid-cols-2 gap-4">
+      <div class="bg-gray-900/60 border border-white/10 rounded-2xl p-6 cursor-pointer hover:border-cyan-500/40 transition-all group">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13"/>
+            </svg>
+          </div>
+          <span class="text-white font-medium">Audio</span>
+        </div>
+        <p class="text-xs text-gray-500">Music & sound files</p>
+      </div>
+
+      <div class="bg-gray-900/60 border border-white/10 rounded-2xl p-6 cursor-pointer hover:border-purple-500/40 transition-all group">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <span class="text-white font-medium">Video</span>
+        </div>
+        <p class="text-xs text-gray-500">Movies & recordings</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const uploadArea = document.querySelector('.upload-area');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const uploadBtn = document.getElementById('uploadBtn');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    ['dragenter', 'dragover'].forEach(event => {
+      uploadArea.addEventListener(event, (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('active');
+        createBurst();
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(event => {
+      uploadArea.addEventListener(event, () => {
+        uploadArea.classList.remove('active');
+      });
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+      [...files].forEach((file, index) => {
+        setTimeout(() => addFileCard(file), index * 150);
+      });
+      uploadBtn.classList.remove('hidden');
+    }
+
+    function addFileCard(file) {
+      const card = document.createElement('div');
+      card.className = 'file-card bg-gray-900/80 border border-white/10 rounded-xl p-4 flex items-center gap-4 animate-[float-up_0.5s_ease_forwards]';
+      
+      const typeInfo = getFileTypeInfo(file.type);
+      
+      card.innerHTML = `
+        <div class="w-12 h-12 rounded-xl ${typeInfo.bg} flex items-center justify-center">
+          ${typeInfo.icon}
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-white font-medium truncate">${file.name}</p>
+          <div class="flex items-center gap-2 mt-1">
+            <p class="text-xs text-gray-500">${formatSize(file.size)}</p>
+            <div class="flex-1 h-1 bg-gray-800 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r ${typeInfo.gradient} rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+        <button class="remove-btn w-8 h-8 rounded-lg bg-white/5 hover:bg-red-500/20 flex items-center justify-center text-gray-400 hover:text-red-400 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      `;
+      
+      fileList.appendChild(card);
+      
+      const progressBar = card.querySelector('div[style*="width: 0%"]');
+      animateProgress(progressBar);
+      
+      card.querySelector('.remove-btn').addEventListener('click', () => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateX(20px)';
+        setTimeout(() => card.remove(), 300);
+      });
+    }
+
+    function animateProgress(bar) {
+      let width = 0;
+      const interval = setInterval(() => {
+        width += Math.random() * 20;
+        if (width >= 100) {
+          width = 100;
+          clearInterval(interval);
+        }
+        bar.style.width = width + '%';
+      }, 150);
+    }
+
+    function getFileTypeInfo(type) {
+      if (type.startsWith('audio/')) {
+        return { 
+          bg: 'bg-cyan-500/20', 
+          gradient: 'from-cyan-500 to-cyan-400',
+          icon: '<svg class="w-6 h-6 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>'
+        };
+      } else if (type.startsWith('video/')) {
+        return { 
+          bg: 'bg-purple-500/20', 
+          gradient: 'from-purple-500 to-purple-400',
+          icon: '<svg class="w-6 h-6 text-purple-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>'
+        };
+      } else if (type.startsWith('image/')) {
+        return { 
+          bg: 'bg-emerald-500/20', 
+          gradient: 'from-emerald-500 to-emerald-400',
+          icon: '<svg class="w-6 h-6 text-emerald-400" fill="currentColor" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>'
+        };
+      }
+      return { 
+        bg: 'bg-blue-500/20', 
+        gradient: 'from-blue-500 to-blue-400',
+        icon: '<svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/></svg>'
+      };
+    }
+
+    function formatSize(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function createBurst() {
+      const colors = ['#06b6d4', '#22d3ee', '#67e8f9', '#ffffff'];
+      for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle-burst';
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.left = '50%';
+        particle.style.top = '50%';
+        
+        const angle = (i / 12) * Math.PI * 2;
+        const distance = 80 + Math.random() * 40;
+        const duration = 500 + Math.random() * 300;
+        
+        particle.style.transition = `all ${duration}ms ease-out`;
+        uploadArea.appendChild(particle);
+        
+        requestAnimationFrame(() => {
+          particle.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+          particle.style.opacity = '0';
+        });
+        
+        setTimeout(() => particle.remove(), duration);
+      }
+    }
+  </script>
+
+</body>
+</html>
