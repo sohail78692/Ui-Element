@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes particle-rise {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-150px) scale(0); opacity: 0; }
+    }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(1.5); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(34,211,238,0.3); }
+      50% { box-shadow: 0 0 40px rgba(34,211,238,0.6); }
+    }
+    @keyframes rotate-slow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .wave-bar {
+      animation: wave 0.8s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+    .glow-border {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    .rotate-ring {
+      animation: rotate-slow 20s linear infinite;
+    }
+    .file-item {
+      transition: all 0.3s ease;
+    }
+    .file-item:hover {
+      transform: translateX(8px);
+      background: rgba(34,211,238,0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-950 min-h-screen flex items-center justify-center p-8">
+
+  <div class="w-full max-w-xl">
+    <h2 class="text-3xl font-bold text-white mb-2 text-center">Particle Upload</h2>
+    <p class="text-gray-400 text-center mb-8">Particle effects file upload</p>
+
+    <div class="relative rounded-3xl overflow-hidden" id="container">
+      <div class="absolute inset-0 bg-gradient-to-b from-cyan-900/20 via-gray-900/80 to-gray-900"></div>
+      <div class="rotate-ring absolute inset-0 flex items-center justify-center opacity-30">
+        <div class="w-96 h-96 border border-dashed border-cyan-500/30 rounded-full"></div>
+      </div>
+      
+      <div class="glow-border relative bg-gray-900/90 m-2 rounded-[1.5rem] p-12 border border-cyan-500/30 cursor-pointer" id="dropzone">
+        <div class="wave-container flex items-end justify-center gap-1 h-10 mb-6">
+          <div class="wave-bar w-2 bg-cyan-400 rounded-full"></div>
+          <div class="wave-bar w-2 bg-cyan-300 rounded-full"></div>
+          <div class="wave-bar w-2 bg-cyan-200 rounded-full"></div>
+          <div class="wave-bar w-2 bg-cyan-300 rounded-full"></div>
+          <div class="wave-bar w-2 bg-cyan-400 rounded-full"></div>
+        </div>
+        
+        <div class="relative z-10 text-center">
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 mb-4">
+            <svg class="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+            </svg>
+          </div>
+          
+          <h3 class="text-xl font-semibold text-white mb-2">Drag & drop files</h3>
+          <p class="text-gray-400 text-sm mb-4">or click to browse</p>
+          
+          <div class="flex items-center justify-center gap-2">
+            <div class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+              <span class="text-xs text-cyan-400">PDF</span>
+            </div>
+            <div class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+              <span class="text-xs text-cyan-400">IMG</span>
+            </div>
+            <div class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+              <span class="text-xs text-cyan-400">DOC</span>
+            </div>
+          </div>
+        </div>
+        
+        <input type="file" id="fileInput" class="hidden" multiple>
+      </div>
+    </div>
+
+    <div id="fileList" class="mt-6 space-y-2"></div>
+
+    <button id="uploadBtn" class="hidden w-full mt-6 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold transition-all hover:opacity-90">
+      <span class="flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+        </svg>
+        Upload All
+      </span>
+    </button>
+
+    <div class="mt-12 grid grid-cols-3 gap-4">
+      <div class="bg-gray-900/60 border border-cyan-500/20 rounded-xl p-4 text-center cursor-pointer hover:border-cyan-500/50 transition-all">
+        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <p class="text-white text-sm">Docs</p>
+      </div>
+      <div class="bg-gray-900/60 border border-blue-500/20 rounded-xl p-4 text-center cursor-pointer hover:border-blue-500/50 transition-all">
+        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-blue-500/10 flex items-center justify-center">
+          <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <p class="text-white text-sm">Photos</p>
+      </div>
+      <div class="bg-gray-900/60 border border-purple-500/20 rounded-xl p-4 text-center cursor-pointer hover:border-purple-500/50 transition-all">
+        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-purple-500/10 flex items-center justify-center">
+          <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/>
+          </svg>
+        </div>
+        <p class="text-white text-sm">Audio</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const container = document.getElementById('container');
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const uploadBtn = document.getElementById('uploadBtn');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    ['dragenter', 'dragover'].forEach(event => {
+      dropzone.addEventListener(event, (e) => {
+        e.preventDefault();
+        createParticles();
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(event => {
+      dropzone.addEventListener(event, () => {});
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    function handleFiles(files) {
+      [...files].forEach((file, i) => setTimeout(() => addFile(file), i * 100));
+      uploadBtn.classList.remove('hidden');
+    }
+
+    function addFile(file) {
+      const div = document.createElement('div');
+      div.className = 'file-item bg-gray-800/60 border border-white/10 rounded-xl p-3 flex items-center gap-3';
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+          <svg class="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-white text-sm truncate">${file.name}</p>
+        </div>
+        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      `;
+      fileList.appendChild(div);
+    }
+
+    function createParticles() {
+      const colors = ['#22d3e8', '#38bdf8', '#818cf8', '#c084fc'];
+      for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = (Math.random() * 100) + '%';
+        particle.style.bottom = '0';
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.animation = `particle-rise ${1 + Math.random()}s ease-out forwards`;
+        container.appendChild(particle);
+        setTimeout(() => particle.remove(), 2000);
+      }
+    }
+  </script>
+
+</body>
+</html>
