@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Glass Morph Badge UI Component">
+<title>Glass Morph Badge</title>
+<style>
+body {
+    background: #0d0d12;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.badge-blue {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+}
+
+.badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.badge-purple {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+}
+
+.badge-orange {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+}
+</style>
+</head>
+<body>
+<span class="badge badge-blue">
+    <svg class="icon" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+    Verified
+</span>
+<span class="badge badge-green">
+    <svg class="icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+    Active
+</span>
+<span class="badge badge-purple">
+    <svg class="icon" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+    Premium
+</span>
+<span class="badge badge-orange">
+    <svg class="icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.692.445-1.144.567-1.562.215-2.384.766-2.684 2.442-.424 2.343.528 4.283 2.303 4.086a1.14 1.14 0 00.83-.445c.225-.28.357-.596.357-.835 0-.255-.115-.55-.327-.79l-.002-.005c-.144-.234-.25-.487-.25-.79 0-.255.12-.55.337-.79a1.14 1.14 0 00.83-.445c.225-.28.357-.596.357-.835 0-.255-.115-.55-.327-.79l-.002-.005c-.144-.234-.25-.487-.25-.79 0-.255.12-.55.337-.79a1.14 1.14 0 00.83-.445c.225-.28.357-.596.357-.835 0-.255-.115-.55-.327-.79l-.002-.005c-.144-.234-.25-.487-.25-.79zm3.825 3.637c-.225.28-.357.596-.357.835 0 .255.115.55.327.79l.002.005c.144.234.25.487.25.79 0 .255-.12.55-.337.79a1.14 1.14 0 01-.83.445c-.225.28-.357.596-.357.835 0 .255.115.55.327.79l.002.005c.144.234.25.487.25.79 0 .255-.12.55-.337.79a1.14 1.14 0 01-.83.445c-1.562-.215-2.384-.766-2.684-2.442-.424-2.343.528-4.283 2.303-4.086.42.066.782.274 1.003.595z" clip-rule="evenodd"/></svg>
+    New
+</span>
+</body>
+</html>
