@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Neural Network Visualizer UI Component">
+<title>Neural Network Visualizer</title>
+<style>
+body {
+    background: #0a0a0f;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.network-viz {
+    width: 500px;
+    height: 350px;
+    background: linear-gradient(145deg, #12121a, #1a1a24);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.viz-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.viz-title {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.viz-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #a78bfa;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.network-canvas {
+    position: absolute;
+    inset: 0;
+}
+
+.layer {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.layer-input { left: 60px; }
+.layer-hidden { left: 200px; }
+.layer-hidden-2 { left: 340px; }
+.layer-output { right: 60px; }
+
+.node {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #6366f1;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
+    animation: node-pulse 2s ease-in-out infinite;
+}
+
+.node-output {
+    background: #10b981;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+}
+
+.layer-input .node:nth-child(2) { animation-delay: 0.2s; }
+.layer-input .node:nth-child(3) { animation-delay: 0.4s; }
+
+.layer-hidden .node:nth-child(1) { animation-delay: 0.1s; }
+.layer-hidden .node:nth-child(2) { animation-delay: 0.3s; }
+.layer-hidden .node:nth-child(3) { animation-delay: 0.5s; }
+.layer-hidden .node:nth-child(4) { animation-delay: 0.7s; }
+
+.layer-hidden-2 .node:nth-child(1) { animation-delay: 0.2s; }
+.layer-hidden-2 .node:nth-child(2) { animation-delay: 0.4s; }
+.layer-hidden-2 .node:nth-child(3) { animation-delay: 0.6s; }
+
+.layer-output .node { animation-delay: 0.3s; }
+
+@keyframes node-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+.connection {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.4), rgba(139, 92, 246, 0.4));
+    transform-origin: left center;
+}
+
+.stats-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+}
+
+.stat-box {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.stat-value.purple { color: #a78bfa; }
+.stat-value.green { color: #34d399; }
+</style>
+</head>
+<body>
+<div class="network-viz">
+    <div class="viz-header">
+        <span class="viz-title">Neural Network</span>
+        <span class="viz-badge">Active</span>
+    </div>
+    <div class="network-canvas">
+        <div class="layer layer-input">
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+        </div>
+        <div class="layer layer-hidden">
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+        </div>
+        <div class="layer layer-hidden-2">
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+        </div>
+        <div class="layer layer-output">
+            <div class="node node-output"></div>
+            <div class="node node-output"></div>
+        </div>
+    </div>
+    <div class="stats-panel">
+        <div class="stat-box">
+            <div class="stat-label">Layers</div>
+            <div class="stat-value purple">4</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Nodes</div>
+            <div class="stat-value">12</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Accuracy</div>
+            <div class="stat-value green">94%</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
