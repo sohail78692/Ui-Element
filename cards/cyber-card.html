@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cyber Card UI Component">
+<title>Cyber Card</title>
+<style>
+body {
+    background: #0a0a0f;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.cyber-card {
+    position: relative;
+    width: 300px;
+    padding: 30px;
+    background: linear-gradient(145deg, #12121a, #0d0d14);
+    border: 1px solid #1f1f2e;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #0ff, #f0f, #0ff);
+    animation: scanLine 2s linear infinite;
+}
+@keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+.cyber-card h3 {
+    margin: 0 0 10px;
+    color: #e0e0e0;
+    font-size: 18px;
+    font-weight: 600;
+}
+.cyber-card p {
+    margin: 0;
+    color: #808090;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.cyber-card .corner {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #0ff;
+}
+.cyber-card .corner.tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+.cyber-card .corner.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+.cyber-card .corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+.cyber-card .corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+</style>
+</head>
+<body>
+
+<div class="cyber-card">
+    <span class="corner tl"></span>
+    <span class="corner tr"></span>
+    <span class="corner bl"></span>
+    <span class="corner br"></span>
+    <h3>System Online</h3>
+    <p>Neural interface initialized. Ready for input.</p>
+</div>
+
+</body>
+</html>
