@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Holographic Ripple Button UI Component">
+<title>Holographic Ripple Button</title>
+<style>
+body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.holo-btn {
+    position: relative;
+    padding: 16px 44px;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e0e0e0;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.holo-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+    background-size: 200% 200%;
+    animation: holoShimmer 3s infinite linear;
+}
+@keyframes holoShimmer {
+    0% { background-position: 200% 50%; }
+    100% { background-position: -200% 50%; }
+}
+.holo-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(100, 200, 255, 0.3),
+                inset 0 0 20px rgba(100, 200, 255, 0.1);
+    color: #fff;
+}
+.holo-btn .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(100, 200, 255, 0.4);
+    transform: scale(0);
+    animation: holoRipple 0.8s ease-out;
+    pointer-events: none;
+}
+@keyframes holoRipple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+</style>
+<script>
+function createRipple(event) {
+    const btn = event.currentTarget;
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple');
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = event.clientX - rect.left - size/2 + 'px';
+    ripple.style.top = event.clientY - rect.top - size/2 + 'px';
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 800);
+}
+</script>
+</head>
+<body>
+
+<button type="button" class="holo-btn" onclick="createRipple(event)">
+    Holo Activate
+</button>
+
+</body>
+</html>
