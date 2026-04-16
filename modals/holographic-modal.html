@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Holographic Modal UI Component">
+<title>Holographic Modal</title>
+<style>
+body {
+    background: #08080c;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.holo-modal {
+    position: relative;
+    width: 400px;
+    padding: 32px;
+    background: rgba(15, 15, 25, 0.85);
+    border: 1px solid rgba(128, 255, 234, 0.2);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 60px rgba(128, 255, 234, 0.1);
+}
+.holo-modal::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    background: linear-gradient(135deg, rgba(128,255,234,0.3), rgba(255,128,192,0.3), rgba(128,255,234,0.3));
+    opacity: 0;
+    z-index: -1;
+    filter: blur(8px);
+    transition: opacity 0.4s;
+}
+.holo-modal:hover::before {
+    opacity: 0.6;
+}
+.holo-modal h2 {
+    margin: 0 0 12px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+}
+.holo-modal p {
+    margin: 0 0 24px;
+    color: #a0a0b0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.holo-modal .btn-group {
+    display: flex;
+    gap: 12px;
+}
+.holo-modal button {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.holo-modal .btn-primary {
+    background: linear-gradient(135deg, #80ffea, #80c0ff);
+    color: #0d0d12;
+}
+.holo-modal .btn-primary:hover {
+    box-shadow: 0 4px 20px rgba(128, 255, 234, 0.4);
+}
+.holo-modal .btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #c0c0d0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.holo-modal .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+</style>
+</head>
+<body>
+
+<div class="holo-modal">
+    <h2>Neural Link</h2>
+    <p>Establish connection to the quantum network for enhanced processing capabilities.</p>
+    <div class="btn-group">
+        <button class="btn-primary">Connect</button>
+        <button class="btn-secondary">Cancel</button>
+    </div>
+</div>
+
+</body>
+</html>
