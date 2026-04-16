@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Plasma Field Input UI Component">
+<title>Plasma Field Input</title>
+<style>
+body {
+    background: #0c0c14;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.plasma-input {
+    position: relative;
+    width: 280px;
+}
+.plasma-input input {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #2a2a3a;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+.plasma-input input::placeholder {
+    color: #505060;
+}
+.plasma-input input:focus {
+    border-color: #80ffea;
+    box-shadow: 0 0 20px rgba(128, 255, 234, 0.15),
+                inset 0 0 20px rgba(128, 255, 234, 0.05);
+}
+.plasma-input .plasma-glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #80ffea, #ff80c0, #80ffea);
+    opacity: 0;
+    z-index: -1;
+    filter: blur(10px);
+    transition: opacity 0.3s;
+}
+.plasma-input input:focus ~ .plasma-glow {
+    opacity: 0.4;
+    animation: plasmaPulse 2s ease-in-out infinite;
+}
+@keyframes plasmaPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.5; }
+}
+</style>
+</head>
+<body>
+
+<div class="plasma-input">
+    <input type="text" placeholder="Enter code...">
+    <span class="plasma-glow"></span>
+</div>
+
+</body>
+</html>
