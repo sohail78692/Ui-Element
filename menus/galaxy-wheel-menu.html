@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Galaxy Wheel Menu UI Component">
+<title>Galaxy Wheel Menu</title>
+<style>
+body {
+    background: #0a0a12;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.galaxy-menu {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+.galaxy-menu .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin: -25px 0 0 -25px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 2px solid rgba(128, 255, 234, 0.3);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+.galaxy-menu .center:hover {
+    border-color: rgba(128, 255, 234, 0.8);
+    box-shadow: 0 0 20px rgba(128, 255, 234, 0.4);
+}
+.galaxy-menu .center svg {
+    width: 20px;
+    height: 20px;
+    fill: #80ffea;
+}
+.galaxy-menu .item {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    background: rgba(20, 20, 35, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    top: 50%;
+    left: 50%;
+    margin: -22px 0 0 -22px;
+    transform: rotate(0deg) translate(0, 0);
+    opacity: 0;
+}
+.galaxy-menu:hover .item {
+    opacity: 1;
+}
+.galaxy-menu:hover .item:nth-child(2) { transform: rotate(0deg) translate(0, -70px); transition-delay: 0s; }
+.galaxy-menu:hover .item:nth-child(3) { transform: rotate(60deg) translate(0, -70px); transition-delay: 0.05s; }
+.galaxy-menu:hover .item:nth-child(4) { transform: rotate(120deg) translate(0, -70px); transition-delay: 0.1s; }
+.galaxy-menu:hover .item:nth-child(5) { transform: rotate(180deg) translate(0, -70px); transition-delay: 0.15s; }
+.galaxy-menu:hover .item:nth-child(6) { transform: rotate(240deg) translate(0, -70px); transition-delay: 0.2s; }
+.galaxy-menu:hover .item:nth-child(7) { transform: rotate(300deg) translate(0, -70px); transition-delay: 0.25s; }
+.galaxy-menu .item:hover {
+    background: rgba(128, 255, 234, 0.2);
+    border-color: rgba(128, 255, 234, 0.5);
+}
+.galaxy-menu .item svg {
+    width: 18px;
+    height: 18px;
+    fill: #a0a0b0;
+    transition: fill 0.3s;
+}
+.galaxy-menu .item:hover svg {
+    fill: #80ffea;
+}
+</style>
+</head>
+<body>
+
+<div class="galaxy-menu">
+    <span class="item">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </span>
+    <span class="item">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </span>
+    <span class="item">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </span>
+    <span class="item">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v6l5.25 3.15.75-1.23-4-2.67z"/></svg>
+    </span>
+    <span class="item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    </span>
+    <span class="item">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+    </span>
+    <span class="center">
+        <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+    </span>
+</div>
+
+</body>
+</html>
