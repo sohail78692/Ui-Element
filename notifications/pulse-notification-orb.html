@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pulse Notification Orb UI Component">
+<title>Pulse Notification Orb</title>
+<style>
+body {
+    background: #0d0d12;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.notification-orb {
+    position: relative;
+    width: 320px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 25, 0.95));
+    border: 1px solid #2a2a40;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+.notification-orb::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(128, 255, 234, 0.1) 0%, transparent 50%);
+    animation: orbPulse 3s ease-in-out infinite;
+}
+@keyframes orbPulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+}
+.notification-orb .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #80ffea, #80c0ff);
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+.notification-orb .icon svg {
+    width: 20px;
+    height: 20px;
+}
+.notification-orb h4 {
+    margin: 0 0 6px;
+    color: #e8e8f0;
+    font-size: 15px;
+    font-weight: 600;
+}
+.notification-orb p {
+    margin: 0;
+    color: #808090;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.notification-orb .progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #80ffea, #ff80c0);
+    border-radius: 0 0 0 16px;
+    animation: progressShrink 4s linear forwards;
+}
+@keyframes progressShrink {
+    0% { width: 100%; }
+    100% { width: 0%; }
+}
+</style>
+</head>
+<body>
+
+<div class="notification-orb">
+    <span class="icon">
+        <svg fill="none" stroke="#0d0d12" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+    </span>
+    <h4>Update Complete</h4>
+    <p>System synchronized successfully.</p>
+    <span class="progress"></span>
+</div>
+
+</body>
+</html>
