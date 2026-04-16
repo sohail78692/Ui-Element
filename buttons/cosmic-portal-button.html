@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cosmic Portal Button UI Component">
+<title>Cosmic Portal Button</title>
+<style>
+body {
+    background: #080115;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.cosmic-btn {
+    position: relative;
+    padding: 18px 48px;
+    border: 2px solid transparent;
+    background: linear-gradient(#080115, #080115) padding-box,
+                linear-gradient(135deg, #ff6b9d, #c44dff, #6bffff) border-box;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.cosmic-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s;
+}
+.cosmic-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 40px -10px rgba(196, 77, 255, 0.5);
+}
+.cosmic-btn:hover::before {
+    left: 100%;
+}
+.cosmic-btn:active {
+    transform: translateY(-1px);
+}
+.cosmic-btn .portal-ring {
+    position: absolute;
+    inset: -2px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ff6b9d, #c44dff, #6bffff);
+    opacity: 0;
+    z-index: -1;
+    filter: blur(15px);
+    transition: opacity 0.4s;
+}
+.cosmic-btn:hover .portal-ring {
+    opacity: 0.6;
+}
+</style>
+</head>
+<body>
+
+<button type="button" class="cosmic-btn">
+    <span class="portal-ring"></span>
+    Enter Portal
+</button>
+
+</body>
+</html>
