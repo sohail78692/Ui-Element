@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plasma Flow Loader</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0d;
+            font-family: 'JetBrains Mono', monospace;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .loader-plasma {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+        .plasma-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid transparent;
+        }
+        .plasma-ring:nth-child(1) {
+            border-top-color: #22d3ee;
+            border-right-color: #a855f7;
+            animation: spin-1 1.2s linear infinite;
+        }
+        .plasma-ring:nth-child(2) {
+            inset: 10px;
+            border-bottom-color: #a855f7;
+            border-left-color: #22d3ee;
+            animation: spin-2 1.2s linear infinite;
+        }
+        .plasma-ring:nth-child(3) {
+            inset: 20px;
+            border-top-color: #f472b6;
+            border-right-color: #f472b6;
+            animation: spin-3 1.2s linear infinite;
+        }
+        .plasma-ring:nth-child(4) {
+            inset: 30px;
+            background: linear-gradient(135deg, #22d3ee, #a855f7, #f472b6);
+            border-radius: 50%;
+            animation: pulse-1 1.2s ease-in-out infinite;
+        }
+        .plasma-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(168, 85, 247, 0.5);
+            animation: center-pulse 1.2s ease-in-out infinite;
+        }
+        .plasma-glow {
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.3) 0%, transparent 70%);
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+        @keyframes spin-1 {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes spin-2 {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+        @keyframes spin-3 {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        @keyframes pulse-1 {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.8); opacity: 0.5; }
+        }
+        @keyframes center-pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(168, 85, 247, 0.5); }
+            50% { transform: translate(-50%, -50%) scale(0.6); box-shadow: 0 0 50px rgba(34, 211, 238, 1), 0 0 80px rgba(168, 85, 247, 0.8); }
+        }
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+        .loader-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .loader-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22d3ee;
+            animation: dot-bounce 1s ease-in-out infinite;
+        }
+        .loader-dot:nth-child(2) {
+            background: #a855f7;
+            animation-delay: 0.2s;
+        }
+        .loader-dot:nth-child(3) {
+            background: #f472b6;
+            animation-delay: 0.4s;
+        }
+        @keyframes dot-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .loader-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-plasma">
+        <div class="plasma-glow"></div>
+        <div class="plasma-ring"></div>
+        <div class="plasma-ring"></div>
+        <div class="plasma-ring"></div>
+        <div class="plasma-ring"></div>
+        <div class="plasma-center"></div>
+    </div>
+    <div class="loader-dots">
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+    </div>
+    <div class="loader-label">Loading</div>
+</body>
+</html>
