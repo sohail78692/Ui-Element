@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Flow Button</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d12;
+            font-family: 'Outfit', sans-serif;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 40px;
+        }
+        .btn-magnetic {
+            position: relative;
+            padding: 20px 50px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #22d3ee, #818cf8);
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .btn-magnetic::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #818cf8, #22d3ee);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .btn-magnetic::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        .btn-magnetic:hover::before {
+            opacity: 1;
+        }
+        .btn-magnetic:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+        .btn-magnetic span {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-magnetic .btn-icon {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+        .btn-magnetic:hover .btn-icon {
+            transform: translateX(4px);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid rgba(129, 140, 248, 0.5);
+            color: #818cf8;
+        }
+        .btn-secondary::before {
+            background: linear-gradient(135deg, #818cf8, #22d3ee);
+        }
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .btn-ghost::before {
+            background: linear-gradient(135deg, #22d3ee, #818cf8);
+        }
+    </style>
+</head>
+<body>
+    <button class="btn-magnetic">
+        <span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            Get Started
+        </span>
+    </button>
+    <button class="btn-magnetic btn-secondary">
+        <span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            Learn More
+        </span>
+    </button>
+    <button class="btn-magnetic btn-ghost">
+        <span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            Explore
+        </span>
+    </button>
+</body>
+</html>
