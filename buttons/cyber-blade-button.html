@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cyber Blade Button UI Component">
+<title>Cyber Blade Button</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0a0a0f;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .cyber-blade-btn {
+        position: relative;
+        padding: 16px 44px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #0ff;
+        background: transparent;
+        border: 2px solid #0ff;
+        border-radius: 4px;
+        cursor: pointer;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    .cyber-blade-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+    .blade {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: #0ff;
+        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+        transform: scaleY(0);
+        transform-origin: bottom;
+    }
+    .cyber-blade-btn:hover .blade {
+        animation: blade-sweep 0.4s ease-out forwards;
+    }
+    @keyframes blade-sweep {
+        0% { transform: scaleY(0); }
+        100% { transform: scaleY(1); }
+    }
+    .cyber-blade-btn:hover {
+        background: rgba(0, 255, 255, 0.1);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.1);
+    }
+    .cyber-blade-btn:hover::before {
+        left: 100%;
+    }
+    .glitch-text {
+        position: relative;
+    }
+    .cyber-blade-btn:hover .glitch-text {
+        animation: glitch 0.3s infinite;
+    }
+    @keyframes glitch {
+        0%, 100% { transform: translate(0); }
+        20% { transform: translate(-2px, 2px); }
+        40% { transform: translate(2px, -2px); }
+        60% { transform: translate(-1px, -1px); }
+        80% { transform: translate(1px, 1px); }
+    }
+</style>
+</head>
+<body>
+<button type="button" class="cyber-blade-btn">
+    <span class="blade"></span>
+    <span class="glitch-text">Initialize</span>
+</button>
+</body>
+</html>
