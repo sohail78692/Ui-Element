@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Aurora Ripple Button UI Component">
+<title>Aurora Ripple Button</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .aurora-ripple-btn {
+        position: relative;
+        padding: 16px 48px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    .aurora-ripple-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s;
+    }
+    .aurora-ripple-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+    .aurora-ripple-btn:hover::before {
+        left: 100%;
+    }
+    .aurora-ripple-btn:active {
+        transform: translateY(0);
+    }
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        transform: scale(0);
+        animation: ripple-effect 0.6s linear;
+        pointer-events: none;
+    }
+    @keyframes ripple-effect {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+</style>
+</head>
+<body>
+<button type="button" class="aurora-ripple-btn" onclick="createRipple(event)">Explore Now</button>
+<script>
+    function createRipple(event) {
+        const button = event.currentTarget;
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = event.clientX - rect.left - size / 2 + 'px';
+        ripple.style.top = event.clientY - rect.top - size / 2 + 'px';
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+</script>
+</body>
+</html>
