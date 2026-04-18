@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Aurora Pulse Input UI Component">
+<title>Aurora Pulse Input</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .aurora-input-group {
+        position: relative;
+    }
+    .aurora-input {
+        width: 300px;
+        padding: 18px 24px;
+        font-size: 16px;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid transparent;
+        border-radius: 16px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+    .aurora-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    .aurora-input:focus {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(139, 92, 246, 0.5);
+        box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+    }
+    .aurora-ring {
+        position: absolute;
+        inset: -3px;
+        border-radius: 18px;
+        background: linear-gradient(45deg, #8b5cf6, #ec4899, #06b6d4, #8b5cf6);
+        background-size: 300% 300%;
+        animation: aurora-flow 3s ease infinite;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: -1;
+    }
+    .aurora-input:focus ~ .aurora-ring {
+        opacity: 1;
+    }
+    @keyframes aurora-flow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .input-glow {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4);
+        transition: width 0.3s ease;
+    }
+    .aurora-input:focus ~ .input-glow {
+        width: 100%;
+    }
+</style>
+</head>
+<body>
+<div class="aurora-input-group">
+    <input type="text" class="aurora-input" placeholder="Search anything...">
+    <div class="aurora-ring"></div>
+    <div class="input-glow"></div>
+</div>
+</body>
+</html>
