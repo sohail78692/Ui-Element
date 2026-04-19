@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dual Ring Loader UI Component">
+<title>Dual Ring Loader</title>
+<style>
+body { background:#0c0c14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.dual-ring {
+  position:relative;
+  width:80px;
+  height:80px;
+}
+.dual-ring .ring {
+  position:absolute;
+  width:100%;height:100%;
+  border:4px solid transparent;
+  border-radius:50%;
+}
+.dual-ring .ring:first-child {
+  border-top-color:#ff00ff;
+  animation:spin 1s linear infinite;
+}
+.dual-ring .ring:nth-child(2) {
+  border-bottom-color:#00ffff;
+  animation:spin 1.5s linear infinite reverse;
+}
+@keyframes spin {
+  to{transform:rotate(360deg);}
+}
+</style>
+</head>
+<body>
+<div class="dual-ring">
+  <div class="ring"></div>
+  <div class="ring"></div>
+</div>
+</body>
+</html>
