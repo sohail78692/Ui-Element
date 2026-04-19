@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tab Bar UI Component">
+<title>Tab Bar</title>
+<style>
+body { background:#0c0c14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.tab-bar {
+  display:flex;
+  background:#14141e;
+  border-radius:10px;
+  padding:4px;
+  gap:4px;
+}
+.tab-bar .tab {
+  padding:10px 24px;
+  color:#666;
+  font-size:14px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.tab-bar .tab:hover { color:#aaa; }
+.tab-bar .tab.active {
+  background:#00ffaa;
+  color:#000;
+  font-weight:600;
+}
+</style>
+</head>
+<body>
+<div class="tab-bar">
+  <div class="tab active">Home</div>
+  <div class="tab">Profile</div>
+  <div class="tab">Settings</div>
+</div>
+</body>
+</html>
