@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Fold Corner Card UI Component">
+<title>Fold Corner Card</title>
+<style>
+body { background:#0a0a12; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.fold-card {
+  position:relative;
+  width:280px;
+  padding:24px;
+  background:#14141e;
+  border-radius:8px;
+}
+.fold-card::after {
+  content:'';
+  position:absolute;
+  top:0;right:0;
+  width:0;
+  height:0;
+  border-style:solid;
+  border-width:0 30px 30px 0;
+  border-color:transparent #0a0a12 transparent transparent;
+}
+.fold-card h3 { color:#fff; margin:0 0 10px; }
+.fold-card p { color:#888; margin:0; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="fold-card">
+  <h3>Fold Corner</h3>
+  <p>A clean card with a folded corner effect for a premium document feel.</p>
+</div>
+</body>
+</html>
