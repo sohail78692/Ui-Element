@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Breathe Ring Loader UI Component">
+<title>Breathe Ring Loader</title>
+<style>
+body { background:#08080c; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.breathe-ring {
+  position:relative;
+  width:100px;
+  height:100px;
+}
+.breathe-ring .ring {
+  position:absolute;
+  border:3px solid transparent;
+  border-radius:50%;
+  animation:breathe 2s ease-in-out infinite;
+}
+.breathe-ring .ring:nth-child(1) {
+  inset:0;
+  border-color:#ff3366;
+  animation-delay:0s;
+}
+.breathe-ring .ring:nth-child(2) {
+  inset:10px;
+  border-color:#00ccff;
+  animation-delay:0.3s;
+}
+.breathe-ring .ring:nth-child(3) {
+  inset:20px;
+  border-color:#ffcc00;
+  animation-delay:0.6s;
+}
+.breathe-ring .center {
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:20px;height:20px;
+  background:#fff;
+  border-radius:50%;
+  animation:breathe 2s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,100%{transform:scale(0.8);opacity:0.3;}
+  50%{transform:scale(1);opacity:1;}
+}
+</style>
+</head>
+<body>
+<div class="breathe-ring">
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="center"></div>
+</div>
+</body>
+</html>
