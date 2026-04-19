@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Stacked Avatars UI Component">
+<title>Stacked Avatars</title>
+<style>
+body { background:#0a0a12; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.avatar-stack {
+  display:flex;
+}
+.avatar-stack .avatar {
+  width:44px;height:44px;
+  border-radius:50%;
+  border:3px solid #0a0a12;
+  margin-left:-12px;
+  background-size:cover;
+  background-position:center;
+}
+.avatar-stack .avatar:first-child { margin-left:0; }
+.avatar-stack .avatar:nth-child(1) { background:#ff6b6b; }
+.avatar-stack .avatar:nth-child(2) { background:#4ecdc4; }
+.avatar-stack .avatar:nth-child(3) { background:#ffe66d; }
+.avatar-stack .avatar:nth-child(4) { background:#95e1d3; }
+.avatar-stack .more {
+  width:44px;height:44px;
+  border-radius:50%;
+  border:3px solid #0a0a12;
+  margin-left:-12px;
+  background:#2a2a3a;
+  color:#fff;
+  font-size:12px;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+</style>
+</head>
+<body>
+<div class="avatar-stack">
+  <div class="avatar"></div>
+  <div class="avatar"></div>
+  <div class="avatar"></div>
+  <div class="avatar"></div>
+  <div class="more">+5</div>
+</div>
+</body>
+</html>
