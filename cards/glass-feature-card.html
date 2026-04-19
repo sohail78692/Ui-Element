@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Glass Feature Card UI Component">
+<title>Glass Feature Card</title>
+<style>
+body { background:#0a0a12; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.glass-feature {
+  position:relative;
+  width:280px;
+  padding:28px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.05));
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:16px;
+  backdrop-filter:blur(10px);
+}
+.glass-feature .icon {
+  width:48px;
+  height:48px;
+  background:linear-gradient(135deg,#00ffaa,#00ccff);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:16px;
+  font-size:24px;
+}
+.glass-feature h3 {
+  color:#fff;
+  margin:0 0 10px;
+  font-size:18px;
+}
+.glass-feature p {
+  color:#888;
+  margin:0;
+  line-height:1.5;
+  font-size:14px;
+}
+</style>
+</head>
+<body>
+<div class="glass-feature">
+  <div class="icon">⚡</div>
+  <h3>Fast Performance</h3>
+  <p>Lightning fast loading with optimized rendering and minimal resource usage.</p>
+</div>
+</body>
+</html>
