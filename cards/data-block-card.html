@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Data Block Card UI Component">
+<title>Data Block Card</title>
+<style>
+body { background:#0c0c14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.data-card {
+  position:relative;
+  width:280px;
+  padding:24px;
+  background:#12121a;
+  border-radius:12px;
+  border-left:4px solid #ff6b35;
+}
+.data-card .label {
+  font-size:11px;
+  color:#666;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+.data-card .value {
+  font-size:36px;
+  font-weight:bold;
+  color:#fff;
+  margin-bottom:12px;
+}
+.data-card .trend {
+  font-size:14px;
+  color:#00ff88;
+}
+.data-card .trend.down { color:#ff4466; }
+.data-card::after {
+  content:'';
+  position:absolute;
+  top:0;right:0;
+  width:60px;height:60px;
+  background:linear-gradient(135deg,rgba(255,107,53,0.1),transparent);
+  border-radius:0 12px 0 60px;
+}
+</style>
+</head>
+<body>
+<div class="data-card">
+  <div class="label">Total Revenue</div>
+  <div class="value">$42,890</div>
+  <div class="trend">+12.5% from last month</div>
+</div>
+</body>
+</html>
