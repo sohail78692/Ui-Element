@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Simple Tooltip UI Component">
+<title>Simple Tooltip</title>
+<style>
+body { background:#0d0d14; padding:80px 50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.tooltip-wrap { position:relative; display:inline-block; }
+.tooltip-wrap button {
+  padding:12px 28px;
+  font-size:14px;
+  color:#fff;
+  background:#1a1a2e;
+  border:1px solid #333;
+  border-radius:6px;
+  cursor:pointer;
+}
+.tooltip-wrap .tooltip {
+  position:absolute;
+  bottom:calc(100% + 12px);
+  left:50%;
+  transform:translateX(-50%) scale(0.9);
+  padding:8px 14px;
+  background:#00ffaa;
+  color:#000;
+  font-size:12px;
+  font-weight:600;
+  border-radius:6px;
+  white-space:nowrap;
+  opacity:0;
+  visibility:hidden;
+  transition:all 0.2s;
+}
+.tooltip-wrap .tooltip::after {
+  content:'';
+  position:absolute;
+  top:100%;left:50%;
+  transform:translateX(-50%);
+  border:6px solid transparent;
+  border-top-color:#00ffaa;
+}
+.tooltip-wrap:hover .tooltip {
+  opacity:1;
+  visibility:visible;
+  transform:translateX(-50%) scale(1);
+}
+</style>
+</head>
+<body>
+<div class="tooltip-wrap">
+  <button>Hover me</button>
+  <div class="tooltip">Tooltip Text Here</div>
+</div>
+</body>
+</html>
