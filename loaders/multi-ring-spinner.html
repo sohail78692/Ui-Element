@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pulse Ring Loader UI Component">
+<title>Pulse Ring Loader</title>
+<style>
+body { background:#08080c; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.pulse-ring {
+  position:relative;
+  width:80px;
+  height:80px;
+}
+.pulse-ring .ring {
+  position:absolute;
+  width:100%;height:100%;
+  border:3px solid transparent;
+  border-radius:50%;
+}
+.pulse-ring .ring:nth-child(1) {
+  border-top-color:#ff0080;
+  animation:spin 1s linear infinite;
+}
+.pulse-ring .ring:nth-child(2) {
+  width:60px;height:60px;
+  top:10px;left:10px;
+  border-right-color:#00ff88;
+  animation:spin 0.8s linear infinite reverse;
+}
+.pulse-ring .ring:nth-child(3) {
+  width:40px;height:40px;
+  top:20px;left:20px;
+  border-bottom-color:#0080ff;
+  animation:spin 0.6s linear infinite;
+}
+.pulse-ring .center-dot {
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:12px;height:12px;
+  background:#fff;
+  border-radius:50%;
+  animation:pulse 1s ease-in-out infinite;
+}
+@keyframes spin {
+  to{transform:rotate(360deg);}
+}
+@keyframes pulse {
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1;}
+  50%{transform:translate(-50%,-50%) scale(1.5);opacity:0.5;}
+}
+</style>
+</head>
+<body>
+<div class="pulse-ring">
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="center-dot"></div>
+</div>
+</body>
+</html>
