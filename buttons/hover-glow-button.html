@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hover Glow Button UI Component">
+<title>Hover Glow Button</title>
+<style>
+body { background:#0c0c14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.btn-glow-hover {
+  position:relative;
+  padding:14px 32px;
+  font-size:15px;
+  font-weight:600;
+  color:#fff;
+  background:#1a1a2e;
+  border:1px solid #333;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.3s;
+  overflow:hidden;
+}
+.btn-glow-hover:hover {
+  border-color:#00ffaa;
+  box-shadow:0 0 20px rgba(0,255,170,0.3),0 0 40px rgba(0,255,170,0.1);
+  color:#00ffaa;
+}
+</style>
+</head>
+<body>
+<button class="btn-glow-hover">Hover Glow</button>
+</body>
+</html>
