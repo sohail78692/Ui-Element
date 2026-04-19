@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hover Reveal Card UI Component">
+<title>Hover Reveal Card</title>
+<style>
+body { background:#0d0d14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.reveal-card {
+  position:relative;
+  width:280px;
+  height:180px;
+  background:#14141e;
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+}
+.reveal-card .front {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:24px;
+  transition:opacity 0.3s,transform 0.3s;
+}
+.reveal-card h3 { color:#fff; margin:0 0 8px; }
+.reveal-card p { color:#777; margin:0; text-align:center; }
+.reveal-card .back {
+  position:absolute;
+  inset:0;
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#1a1a2e,#252540);
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 0.3s;
+}
+.reveal-card:hover .front {
+  opacity:0;
+  transform:translateY(-20px);
+}
+.reveal-card:hover .back {
+  opacity:1;
+  transform:translateY(0);
+}
+.reveal-card .back button {
+  padding:10px 20px;
+  font-size:13px;
+  color:#fff;
+  background:#00ffaa;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+.reveal-card .back button.secondary {
+  background:transparent;
+  border:1px solid #00ffaa;
+  color:#00ffaa;
+}
+</style>
+</head>
+<body>
+<div class="reveal-card">
+  <div class="front">
+    <h3>Hover Me</h3>
+    <p>Reveal hidden actions on hover</p>
+  </div>
+  <div class="back">
+    <button>View</button>
+    <button class="secondary">Edit</button>
+  </div>
+</div>
+</body>
+</html>
