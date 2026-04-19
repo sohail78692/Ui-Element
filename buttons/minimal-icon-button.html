@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Minimal Icon Button UI Component">
+<title>Minimal Icon Button</title>
+<style>
+body { background:#0d0d14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;gap:16px; }
+.mini-btn {
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.mini-btn:hover {
+  background:rgba(255,255,255,0.1);
+  border-color:#00ffaa;
+  transform:translateY(-2px);
+}
+.mini-btn svg {
+  width:20px;
+  height:20px;
+  stroke:#888;
+  stroke-width:2;
+  fill:none;
+  transition:stroke 0.2s;
+}
+.mini-btn:hover svg { stroke:#00ffaa; }
+</style>
+</head>
+<body>
+<button class="mini-btn">
+  <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+<button class="mini-btn">
+  <svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+</button>
+<button class="mini-btn">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+</button>
+</body>
+</html>
