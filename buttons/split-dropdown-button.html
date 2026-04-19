@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Split Button UI Component">
+<title>Split Button</title>
+<style>
+body { background:#0c0c14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.split-btn {
+  display:flex;
+  border-radius:8px;
+  overflow:hidden;
+}
+.split-btn button {
+  padding:14px 24px;
+  font-size:14px;
+  font-weight:600;
+  color:#fff;
+  background:#1a1a2e;
+  border:none;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.split-btn button:first-child {
+  border-right:1px solid #333;
+}
+.split-btn button:hover {
+  background:#252540;
+}
+.split-btn .caret {
+  padding:14px 16px;
+  background:#00ffaa;
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+  transition:background 0.2s;
+  display:flex;
+  align-items:center;
+}
+.split-btn .caret:hover {
+  background:#00cc88;
+}
+</style>
+</head>
+<body>
+<div class="split-btn">
+  <button>Download</button>
+  <span class="caret">▼</span>
+</div>
+</body>
+</html>
