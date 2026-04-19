@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Glitch Text Button UI Component">
+<title>Glitch Text Button</title>
+<style>
+body { background:#0d0d18; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.btn-glitch {
+  position:relative;
+  padding:18px 50px;
+  font-size:18px;
+  font-weight:bold;
+  color:#fff;
+  background:transparent;
+  border:2px solid #ff0055;
+  cursor:pointer;
+  overflow:hidden;
+  transition:all 0.2s;
+  text-transform:uppercase;
+  letter-spacing:3px;
+}
+.btn-glitch:hover {
+  background:#ff0055;
+  box-shadow:0 0 30px #ff0055;
+}
+.btn-glitch .glitch-txt {
+  position:relative;
+  display:block;
+}
+.btn-glitch .glitch-txt::before,
+.btn-glitch .glitch-txt::after {
+  content:attr(data-text);
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  opacity:0;
+}
+.btn-glitch:hover .glitch-txt::before {
+  color:#00ffff;
+  animation:glitch-1 0.3s infinite;
+  opacity:0.8;
+}
+.btn-glitch:hover .glitch-txt::after {
+  color:#ff00ff;
+  animation:glitch-2 0.3s infinite;
+  opacity:0.8;
+}
+@keyframes glitch-1 {
+  0%,100%{transform:translate(0);clip-path:inset(0 0 80% 0);}
+  25%{transform:translate(-3px,2px);clip-path:inset(20% 0 60% 0);}
+  50%{transform:translate(3px,-2px);clip-path:inset(60% 0 20% 0);}
+  75%{transform:translate(-2px,-1px);clip-path:inset(10% 0 70% 0);}
+}
+@keyframes glitch-2 {
+  0%,100%{transform:translate(0);clip-path:inset(0 0 50% 0);}
+  25%{transform:translate(2px,-3px);clip-path:inset(70% 0 10% 0);}
+  50%{transform:translate(-2px,3px);clip-path:inset(30% 0 50% 0);}
+  75%{transform:translate(1px,2px);clip-path:inset(50% 0 30% 0);}
+}
+</style>
+</head>
+<body>
+<button class="btn-glitch">
+  <span class="glitch-txt" data-text="GLITCH">GLITCH</span>
+</button>
+</body>
+</html>
