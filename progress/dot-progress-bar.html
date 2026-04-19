@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dot Progress Bar UI Component">
+<title>Dot Progress Bar</title>
+<style>
+body { background:#0d0d14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.dot-progress {
+  display:flex;
+  gap:10px;
+}
+.dot-progress .dot {
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#2a2a3a;
+  transition:all 0.3s;
+}
+.dot-progress .dot.active {
+  background:#00ffaa;
+  box-shadow:0 0 15px #00ffaa;
+}
+.dot-progress .dot.done {
+  background:#00cc88;
+}
+</style>
+</head>
+<body>
+<div class="dot-progress">
+  <div class="dot done"></div>
+  <div class="dot done"></div>
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+</body>
+</html>
