@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Bar Loader UI Component">
+<title>Bar Loader</title>
+<style>
+body { background:#0a0a12; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.bar-loader {
+  display:flex;
+  gap:6px;
+  height:40px;
+  align-items:flex-end;
+}
+.bar-loader .bar {
+  width:8px;
+  background:#00ccff;
+  border-radius:4px;
+  animation:bar-bounce 1s ease-in-out infinite;
+}
+.bar-loader .bar:nth-child(1){height:20px;animation-delay:0s;}
+.bar-loader .bar:nth-child(2){height:30px;animation-delay:0.1s;}
+.bar-loader .bar:nth-child(3){height:40px;animation-delay:0.2s;}
+.bar-loader .bar:nth-child(4){height:25px;animation-delay:0.3s;}
+.bar-loader .bar:nth-child(5){height:35px;animation-delay:0.4s;}
+@keyframes bar-bounce {
+  0%,100%{transform:scaleY(0.5);}
+  50%{transform:scaleY(1);}
+}
+</style>
+</head>
+<body>
+<div class="bar-loader">
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</div>
+</body>
+</html>
