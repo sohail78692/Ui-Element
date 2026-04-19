@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Step Indicator UI Component">
+<title>Step Indicator</title>
+<style>
+body { background:#0c0c14; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.step-indicator {
+  display:flex;
+  gap:8px;
+}
+.step-indicator .step {
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#1a1a2e;
+  border:2px solid #333;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#666;
+  font-size:14px;
+  font-weight:600;
+  transition:all 0.3s;
+}
+.step-indicator .step.active {
+  border-color:#00ffaa;
+  color:#00ffaa;
+  box-shadow:0 0 15px rgba(0,255,170,0.3);
+}
+.step-indicator .step.completed {
+  background:#00ffaa;
+  border-color:#00ffaa;
+  color:#000;
+}
+.step-indicator .connector {
+  width:40px;
+  height:2px;
+  background:#333;
+  align-self:center;
+}
+.step-indicator .connector.active {
+  background:#00ffaa;
+}
+</style>
+</head>
+<body>
+<div class="step-indicator">
+  <div class="step completed">✓</div>
+  <div class="connector active"></div>
+  <div class="step active">2</div>
+  <div class="connector"></div>
+  <div class="step">3</div>
+</div>
+</body>
+</html>
