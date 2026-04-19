@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Glow Border Button UI Component">
+<title>Glow Border Button</title>
+<style>
+body { background:#0a0a12; padding:50px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.btn-glow {
+  position:relative;
+  padding:14px 36px;
+  font-size:15px;
+  font-weight:600;
+  color:#fff;
+  background:#12121a;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  overflow:hidden;
+  z-index:1;
+}
+.btn-glow::before {
+  content:'';
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(45deg,#ff00cc,#00ffcc,#ff00cc);
+  background-size:200% 200%;
+  animation:gradient-move 3s linear infinite;
+  z-index:-2;
+  border-radius:10px;
+}
+.btn-glow::after {
+  content:'';
+  position:absolute;
+  inset:2px;
+  background:#12121a;
+  border-radius:6px;
+  z-index:-1;
+}
+.btn-glow span {
+  position:relative;
+  z-index:1;
+}
+@keyframes gradient-move {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+</style>
+</head>
+<body>
+<button class="btn-glow"><span>Glow Border</span></button>
+</body>
+</html>
