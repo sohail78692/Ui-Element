@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Liquid Morph Card UI Component">
+<title>Liquid Morph Card</title>
+<style>
+body { background:#0d0d15; padding:40px; display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0; }
+.liquid-card {
+  position:relative;
+  width:320px;
+  padding:30px;
+  background:rgba(255,255,255,0.05);
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  overflow:hidden;
+}
+.liquid-card::before {
+  content:'';
+  position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(circle,rgba(255,100,150,0.15) 0%,transparent 50%);
+  animation:liquid-move 8s ease-in-out infinite;
+}
+.liquid-card h3 {
+  position:relative;
+  color:#fff;
+  margin:0 0 15px;
+  font-size:22px;
+}
+.liquid-card p {
+  position:relative;
+  color:#aaa;
+  margin:0;
+  line-height:1.6;
+}
+.liquid-card .blob {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(40px);
+  opacity:0.5;
+  animation:float 6s ease-in-out infinite;
+}
+.liquid-card .blob:nth-child(1) {
+  width:100px;height:100px;
+  background:#ff6699;
+  top:-20px;right:-20px;
+  animation-delay:0s;
+}
+.liquid-card .blob:nth-child(2) {
+  width:80px;height:80px;
+  background:#66ccff;
+  bottom:-10px;left:-10px;
+  animation-delay:-3s;
+}
+@keyframes liquid-move {
+  0%,100%{transform:translate(0,0) rotate(0deg);}
+  50%{transform:translate(20px,20px) rotate(180deg);}
+}
+@keyframes float {
+  0%,100%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-20px) scale(1.1);}
+}
+</style>
+</head>
+<body>
+<div class="liquid-card">
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <h3>Liquid Morph</h3>
+  <p>A card with organic flowing blobs and smooth animations that create a mesmerizing liquid effect.</p>
+</div>
+</body>
+</html>
