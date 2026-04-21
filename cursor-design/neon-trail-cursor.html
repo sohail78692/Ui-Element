@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Trail Cursor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: #0a0a0f;
+            font-family: 'Space Mono', monospace;
+            overflow: hidden;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            text-align: center;
+            pointer-events: none;
+        }
+        .info h1 {
+            font-size: 24px;
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #00ffff;
+        }
+        .cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>NEON TRAIL</h1>
+        <p>Move your cursor to create glowing trails</p>
+    </div>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <canvas id="trailCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('trailCanvas');
+        const ctx = canvas.getContext('2d');
+        const cursorDot = document.getElementById('cursorDot');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const trails = [];
+        const maxTrailLength = 80;
+        const hueBase = 180;
+        let mouseX = canvas.width / 2;
+        let mouseY = canvas.height / 2;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = (mouseX - 4) + 'px';
+            cursorDot.style.top = (mouseY - 4) + 'px';
+            for (let i = 0; i < 3; i++) {
+                trails.push({
+                    x: mouseX + (Math.random() - 0.5) * 10,
+                    y: mouseY + (Math.random() - 0.5) * 10,
+                    radius: 3 + Math.random() * 4,
+                    hue: hueBase + Math.random() * 60,
+                    life: 1,
+                    decay: 0.01 + Math.random() * 0.015,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5
+                });
+            }
+        });
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 15, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let i = trails.length - 1; i >= 0; i--) {
+                const t = trails[i];
+                t.x += t.vx;
+                t.y += t.vy;
+                t.life -= t.decay;
+                if (t.life <= 0) {
+                    trails.splice(i, 1);
+                    continue;
+                }
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, t.radius * t.life, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${t.hue}, 100%, 60%, ${t.life})`;
+                ctx.fill();
+                ctx.shadowBlur = 15 * t.life;
+                ctx.shadowColor = `hsla(${t.hue}, 100%, 60%, ${t.life})`;
+            }
+            ctx.shadowBlur = 0;
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
