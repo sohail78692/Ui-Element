@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entropy Input</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .entropy-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .entropy-container {
+            position: relative;
+            width: 400px;
+            padding: 30px 20px 20px;
+            background: rgba(10, 10, 15, 0.9);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 100, 100, 0.2);
+        }
+        .entropy-label {
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            font-size: 10px;
+            color: rgba(255, 100, 100, 0.5);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .entropy-input {
+            width: 100%;
+            padding: 16px 12px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid rgba(255, 100, 100, 0.3);
+            color: #ff6464;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+            letter-spacing: 2px;
+        }
+        .entropy-input:focus {
+            border-color: #ff6464;
+            box-shadow: 0 2px 0 rgba(255, 100, 100, 0.2);
+        }
+        .entropy-input.error {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+        .entropy-input.success {
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+        .entropy-cursor {
+            position: absolute;
+            bottom: 0;
+            left: 12px;
+            width: 8px;
+            height: 8px;
+            background: #ff6464;
+            border-radius: 50%;
+            animation: cursorPulse 1s infinite;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .entropy-input:focus ~ .entropy-cursor {
+            opacity: 1;
+        }
+        @keyframes cursorPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+        .entropy-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .entropy-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ff6464;
+            border-radius: 50%;
+            opacity: 0;
+        }
+        .entropy-field {
+            position: absolute;
+            top: -30px;
+            left: -30px;
+            right: -30px;
+            bottom: -30px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .entropy-input:focus ~ .entropy-field {
+            opacity: 1;
+        }
+        .field-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border: 1px dashed rgba(255, 100, 100, 0.2);
+            border-radius: 12px;
+            transform: translate(-50%, -50%);
+            animation: rotateRing 10s linear infinite;
+        }
+        @keyframes rotateRing {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .glitch-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 100, 100, 0.03) 0px,
+                rgba(255, 100, 100, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+        }
+        .entropy-input:focus ~ .glitch-overlay {
+            animation: glitchScan 0.2s infinite;
+        }
+        @keyframes glitchScan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+        .entropy-status {
+            font-size: 11px;
+            color: rgba(255, 100, 100, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .entropy-status.active {
+            color: #ff6464;
+        }
+        .entropy-status.valid {
+            color: #00ff88;
+        }
+        .input-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            mix-blend-mode: difference;
+        }
+        .mask-char {
+            position: absolute;
+            font-size: 14px;
+            color: #ff6464;
+            animation: maskFade 0.3s forwards;
+        }
+        @keyframes maskFade {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="entropy-wrapper">
+        <div class="entropy-container" id="entropyContainer">
+            <div class="entropy-label">Cryptographic Input</div>
+            <input type="text" class="entropy-input" id="entropyInput" placeholder="Enter secure token" autocomplete="off">
+            <div class="entropy-cursor"></div>
+            <div class="entropy-field">
+                <div class="field-ring"></div>
+            </div>
+            <div class="entropy-particles" id="entropyParticles"></div>
+            <div class="glitch-overlay"></div>
+            <div class="input-mask" id="inputMask"></div>
+        </div>
+        <div class="entropy-status" id="entropyStatus">System Ready</div>
+    </div>
+    <script>
+        const input = document.getElementById('entropyInput');
+        const container = document.getElementById('entropyContainer');
+        const particles = document.getElementById('entropyParticles');
+        const mask = document.getElementById('inputMask');
+        const status = document.getElementById('entropyStatus');
+        let charIndex = 0;
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'entropy-particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 1 + Math.random() * 2;
+            const vx = Math.cos(angle) * speed;
+            const vy = Math.sin(angle) * speed;
+            container.appendChild(particle);
+            let opacity = 0.8;
+            let px = x, py = y;
+            const animate = () => {
+                px += vx;
+                py += vy;
+                opacity -= 0.02;
+                particle.style.left = px + 'px';
+                particle.style.top = py + 'px';
+                particle.style.opacity = opacity;
+                if (opacity > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            };
+            requestAnimationFrame(animate);
+        }
+        input.addEventListener('input', (e) => {
+            const rect = input.getBoundingClientRect();
+            const caretX = rect.left + input.value.length * 9 + 12;
+            const caretY = rect.top + rect.height / 2;
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createParticle(
+                        caretX + (Math.random() - 0.5) * 10,
+                        caretY + (Math.random() - 0.5) * 10
+                    );
+                }, i * 50);
+            }
+            if (input.value.length > 0) {
+                const maskChar = document.createElement('div');
+                maskChar.className = 'mask-char';
+                maskChar.textContent = input.value[input.value.length - 1];
+                maskChar.style.left = (caretX - 10) + 'px';
+                maskChar.style.top = (caretY - 8) + 'px';
+                mask.appendChild(maskChar);
+                setTimeout(() => maskChar.remove(), 300);
+            }
+            if (input.value.length >= 8) {
+                const isValid = /^[A-Za-z0-9]+$/.test(input.value);
+                input.classList.toggle('success', isValid);
+                input.classList.toggle('error', !isValid);
+                status.textContent = isValid ? 'Signature Valid' : 'Invalid Format';
+                status.className = 'entropy-status ' + (isValid ? 'valid' : 'active');
+            } else {
+                input.classList.remove('success', 'error');
+                status.textContent = `Enter ${8 - input.value.length} more characters`;
+                status.className = 'entropy-status active';
+            }
+        });
+        input.addEventListener('focus', () => {
+            status.textContent = 'Listening for input...';
+            status.className = 'entropy-status active';
+        });
+        input.addEventListener('blur', () => {
+            if (input.value.length === 0) {
+                status.textContent = 'System Ready';
+                status.className = 'entropy-status';
+            }
+        });
+    </script>
+</body>
+</html>
