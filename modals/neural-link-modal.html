@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Link Modal</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #050505;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .trigger-btn {
+            padding: 16px 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: #00ff88;
+            background: transparent;
+            border: 2px solid #00ff88;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .trigger-btn:hover {
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+        .trigger-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .trigger-btn:hover::before {
+            left: 100%;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .neural-modal {
+            position: relative;
+            width: 90%;
+            max-width: 520px;
+            padding: 50px 40px;
+            background: linear-gradient(180deg, rgba(10,15,15,0.98) 0%, rgba(5,10,10,1) 100%);
+            border-radius: 12px;
+            transform: scale(0.7) translateY(50px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            box-shadow: 
+                0 0 80px rgba(0, 255, 136, 0.08),
+                inset 0 0 80px rgba(0, 255, 136, 0.03);
+        }
+        .modal-overlay.active .neural-modal {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+        .neural-network {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        .neuron {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff88;
+            opacity: 0.6;
+        }
+        .synapse {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.4), transparent);
+            transform-origin: left center;
+        }
+        .modal-header {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .neural-title {
+            font-size: 20px;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+        .neural-subtitle {
+            font-size: 12px;
+            color: rgba(0, 255, 136, 0.5);
+            letter-spacing: 1px;
+        }
+        .neural-content {
+            position: relative;
+            z-index: 2;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            line-height: 1.8;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .neural-actions {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .neural-btn {
+            padding: 14px 36px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .neural-btn.primary {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            border: none;
+        }
+        .neural-btn.primary:hover {
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+            transform: translateY(-2px);
+        }
+        .neural-btn.secondary {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .neural-btn.secondary:hover {
+            border-color: #00ff88;
+            color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        .status-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            color: rgba(0, 255, 136, 0.6);
+            letter-spacing: 1px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        @keyframes neuronPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+        @keyframes synapsePulse {
+            0% { opacity: 0.1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.1; }
+        }
+    </style>
+</head>
+<body>
+    <button class="trigger-btn" id="openNeural">INITIALIZE NEURAL LINK</button>
+    <div class="modal-overlay" id="neuralOverlay">
+        <div class="neural-modal">
+            <div class="neural-network" id="neuralNetwork"></div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>SYSTEM ONLINE</span>
+            </div>
+            <div class="modal-header">
+                <h2 class="neural-title">NEURAL INTERFACE</h2>
+                <p class="neural-subtitle">NEURAL SYNC PROTOCOL v2.7</p>
+            </div>
+            <div class="neural-content">
+                Establish quantum-entangled connection with the central intelligence? 
+                This will synchronize your cognitive patterns with the network matrix.
+            </div>
+            <div class="neural-actions">
+                <button class="neural-btn primary" id="syncBtn">SYNC NOW</button>
+                <button class="neural-btn secondary" id="neuralCancel">CANCEL</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const openBtn = document.getElementById('openNeural');
+        const overlay = document.getElementById('neuralOverlay');
+        const cancelBtn = document.getElementById('neuralCancel');
+        const syncBtn = document.getElementById('syncBtn');
+        const network = document.getElementById('neuralNetwork');
+
+        function createNeuralNetwork() {
+            network.innerHTML = '';
+            for (let i = 0; i < 30; i++) {
+                const neuron = document.createElement('div');
+                neuron.className = 'neuron';
+                neuron.style.left = Math.random() * 100 + '%';
+                neuron.style.top = Math.random() * 100 + '%';
+                neuron.style.animation = `neuronPulse ${1 + Math.random() * 2}s infinite`;
+                neuron.style.animationDelay = Math.random() * 2 + 's';
+                network.appendChild(neuron);
+            }
+            const synapses = 25;
+            for (let i = 0; i < synapses; i++) {
+                const synapse = document.createElement('div');
+                synapse.className = 'synapse';
+                const x1 = Math.random() * 100;
+                const y1 = Math.random() * 100;
+                const x2 = Math.random() * 100;
+                const y2 = Math.random() * 100;
+                const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                synapse.style.left = x1 + '%';
+                synapse.style.top = y1 + '%';
+                synapse.style.width = length + '%';
+                synapse.style.transform = `rotate(${angle}deg)`;
+                synapse.style.animation = `synapsePulse ${2 + Math.random() * 2}s infinite`;
+                synapse.style.animationDelay = Math.random() * 2 + 's';
+                network.appendChild(synapse);
+            }
+        }
+
+        openBtn.addEventListener('click', () => {
+            createNeuralNetwork();
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeModal() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        cancelBtn.addEventListener('click', closeModal);
+        syncBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
